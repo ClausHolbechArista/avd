@@ -1,0 +1,33 @@
+  vpws:
+{% for tenant in switch.tenants | arista.avd.natural_sort %}
+{%     set tenant_vpws = namespace(render = false ) %}
+{%     for l1_service in tenants[tenant].l1_services | arista.avd.default([]) %}
+{%         for node in l1_service.nodes | arista.avd.default([]) %}
+{%             if node == inventory_hostname %}
+{%                 set tenant_vpws.render = true %}
+{%                 break %}
+{%             endif %}
+{%         endfor %}
+{%     endfor %}
+{%     if tenant_vpws.render %}
+{%         if tenants[tenant].l1_services is arista.avd.defined and tenants[tenant].pseudowire_rt_base is arista.avd.defined %}
+    - name: {{ tenant }}
+{%             set rt = tenants[tenant].pseudowire_rt_base %}
+      rd: "{{ network_services_data.evpn_rd_admin_subfield }}:{{ rt }}"
+      route_targets:
+        import_export: "{{ network_services_data.evpn_rt_admin_subfield or rt }}:{{ rt }}"
+      pseudowires:
+{%             for l1_service in tenants[tenant].l1_services | arista.avd.default([]) %}
+{%                 if l1_service.nodes is arista.avd.defined and inventory_hostname in l1_service.nodes and l1_service.interfaces is arista.avd.defined %}
+{%                     for node in l1_service.nodes %}
+{%                         if node == inventory_hostname %}
+        - name: {{ l1_service.name }}
+          id_local: {{ l1_service.ids[loop.index0] }}
+          id_remote: {{ l1_service.ids[loop.index0-1] }}
+{%                         endif %}
+{%                     endfor %}
+{%                 endif %}
+{%             endfor %}
+{%         endif %}
+{%     endif %}
+{% endfor %}

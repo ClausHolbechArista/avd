@@ -25,7 +25,6 @@
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
   - [Router ISIS](#router-isis)
-  - [Router BGP](#router-bgp)
 - [Multicast](#multicast)
 - [Filters](#filters)
 - [ACL](#acl)
@@ -243,6 +242,7 @@ interface Ethernet1
    no switchport
    ip address 172.31.255.4/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -253,6 +253,7 @@ interface Ethernet2
    no switchport
    ip address 172.31.255.12/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -263,6 +264,7 @@ interface Ethernet3
    no switchport
    ip address 172.31.255.20/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -273,6 +275,7 @@ interface Ethernet4
    no switchport
    ip address 172.31.255.28/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -283,6 +286,7 @@ interface Ethernet5
    no switchport
    ip address 172.31.255.36/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -293,6 +297,7 @@ interface Ethernet6
    no switchport
    ip address 172.31.255.44/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 !
@@ -303,6 +308,7 @@ interface Ethernet7
    no switchport
    ip address 172.31.255.52/31
    isis enable EVPN_UNDERLAY
+   isis circuit-type level-1-2
    isis metric 50
    isis network point-to-point
 ```
@@ -430,31 +436,6 @@ router isis EVPN_UNDERLAY
    address-family ipv4 unicast
       maximum-paths 4
    !
-```
-
-## Router BGP
-
-### Router BGP Summary
-
-| BGP AS | Router ID |
-| ------ | --------- |
-| 65000|  192.168.255.3 |
-
-| BGP Tuning |
-| ---------- |
-| no bgp default ipv4-unicast |
-| distance bgp 20 200 200 |
-| maximum-paths 4 ecmp 4 |
-
-### Router BGP Device Configuration
-
-```eos
-!
-router bgp 65000
-   router-id 192.168.255.3
-   no bgp default ipv4-unicast
-   distance bgp 20 200 200
-   maximum-paths 4 ecmp 4
 ```
 
 # Multicast

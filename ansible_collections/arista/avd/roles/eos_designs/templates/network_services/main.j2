@@ -1,7 +1,13 @@
 {# Add one blank line after each included template #}
-{% if switch.network_services_l2 is arista.avd.defined(true) or switch.network_services_l3 is arista.avd.defined(true) %}
+{% if switch.network_services_l2 is arista.avd.defined(true) or switch.network_services_l3 is arista.avd.defined(true) or switch.network_services_l1 is arista.avd.defined(true) %}
 {%     set network_services_data = namespace() %}
 {%     include 'network_services/logic.j2' %}
+
+{% endif %}
+
+{# L1 #}
+{% if switch.network_services_l1 is arista.avd.defined(true) %}
+{%     include 'network_services/patch-panel.j2' %}
 
 {% endif %}
 
@@ -39,18 +45,23 @@
 
 {%     include 'network_services/structured-config-vrfs.j2' %}
 
+{%     include 'network_services/router-ospf.j2' %}
+
 {% endif %}
 
-{# VTEP and (L2 or L3) #}
-{% if switch.vtep is arista.avd.defined(true) and
+{# VTEP and (L1 or L2 or L3) #}
+{% if (switch.vtep is arista.avd.defined(true) or switch.mpls_tep is arista.avd.defined(true)) and
       (switch.network_services_l2 is arista.avd.defined(true) or
-      switch.network_services_l3 is arista.avd.defined(true)) %}
+      switch.network_services_l3 is arista.avd.defined(true) or
+      switch.network_services_l1 is arista.avd.defined(true)) %}
 {%     include 'network_services/vtep-logic.j2' %}
 
 {%     include 'network_services/router-bgp.j2' %}
 
 {%     include 'network_services/virtual-source-nat-vrfs.j2' %}
 
-{%     include 'network_services/vxlan-interface.j2' %}
+{%     if switch.vtep is arista.avd.defined(true) %}
+{%         include 'network_services/vxlan-interface.j2' %}
 
+{%     endif %}
 {% endif %}

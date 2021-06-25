@@ -1,0 +1,21 @@
+patch_panel:
+  patches:
+{% for tenant in network_services_data.tenants %}
+{%     for l1_service in tenant.l1_services | arista.avd.default([]) %}
+{%         for node in l1_service.nodes %}
+{%             if node == inventory_hostname %}
+    - name: {{ l1_service.name }}
+      enabled: true
+      connectors:
+        - id: 1
+          type: interface
+          endpoint: {{ l1_service.interfaces[loop.index0] }}
+{%                 if l1_service.type is arista.avd.defined("vpws-pseudowire") %}
+        - id: 2
+          type: pseudowire
+          endpoint: "bgp vpws {{ tenant.name }} pseudowire {{ l1_service.name }}"
+{%                 endif %}
+{%             endif %}
+{%         endfor %}
+{%     endfor %}
+{% endfor %}

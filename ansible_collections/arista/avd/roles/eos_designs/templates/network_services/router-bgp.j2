@@ -7,4 +7,8 @@ router_bgp:
 
 {%     include 'network_services/router-bgp-vlan-aware-bundles.j2' %}
 
+{%     if switch.mpls_overlay_role == "client" and switch.network_services_l1 is arista.avd.defined(true) %}
+{%         include 'network_services/router-bgp-vpws.j2'%}
+
+{%     endif %}
 {% endif %}

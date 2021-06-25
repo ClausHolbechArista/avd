@@ -7,9 +7,18 @@
 {%         for vrf in tenant.vrfs %}
 {%             set bgp_vrf.address_family_ipv4_neighbors = [] %}
 {%             set bgp_vrf.address_family_ipv6_neighbors = [] %}
-{%             set bgp_vrf_vni = vrf.vrf_vni | arista.avd.default(vrf.vrf_id) %}
-{%             set leaf_evpn_rt = (network_services_data.evpn_rt_admin_subfield or bgp_vrf_vni) ~ ':' ~ bgp_vrf_vni %}
-{%             set route_targets = namespace(import={'evpn': [leaf_evpn_rt]}, export={'evpn': [leaf_evpn_rt]}) %}
+{%             set bgp_vrf_id = vrf.vrf_vni | arista.avd.default(vrf.vrf_id) %}
+{%             set bgp_overlay_rt_admin_subfield = network_services_data.evpn_rt_admin_subfield %}
+{%             set leaf_overlay_rt = (bgp_overlay_rt_admin_subfield or bgp_vrf_id) ~ ':' ~ bgp_vrf_id %}
+{%             if vrf.address_families is arista.avd.defined() %}
+{%                 set route_targets = namespace(import={}, export={}) %}
+{%                 for af in vrf.address_families %}
+{%                     do route_targets.import.update({af: [leaf_overlay_rt]}) %}
+{%                     do route_targets.export.update({af: [leaf_overlay_rt]}) %}
+{%                 endfor %}
+{%             else %}
+{%                 set route_targets = namespace(import={'evpn': [leaf_overlay_rt]}, export={'evpn': [leaf_overlay_rt]}) %}
+{%             endif %}
 {%             for additional_route_target in vrf.additional_route_targets | arista.avd.natural_sort %}
 {%                 if inventory_hostname in additional_route_target.nodes | arista.avd.default([inventory_hostname]) %}
 {%                     if additional_route_target.address_family is arista.avd.defined and additional_route_target.route_target is arista.avd.defined and additional_route_target.type is arista.avd.defined %}
@@ -25,7 +34,7 @@
 {%             endfor %}
     {{ vrf.name }}:
       router_id: {{ switch.router_id }}
-      rd: "{{ network_services_data.evpn_rd_admin_subfield }}:{{ bgp_vrf_vni }}"
+      rd: "{{ network_services_data.evpn_rd_admin_subfield }}:{{ bgp_vrf_id }}"
       route_targets:
         import: {{ route_targets.import | to_json }}
         export: {{ route_targets.export | to_json }}

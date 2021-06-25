@@ -20,7 +20,11 @@ port_channel_interfaces:
   Port-Channel{{ channel_group_id }}:
 {%                         set peer = connected_endpoint %}
     description: "{% include switch.interface_descriptions.connected_endpoints_port_channel_interfaces %}"
+{%                         if adapter_settings.port_channel.subinterfaces is arista.avd.defined %}
+    type: routed
+{%                         else %}
     type: switched
+{%                         endif %}
 {%                         if adapter_settings.port_channel.enabled is arista.avd.defined(false) %}
     shutdown: true
 {%                         else %}
@@ -83,6 +87,27 @@ port_channel_interfaces:
 {%                         if adapter_settings.port_channel.structured_config is arista.avd.defined %}
     struct_cfg: {{ adapter_settings.port_channel.structured_config }}
 {%                         endif %}
+{# Render Port-Channel subinterfaces #}
+{%                         for subinterface in adapter_settings.port_channel.subinterfaces | arista.avd.default([]) %}
+{%                             if subinterface.number is arista.avd.defined %}
+  Port-Channel{{ channel_group_id }}.{{ subinterface.number }}:
+    type: l2dot1q
+    mode: flexencap
+{%                                 if subinterface.short_esi is arista.avd.defined %}
+{%                                     if subinterface.short_esi.split(':') | length == 3 %}
+    esi: {{ subinterface.short_esi | arista.avd.generate_esi(evpn_short_esi_prefix) }}
+    rt: {{ subinterface.short_esi | arista.avd.generate_route_target }}
+{%                                     endif %}
+{%                                 endif %}
+    vlan_id: {{ subinterface.vlan_id | arista.avd.default(subinterface.number) }}
+    encapsulation_vlan:
+      client:
+        dot1q:
+          vlan: {{ subinterface.client_dot1q | arista.avd.default(subinterface.number) }}
+      network:
+        client: true
+{%                             endif %}
+{%                         endfor %}
 {%                         break %}
 {%                     endif %}
 {%                 endfor %}
