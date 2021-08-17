@@ -4,7 +4,6 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
-  - [Domain-list](#domain-list)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
@@ -77,19 +76,6 @@ interface Management1
    no shutdown
    vrf MGMT
    ip address 192.168.1.9/16
-```
-
-## Domain-list
-
-### Domain-list:
- - structured-config.set.under.vrf.common-vrf
-
-### Domain-list Device Configuration
-
-```eos
-!
-ip domain-list structured-config.set.under.vrf.common-vrf
-!
 ```
 
 ## Management API HTTP
@@ -280,7 +266,7 @@ vlan 4094
 | Ethernet5 | MLAG_PEER_DC1-POD1-LEAF2A_Ethernet5 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 5 |
 | Ethernet6 | MLAG_PEER_DC1-POD1-LEAF2A_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 5 |
 | Ethernet16 | server-1_Eth2 | *access | *110 | *- | *- | 16 |
-| Ethernet17 | Set using structured_config on server adapter | *access | *110 | *- | *- | 17 |
+| Ethernet17 | server-1_Eth4 | *access | *110 | *- | *- | 17 |
 | Ethernet18 | server-1_Eth6 | *access | *110 | *- | *- | 18 |
 | Ethernet19 | server-1_Eth8 | *access | *110 | *- | *- | 19 |
 
@@ -374,7 +360,7 @@ interface Ethernet16
 
 !
 interface Ethernet17
-   description Set using structured_config on server adapter
+   description server-1_Eth4
    no shutdown
    channel-group 17 mode active
    comment
@@ -412,7 +398,7 @@ interface Ethernet19
 | Port-Channel3 | RACK2_MLAG_Po1 | switched | trunk | 110-113,2500,2600-2601,4085 | - | - | - | - | 3 | - |
 | Port-Channel5 | MLAG_PEER_DC1-POD1-LEAF2A_Po5 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 | Port-Channel16 | server-1_PortChannel | switched | access | 110 | - | - | - | - | 16 | - |
-| Port-Channel17 | Set using structured_config on server adapter port-channel | switched | access | 110 | - | - | - | - | 17 | - |
+| Port-Channel17 | server-1_PortChannel | switched | access | 110 | - | - | - | - | 17 | - |
 | Port-Channel18 | server-1_PortChannel | switched | access | 110 | - | - | - | - | 18 | - |
 | Port-Channel19 | server-1_PortChannel | switched | access | 110 | - | - | - | - | 19 | - |
 
@@ -448,7 +434,7 @@ interface Port-Channel16
    service-profile bar
 !
 interface Port-Channel17
-   description Set using structured_config on server adapter port-channel
+   description server-1_PortChannel
    no shutdown
    switchport
    switchport access vlan 110
@@ -520,7 +506,7 @@ interface Loopback1
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan110 |  set from structured_config on svi (was Tenant_A_OP_Zone_1)  |  Common_VRF  |  -  |  false  |
+| Vlan110 |  Tenant_A_OP_Zone_1  |  Common_VRF  |  -  |  false  |
 | Vlan111 |  Tenant_A_OP_Zone_2  |  Common_VRF  |  -  |  true  |
 | Vlan112 |  Tenant_A_OP_Zone_3  |  Common_VRF  |  -  |  false  |
 | Vlan113 |  SVI_with_no_vxlan  |  Common_VRF  |  -  |  false  |
@@ -544,7 +530,7 @@ interface Loopback1
 ```eos
 !
 interface Vlan110
-   description set from structured_config on svi (was Tenant_A_OP_Zone_1)
+   description Tenant_A_OP_Zone_1
    no shutdown
    vrf Common_VRF
    ip address virtual 10.1.10.1/24
@@ -1045,12 +1031,6 @@ vrf instance MGMT
 
 ```eos
 !
-interface Loopback1002
-  description Loopback created from raw_eos_cli under l3leaf node-group RACK2_MLAG
-
-interface Loopback1111
-  description Loopback created from raw_eos_cli under platform_settings vEOS-LAB
-
 interface Loopback1000
   description Loopback created from raw_eos_cli under VRF Common_VRF
 

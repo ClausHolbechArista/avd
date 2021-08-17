@@ -1,3 +1,4 @@
+arista_avd_eos_designs_version: 3.0.0rc2
 router_bgp:
   as: '65112.100'
   router_id: 172.16.110.4
@@ -185,12 +186,11 @@ management_api_http:
   enable_vrfs:
     MGMT: {}
   enable_https: true
-eos_cli: "interface Loopback1002\n  description Loopback created from raw_eos_cli\
-  \ under l3leaf node-group RACK2_MLAG\n\ninterface Loopback1111\n  description Loopback\
-  \ created from raw_eos_cli under platform_settings vEOS-LAB\n\ninterface Loopback1000\n\
-  \  description Loopback created from raw_eos_cli under VRF Common_VRF\n"
+eos_cli: "interface Loopback1000\n  description Loopback created from raw_eos_cli\
+  \ under VRF Common_VRF\n"
 struct_cfg:
   domain_list:
+  - structured-config.set.on.node
   - structured-config.set.on.node
   - structured-config.set.under.vrf.common-vrf
 vlans:
@@ -234,7 +234,7 @@ vlan_interfaces:
     tenant: Tenant_A
     tags:
     - opzone
-    description: set from structured_config on svi for DC1-POD1-LEAF2A (was Tenant_A_OP_Zone_1)
+    description: Tenant_A_OP_Zone_1
     shutdown: false
     vrf: Common_VRF
     ip_address_virtual: 10.1.10.1/24
@@ -307,7 +307,7 @@ port_channel_interfaces:
     mlag: 16
     service_profile: bar
   Port-Channel17:
-    description: Set using structured_config on server adapter port-channel
+    description: server-1_PortChannel
     type: switched
     shutdown: false
     mode: access
@@ -468,7 +468,7 @@ ethernet_interfaces:
     peer: server-1
     peer_interface: Eth3
     peer_type: server
-    description: Set using structured_config on server adapter
+    description: server-1_Eth3
     type: switched
     shutdown: false
     mode: access
@@ -629,6 +629,3 @@ vxlan_interface:
         Common_VRF:
           vni: 1025
 ip_virtual_router_mac_address: 00:1c:73:00:dc:01
-domain_list:
-- structured-config.set.on.node
-- structured-config.set.under.vrf.common-vrf

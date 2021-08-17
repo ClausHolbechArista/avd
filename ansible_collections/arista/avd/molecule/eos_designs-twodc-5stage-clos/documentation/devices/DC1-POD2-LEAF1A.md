@@ -4,7 +4,6 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
-  - [Domain-list](#domain-list)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
@@ -73,19 +72,6 @@ interface Management1
    no shutdown
    vrf MGMT
    ip address 192.168.1.15/24
-```
-
-## Domain-list
-
-### Domain-list:
- - structured-config.set.under.vrf.common-vrf
-
-### Domain-list Device Configuration
-
-```eos
-!
-ip domain-list structured-config.set.under.vrf.common-vrf
-!
 ```
 
 ## Management API HTTP
@@ -312,7 +298,7 @@ interface Loopback1
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan110 |  set from structured_config on svi (was Tenant_A_OP_Zone_1)  |  Common_VRF  |  -  |  false  |
+| Vlan110 |  Tenant_A_OP_Zone_1  |  Common_VRF  |  -  |  false  |
 | Vlan111 |  Tenant_A_OP_Zone_2  |  Common_VRF  |  -  |  true  |
 | Vlan112 |  Tenant_A_OP_Zone_3  |  Common_VRF  |  -  |  false  |
 | Vlan113 |  SVI_with_no_vxlan  |  Common_VRF  |  -  |  false  |
@@ -332,7 +318,7 @@ interface Loopback1
 ```eos
 !
 interface Vlan110
-   description set from structured_config on svi (was Tenant_A_OP_Zone_1)
+   description Tenant_A_OP_Zone_1
    no shutdown
    vrf Common_VRF
    ip address virtual 10.1.10.1/24
@@ -734,9 +720,6 @@ vrf instance MGMT
 
 ```eos
 !
-interface Loopback1111
-  description Loopback created from raw_eos_cli under platform_settings vEOS-LAB
-
 interface Loopback1000
   description Loopback created from raw_eos_cli under VRF Common_VRF
 

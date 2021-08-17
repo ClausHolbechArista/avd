@@ -1,3 +1,4 @@
+arista_avd_eos_designs_version: 3.0.0rc2
 router_bgp:
   as: '65121'
   router_id: 172.16.120.3
@@ -163,9 +164,8 @@ management_api_http:
   enable_vrfs:
     MGMT: {}
   enable_https: true
-eos_cli: "interface Loopback1111\n  description Loopback created from raw_eos_cli\
-  \ under platform_settings vEOS-LAB\n\ninterface Loopback1000\n  description Loopback\
-  \ created from raw_eos_cli under VRF Common_VRF\n"
+eos_cli: "interface Loopback1000\n  description Loopback created from raw_eos_cli\
+  \ under VRF Common_VRF\n"
 ethernet_interfaces:
   Ethernet1:
     peer: DC1-POD2-SPINE1
@@ -286,7 +286,7 @@ vlan_interfaces:
     tenant: Tenant_A
     tags:
     - opzone
-    description: set from structured_config on svi (was Tenant_A_OP_Zone_1)
+    description: Tenant_A_OP_Zone_1
     shutdown: false
     vrf: Common_VRF
     ip_address_virtual: 10.1.10.1/24
@@ -327,5 +327,3 @@ ip_virtual_router_mac_address: 00:1c:73:00:dc:01
 struct_cfg:
   domain_list:
   - structured-config.set.under.vrf.common-vrf
-domain_list:
-- structured-config.set.under.vrf.common-vrf
