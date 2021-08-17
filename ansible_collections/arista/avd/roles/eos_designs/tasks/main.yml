@@ -29,8 +29,8 @@
 
 - name: Generate YAML file with hostvars (only for debugging)
   tags: [debug, never]
-  template:
-    src: debug/generate-debug-vars.j2
+  copy:
+    content: "{{ hostvars[inventory_hostname] | to_nice_yaml(indent=2, sort_keys=False) }}"
     dest: "{{ structured_dir }}/{{ inventory_hostname }}-debug-vars.yml"
     mode: 0664
   delegate_to: localhost
@@ -39,25 +39,21 @@
 - name: Generate device configuration in structured format
   tags: [build, provision]
   yaml_templates_to_facts:
-    root_key: structured_config
     templates: "{{ templates.structured_config }}"
   delegate_to: localhost
   check_mode: no
   changed_when: False
+  register: result
 
 - name: Write device structured configuration to YAML file
   tags: [build, provision]
-  template:
-    src: generate-structured-config.j2
+  copy:
+    content: "{{ result.ansible_facts | to_nice_yaml(indent=2, sort_keys=False) }}"
     dest: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
     mode: 0664
   delegate_to: localhost
   changed_when: False
-
-- name: Include device structured configuration, that was previously generated.
-  tags: [build, provision]
-  include_vars: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
-  delegate_to: localhost
+  when: result.ansible_facts is defined
 
 - name: Generate fabric documentation
   tags: [build, provision, documentation]
