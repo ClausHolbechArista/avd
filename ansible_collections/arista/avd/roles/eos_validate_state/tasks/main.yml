@@ -15,7 +15,7 @@
   delegate_to: localhost
   tags:
     - always
-  when: arista_avd_eos_designs_version is not defined and lookup('first_found', [structured_config_file], errors='ignore', skip=true)
+  when: eos_designs_result is not defined and lookup('first_found', [structured_config_file], errors='ignore', skip=true)
   vars:
     structured_config_file: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
 
