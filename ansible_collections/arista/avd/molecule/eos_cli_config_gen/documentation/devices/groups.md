@@ -1,7 +1,5 @@
 # groups
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
 - [Authentication](#authentication)
@@ -20,7 +18,6 @@
   - [BGP Groups](#bgp-groups)
   - [Interface Groups](#interface-groups)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

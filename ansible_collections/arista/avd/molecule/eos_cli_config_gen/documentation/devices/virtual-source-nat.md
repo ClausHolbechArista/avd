@@ -1,7 +1,5 @@
 # virtual-source-nat
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
 - [Authentication](#authentication)
@@ -20,7 +18,6 @@
   - [Virtual Source NAT Configuration](#virtual-source-nat-configuration)
 - [Quality Of Service](#quality-of-service)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

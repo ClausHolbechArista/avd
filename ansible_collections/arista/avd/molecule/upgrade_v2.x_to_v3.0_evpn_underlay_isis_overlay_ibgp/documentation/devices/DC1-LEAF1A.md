@@ -1,7 +1,5 @@
 # DC1-LEAF1A
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
   - [Name Servers](#name-servers)
@@ -42,7 +40,6 @@
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 - [Quality Of Service](#quality-of-service)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces
@@ -474,7 +471,7 @@ router isis EVPN_UNDERLAY
 | Settings | Value |
 | -------- | ----- |
 | Address Family | evpn |
-| Remote AS | 65001 |
+| Remote AS | 65000 |
 | Source | Loopback0 |
 | Bfd | true |
 | Send community | all |
@@ -503,7 +500,7 @@ router bgp 65000
    distance bgp 20 200 200
    maximum-paths 4 ecmp 4
    neighbor OVERLAY-PEERS peer group
-   neighbor OVERLAY-PEERS remote-as 65001
+   neighbor OVERLAY-PEERS remote-as 65000
    neighbor OVERLAY-PEERS update-source Loopback0
    neighbor OVERLAY-PEERS bfd
    neighbor OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==

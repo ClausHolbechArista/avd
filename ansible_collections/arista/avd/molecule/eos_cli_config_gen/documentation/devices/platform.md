@@ -1,7 +1,5 @@
 # platform
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
 - [Authentication](#authentication)
@@ -20,7 +18,6 @@
   - [Platform Configuration](#platform-configuration)
 - [Quality Of Service](#quality-of-service)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

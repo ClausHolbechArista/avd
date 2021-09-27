@@ -11,7 +11,6 @@ router_bgp:
       password: AQQvKeimxJu+uGQ/yYvv9w==
       maximum_routes: 12000
       send_community: all
-      remote_as: 65001
     EVPN-OVERLAY-PEERS:
       type: evpn
       update_source: Loopback0
@@ -20,7 +19,6 @@ router_bgp:
       password: q+VNViP5i4rVjW1cxFv2wA==
       send_community: all
       maximum_routes: 0
-      remote_as: 65001
   address_family_ipv4:
     peer_groups:
       UNDERLAY-PEERS:

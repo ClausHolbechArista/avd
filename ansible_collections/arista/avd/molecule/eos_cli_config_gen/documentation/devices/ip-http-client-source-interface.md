@@ -1,7 +1,5 @@
 # ip-http-client-source-interface
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
   - [IP HTTP Client Source Interfaces](#ip-http-client-source-interfaces)
@@ -18,7 +16,6 @@
 - [ACL](#acl)
 - [Quality Of Service](#quality-of-service)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

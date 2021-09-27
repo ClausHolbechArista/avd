@@ -1,7 +1,5 @@
 # policy-maps
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
 - [Authentication](#authentication)
@@ -18,7 +16,6 @@
 - [Quality Of Service](#quality-of-service)
   - [QOS Policy Maps](#qos-policy-maps)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

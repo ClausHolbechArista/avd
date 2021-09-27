@@ -1,7 +1,5 @@
 # DC1-BL1A
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
   - [Name Servers](#name-servers)
@@ -50,7 +48,6 @@
   - [Platform Configuration](#platform-configuration)
 - [Quality Of Service](#quality-of-service)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces

@@ -1,7 +1,5 @@
 # qos
 # Table of Contents
-<!-- toc -->
-
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
 - [Authentication](#authentication)
@@ -21,7 +19,6 @@
   - [QOS](#qos)
   - [QOS Profiles](#qos-profiles)
 
-<!-- toc -->
 # Management
 
 ## Management Interfaces
