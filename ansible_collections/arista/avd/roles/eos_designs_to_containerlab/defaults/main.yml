@@ -2,10 +2,23 @@
 # defaults file for avd_to_containerlab
 
 # cEOS Image to use
-ceos_version: ceos:latest
+ceos_lab_version: ceos:latest
 
-# Default management network IP
-mgmt_network_v4: 192.168.1.0/24
+# Root directory where to build output structure
+root_dir: '{{ inventory_dir }}'
 
 # Default containerlabs configuration file generated
-containerlab_configuration: '{{ inventory_dir }}/containerlabs.yml'
+containerlab_configuration: '{{ root_dir }}/containerlabs.yml'
+
+# AVD configurations output
+# Main output directory
+output_dir_name: 'intended'
+output_dir: '{{ root_dir }}/{{ output_dir_name }}'
+
+# Output for structured YAML files:
+structured_dir_name: 'structured_configs'
+structured_dir: '{{ output_dir }}/{{ structured_dir_name }}'
+
+# EOS Configuration Directory name
+eos_config_dir_name: 'configs'
+eos_config_dir: '{{ output_dir }}/{{ eos_config_dir_name }}'

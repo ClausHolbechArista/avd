@@ -1,0 +1,31 @@
+{# CONTAINERLABS configuration rendering #}
+---
+name: {{ fabric_name }}
+
+mgmt:
+  network: mgmt_{{ fabric_name }}
+{# We require that all devices are in the same management subnet #}
+  ipv4_subnet: {{ management_interfaces.Management1.ip_address | ansible.netcommon.ipaddr('subnet') }}
+
+{# NODES definition #}
+topology:
+  nodes:
+{% for fabric_switch in groups[fabric_name] | arista.avd.natural_sort if hostvars[fabric_switch].management_interfaces.Management1.ip_address is arista.avd.defined %}
+    {{ fabric_switch }}:
+      image: {{ ceos_version }}
+      mgmt_ipv4: {{ hostvars[fabric_switch].management_interfaces.Management1.ip_address }}
+      kind: ceos
+      startup-config: {{ eos_config_dir }}/{{ fabric_switch }}.cfg
+{% endfor %}
+
+{# LINKS definition #}
+  links:
+{% set interfaces_done = [] %}
+{% for link in fabric_topology_links | arista.avd.natural_sort %}
+{%     do interfaces_done.append(link.node ~ "," ~ link.interface) %}
+{%     if link.peer is arista.avd.defined and link.peer_interface is arista.avd.defined and link.peer ~ "," ~ link.peer_interface not in interfaces_done %}
+    - endpoints:
+        - {{ link.node }}:{{ link.interface | lower | replace('ethernet','eth') }}
+        - {{ link.peer }}:{{ link.peer_interface | lower | replace('ethernet','eth') }}
+{%     endif %}
+{% endfor %}

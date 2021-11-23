@@ -1,8 +1,22 @@
 ---
 # tasks file for avd_to_containerlab
+- name: Check if structure configuration file exists
+  tags: [build, provision]
+  stat:
+    path: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
+  register: stat_result
+  delegate_to: localhost
+  when: structured_config is not defined
+
+- name: Include device intended structure configuration variables
+  tags: [build, provision]
+  include_vars: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
+  delegate_to: localhost
+  when: structured_config is not defined and stat_result.stat.exists
+
 - name: Generate containerlab topology
   template:
-    src: topology.yml.j2
+    src: containerlab_configuration.yml.j2
     dest: '{{ containerlab_configuration }}'
   delegate_to: localhost
   run_once: true
