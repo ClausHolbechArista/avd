@@ -1,0 +1,23 @@
+---
+CVP_DEVICES:
+CVP_CONTAINERS:
+  DC1_BL1:
+    parentContainerName: DC1_LEAFS
+  DC1_FABRIC:
+    parentContainerName: Tenant
+  DC1_L2LEAF1:
+    parentContainerName: DC1_L2LEAFS
+  DC1_L2LEAF2:
+    parentContainerName: DC1_L2LEAFS
+  DC1_L2LEAFS:
+    parentContainerName: DC1_FABRIC
+  DC1_LEAF1:
+    parentContainerName: DC1_LEAFS
+  DC1_LEAF2:
+    parentContainerName: DC1_LEAFS
+  DC1_LEAFS:
+    parentContainerName: DC1_FABRIC
+  DC1_SPINES:
+    parentContainerName: DC1_FABRIC
+  DC1_SVC3:
+    parentContainerName: DC1_LEAFS

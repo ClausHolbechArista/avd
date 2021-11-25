@@ -1,0 +1,8 @@
+---
+ansible_python_interpreter: $(which python)
+ansible_host: www.cv-staging.corp.arista.io
+ansible_user: cvaas
+ansible_password: "{{ lookup('env', 'CVAAS_TOKEN') }}"
+ansible_connection: httpapi
+ansible_httpapi_use_ssl: True
+ansible_network_os: eos

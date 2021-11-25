@@ -1,0 +1,33 @@
+on: 
+  workflow_dispatch:
+
+concurrency:
+  cancel-in-progress: true
+
+jobs:
+  molecule_eos_config_deploy_cvp_to_cvaas:
+    name: Validate eos_config_deploy_cvp_to_cvaas
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+      matrix:
+        avd_scenario: ['eos_config_deploy_cvp_to_cvaas']
+        ansible_version: ['ansible-core>=2.11.3,<2.13.0']
+    steps:
+      - name: 'set environment variables'
+        run: |
+          echo "PY_COLORS=1" >> $GITHUB_ENV
+          echo "ANSIBLE_FORCE_COLOR=1" >> $GITHUB_ENV
+          echo "CVAAS_TOKEN=${{secrets.AVD_CVAAS_TOKEN}} >> $GITHUB_ENV"
+      #- uses: actions/checkout@v2
+      - name: Run molecule action
+        uses: arista-netdevops-community/action-molecule-avd@v1.3
+        with:
+          molecule_parentdir: 'ansible_collections/arista/avd'
+          molecule_command: 'test'
+          molecule_args: '--scenario-name ${{ matrix.avd_scenario }}'
+          pip_file: ansible_collections/arista/avd/requirements.txt
+          galaxy_file: "ansible_collections/arista/avd/collections.yml"
+          ansible: ${{ matrix.ansible_version }}
+          check_git: false
+          check_git_enforced: false
