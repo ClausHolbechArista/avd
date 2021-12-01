@@ -39,6 +39,7 @@
 - name: Generate device configuration in structured format
   tags: [build, provision]
   yaml_templates_to_facts:
+    debug: true
     root_key: structured_config
     templates: "{{ templates.structured_config }}"
   delegate_to: localhost
