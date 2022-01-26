@@ -8,6 +8,10 @@
   loop:
     - "{{ structured_dir }}"
     - "{{ fabric_dir }}"
+    - "{{ switch_facts_dir }}"
+    - "{{ topology_facts_dir }}"
+    - "{{ topology_peers_facts_dir }}"
+    - "{{ overlay_peers_facts_dir }}"
   delegate_to: localhost
   run_once: true
 
@@ -15,17 +19,39 @@
   tags: [build, provision]
   yaml_templates_to_facts:
     templates: "{{ templates.facts }}"
+    output_filename: "{{ switch_facts_dir }}/{{ inventory_hostname }}.json"
   delegate_to: localhost
   check_mode: no
-  changed_when: False
 
 - name: Set AVD topology facts
   tags: [build, provision]
   yaml_templates_to_facts:
     templates: "{{ templates.topology_facts }}"
+    output_filename: "{{ topology_facts_dir }}/{{ inventory_hostname }}.json"
   delegate_to: localhost
   check_mode: no
-  changed_when: False
+
+- name: Write topology_peers info to filesystem
+  tags: [build, provision]
+  ansible.builtin.file:
+    path: "{{ topology_peers_facts_dir }}/{{ item }}_{{ inventory_hostname }}.json"
+    state: link
+    src: "{{ topology_facts_dir }}/{{ inventory_hostname }}.json"
+    mode: 0664
+  loop: "{{ topology.peers | arista.avd.default([]) }}"
+  delegate_to: localhost
+  check_mode: no
+
+- name: Write overlay_peers info to filesystem
+  tags: [build, provision]
+  ansible.builtin.file:
+    path: "{{ overlay_peers_facts_dir }}/{{ item }}_{{ inventory_hostname }}.json"
+    state: link
+    src: "{{ switch_facts_dir }}/{{ inventory_hostname }}.json"
+    mode: 0664
+  loop: "{{ switch.evpn_route_servers | arista.avd.default([]) }}"
+  delegate_to: localhost
+  check_mode: no
 
 - name: Generate YAML file with hostvars (only for debugging)
   tags: [debug, never]
@@ -39,26 +65,13 @@
 - name: Generate device configuration in structured format
   tags: [build, provision]
   yaml_templates_to_facts:
-    debug: true
-    root_key: structured_config
     templates: "{{ templates.structured_config }}"
+    output_filename: "{{ structured_dir }}/{{ inventory_hostname }}.{{ avd_structured_config_file_format }}"
+    output_format: "{{ avd_structured_config_file_format }}"
+    template_output: True
   delegate_to: localhost
   check_mode: no
-  changed_when: False
-
-- name: Write device structured configuration to YAML file
-  tags: [build, provision]
-  template:
-    src: generate-structured-config.j2
-    dest: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
-    mode: 0664
-  delegate_to: localhost
-  changed_when: False
-
-- name: Include device structured configuration, that was previously generated.
-  tags: [build, provision]
-  include_vars: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
-  delegate_to: localhost
+  register: structured_config
 
 - name: Generate fabric documentation
   tags: [build, provision, documentation]

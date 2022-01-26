@@ -1,0 +1,1 @@
+{"topology": {"links": {"Ethernet1": {"peer": "DC2-POD1-LEAF1A", "peer_interface": "Ethernet3", "peer_type": "l3leaf", "type": "underlay_l2", "channel_group_id": 1, "peer_channel_group_id": 3, "vlans": [4092]}}, "peers": ["DC2-POD1-LEAF1A"], "vlans": [4092]}}

@@ -2,17 +2,27 @@
 {%     set overlay_data.evpn_route_clients = {} %}
 {# #}
 {# Look for switches pointing to us as evpn_route_server #}
-{%     for fabric_switch in groups[fabric_name] if fabric_switch not in overlay_data.evpn_route_servers | arista.avd.natural_sort %}
-{%         set fabric_switch_facts = hostvars[fabric_switch].switch | arista.avd.default %}
-{%         if fabric_switch_facts is arista.avd.defined(fail_action='warning',var_name='hostvars[' ~ fabric_switch ~ '].switch') %}
-{%             set fabric_switch_evpn_role = fabric_switch_facts.evpn_role | arista.avd.default('none') %}
-{%             set fabric_switch_evpn_route_servers = fabric_switch_facts.evpn_route_servers | arista.avd.default([]) %}
-{%             if inventory_hostname in fabric_switch_evpn_route_servers and fabric_switch_evpn_role in ['client', 'server'] %}
+
+{# List of fact files created by peers pointing to this device #}
+{%     set overlay_peers_file_glob = overlay_peers_facts_dir ~ '/' ~ inventory_hostname ~ '_*.json' %}
+{%     set overlay_peers_facts_files = query('ansible.builtin.fileglob', overlay_peers_file_glob) %}
+
+{# Run through list and load the switch facts for that device #}
+{%     for overlay_peers_facts_file in overlay_peers_facts_files %}
+{%         set overlay_peers_facts_file_data = lookup('ansible.builtin.file', overlay_peers_facts_file) | from_json %}
+{%         set fabric_switch_switch_facts = overlay_peers_facts_file_data.switch | arista.avd.default %}
+{%         if fabric_switch_switch_facts is arista.avd.defined %}
+{%             set fabric_switch = fabric_switch_switch_facts.inventory_hostname %}
+{%             if fabric_switch not in overlay_data.evpn_route_servers | arista.avd.default([]) %}
+{%                 set fabric_switch_evpn_role = fabric_switch_switch_facts.evpn_role | arista.avd.default('none') %}
+{%                 set fabric_switch_evpn_route_servers = fabric_switch_switch_facts.evpn_route_servers | arista.avd.default([]) %}
+{%                 if inventory_hostname in fabric_switch_evpn_route_servers and fabric_switch_evpn_role in ['client', 'server'] %}
 {# Found a matching client. Gathering information for this client #}
-{%                 set client = namespace() %}
-{%                 set client.bgp_as = fabric_switch_facts.bgp_as %}
-{%                 set client.ip_address = fabric_switch_facts.router_id %}
-{%                 do overlay_data.evpn_route_clients.update({ fabric_switch: client }) %}
+{%                     set client = namespace() %}
+{%                     set client.bgp_as = fabric_switch_switch_facts.bgp_as %}
+{%                     set client.ip_address = fabric_switch_switch_facts.router_id %}
+{%                     do overlay_data.evpn_route_clients.update({ fabric_switch: client }) %}
+{%                 endif %}
 {%             endif %}
 {%         endif %}
 {%     endfor %}

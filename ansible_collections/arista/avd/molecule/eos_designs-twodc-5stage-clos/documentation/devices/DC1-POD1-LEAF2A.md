@@ -56,12 +56,14 @@
 
 ### Domain-list:
  - structured-config.set.on.node
+ - structured-config.set.on.node
  - structured-config.set.under.vrf.common-vrf
 
 ### Domain-list Device Configuration
 
 ```eos
 !
+ip domain-list structured-config.set.on.node
 ip domain-list structured-config.set.on.node
 ip domain-list structured-config.set.under.vrf.common-vrf
 !

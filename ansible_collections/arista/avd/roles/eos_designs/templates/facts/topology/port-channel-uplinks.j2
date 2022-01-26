@@ -1,6 +1,10 @@
 {% set topology_peers = [] %}
 {% set ns = namespace(vlans=switch.vlans) %}
-
+{% if switch.mlag_role is arista.avd.defined('secondary') %}
+{%     set mlag_peer_switch_facts_filename = switch_facts_dir ~ '/' ~ switch.mlag_peer ~ '.json' %}
+{%     set mlag_peer_switch_facts_file_data = lookup('ansible.builtin.file', mlag_peer_switch_facts_filename) | from_json %}
+{%     set mlag_peer_switch_facts = mlag_peer_switch_facts_file_data.switch | arista.avd.default %}
+{% endif %}
 topology:
 
 {# topology.links #}
@@ -8,8 +12,10 @@ topology:
 {% for uplink_interface in switch.uplink_interfaces | arista.avd.default([]) %}
 {%     set uplink_switch = switch.uplink_switches[loop.index0] | arista.avd.default() %}
 {%     if uplink_switch is arista.avd.defined and uplink_switch in groups[fabric_name] %}
-{%         set uplink_switch_facts = hostvars[uplink_switch].switch | arista.avd.default %}
-{%         if uplink_switch_facts is arista.avd.defined(fail_action='warning',var_name='hostvars[' ~ uplink_switch ~ '].switch') %}
+{%         set uplink_switch_facts_filename = switch_facts_dir ~ '/' ~ uplink_switch ~ '.json' %}
+{%         set uplink_switch_facts_file_data = lookup('ansible.builtin.file', uplink_switch_facts_filename) | from_json %}
+{%         set uplink_switch_facts = uplink_switch_facts_file_data.switch | arista.avd.default %}
+{%         if uplink_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ uplink_switch) %}
 {%             do topology_peers.append(uplink_switch) %}
     {{ uplink_interface }}:
       peer: {{ uplink_switch }}
@@ -27,8 +33,8 @@ topology:
 {# Override the peer's description on port-channel to be our group name if we are mlag pair #}
       peer_channel_description: {{ switch.group }}
 {%             endif %}
-{%             if switch.mlag_role is arista.avd.defined('secondary') %}
-{%                 set mlag_peer_switch_facts = hostvars[switch.mlag_peer].switch %}
+{%             if switch.mlag_role is arista.avd.defined('secondary') and
+                  mlag_peer_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ switch.mlag_peer) %}
       channel_group_id: {{ mlag_peer_switch_facts.uplink_interfaces[0] | regex_findall("\d") | join }}
       peer_channel_group_id: {{ mlag_peer_switch_facts.uplink_switch_interfaces[0] | regex_findall("\d") | join }}
 {%             else %}

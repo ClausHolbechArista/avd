@@ -2,8 +2,10 @@
 {# #}
 {# Expand data for evpn_route_servers #}
 {% for route_server in switch.evpn_route_servers | arista.avd.natural_sort %}
-{%     set fabric_switch_switch_facts = hostvars[route_server].switch | arista.avd.default %}
-{%     if fabric_switch_switch_facts is arista.avd.defined(fail_action='warning',var_name='hostvars[' ~ route_server ~ '].switch') %}
+{%     set fabric_switch_facts_filename = switch_facts_dir ~ '/' ~ route_server ~ '.json' %}
+{%     set fabric_switch_facts_file_data = lookup('ansible.builtin.file', fabric_switch_facts_filename) | from_json %}
+{%     set fabric_switch_switch_facts = fabric_switch_facts_file_data.switch | arista.avd.default %}
+{%     if fabric_switch_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ route_server) %}
 {%         if fabric_switch_switch_facts.evpn_role is arista.avd.defined('server') %}
 {# Found a matching server. Gathering information for this server #}
 {%             set server = namespace() %}

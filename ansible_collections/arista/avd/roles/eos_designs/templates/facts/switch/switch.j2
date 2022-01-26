@@ -1,5 +1,8 @@
 switch:
 
+{# switch.inventory_hostname #}
+  inventory_hostname: {{ inventory_hostname }}
+
 {# switch.type #}
   type: {{ type | arista.avd.default }}
 

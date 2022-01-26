@@ -3,13 +3,26 @@
 {% set inband_management_data.subnets = [] %}
 
 {# Add underlay links defined on other devices pointing to this device #}
-{% for fabric_switch in groups[fabric_name] | arista.avd.natural_sort %}
-{%     set fabric_switch_facts = hostvars[fabric_switch].switch | arista.avd.default %}
-{%     if inventory_hostname in fabric_switch_facts.inband_management_parents | arista.avd.default([]) %}
+
+{# List of fact files created by peers pointing to this device #}
+{% set topology_peers_file_glob = topology_peers_facts_dir ~ '/' ~ inventory_hostname ~ '_*.json' %}
+{% set topology_peers_facts_files = query('ansible.builtin.fileglob', topology_peers_file_glob) %}
+
+{# Run through list and load switch facts for that device #}
+{% for topology_peers_facts_file in topology_peers_facts_files %}
+{%     set topology_peer_filename = topology_peers_facts_file | basename %}
+{%     set filename_prefix_length = (inventory_hostname ~ '_') | length %}
+{#     Remove the "hostname_" from the filename so we only have "peerhostname.json" left #}
+{%     set fabric_switch_facts_filename = switch_facts_dir ~ '/' ~ topology_peer_filename[filename_prefix_length:] %}
+{%     set fabric_switch_facts_file_data = lookup('ansible.builtin.file', fabric_switch_facts_filename) | from_json %}
+{%     set fabric_switch_switch_facts = fabric_switch_facts_file_data.switch | arista.avd.default %}
+
+{# Parse switch facts for inband_management parents #}
+{%     if inventory_hostname in fabric_switch_switch_facts.inband_management_parents | arista.avd.default([]) %}
 {%         set inband_management_data.role = 'parent' %}
-{%         if fabric_switch_facts.inband_management_subnet not in inband_management_data.subnets %}
-{%             do inband_management_data.vlans.append(fabric_switch_facts.inband_management_vlan) %}
-{%             do inband_management_data.subnets.append(fabric_switch_facts.inband_management_subnet) %}
+{%         if fabric_switch_switch_facts.inband_management_subnet not in inband_management_data.subnets %}
+{%             do inband_management_data.vlans.append(fabric_switch_switch_facts.inband_management_vlan) %}
+{%             do inband_management_data.subnets.append(fabric_switch_switch_facts.inband_management_subnet) %}
 {%         endif %}
 {%     endif %}
 {% endfor %}

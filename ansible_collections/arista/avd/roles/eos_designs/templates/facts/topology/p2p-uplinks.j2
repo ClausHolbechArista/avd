@@ -7,8 +7,10 @@ topology:
 {% for uplink_interface in switch.uplink_interfaces | arista.avd.default([]) %}
 {%     set uplink_switch = switch.uplink_switches[loop.index0] | arista.avd.default() %}
 {%     if uplink_switch is arista.avd.defined and uplink_switch in groups[fabric_name] %}
-{%         set uplink_switch_facts = hostvars[uplink_switch].switch | arista.avd.default %}
-{%         if uplink_switch_facts is arista.avd.defined(fail_action='warning',var_name='hostvars[' ~ uplink_switch ~ '].switch') %}
+{%         set uplink_switch_facts_filename = switch_facts_dir ~ '/' ~ uplink_switch ~ '.json' %}
+{%         set uplink_switch_facts_file_data = lookup('ansible.builtin.file', uplink_switch_facts_filename) | from_json %}
+{%         set uplink_switch_facts = uplink_switch_facts_file_data.switch | arista.avd.default %}
+{%         if uplink_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ uplink_switch) %}
 {%             do topology_peers.append(uplink_switch) %}
     {{ uplink_interface }}:
       peer: {{ uplink_switch }}
