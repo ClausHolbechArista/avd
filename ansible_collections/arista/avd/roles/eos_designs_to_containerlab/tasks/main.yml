@@ -1,22 +1,44 @@
 ---
-# tasks file for avd_to_containerlab
-- name: Check if structure configuration file exists
+#tasks file for avd_to_containerlab
+- name: Create required output directories if not present
   tags: [build, provision]
-  stat:
-    path: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
-  register: stat_result
-  delegate_to: localhost
-  when: structured_config is not defined
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+  loop:
+    - "configs"
+  run_once: true
 
-- name: Include device intended structure configuration variables
-  tags: [build, provision]
-  include_vars: "{{ structured_dir }}/{{ inventory_hostname }}.yml"
-  delegate_to: localhost
-  when: structured_config is not defined and stat_result.stat.exists
+- name: Copy configuration files to containerlab host
+  copy:
+    src: "{{ eos_config_dir }}/"
+    dest: "configs/"
+    force: false
+  run_once: true
 
 - name: Generate containerlab topology
   template:
     src: containerlab_configuration.yml.j2
     dest: '{{ containerlab_configuration }}'
-  delegate_to: localhost
+  run_once: true
+
+- ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+  run_once: true
+
+- name: Deploy containerlab
+  command: "docker run \
+    --rm \
+    -it \
+    --privileged \
+    --network host \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /var/run/netns:/var/run/netns \
+    -v /etc/hosts:/etc/hosts \
+    --pid='host' \
+    -v {{ ansible_facts.env.PWD }}:{{ containerlab_container_data_path }} \
+    -w {{ containerlab_container_data_path }} \
+    ghcr.io/srl-labs/clab clab deploy -t {{ containerlab_configuration }} --reconfigure"
   run_once: true

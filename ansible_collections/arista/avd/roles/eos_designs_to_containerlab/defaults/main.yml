@@ -8,7 +8,9 @@ ceos_version: ceos:latest
 root_dir: '{{ inventory_dir }}'
 
 # Default containerlabs configuration file generated
-containerlab_configuration: '{{ root_dir }}/containerlabs.yml'
+containerlab_container_data_path: '/data'
+containerlab_container_config_path: '{{ containerlab_container_data_path }}/configs'
+containerlab_configuration: 'containerlabs.yml'
 
 # AVD configurations output
 # Main output directory
@@ -22,3 +24,10 @@ structured_dir: '{{ output_dir }}/{{ structured_dir_name }}'
 # EOS Configuration Directory name
 eos_config_dir_name: 'configs'
 eos_config_dir: '{{ output_dir }}/{{ eos_config_dir_name }}'
+
+# Output for Internal Facts files:
+facts_dir_name: 'data'
+facts_dir: '{{ root_dir }}/{{ facts_dir_name }}'
+switch_facts_dir: '{{ facts_dir }}/switch'
+topology_facts_dir: '{{ facts_dir }}/topology'
+topology_peers_facts_dir: '{{ facts_dir }}/topology_peers'
