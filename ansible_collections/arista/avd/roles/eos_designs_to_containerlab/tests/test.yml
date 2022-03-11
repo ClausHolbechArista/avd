@@ -1,5 +1,8 @@
 ---
-- hosts: localhost
-  remote_user: root
-  roles:
-    - avd_to_containerlab
+- name: Build containerlab topology
+  hosts: DC1
+  gather_facts: false
+  tasks:
+    - name: 'Build and run containerlab topolgy'
+      import_role:
+        name: arista.avd.eos_designs_to_containerlab

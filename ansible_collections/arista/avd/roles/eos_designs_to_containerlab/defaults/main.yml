@@ -1,16 +1,8 @@
 ---
 # defaults file for avd_to_containerlab
 
-# cEOS Image to use
-ceos_version: ceos:latest
-
 # Root directory where to build output structure
 root_dir: '{{ inventory_dir }}'
-
-# Default containerlabs configuration file generated
-containerlab_container_data_path: '/data'
-containerlab_container_config_path: '{{ containerlab_container_data_path }}/configs'
-containerlab_configuration: 'containerlabs.yml'
 
 # AVD configurations output
 # Main output directory
@@ -25,9 +17,26 @@ structured_dir: '{{ output_dir }}/{{ structured_dir_name }}'
 eos_config_dir_name: 'configs'
 eos_config_dir: '{{ output_dir }}/{{ eos_config_dir_name }}'
 
-# Output for Internal Facts files:
-facts_dir_name: 'data'
-facts_dir: '{{ root_dir }}/{{ facts_dir_name }}'
-switch_facts_dir: '{{ facts_dir }}/switch'
-topology_facts_dir: '{{ facts_dir }}/topology'
-topology_peers_facts_dir: '{{ facts_dir }}/topology_peers'
+# Default containerlabs configuration file generated
+containerlab_container_data_path: '/data'
+containerlab_container_config_path: '{{ containerlab_container_data_path }}/configs'
+
+# Defaults for running containerlab
+containerlab_dir_name: 'containerlab'
+containerlab_dir: '{{ output_dir }}/{{ containerlab_dir_name }}'
+containerlab_mapping_dir_name: 'mappings'
+containerlab_mapping_dir: '{{ output_dir }}/{{ containerlab_dir_name }}/{{ containerlab_mapping_dir_name }}'
+containerlab_config_dir_name: 'configs'
+containerlab_config_dir: '{{ output_dir }}/{{ containerlab_dir_name }}/{{ containerlab_config_dir_name }}'
+containerlab_configuration: containerlab.yml
+containerlab_mode: installed
+containerlab_labname: AVD
+containerlab_prefix: __lab-name  
+containerlab_mgmt_network_name: MGMT
+containerlab_ceos_version: ceos:latest
+containerlab_enforce_startup_config: true
+containerlab_custom_interface_mapping: true
+containerlab_include_intfs_to_non_avd_nodes: false
+avd_structured_config_file_format: "yml"
+avd_config_file_format: "cfg"
+avd_interface_mapping_file_format: "json"

@@ -1,45 +1,113 @@
 {# CONTAINERLABS configuration rendering #}
 ---
-name: {{ fabric_name }}
+name: {{ containerlab_labname }}
 
-{% for fabric_switch in groups[fabric_name] | arista.avd.natural_sort %}
-{# Load fabric_switch facts #}
-{%     set fabric_switch_facts_filename = switch_facts_dir ~ '/' ~ fabric_switch ~ '.json' %}
-{%     set fabric_switch_facts_file_data = lookup('ansible.builtin.file', fabric_switch_facts_filename) | from_json %}
-{%     set fabric_switch_facts = fabric_switch_facts_file_data.switch | arista.avd.default %}
+prefix: {{ containerlab_prefix }}
+
+{% for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort %}
 {# Generate topology nodes #}
+{%     set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
 {%     if fabric_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ fabric_switch) %}
-{%         if fabric_switch_facts.mgmt_ip is arista.avd.defined %}
-
 {# For First loop generate mgmt network and nodes header #}
-{%             if loop.first %}
+{%         if loop.first %}
 mgmt:
-  network: mgmt_{{ fabric_name }}
+  network: {{ containerlab_mgmt_network_name }}
 {# We require that all devices are in the same management subnet #}
-  ipv4_subnet: {{ fabric_switch_facts.mgmt_ip | ansible.netcommon.ipaddr('subnet') }}
-
+{%             if containerlab_mgmt_network is arista.avd.defined %}
+  ipv4_subnet: {{ containerlab_mgmt_network | ansible.netcommon.ipaddr('subnet') }}
+{%             else %}
+{# If containerlab_mgmt_network is not defined use the management ip of the first node to determine the mgmt network #}
+{%                 if fabric_switch_facts.management_interfaces is arista.avd.defined %}
+{%                     set ns = namespace(first_entry=true) -%}   
+{%                     for mgmt_int in fabric_switch_facts.management_interfaces if ns.first_entry %}
+{%                         if fabric_switch_facts.management_interfaces[mgmt_int].type is arista.avd.defined and fabric_switch_facts.management_interfaces[mgmt_int].type == 'oob' %}
+  ipv4_subnet: {{fabric_switch_facts.management_interfaces[mgmt_int].ip_address | ansible.netcommon.ipaddr('subnet') }}
+{%                             set ns.first_entry=false -%}
+{%                         endif %}
+{%                     endfor %}  
+{%                 endif %}
+{%             endif %}
 {# NODES definition #}
 topology:
   nodes:
-{%             endif %}
+{%         endif %}
     {{ fabric_switch }}:
-      image: {{ ceos_version }}
-      mgmt_ipv4: {{ fabric_switch_facts.mgmt_ip | ansible.netcommon.ipaddr('address') }}
+      image: {{ containerlab_ceos_version }}
+{%         if fabric_switch_facts.management_interfaces is arista.avd.defined %}
+{%             set ns = namespace(first_entry=true) -%}   
+{%             for mgmt_int in fabric_switch_facts.management_interfaces if ns.first_entry %}
+{%                 if fabric_switch_facts.management_interfaces[mgmt_int].type is arista.avd.defined and fabric_switch_facts.management_interfaces[mgmt_int].type == 'oob' %}
+      mgmt_ipv4: {{ fabric_switch_facts.management_interfaces[mgmt_int].ip_address | ansible.netcommon.ipaddr('address') -}}
+{%                     set ns.first_entry=false -%}
+{%                 endif %}
+{%             endfor %}  
+{%         endif %}
       kind: ceos
-      startup-config: {{ containerlab_container_data_path }}/configs/{{ fabric_switch }}.cfg
+      startup-config: {{ eos_config_dir_name }}/{{ fabric_switch }}.{{ avd_config_file_format }}
+{%         if containerlab_enforce_startup_config %}
+      enforce-startup-config: true
+{%         endif %}
+{%         if containerlab_custom_interface_mapping %}
+      binds:
+        - {{ containerlab_mapping_dir_name }}/{{ fabric_switch }}.{{ avd_interface_mapping_file_format }}:/mnt/flash/EosIntfMapping.json:ro
+{%         endif %}
+{%         if fabric_switch_facts.containerlab is arista.avd.defined %}
+      {{ fabric_switch_facts.containerlab | to_nice_yaml(indent=2, sort_keys=False) | indent(6) -}}
 {%         endif %}
 {%     endif %}
+
 {% endfor %}
 
-{# Generate topology links #}
+{# LINKS definition #}
   links:
-{% for fabric_switch in groups[fabric_name] | arista.avd.natural_sort %}
-{%     set topology_peers_facts_filename = topology_facts_dir ~ '/' ~ fabric_switch ~ '.json' %}
-{%     set topology_peers_facts_file_data = lookup('ansible.builtin.file', topology_peers_facts_filename) | from_json %}
-{%     set fabric_switch_topology_facts = topology_peers_facts_file_data.topology | arista.avd.default %}
-{%     for link in fabric_switch_topology_facts.links | arista.avd.convert_dicts | arista.avd.natural_sort %}
-    - endpoints:
-        - {{ fabric_switch }}:{{ link.name | lower | replace('ethernet','eth') }}
-        - {{ link.peer }}:{{ link.peer_interface | lower | replace('ethernet','eth') }}
+{# If customer interface mapping is true create a mapping between the linux interface and the custom mapping in EOS #}
+{% if containerlab_custom_interface_mapping %}
+{%     set intf_mapping_all={} -%} 
+{%     for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort if hostvars[fabric_switch].ethernet_interfaces is arista.avd.defined %}
+{%         set intf_mapping_switch={} -%} 
+{%         set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
+{%         for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort %}
+{%             do intf_mapping_switch.update({ link:'eth'+loop.index|string }) %}
+{%         endfor %}
+{%         do intf_mapping_all.update({ fabric_switch:intf_mapping_switch }) %}
+{%     endfor %}
+{% endif %}
+{% set connections_done = [] %}
+{% for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort if hostvars[fabric_switch].ethernet_interfaces is arista.avd.defined %}
+{%     set parentloop = loop %}
+{%     set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
+{%     for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort %}
+{%         if fabric_switch_facts.ethernet_interfaces[link].peer is arista.avd.defined and fabric_switch_facts.ethernet_interfaces[link].peer_interface is arista.avd.defined %}
+{#             LINKS between AVD defined nodes #}
+{%             if fabric_switch_facts.ethernet_interfaces[link].peer in ansible_play_hosts_all %}
+{%                 set reverse_connection = fabric_switch_facts.ethernet_interfaces[link].peer+":"+fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth')+", "+fabric_switch+":"+link | lower | replace('ethernet','eth') %}
+{%                 if reverse_connection not in connections_done %}
+{%                   if containerlab_custom_interface_mapping %}
+    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "{{ fabric_switch_facts.ethernet_interfaces[link].peer  }}:{{ intf_mapping_all[fabric_switch_facts.ethernet_interfaces[link].peer][fabric_switch_facts.ethernet_interfaces[link].peer_interface] }}"]
+{%                   else %}
+    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "{{ fabric_switch_facts.ethernet_interfaces[link].peer  }}:{{ fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth') | replace('/','_') }}"]
+{%                   endif %}
+{%                 do connections_done.append(fabric_switch+":"+link | lower | replace('ethernet','eth')+", "+fabric_switch_facts.ethernet_interfaces[link].peer+":"+fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth')) %}
+{%                 endif %}
+{%             else %}
+{#             LINKS to non AVD defined peer where the peer name and peer interface is defined #}
+{%               if containerlab_include_intfs_to_non_avd_nodes %}
+{%                   if containerlab_custom_interface_mapping %}
+    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
+{%                   else %}
+    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
+{%                   endif %}
+{%               endif %}
+{%             endif %}
+{%         else %}
+{#         LINKS to non AVD defined peer where the peer name and/or peer interface is not defined #}
+{%           if containerlab_include_intfs_to_non_avd_nodes %}
+{%               if containerlab_custom_interface_mapping %}
+    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
+{%               else %}
+    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
+{%               endif %}
+{%           endif %}
+{%         endif %}
 {%     endfor %}
 {% endfor %}
