@@ -117,6 +117,7 @@
     - "{{ ansible_facts.env.PWD }}/{{ containerlab_labname }}"
   delegate_to: CL_1
   run_once: true
+  become: yes
 
 - name: Create required directories on the containerlab host
   delegate_to: CL_1
