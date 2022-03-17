@@ -16,6 +16,8 @@
 
 - In case you want to split the AVD nodes on different containerlab hosts, the containerlab hosts must be able to reach each other.
 
+- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".               
+
 
 ## Role Variables
 
