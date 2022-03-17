@@ -16,6 +16,8 @@
 
 - In case you want to split the AVD nodes on different containerlab hosts, the containerlab hosts must be able to reach each other.
 
+- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".
+
 
 ## Role Variables
 
@@ -76,7 +78,7 @@ Here is a playbook example to use `arista.avd.eos_designs_to_containerlab`:
 ```yaml
 ---
 - name: Create avd nodes specific files
-  hosts: Count_and_Care_FABRIC
+  hosts: DC1
   gather_facts: false
   tasks:
     - name: 'Create avd nodes specific files'
@@ -108,9 +110,9 @@ all:
         CL_2:
           ansible_host: 1.1.1.2
       vars:
-          ansible_user: testuser
-          ansible_password: testuser
-          ansible_become_password: testuser
+          ansible_user: user
+          ansible_password: pass
+          ansible_become_password: pass
           containerlab_ceos_version: ceos:4.28.0F
           containerlab_configuration: custom_topology.yml
           containerlab_vxlan_base: 200

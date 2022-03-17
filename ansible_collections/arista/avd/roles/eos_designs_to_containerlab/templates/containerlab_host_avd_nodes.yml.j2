@@ -1,0 +1,14 @@
+{# CONTAINERLABS connections per containerlab host #}
+{# Run through all node names and divide them to the containerlab hosts #}
+{%- set distributed_nodes = {} -%}
+{%- for docker_node in groups['CONTAINERLAB'] -%}
+{%-     set docker_host_counter = loop -%}
+{%-     set tmp_node_list = [] -%}
+{%-     for fabric_switch in avd_nodes_all.nodes | arista.avd.natural_sort -%}
+{%-         if loop.index % (groups['CONTAINERLAB'] | length) == docker_host_counter.index-1 -%}
+{%-             do tmp_node_list.append(fabric_switch) -%}
+{%-         endif -%} 
+{%-     endfor -%}  
+{%-     do distributed_nodes.update({ docker_node:tmp_node_list }) -%}
+{%- endfor -%}  
+{{ distributed_nodes | to_nice_yaml }}
