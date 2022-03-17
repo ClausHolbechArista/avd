@@ -33,7 +33,7 @@ mgmt:
 {%                     set ns = namespace(first_entry=true) -%}   
 {%                     for mgmt_int in fabric_switch_facts.management_interfaces if ns.first_entry %}
 {%                         if fabric_switch_facts.management_interfaces[mgmt_int].type is arista.avd.defined and fabric_switch_facts.management_interfaces[mgmt_int].type == 'oob' %}
-  ipv4_subnet: {{fabric_switch_facts.management_interfaces[mgmt_int].ip_address | ansible.netcommon.ipaddr('subnet') }}
+  ipv4_subnet: {{ fabric_switch_facts.management_interfaces[mgmt_int].ip_address | ansible.netcommon.ipaddr('subnet') }}
 {%                             set ns.first_entry=false -%}
 {%                         endif %}
 {%                     endfor %}  
