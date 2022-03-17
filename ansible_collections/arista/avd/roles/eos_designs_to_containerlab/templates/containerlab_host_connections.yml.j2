@@ -19,23 +19,23 @@
 {%-     set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default -%}
 {%-     for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort -%}
 {%-         if fabric_switch_facts.ethernet_interfaces[link].peer is arista.avd.defined and fabric_switch_facts.ethernet_interfaces[link].peer_interface is arista.avd.defined %}
-{#             LINKS between AVD defined nodes #}
+{#              LINKS between AVD defined nodes #}
 {%-             if fabric_switch_facts.ethernet_interfaces[link].peer in ansible_play_hosts_all -%}
 {%-                 set reverse_connection = {fabric_switch_facts.ethernet_interfaces[link].peer:fabric_switch_facts.ethernet_interfaces[link].peer_interface, fabric_switch:link} -%}
 {%-                 if reverse_connection not in connections_done -%}
 {%-                     do connections_done.append({fabric_switch:link, fabric_switch_facts.ethernet_interfaces[link].peer:fabric_switch_facts.ethernet_interfaces[link].peer_interface}) -%}
 {%-                 endif -%}
 {%-             else -%}
-{#             LINKS to non AVD defined peer where the peer name and peer interface is defined #}
+{#              LINKS to non AVD defined peer where the peer name and peer interface is defined #}
 {%-                 if containerlab_include_intfs_to_non_avd_nodes -%}
-{%-                     do connections_done.append({fabric_switch:link, "host":"dummy"+loop.index}) -%}
+{%-                     do connections_done.append({fabric_switch:link, "host":"dummy" + loop.index}) -%}
 {%-                 endif -%}
 {%-             endif -%}
 {%-         else -%}
-{#         LINKS to non AVD defined peer where the peer name and/or peer interface is not defined #}
-{%-           if containerlab_include_intfs_to_non_avd_nodes %}
-{%-               do connections_done.append({fabric_switch:link, "host":"dummy"+loop.index}) -%}
-{%-           endif -%}
+{#          LINKS to non AVD defined peer where the peer name and/or peer interface is not defined #}
+{%-             if containerlab_include_intfs_to_non_avd_nodes %}
+{%-                 do connections_done.append({fabric_switch:link, "host":"dummy" + loop.index}) -%}
+{%-             endif -%}
 {%-         endif -%}
 {%-     endfor -%}
 {%- endfor -%}
@@ -47,7 +47,7 @@
 {%-         set intf_mapping_switch={} -%} 
 {%-         set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default -%}
 {%-         for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort -%}
-{%-             do intf_mapping_switch.update({ link:'eth'+loop.index|string }) -%}
+{%-             do intf_mapping_switch.update({ link:'eth' + loop.index | string }) -%}
 {%-         endfor -%}
 {%-         do intf_mapping_all.update({ fabric_switch:intf_mapping_switch }) -%}
 {%-     endfor -%}
@@ -56,34 +56,34 @@
 {# Replace the EOS interface with the linux interface (ethX) or the containerlab representation (ex. eth52_1) which is needed for the containerlab topology #}
 {%- set connections = [] -%}
 {%- for connection in connections_done -%}
-{%-   set ns = namespace(node1_name="") -%}
-{%-   set ns = namespace(node1_interface="") -%}   
-{%-   set ns = namespace(node2_name="") -%}   
-{%-   set ns = namespace(node2_interface="") -%}   
-{%-   for node, interface in connection.items() -%}
-{%-     if loop.index % 2 != 0 -%}
-{%-       set ns.node1_name=node -%}
-{%-       if containerlab_custom_interface_mapping -%}
-{%-         set ns.node1_interface=intf_mapping_all[node][interface] -%}
-{%-       else -%}
-{%-         set ns.node1_interface=interface | lower | replace('ethernet','eth') | replace('/','_') -%}
-{%-       endif -%}  
-{%-     else -%}  
-{%-       set ns.node2_name=node -%}
-{%-       if node != "host": -%}
-{#         Real connection to a AVD node #}
-{%-         if containerlab_custom_interface_mapping -%}
-{%-           set ns.node2_interface=intf_mapping_all[node][interface] -%}
-{%-         else -%}
-{%-           set ns.node2_interface=interface | lower | replace('ethernet','eth') | replace('/','_') -%}
-{%-         endif -%}  
-{%-       else -%}  
-{#         Dummy connection to a non AVD node #}
-{%-         set ns.node2_interface=interface -%}
-{%-       endif -%}  
-{%-     endif %}  
-{%-   endfor -%}      
-{%-   do connections.append({ns.node1_name:ns.node1_interface, ns.node2_name:ns.node2_interface}) -%}
+{%-     set ns = namespace(node1_name="") -%}
+{%-     set ns = namespace(node1_interface="") -%}   
+{%-     set ns = namespace(node2_name="") -%}   
+{%-     set ns = namespace(node2_interface="") -%}   
+{%-     for node, interface in connection.items() -%}
+{%-         if loop.index % 2 != 0 -%}
+{%-             set ns.node1_name=node -%}
+{%-             if containerlab_custom_interface_mapping -%}
+{%-                 set ns.node1_interface=intf_mapping_all[node][interface] -%}
+{%-             else -%}
+{%-                 set ns.node1_interface=interface | lower | replace('ethernet','eth') | replace('/','_') -%}
+{%-             endif -%}  
+{%-         else -%}  
+{%-             set ns.node2_name=node -%}
+{%-             if node != "host": -%}
+{#              Real connection to a AVD node #}
+{%-                 if containerlab_custom_interface_mapping -%}
+{%-                     set ns.node2_interface=intf_mapping_all[node][interface] -%}
+{%-                 else -%}
+{%-                     set ns.node2_interface=interface | lower | replace('ethernet','eth') | replace('/','_') -%}
+{%-                 endif -%}  
+{%-             else -%}  
+{#              Dummy connection to a non AVD node #}
+{%-                 set ns.node2_interface=interface -%}
+{%-             endif -%}  
+{%-         endif %}  
+{%-     endfor -%}      
+{%-     do connections.append({ns.node1_name:ns.node1_interface, ns.node2_name:ns.node2_interface}) -%}
 {%- endfor -%}
 {#########################}
 {# Create structure to hold the connections per docker node #}
@@ -94,35 +94,35 @@
 {#########################}
 {# Create the connections list for each docker node #}
 {%- if hostvars[groups['CONTAINERLAB'][0]].containerlab_vxlan_base is defined -%}
-{%- set ns = namespace(vxlan_count = hostvars[groups['CONTAINERLAB'][0]].containerlab_vxlan_base) -%}
+{%-     set ns = namespace(vxlan_count = hostvars[groups['CONTAINERLAB'][0]].containerlab_vxlan_base) -%}
 {%- else -%}
-{%- set ns = namespace(vxlan_count = containerlab_vxlan_base) -%}
+{%-     set ns = namespace(vxlan_count = containerlab_vxlan_base) -%}
 {%- endif -%}
-{%- for docker_node in groups['CONTAINERLAB']  | arista.avd.natural_sort -%}
-{%-   for node in distributed_nodes[docker_node] | arista.avd.natural_sort -%}
-{%-     for connection in connections  | arista.avd.natural_sort -%}
-{%-        if node == (connection.keys() | list)[0] -%}
-{%-         if (connection.keys() | list)[1] in distributed_nodes[docker_node] -%}  
-{#            Connections which stay local on the containerlab host (both nodes on the same containerlab host) #}
-{%-           do docker_connections[docker_node]["local_con"].append(connection) -%}  
-{%-         else -%}  
-{#            Connections which are to a remote node running on a different containerlab host (written in local topology file) #}
-{%-           do docker_connections[docker_node]["local_vx_con"].append({(connection.keys() | list)[0]: connection[(connection.keys() | list)[0]], "host:vx" + (ns.vxlan_count|string): connection[(connection.keys() | list)[1]]}) -%}  
-{#            Create the containerlab vxlan mapping commands (belong to the before created vxlan connection for the topology file) #}
-{%-           for tmp_conlab in groups['CONTAINERLAB'] -%}
-{#              Find the containerlab host IP where the remote node will be running #}
-{%-             if (connection.keys() | list)[1] in distributed_nodes[tmp_conlab] -%}
-{#                Create the vxlan contaierlab command for the remote containerlab host #}                
-{%-               do docker_connections[docker_node]["local_vx_clab_tools_cmd"].append("clab tools vxlan create --remote " + hostvars[tmp_conlab].ansible_host + " --id " + (ns.vxlan_count|string) + " --link vx" + (ns.vxlan_count|string) + "-" + (connection[(connection.keys() | list)[1]])|string) -%}
-{#                Create the vxlan connection and vxlan contaierlab command for the remote containerlab host #}
-{%-               do docker_connections[tmp_conlab]["local_vx_con"].append({(connection.keys() | list)[1]: connection[(connection.keys() | list)[1]], "host:vx" + (ns.vxlan_count|string): connection[(connection.keys() | list)[0]]}) -%}
-{%-               do docker_connections[tmp_conlab]["local_vx_clab_tools_cmd"].append("clab tools vxlan create --remote " + hostvars[docker_node].ansible_host + " --id " + (ns.vxlan_count|string) + " --link vx" + (ns.vxlan_count|string) + "-" + (connection[(connection.keys() | list)[0]])|string) -%}
+{%- for docker_node in groups['CONTAINERLAB'] | arista.avd.natural_sort -%}
+{%-     for node in distributed_nodes[docker_node] | arista.avd.natural_sort -%}
+{%-         for connection in connections | arista.avd.natural_sort -%}
+{%-             if node == (connection.keys() | list)[0] -%}
+{%-                 if (connection.keys() | list)[1] in distributed_nodes[docker_node] -%}  
+{#                  Connections which stay local on the containerlab host (both nodes on the same containerlab host) #}
+{%-                     do docker_connections[docker_node]["local_con"].append(connection) -%}  
+{%-                 else -%}  
+{#                  Connections which are to a remote node running on a different containerlab host (written in local topology file) #}
+{%-                     do docker_connections[docker_node]["local_vx_con"].append({(connection.keys() | list)[0]: connection[(connection.keys() | list)[0]], "host:vx" + (ns.vxlan_count | string): connection[(connection.keys() | list)[1]]}) -%}  
+{#                      Create the containerlab vxlan mapping commands (belong to the before created vxlan connection for the topology file) #}
+{%-                     for tmp_conlab in groups['CONTAINERLAB'] -%}
+{#                          Find the containerlab host IP where the remote node will be running #}
+{%-                         if (connection.keys() | list)[1] in distributed_nodes[tmp_conlab] -%}
+{#                              Create the vxlan contaierlab command for the remote containerlab host #}                
+{%-                             do docker_connections[docker_node]["local_vx_clab_tools_cmd"].append("clab tools vxlan create --remote " + hostvars[tmp_conlab].ansible_host + " --id " + (ns.vxlan_count | string) + " --link vx" + (ns.vxlan_count | string) + "-" + (connection[(connection.keys() | list)[1]]) | string) -%}
+{#                              Create the vxlan connection and vxlan contaierlab command for the remote containerlab host #}
+{%-                             do docker_connections[tmp_conlab]["local_vx_con"].append({(connection.keys() | list)[1]: connection[(connection.keys() | list)[1]], "host:vx" + (ns.vxlan_count | string): connection[(connection.keys() | list)[0]]}) -%}
+{%-                             do docker_connections[tmp_conlab]["local_vx_clab_tools_cmd"].append("clab tools vxlan create --remote " + hostvars[docker_node].ansible_host + " --id " + (ns.vxlan_count | string) + " --link vx" + (ns.vxlan_count | string) + "-" + (connection[(connection.keys() | list)[0]]) | string) -%}
+{%-                         endif -%}  
+{%-                     endfor -%}  
+{%-                 endif -%}  
+{%-                 set ns.vxlan_count=ns.vxlan_count+1 -%}
 {%-             endif -%}  
-{%-           endfor -%}  
-{%-         endif -%}  
-{%-         set ns.vxlan_count=ns.vxlan_count+1 -%}
-{%-       endif -%}  
+{%-         endfor -%}  
 {%-     endfor -%}  
-{%-   endfor -%}  
 {%- endfor -%}  
 {{ docker_connections | to_nice_yaml }}
