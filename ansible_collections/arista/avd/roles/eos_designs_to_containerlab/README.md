@@ -16,7 +16,7 @@
 
 - In case you want to split the AVD nodes on different containerlab hosts, the containerlab hosts must be able to reach each other.
 
-- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".
+- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".               
 
 
 ## Role Variables
@@ -111,8 +111,8 @@ all:
           ansible_host: 1.1.1.2
       vars:
           ansible_user: user
-          ansible_password: pass
-          ansible_become_password: pass
+          ansible_password: password
+          ansible_become_password: password
           containerlab_ceos_version: ceos:4.28.0F
           containerlab_configuration: custom_topology.yml
           containerlab_vxlan_base: 200
@@ -124,3 +124,4 @@ all:
 ## License
 
 Project is published under [Apache 2.0 License](../../LICENSE)
+
