@@ -4,7 +4,19 @@ name: {{ containerlab_labname }}
 
 prefix: {{ containerlab_prefix }}
 
-{% for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort %}
+{# Run through all node names and divide them to the containerlab hosts #}
+{%- set distributed_nodes = {} -%}
+{%- for docker_node in groups['CONTAINERLAB'] -%}
+{%-     set docker_host_counter = loop -%}
+{%-     set tmp_node_list = [] -%}
+{%-     for fabric_switch in avd_nodes_all.nodes | arista.avd.natural_sort -%}
+{%-         if loop.index % (groups['CONTAINERLAB'] | length) == docker_host_counter.index-1 -%}
+{%-             do tmp_node_list.append(fabric_switch) -%}
+{%-         endif -%} 
+{%-     endfor -%}  
+{%-     do distributed_nodes.update({ docker_node:tmp_node_list }) -%}
+{%- endfor -%}  
+{% for fabric_switch in distributed_nodes[inventory_hostname] | arista.avd.natural_sort %}
 {# Generate topology nodes #}
 {%     set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
 {%     if fabric_switch_facts is arista.avd.defined(fail_action='warning',var_name='Switch Facts for ' ~ fabric_switch) %}
@@ -43,13 +55,13 @@ topology:
 {%             endfor %}  
 {%         endif %}
       kind: ceos
-      startup-config: {{ eos_config_dir_name }}/{{ fabric_switch }}.{{ avd_config_file_format }}
+      startup-config: {{ inventory_hostname }}_{{ eos_config_dir_name }}/{{ fabric_switch }}.{{ avd_config_file_format }}
 {%         if containerlab_enforce_startup_config %}
       enforce-startup-config: true
 {%         endif %}
 {%         if containerlab_custom_interface_mapping %}
       binds:
-        - {{ containerlab_mapping_dir_name }}/{{ fabric_switch }}.{{ avd_interface_mapping_file_format }}:/mnt/flash/EosIntfMapping.json:ro
+        - {{ inventory_hostname }}_{{ containerlab_mapping_dir_name }}/{{ fabric_switch }}.{{ avd_interface_mapping_file_format }}:/mnt/flash/EosIntfMapping.json:ro
 {%         endif %}
 {%         if fabric_switch_facts.containerlab is arista.avd.defined %}
       {{ fabric_switch_facts.containerlab | to_nice_yaml(indent=2, sort_keys=False) | indent(6) -}}
@@ -60,54 +72,9 @@ topology:
 
 {# LINKS definition #}
   links:
-{# If customer interface mapping is true create a mapping between the linux interface and the custom mapping in EOS #}
-{% if containerlab_custom_interface_mapping %}
-{%     set intf_mapping_all={} -%} 
-{%     for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort if hostvars[fabric_switch].ethernet_interfaces is arista.avd.defined %}
-{%         set intf_mapping_switch={} -%} 
-{%         set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
-{%         for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort %}
-{%             do intf_mapping_switch.update({ link:'eth'+loop.index|string }) %}
-{%         endfor %}
-{%         do intf_mapping_all.update({ fabric_switch:intf_mapping_switch }) %}
-{%     endfor %}
-{% endif %}
-{% set connections_done = [] %}
-{% for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort if hostvars[fabric_switch].ethernet_interfaces is arista.avd.defined %}
-{%     set parentloop = loop %}
-{%     set fabric_switch_facts = hostvars[fabric_switch] | arista.avd.default %}
-{%     for link in fabric_switch_facts.ethernet_interfaces | arista.avd.natural_sort %}
-{%         if fabric_switch_facts.ethernet_interfaces[link].peer is arista.avd.defined and fabric_switch_facts.ethernet_interfaces[link].peer_interface is arista.avd.defined %}
-{#             LINKS between AVD defined nodes #}
-{%             if fabric_switch_facts.ethernet_interfaces[link].peer in ansible_play_hosts_all %}
-{%                 set reverse_connection = fabric_switch_facts.ethernet_interfaces[link].peer+":"+fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth')+", "+fabric_switch+":"+link | lower | replace('ethernet','eth') %}
-{%                 if reverse_connection not in connections_done %}
-{%                   if containerlab_custom_interface_mapping %}
-    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "{{ fabric_switch_facts.ethernet_interfaces[link].peer  }}:{{ intf_mapping_all[fabric_switch_facts.ethernet_interfaces[link].peer][fabric_switch_facts.ethernet_interfaces[link].peer_interface] }}"]
-{%                   else %}
-    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "{{ fabric_switch_facts.ethernet_interfaces[link].peer  }}:{{ fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth') | replace('/','_') }}"]
-{%                   endif %}
-{%                 do connections_done.append(fabric_switch+":"+link | lower | replace('ethernet','eth')+", "+fabric_switch_facts.ethernet_interfaces[link].peer+":"+fabric_switch_facts.ethernet_interfaces[link].peer_interface | lower | replace('ethernet','eth')) %}
-{%                 endif %}
-{%             else %}
-{#             LINKS to non AVD defined peer where the peer name and peer interface is defined #}
-{%               if containerlab_include_intfs_to_non_avd_nodes %}
-{%                   if containerlab_custom_interface_mapping %}
-    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
-{%                   else %}
-    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
-{%                   endif %}
-{%               endif %}
-{%             endif %}
-{%         else %}
-{#         LINKS to non AVD defined peer where the peer name and/or peer interface is not defined #}
-{%           if containerlab_include_intfs_to_non_avd_nodes %}
-{%               if containerlab_custom_interface_mapping %}
-    - endpoints: ["{{ fabric_switch }}:{{ intf_mapping_all[fabric_switch][link] }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
-{%               else %}
-    - endpoints: ["{{ fabric_switch }}:{{ link | lower | replace('ethernet','eth') | replace('/','_') }}", "host:dummy{{parentloop.index}}{{loop.index}}"]
-{%               endif %}
-{%           endif %}
-{%         endif %}
-{%     endfor %}
+{% for connection in connections_per_host[inventory_hostname]['local_con'] %}
+    - endpoints: ["{{ (connection.keys() | list)[0] }}:{{ connection[(connection.keys() | list)[0]] }}", "{{ (connection.keys() | list)[1] }}:{{ connection[(connection.keys() | list)[1]] }}"]
+{% endfor %}
+{% for connection in connections_per_host[inventory_hostname]['local_vx_con'] %}
+    - endpoints: ["{{ (connection.keys() | list)[0] }}:{{ connection[(connection.keys() | list)[0]] }}", "{{ (connection.keys() | list)[1] }}-{{ connection[(connection.keys() | list)[1]] }}"]
 {% endfor %}

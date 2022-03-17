@@ -34,6 +34,7 @@ containerlab_labname: AVD
 containerlab_prefix: __lab-name  
 containerlab_mgmt_network_name: MGMT
 containerlab_ceos_version: ceos:latest
+containerlab_vxlan_base: 100
 containerlab_enforce_startup_config: true
 containerlab_custom_interface_mapping: true
 containerlab_include_intfs_to_non_avd_nodes: false
