@@ -76,7 +76,7 @@ Here is a playbook example to use `arista.avd.eos_designs_to_containerlab`:
 ```yaml
 ---
 - name: Create avd nodes specific files
-  hosts: Count_and_Care_FABRIC
+  hosts: DC1
   gather_facts: false
   tasks:
     - name: 'Create avd nodes specific files'
@@ -108,9 +108,9 @@ all:
         CL_2:
           ansible_host: 1.1.1.2
       vars:
-          ansible_user: testuser
-          ansible_password: testuser
-          ansible_become_password: testuser
+          ansible_user: user
+          ansible_password: password
+          ansible_become_password: password
           containerlab_ceos_version: ceos:4.28.0F
           containerlab_configuration: custom_topology.yml
           containerlab_vxlan_base: 200
