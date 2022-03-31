@@ -2,14 +2,12 @@
 #tasks file for containerlab hosts
 
 - ansible.builtin.setup:
-    # gather_subset:
-    #   - '!all'
-    filter:
-      - 'ansible_env'
+    gather_subset:
+      - '!all'
 
 - name: Check if more than one containerlab host is defined
   set_fact:
-    multinode: "{{ true if groups['CONTAINERLAB']|length > 1 else false }}"
+    multinode: "{{ true if groups['CONTAINERLAB'] | arista.avd.default([]) | length > 1 else false }}"
   run_once: true
   delegate_to: localhost
 
@@ -69,25 +67,12 @@
     state: absent
   run_once: true
 
-- name: Generate temporary containerlab host to avd nodes mapping
+- name: Generate containerlab host to avd nodes mapping
+  yaml_templates_to_facts:
+    templates: 
+      - template: containerlab_host_avd_nodes.yml.j2
+  register: clab_to_avd_nodes_mapping
   delegate_to: localhost
-  template:
-    src: containerlab_host_avd_nodes.yml.j2
-    dest: "{{ containerlab_dir }}/containerlab_host_avd_nodes.yml"
-  run_once: true
-
-- name: Include containerlab host to avd nodes mapping
-  delegate_to: localhost
-  include_vars: 
-    file: "{{ containerlab_dir }}/containerlab_host_avd_nodes.yml"
-    name: clab_to_avd_nodes_mapping
-  run_once: true
-
-- name: Remove the temporary containerlab host to avd nodes mapping
-  delegate_to: localhost
-  file:
-    path: "{{ containerlab_dir }}/containerlab_host_avd_nodes.yml"
-    state: absent
   run_once: true
 
 - name: Generate containerlab topology
@@ -124,15 +109,15 @@
 
 - name: Copy the needed config files per containerlab host
   delegate_to: localhost
-  copy: src={{ eos_config_dir }}/{{ item }}.{{ avd_config_file_format }} dest={{ output_dir }}/{{ containerlab_dir_name }}/{{ inventory_hostname }}_{{ containerlab_config_dir_name }}/{{ item }}.{{ avd_config_file_format }}
+  copy: src={{ eos_config_dir }}/{{ item }}.cfg dest={{ output_dir }}/{{ containerlab_dir_name }}/{{ inventory_hostname }}_{{ containerlab_config_dir_name }}/{{ item }}.cfg
   with_items:
-    - "{{ clab_to_avd_nodes_mapping[inventory_hostname] }}"
+    - "{{ ansible_facts[inventory_hostname] }}"
 
 - name: Copy the needed interface mapping files per containerlab host
   delegate_to: localhost
-  copy: src={{ containerlab_mapping_dir }}/{{ item }}.{{ avd_interface_mapping_file_format }} dest={{ output_dir }}/{{ containerlab_dir_name }}/{{ inventory_hostname }}_{{ containerlab_mapping_dir_name }}/{{ item }}.{{ avd_interface_mapping_file_format }}
+  copy: src={{ containerlab_mapping_dir }}/{{ item }}.json dest={{ output_dir }}/{{ containerlab_dir_name }}/{{ inventory_hostname }}_{{ containerlab_mapping_dir_name }}/{{ item }}.json
   with_items:
-    - "{{ clab_to_avd_nodes_mapping[inventory_hostname] }}"
+    - "{{ ansible_facts[inventory_hostname] }}"
 
 - name: Remove the temporary interface mapping directory
   delegate_to: localhost
@@ -182,10 +167,10 @@
 - name: Creating run parameters for containerlab deploy
   set_fact:
     containerlab_cmd: "\
-    {% if containerlab_max_workers is defined %} --max-workers {{ containerlab_max_workers }}{% endif %}\
-    {% if containerlab_timeout is defined %} --timeout {{ containerlab_timeout }}{% endif %}\
-    {% if containerlab_skip_post_deploy is defined %}{% if containerlab_skip_post_deploy %} --skip-post-deploy {% endif %}{% endif %}\
-    {% if containerlab_debug is defined %}{% if containerlab_debug %} -d {% endif %}{% endif %}"
+    {% if containerlab_max_workers is arista.avd.defined %} --max-workers {{ containerlab_max_workers }}{% endif %}\
+    {% if containerlab_timeout is arista.avd.defined %} --timeout {{ containerlab_timeout }}{% endif %}\
+    {% if containerlab_skip_post_deploy is arista.avd.defined %}{% if containerlab_skip_post_deploy %} --skip-post-deploy {% endif %}{% endif %}\
+    {% if containerlab_debug is arista.avd.defined %}{% if containerlab_debug %} -d {% endif %}{% endif %}"
   delegate_to: localhost
   run_once: true
 

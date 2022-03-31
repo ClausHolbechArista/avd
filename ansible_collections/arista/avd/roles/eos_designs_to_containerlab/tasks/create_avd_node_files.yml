@@ -6,6 +6,8 @@
     path: "{{ item }}"
     state: absent
   loop:
+    - "{{ containerlab_config_dir }}"
+    - "{{ containerlab_mapping_dir }}"
     - "{{ containerlab_dir }}"
   delegate_to: localhost
   run_once: true
@@ -41,19 +43,13 @@
   delegate_to: localhost
   template:
     src: containerlab_custom_intf_mapping.j2
-    dest: "{{ containerlab_mapping_dir }}/{{ inventory_hostname }}.{{ avd_interface_mapping_file_format }}"
+    dest: "{{ containerlab_mapping_dir }}/{{ inventory_hostname }}.json"
   when: containerlab_custom_interface_mapping
 
-- name: Write AVD inventory hosts to facts
-  set_fact:
-    avd_nodes: "{{ avd_nodes | default({ 'nodes': ansible_play_hosts_all})}}"
-  run_once: true
-  delegate_to: localhost
-
 - name: Write the AVD inventory hosts to file for later use
-  copy:
-    content: "{{avd_nodes | to_nice_yaml}}" 
+  yaml_templates_to_facts:
+    templates: 
+      - template: containerlab_play_hosts.yml.j2
     dest: "{{ containerlab_dir }}/temp_AVD_ansible_hosts.yml"
-  run_once: true
   delegate_to: localhost
-
+  run_once: true

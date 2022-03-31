@@ -55,13 +55,13 @@ topology:
 {%             endfor %}  
 {%         endif %}
       kind: ceos
-      startup-config: {{ inventory_hostname }}_{{ eos_config_dir_name }}/{{ fabric_switch }}.{{ avd_config_file_format }}
+      startup-config: {{ inventory_hostname }}_{{ eos_config_dir_name }}/{{ fabric_switch }}.cfg
 {%         if containerlab_enforce_startup_config %}
       enforce-startup-config: true
 {%         endif %}
 {%         if containerlab_custom_interface_mapping %}
       binds:
-        - {{ inventory_hostname }}_{{ containerlab_mapping_dir_name }}/{{ fabric_switch }}.{{ avd_interface_mapping_file_format }}:/mnt/flash/EosIntfMapping.json:ro
+        - {{ inventory_hostname }}_{{ containerlab_mapping_dir_name }}/{{ fabric_switch }}.json:/mnt/flash/EosIntfMapping.json:ro
 {%         endif %}
 {%         if fabric_switch_facts.containerlab is arista.avd.defined %}
       {{ fabric_switch_facts.containerlab | to_nice_yaml(indent=2, sort_keys=False) | indent(6) -}}

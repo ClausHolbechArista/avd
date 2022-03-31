@@ -39,5 +39,3 @@ containerlab_enforce_startup_config: true
 containerlab_custom_interface_mapping: true
 containerlab_include_intfs_to_non_avd_nodes: false
 avd_structured_config_file_format: "yml"
-avd_config_file_format: "cfg"
-avd_interface_mapping_file_format: "json"
