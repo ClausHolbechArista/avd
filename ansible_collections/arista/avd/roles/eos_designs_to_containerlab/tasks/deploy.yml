@@ -164,6 +164,31 @@
   when: multinode
   ignore_errors: yes
 
+- name: Delete vxlan connections between hosts using containerlab in a container
+  become: yes
+  command: "docker run \
+    --rm \
+    -it \
+    --privileged \
+    --network host \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /var/run/netns:/var/run/netns \
+    -v /etc/hosts:/etc/hosts \
+    --pid='host' \
+    -v {{ ansible_facts.env.PWD }}:{{ ansible_facts.env.PWD }} \
+    -w {{ ansible_facts.env.PWD }}/{{ containerlab_labname }} \
+    ghcr.io/srl-labs/clab clab tools vxlan delete"
+  when: containerlab_mode == 'container' and multinode
+  ignore_errors: yes
+
+- name: Delete vxlan connections between hosts using installed containerlab
+  become: yes
+  command: "clab tools vxlan delete"
+  args:
+    chdir: "{{ ansible_facts.env.PWD }}/{{ containerlab_labname }}"
+  when: containerlab_mode == 'installed' and multinode
+  ignore_errors: yes
+
 - name: Creating run parameters for containerlab deploy
   set_fact:
     containerlab_cmd: "\

@@ -1,7 +1,11 @@
 {# CONTAINERLABS connections per containerlab host #}
 {# Run through all node names and divide them to the containerlab hosts #}
+{%- set ns = namespace(include_non_avd_intfs = containerlab_include_intfs_to_non_avd_nodes) -%}  
 {%- set distributed_nodes = {} -%}
 {%- for docker_node in groups['CONTAINERLAB'] -%}
+{%-     if loop.first -%}
+{%-         set ns.include_non_avd_intfs = hostvars[docker_node]['containerlab_include_intfs_to_non_avd_nodes'] -%}
+{%-     endif -%} 
 {%-     set docker_host_counter = loop -%}
 {%-     set tmp_node_list = [] -%}
 {%-     for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort -%}
@@ -27,20 +31,20 @@
 {%-                 endif -%}
 {%-             else -%}
 {#              LINKS to non AVD defined peer where the peer name and peer interface is defined #}
-{%-                 if containerlab_include_intfs_to_non_avd_nodes -%}
-{%-                     do connections_done.append({fabric_switch:link, "host":"dummy" + loop.index}) -%}
+{%-                 if ns.include_non_avd_intfs -%}
+{%-                     do connections_done.append({fabric_switch:link, "host":"dummy" + (loop.index | string)}) -%}
 {%-                 endif -%}
 {%-             endif -%}
 {%-         else -%}
 {#          LINKS to non AVD defined peer where the peer name and/or peer interface is not defined #}
-{%-             if containerlab_include_intfs_to_non_avd_nodes %}
-{%-                 do connections_done.append({fabric_switch:link, "host":"dummy" + loop.index}) -%}
+{%-             if ns.include_non_avd_intfs %}
+{%-                 do connections_done.append({fabric_switch:link, "host":"dummy" + (loop.index | string)}) -%}
 {%-             endif -%}
 {%-         endif -%}
 {%-     endfor -%}
 {%- endfor -%}
 {#########################}
-{# If customer interface mapping is true create a mapping between the linux interface and the custom mapping in EOS #}
+{# If custom interface mapping is true create a mapping between the linux interface and the custom mapping in EOS #}
 {%- if containerlab_custom_interface_mapping -%}
 {%-     set intf_mapping_all={} -%} 
 {%-     for fabric_switch in ansible_play_hosts_all | arista.avd.natural_sort if hostvars[fabric_switch].ethernet_interfaces is arista.avd.defined -%}
