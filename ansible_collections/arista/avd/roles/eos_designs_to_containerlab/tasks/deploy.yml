@@ -219,4 +219,3 @@
   args:
     chdir: "{{ ansible_facts.env.PWD }}/{{ containerlab_labname }}"
   when: multinode and containerlab_mode == 'installed'
-
