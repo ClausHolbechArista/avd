@@ -8,7 +8,7 @@
 
 - containerlab must be installed or a host with docker installed must be available in case containeriezed deployment will be used. See the following link for deployment models of containerlab: https://containerlab.dev/install/
 
-- containerlab in version `>=0.15.3`
+- containerlab in version `>=0.25.0` 
 
 - The cEOS-lab image which should be used has to be available in the docker images.
 
@@ -16,7 +16,8 @@
 
 - In case you want to split the AVD nodes on different containerlab hosts, the containerlab hosts must be able to reach each other.
 
-- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".               
+- NOTE: If you are running a cEOS-lab < 4.28.0F set "containerlab_custom_interface_mapping: false".            
+- NOTE: Currently you should only run one AVD lab on the containerlab host / containerlab hosts        
 
 
 ## Role Variables
