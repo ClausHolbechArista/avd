@@ -93,11 +93,11 @@ jobs:
           cat ansible_collections/arista/avd/requirements.txt | sed -e 's/[<>=]=\([0-9\.]\+\).*/==\1/' | tee ansible_collections/arista/avd/min-requirements.txt
       - name: Create ansible-avd-ee:${{ github.sha }}-latest Dockerfile
         run: |
-          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml -c context/latest
+          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml -c context/latest/Dockerfile
         # ansible-builder build --container-runtime=docker --tag=ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml
       - name: Create ansible-avd-ee:${{ github.sha }}-minimum Dockerfile
         run: |
-          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-minimum.yml -c context/minimum
+          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-minimum.yml -c context/minimum/Dockerfile
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
