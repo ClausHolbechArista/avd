@@ -74,15 +74,12 @@ jobs:
 
   ci_container:
     name: Build CI container
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs: file-changes
     steps:
-      - name: Log in to the Container registry
-        uses: docker/login-action
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
       - name: Install ansible-builder
         run: |
@@ -94,12 +91,31 @@ jobs:
         run: |
           cat ansible_collections/arista/avd/collections.yml | sed -e 's/\"[<>=]=\([0-9\.]\+\).*/"==\1"/' | tee ansible_collections/arista/avd/min-collections.yml
           cat ansible_collections/arista/avd/requirements.txt | sed -e 's/[<>=]=\([0-9\.]\+\).*/==\1/' | tee ansible_collections/arista/avd/min-requirements.txt
-      - name: Build ansible-avd-ee:${{ github.sha }}-latest container
+      - name: Create ansible-avd-ee:${{ github.sha }}-latest Dockerfile
         run: |
-          ansible-builder build --container-runtime=docker --tag=ansible-avd-ee:${{ github.sha }}-latest --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml
-      - name: Build ansible-avd-ee:${{ github.sha }}-minimum container
+          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml -c context/latest
+        # ansible-builder build --container-runtime=docker --tag=ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml
+      - name: Create ansible-avd-ee:${{ github.sha }}-minimum Dockerfile
         run: |
-          ansible-builder build --container-runtime=docker --tag=ansible-avd-ee:${{ github.sha }}-minimum --verbosity 3 -f execution_environments/ansible-avd-ee-minimum.yml
+          ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-minimum.yml -c context/minimum
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push ansible-avd-ee:${{ github.sha }}-latest
+        uses: docker/build-push-action@v3
+        with:
+          context: context/latest
+          push: true
+          tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest
+      - name: Build and push ansible-avd-ee:${{ github.sha }}-minimum
+        uses: docker/build-push-action@v3
+        with:
+          context: context/minimum
+          push: true
+          tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-minimum
 
   # ----------------------------------- #
   # Pre Commit code validation
