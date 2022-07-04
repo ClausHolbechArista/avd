@@ -91,11 +91,11 @@ jobs:
         run: |
           cat ansible_collections/arista/avd/collections.yml | sed -e 's/\"[<>=]=\([0-9\.]\+\).*/"==\1"/' | tee ansible_collections/arista/avd/min-collections.yml
           cat ansible_collections/arista/avd/requirements.txt | sed -e 's/[<>=]=\([0-9\.]\+\).*/==\1/' | tee ansible_collections/arista/avd/min-requirements.txt
-      - name: Create ansible-avd-ee:${{ github.sha }}-latest Dockerfile
+      - name: Create ansible-avd-ee:${{ github.sha }}-latest Containerfile
         run: |
           ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml -c context/latest
         # ansible-builder build --container-runtime=docker --tag=ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest --verbosity 3 -f execution_environments/ansible-avd-ee-latest.yml
-      - name: Create ansible-avd-ee:${{ github.sha }}-minimum Dockerfile
+      - name: Create ansible-avd-ee:${{ github.sha }}-minimum Containerfile
         run: |
           ansible-builder create --verbosity 3 -f execution_environments/ansible-avd-ee-minimum.yml -c context/minimum
       - name: Log in to the Container registry
@@ -109,13 +109,13 @@ jobs:
       - name: Build and push ansible-avd-ee:${{ github.sha }}-latest
         uses: docker/build-push-action@v3
         with:
-          context: context/latest/Dockerfile
+          context: context/latest/Containerfile
           push: true
           tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest
       - name: Build and push ansible-avd-ee:${{ github.sha }}-minimum
         uses: docker/build-push-action@v3
         with:
-          context: context/minimum/Dockerfile
+          context: context/minimum/Containerfile
           push: true
           tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-minimum
 
