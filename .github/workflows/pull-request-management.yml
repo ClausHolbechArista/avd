@@ -109,13 +109,15 @@ jobs:
       - name: Build and push ansible-avd-ee:${{ github.sha }}-latest
         uses: docker/build-push-action@v3
         with:
-          context: context/latest/Containerfile
+          context: context/latest/
+          file: context/latest/Containerfile
           push: true
           tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-latest
       - name: Build and push ansible-avd-ee:${{ github.sha }}-minimum
         uses: docker/build-push-action@v3
         with:
-          context: context/minimum/Containerfile
+          context: context/minimum/
+          file: context/minimum/Containerfile
           push: true
           tags: ghcr.io/aristanetworks/ansible-avd/ansible-avd-ee:${{ github.sha }}-minimum
 
