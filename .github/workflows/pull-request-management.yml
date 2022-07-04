@@ -104,6 +104,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug
+        run: ls -latrR
       - name: Build and push ansible-avd-ee:${{ github.sha }}-latest
         uses: docker/build-push-action@v3
         with:
