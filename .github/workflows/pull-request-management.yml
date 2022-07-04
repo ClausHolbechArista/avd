@@ -71,6 +71,15 @@ jobs:
               - 'ansible_collections/arista/avd/roles/**/*.md'
               - 'ansible_collections/arista/avd/**/*.md'
               - 'ansible_collections/arista/avd/README.md'
+
+  ci_container:
+    name: Build CI container
+    runs-on: ubuntu-20.04
+    needs: file-changes
+    steps:
+      - uses: actions/checkout@v2
+
+
   # ----------------------------------- #
   # Pre Commit code validation
   # ----------------------------------- #
