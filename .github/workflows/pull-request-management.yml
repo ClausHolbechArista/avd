@@ -78,7 +78,22 @@ jobs:
     needs: file-changes
     steps:
       - uses: actions/checkout@v2
-
+      - name: Install ansible-builder
+        run: |
+          pip install ansible-builder
+      - name: Add dev requirements to regular requirements
+        run: |
+          cat ansible_collections/arista/avd/requirements-dev.txt  >> ansible_collections/arista/avd/requirements.txt
+      - name: Create minimum requirements files
+        run: |
+          cat ansible_collections/arista/avd/collections.yml | sed -e 's/\"[<>=]=\([0-9\.]\+\).*/"==\1"/' > ansible_collections/arista/avd/min-collections.yml
+          cat ansible_collections/arista/avd/requirements.txt | sed -e 's/[<>=]=\([0-9\.]\+\).*/==\1/' > ansible_collections/arista/avd/min-requirements.txt
+      - name: Build ci-ee-latest container
+        run: |
+          ansible-builder build --container-runtime=docker --tag=ci-ee-latest:${{ github.sha }} --verbosity 3 -f .github/ansible_execution_environments/ci-ee-latest.yml
+      - name: Build ci-ee-minimum container
+        run: |
+          ansible-builder build --container-runtime=docker --tag=ci-ee-minimum:${{ github.sha }} --verbosity 3 -f .github/ansible_execution_environments/ci-ee-minimum.yml
 
   # ----------------------------------- #
   # Pre Commit code validation

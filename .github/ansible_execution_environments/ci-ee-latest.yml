@@ -1,7 +1,7 @@
 # Create Ansible Execution Environment for use in CI workflows
 # Run from root of repo
 # Example:
-#   ansible-builder build --container-runtime=docker --tag={{name}} --verbosity 3 -c . -f .github/ansible_executution_environments/ci-ee-latest.yml
+#   ansible-builder build --container-runtime=docker --tag=ci-ee-latest:<tag> --verbosity 3 -f .github/ansible_execution_environments/ci-ee-latest.yml
 ---
 version: 1
 
@@ -10,10 +10,6 @@ build_arg_defaults:
   ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: '--force --verbose'
 
 dependencies:
-  galaxy: ansible_collections/arista/avd/collections.yml
-  python: ansible_collections/arista/avd/requirements.txt
-  system: ansible_collections/arista/avd/bindep.txt
-
-additional_build_steps:
-  append:
-    - COPY ansible_collections/arista/avd/ /usr/share/ansible/collections/ansible_collections/arista/avd
+  galaxy: ../../ansible_collections/arista/avd/collections.yml
+  python: ../../ansible_collections/arista/avd/requirements.txt
+  system: ../../ansible_collections/arista/avd/bindep.txt
