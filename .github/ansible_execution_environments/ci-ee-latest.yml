@@ -1,4 +1,4 @@
-# Create Ansible Execution Environment for use in CI workflows
+# Create Ansible Execution Environment - using latest requirements - for use in CI workflows
 # Run from root of repo
 # Example:
 #   ansible-builder build --container-runtime=docker --tag=ci-ee-latest:<tag> --verbosity 3 -f .github/ansible_execution_environments/ci-ee-latest.yml
