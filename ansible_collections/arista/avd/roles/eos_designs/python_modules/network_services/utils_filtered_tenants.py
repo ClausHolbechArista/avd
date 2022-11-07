@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from collections import ChainMap
 from functools import cached_property
 
 from ansible_collections.arista.avd.plugins.filter.convert_dicts import convert_dicts
-from ansible_collections.arista.avd.plugins.filter.default import default
 from ansible_collections.arista.avd.plugins.filter.natural_sort import natural_sort
 from ansible_collections.arista.avd.plugins.filter.range_expand import range_expand
-from ansible_collections.arista.avd.plugins.plugin_utils.merge import merge
+from ansible_collections.arista.avd.plugins.plugin_utils.nestedchainmap import NestedChainMap
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import get, get_item, unique
 
 
@@ -185,36 +185,29 @@ class UtilsFilteredTenantsMixin(object):
         # deepmerge all levels of config - later vars override previous.
         # Using destructive_merge=False to avoid having references to profiles and other data.
         # Instead it will be doing deep copies inside merge.
-        merged_svi = merge(
-            svi_parent_profile,
-            svi_profile,
-            svi,
-            svi_parent_profile["node_config"],
-            svi_profile["node_config"],
+
+        # structured_configs is a placeholder for regular ChainMaps to avoid the nested ChainMap behavior.
+        structured_configs = {}
+        merged_svi = NestedChainMap(
+            structured_configs,
             svi_node_config,
-            list_merge="replace",
-            destructive_merge=False,
+            svi_profile["node_config"],
+            svi_parent_profile["node_config"],
+            svi,
+            svi_profile,
+            svi_parent_profile,
+            liststrategy="replace",
+            exempt="structured_config",
         )
 
         # Override structured configs since we don't want to deep-merge those
-        merged_svi["structured_config"] = default(
-            svi_node_config.get("structured_config"),
-            svi_profile["node_config"].get("structured_config"),
-            svi_parent_profile["node_config"].get("structured_config"),
-            svi.get("structured_config"),
-            svi_profile.get("structured_config"),
-            svi_parent_profile.get("structured_config"),
+        structured_configs.update(
+            {
+                "structured_config": ChainMap(merged_svi.maps).get("structured_config"),
+                "bgp": {"structured_config": ChainMap(merged_svi.get("bgp", ChainMap()).maps).get("structured_config")},
+            }
         )
 
-        # Override bgp.structured configs since we don't want to deep-merge those
-        merged_svi.setdefault("bgp", {})["structured_config"] = default(
-            get(svi_node_config, "bgp.structured_config"),
-            get(svi_profile["node_config"], "bgp.structured_config"),
-            get(svi_parent_profile["node_config"], "bgp.structured_config"),
-            get(svi, "bgp.structured_config"),
-            get(svi_profile, "bgp.structured_config"),
-            get(svi_parent_profile, "bgp.structured_config"),
-        )
         return merged_svi
 
     def _filtered_svis(self, vrf: dict) -> list[dict]:

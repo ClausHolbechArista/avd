@@ -60,7 +60,7 @@
   arista.avd.yaml_templates_to_facts:
     templates: "{{ templates.structured_config }}"
     dest: "{{ structured_dir }}/{{ inventory_hostname }}.{{ avd_structured_config_file_format }}"
-    #cprofile_file: "structured-{{inventory_hostname}}.prof"
+    cprofile_file: "structured-{{inventory_hostname}}.prof"
     template_output: true
   delegate_to: localhost
   check_mode: false
