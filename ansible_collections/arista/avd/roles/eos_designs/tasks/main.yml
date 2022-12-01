@@ -29,6 +29,9 @@
     avd_switch_facts: true
     #cprofile_file: "eos_designs_facts.prof"
     template_output: true
+    schema: "{{ lookup('ansible.builtin.file', role_schema_path) | from_yaml }}"
+    conversion_mode: "{{ avd_validate_conversion_mode }}"
+    validation_mode: "{{ avd_validate_validation_mode }}"
   check_mode: false
   run_once: true
 

@@ -81,24 +81,9 @@ class ActionModule(ActionBase):
 
         hostname = task_vars["inventory_hostname"]
 
-        # Load schema tools
+        # Load schema tools and perform conversion and validation
         avdschematools = AvdSchemaTools(schema, hostname, display, conversion_mode, validation_mode)
-
-        result_messages = []
-
-        # Perform data conversions
-        result_messages.extend(avdschematools.convert_data(task_vars))
-
-        # Perform validation
-        validation_messages = avdschematools.validate_data(task_vars)
-        if validation_messages:
-            result_messages.extend(validation_messages)
-            if validation_mode == "error":
-                result["failed"] = True
-
-        if result_messages:
-            result["msg"] = " ".join(result_messages)
-
+        result.update(avdschematools.convert_and_validate_data(task_vars))
         if result.get("failed"):
             # Input data validation failed so return errors.
             return result

@@ -91,6 +91,36 @@ class AvdSchemaTools:
 
         return result_messages
 
+    def convert_and_validate_data(self, data):
+        """
+        Convert & Validate data according to the schema
+
+        Calls convertion and validation methods and gather resulting messages
+
+        Returns dict which can contain either or both of the following keys:
+        - failed: <bool>
+        - msg: <str with summarys messages from conversion and validation>
+
+        The return value should be updated on Ansible Action "result"
+        """
+        result = {}
+        result_messages = []
+
+        # Perform data conversions
+        result_messages.extend(self.convert_data(data))
+
+        # Perform validation
+        validation_messages = self.validate_data(data)
+        if validation_messages:
+            result_messages.extend(validation_messages)
+            if self.validation_mode == "error":
+                result["failed"] = True
+
+        if result_messages:
+            result["msg"] = " ".join(result_messages)
+
+        return result
+
     def handle_validation_exceptions(self, exceptions, mode):
         counter = 0
         for exception in exceptions:
