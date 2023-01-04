@@ -6,6 +6,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.errors import AristaAvd
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschema import AvdSchema
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdtodocumentationschemaconverter import AvdToDocumentationSchemaConverter
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdtojsonschemaconverter import AvdToJsonSchemaConverter
+from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdtopydanticconverter import AvdToPydanticConverter
 
 
 def convert_schema(schema: dict, type: str):
@@ -21,7 +22,7 @@ def convert_schema(schema: dict, type: str):
 
     Returns
     -------
-    dict
+    dict | str
         Schema of the requested type
 
     Raises
@@ -34,6 +35,8 @@ def convert_schema(schema: dict, type: str):
         schemaconverter = AvdToDocumentationSchemaConverter(avdschema)
     elif type == "jsonschema":
         schemaconverter = AvdToJsonSchemaConverter(avdschema)
+    elif type == "pydantic":
+        schemaconverter = AvdToPydanticConverter(avdschema)
     else:
         raise AristaAvdError(f"Filter arista.avd.convert_schema requires type 'documentation'. Got {type}")
 

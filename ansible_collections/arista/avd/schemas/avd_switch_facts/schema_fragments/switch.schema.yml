@@ -40,7 +40,7 @@ keys:
       default_overlay_address_families:
         type: list
         required: true
-        default: ["evpn"]
+        default: [evpn]
         items:
           type: str
       default_mpls_overlay_role:
@@ -169,7 +169,7 @@ keys:
             type: int
       filter_tenants:
         type: list
-        default: ["all"]
+        default: [all]
         items:
           type: str
       always_include_vrfs_in_tenants:
@@ -178,7 +178,7 @@ keys:
           type: str
       filter_tags:
         type: list
-        default: ["all"]
+        default: [all]
         items:
           type: str
       filter_only_vlans_in_use:
