@@ -223,7 +223,6 @@ keys:
         default: ""
       spanning_tree_mode:
         type: str
-        default: "none"
       spanning_tree_priority:
         type: int
       spanning_tree_root_super:
@@ -364,7 +363,8 @@ keys:
           and by templates for peer devices when rendering downlinks
         default: []
         items:
-          type: str
+          type: dict
+          # TODO: Add keys
       uplink_peers:
         type: list
         description: |
@@ -480,4 +480,5 @@ keys:
             type: list
             default: []
             items:
-              type: str
+              type: dict
+              # TODO: Add keys

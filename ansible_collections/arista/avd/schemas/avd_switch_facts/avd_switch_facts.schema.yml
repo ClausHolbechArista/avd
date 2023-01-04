@@ -220,7 +220,6 @@ keys:
         default: ''
       spanning_tree_mode:
         type: str
-        default: none
       spanning_tree_priority:
         type: int
       spanning_tree_root_super:
@@ -362,7 +361,7 @@ keys:
           '
         default: []
         items:
-          type: str
+          type: dict
       uplink_peers:
         type: list
         description: 'List of all uplink peers
@@ -483,4 +482,4 @@ keys:
             type: list
             default: []
             items:
-              type: str
+              type: dict

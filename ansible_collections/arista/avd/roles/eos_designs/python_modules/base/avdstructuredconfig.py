@@ -2,14 +2,20 @@ from functools import cached_property
 from hashlib import sha1
 
 from ansible_collections.arista.avd.plugins.filter.convert_dicts import convert_dicts
+from ansible_collections.arista.avd.plugins.filter.default import default
 from ansible_collections.arista.avd.plugins.filter.natural_sort import natural_sort
 from ansible_collections.arista.avd.plugins.filter.snmp_hash import hash_passphrase
 from ansible_collections.arista.avd.plugins.plugin_utils.avdfacts import AvdFacts
 from ansible_collections.arista.avd.plugins.plugin_utils.errors import AristaAvdError, AristaAvdMissingVariableError
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import get
+from ansible_collections.arista.avd.schemas.avd_switch_facts.avd_switch_facts import AvdfactsSwitch
 
 
 class AvdStructuredConfig(AvdFacts):
+    def __init__(self, hostvars, templar):
+        super().__init__(hostvars, templar)
+        self.switch = AvdfactsSwitch(**self._hostvars["switch"])
+
     @cached_property
     def _mgmt_interface_vrf(self):
         """
@@ -26,44 +32,15 @@ class AvdStructuredConfig(AvdFacts):
         return get(self._hostvars, "mgmt_gateway")
 
     @cached_property
-    def _platform_settings(self):
-        """
-        Returns the value for switch.platform_settings fact used in queue_monitor_length, tcam_profile, platform
-        and eos_cli data-models
-        """
-        return get(self._hostvars, "switch.platform_settings")
-
-    @cached_property
-    def _mgmt_ip(self):
-        """
-        Returns the value for switch.mgmt_ip fact used in snmp_server and management_interfaces data-models
-        """
-        return get(self._hostvars, "switch.mgmt_ip")
-
-    @cached_property
-    def _hostname(self):
-        """
-        hostname variable set based on switch.hostname fact
-        """
-        return get(self._hostvars, "switch.hostname", required=True)
-
-    @cached_property
-    def _system_mac_address(self):
-        """
-        system_mac_address variable set based on switch.system_mac_address fact
-        """
-        return get(self._hostvars, "switch.system_mac_address")
-
-    @cached_property
     def router_bgp(self):
         """
         router_bgp set based on switch.bgp_as, switch.bgp_defaults, switch.router_id facts
         and aggregating the values of bgp_maximum_paths and bgp_ecmp variables
         """
-        if (bgp_as := get(self._hostvars, "switch.bgp_as")) is None:
+        if (bgp_as := self.switch.bgp_as) is None:
             return None
 
-        bgp_defaults = get(self._hostvars, "switch.bgp_defaults")
+        bgp_defaults = self.switch.bgp_defaults
         if (bgp_maximum_paths := get(self._hostvars, "bgp_maximum_paths")) is not None:
             max_paths_str = f"maximum-paths {bgp_maximum_paths}"
             if (bgp_ecmp := get(self._hostvars, "bgp_ecmp")) is not None:
@@ -72,7 +49,7 @@ class AvdStructuredConfig(AvdFacts):
 
         return {
             "as": bgp_as,
-            "router_id": get(self._hostvars, "switch.router_id"),
+            "router_id": self.switch.router_id,
             "bgp_defaults": bgp_defaults,
         }
 
@@ -124,7 +101,7 @@ class AvdStructuredConfig(AvdFacts):
         """
         ipv6_unicast_routing set based on underlay_rfc5549 and switch.underlay_ipv6
         """
-        if get(self._hostvars, "underlay_rfc5549") is True or get(self._hostvars, "switch.underlay_ipv6") is True:
+        if get(self._hostvars, "underlay_rfc5549") is True or self.switch.underlay_ipv6 is True:
             return True
         return None
 
@@ -143,11 +120,11 @@ class AvdStructuredConfig(AvdFacts):
         router_multicast set based on switch.underlay_multicast, switch.underlay_router
         and switch.evpn_multicast facts
         """
-        if get(self._hostvars, "switch.underlay_multicast") is not True or get(self._hostvars, "switch.underlay_router") is not True:
+        if self.switch.underlay_multicast is not True or self.switch.underlay_router is not True:
             return None
 
         router_multicast = {"ipv4": {"routing": True}}
-        if get(self._hostvars, "switch.evpn_multicast") is True:
+        if self.switch.evpn_multicast is True:
             router_multicast["ipv4"]["software_forwarding"] = "sfe"
 
         return router_multicast
@@ -170,7 +147,7 @@ class AvdStructuredConfig(AvdFacts):
         Converting nested dict to list of dict to support avd_v4.0
         """
         platform_speed_groups = get(self._hostvars, "platform_speed_groups")
-        switch_platform = get(self._hostvars, "switch.platform")
+        switch_platform = self.switch.platform
         if platform_speed_groups is None or switch_platform is None:
             return None
 
@@ -284,7 +261,7 @@ class AvdStructuredConfig(AvdFacts):
 
         queue_monitor_length_dict = {"enabled": True}
         queue_monitor_length_notifying = get(queue_monitor_length, "notifying")
-        notify_supported = get(self._platform_settings, "feature_support.queue_monitor_length_notify")
+        notify_supported = get(self.switch.platform_settings, "feature_support.queue_monitor_length_notify")
         if queue_monitor_length_notifying is not None and notify_supported is not False:
             queue_monitor_length_dict["notifying"] = queue_monitor_length_notifying
 
@@ -334,12 +311,12 @@ class AvdStructuredConfig(AvdFacts):
         if snmp_settings.get("compute_local_engineid") is True:
             compute_source = get(snmp_settings, "compute_local_engineid_source", default="hostname_and_ip")
             if compute_source == "hostname_and_ip":
-                local_engine_id = sha1(f"{self._hostname}{self._mgmt_ip}".encode("utf-8")).hexdigest()
+                local_engine_id = sha1(f"{self.switch.hostname}{self.switch.mgmt_ip}".encode("utf-8")).hexdigest()
             elif compute_source == "system_mac":
-                if self._system_mac_address is None:
+                if self.switch.system_mac_address is None:
                     raise AristaAvdMissingVariableError("default_engine_id_from_system_mac: true requires system_mac_address to be set!")
                 # the default engine id on switches is derived as per the following formula
-                local_engine_id = f"f5717f{str(self._system_mac_address).replace(':', '').lower()}00"
+                local_engine_id = f"f5717f{str(self.switch.system_mac_address).replace(':', '').lower()}00"
             else:
                 # Unknown mode
                 raise AristaAvdError(
@@ -356,8 +333,8 @@ class AvdStructuredConfig(AvdFacts):
                 get(self._hostvars, "fabric_name"),
                 get(self._hostvars, "dc_name"),
                 get(self._hostvars, "pod_name"),
-                get(self._hostvars, "switch.rack"),
-                self._hostname,
+                self.switch.rack,
+                self.switch.hostname,
             ]
             location_elements = [location for location in location_elements if location is not None]
             snmp_location = " ".join(location_elements)
@@ -403,8 +380,8 @@ class AvdStructuredConfig(AvdFacts):
         spanning_tree set based on switch.spanning_tree_root_super, switch.spanning_tree_mode
         and switch.spanning_tree_priority facts
         """
-        spanning_tree_root_super = get(self._hostvars, "switch.spanning_tree_root_super")
-        spanning_tree_mode = get(self._hostvars, "switch.spanning_tree_mode")
+        spanning_tree_root_super = self.switch.spanning_tree_root_super
+        spanning_tree_mode = self.switch.spanning_tree_mode
         if spanning_tree_root_super is not True and spanning_tree_mode is None:
             return None
 
@@ -414,7 +391,7 @@ class AvdStructuredConfig(AvdFacts):
 
         if spanning_tree_mode is not None:
             spanning_tree["mode"] = spanning_tree_mode
-            priority = get(self._hostvars, "switch.spanning_tree_priority", "32768")
+            priority = default(self.switch.spanning_tree_priority, "32768")
             if spanning_tree_mode == "mstp":
                 spanning_tree["mst_instances"] = {"0": {"priority": priority}}
             elif spanning_tree_mode == "rapid-pvst":
@@ -486,14 +463,14 @@ class AvdStructuredConfig(AvdFacts):
         management_interfaces set based on switch.mgmt_interface, switch.mgmt_ip facts,
         mgmt_gateway and mgmt_interface_vrf variable
         """
-        mgmt_interface = get(self._hostvars, "switch.mgmt_interface")
-        if mgmt_interface is not None and self._mgmt_ip is not None and self._mgmt_interface_vrf is not None:
+        mgmt_interface = self.switch.mgmt_interface
+        if mgmt_interface is not None and self.switch.mgmt_ip is not None and self._mgmt_interface_vrf is not None:
             return {
                 mgmt_interface: {
                     "description": "oob_management",
                     "shutdown": False,
                     "vrf": self._mgmt_interface_vrf,
-                    "ip_address": self._mgmt_ip,
+                    "ip_address": self.switch.mgmt_ip,
                     "gateway": self._mgmt_gateway,
                     "type": "oob",
                 }
@@ -506,7 +483,7 @@ class AvdStructuredConfig(AvdFacts):
         """
         tcam_profile set based on switch.platform_settings.tcam_profile fact
         """
-        if (tcam_profile := get(self._platform_settings, "tcam_profile")) is not None:
+        if (tcam_profile := get(self.switch.platform_settings, "tcam_profile")) is not None:
             return {"system": tcam_profile}
         return None
 
@@ -517,11 +494,11 @@ class AvdStructuredConfig(AvdFacts):
         switch.platform_settings.trident_forwarding_table_partition and switch.evpn_multicast facts
         """
         platform = {}
-        if (lag_hardware_only := get(self._platform_settings, "lag_hardware_only")) is not None:
+        if (lag_hardware_only := get(self.switch.platform_settings, "lag_hardware_only")) is not None:
             platform["sand"] = {"lag": {"hardware_only": lag_hardware_only}}
 
-        trident_forwarding_table_partition = get(self._platform_settings, "trident_forwarding_table_partition")
-        if trident_forwarding_table_partition is not None and get(self._hostvars, "switch.evpn_multicast") is True:
+        trident_forwarding_table_partition = get(self.switch.platform_settings, "trident_forwarding_table_partition")
+        if trident_forwarding_table_partition is not None and self.switch.evpn_multicast is True:
             platform["trident"] = {"forwarding_table_partition": trident_forwarding_table_partition}
 
         if platform:
@@ -580,7 +557,7 @@ class AvdStructuredConfig(AvdFacts):
         """
         link_tracking_groups set based on switch.link_tracking_groups fact
         """
-        if (link_tracking_groups := get(self._hostvars, "switch.link_tracking_groups")) is not None:
+        if (link_tracking_groups := self.switch.link_tracking_groups) is not None:
             return link_tracking_groups
         return None
 
@@ -609,8 +586,8 @@ class AvdStructuredConfig(AvdFacts):
         """
         ptp set to contents of switch.ptp.device_config if switch.ptp.enabled is True
         """
-        if get(self._hostvars, "switch.ptp.enabled") is True:
-            return get(self._hostvars, "switch.ptp.device_config")
+        if get(self.switch, "ptp.enabled") is True:
+            return self.switch.ptp["device_config"]
         return None
 
     @cached_property
@@ -618,8 +595,8 @@ class AvdStructuredConfig(AvdFacts):
         """
         Aggregate the values of switch.raw_eos_cli and switch.platform_settings.platform_raw_eos_cli facts
         """
-        raw_eos_cli = get(self._hostvars, "switch.raw_eos_cli")
-        platform_raw_eos_cli = get(self._platform_settings, "raw_eos_cli")
+        raw_eos_cli = self.switch.raw_eos_cli
+        platform_raw_eos_cli = get(self.switch.platform_settings, "raw_eos_cli")
         if raw_eos_cli is not None or platform_raw_eos_cli is not None:
             return "\n".join(filter(None, [raw_eos_cli, platform_raw_eos_cli]))
         return None
@@ -629,6 +606,6 @@ class AvdStructuredConfig(AvdFacts):
         """
         struct_cfg set based on switch.struct_cfg facts
         """
-        if (struct_cfg := get(self._hostvars, "switch.struct_cfg")) is not None:
+        if (struct_cfg := self.switch.struct_cfg) is not None:
             return struct_cfg
         return None

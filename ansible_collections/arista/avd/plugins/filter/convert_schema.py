@@ -9,7 +9,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdtojsonschemac
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdtopydanticconverter import AvdToPydanticConverter
 
 
-def convert_schema(schema: dict, type: str):
+def convert_schema(schema: dict, type: str, *args, **kwargs):
     """
     The `arista.avd.convert_schema` filter will convert AVD Schema to a chosen output format.
 
@@ -40,7 +40,7 @@ def convert_schema(schema: dict, type: str):
     else:
         raise AristaAvdError(f"Filter arista.avd.convert_schema requires type 'documentation'. Got {type}")
 
-    return schemaconverter.convert_schema()
+    return schemaconverter.convert_schema(*args, **kwargs)
 
 
 class FilterModule(object):

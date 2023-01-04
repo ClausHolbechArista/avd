@@ -9,10 +9,12 @@ class AvdToPydanticConverter:
     def __init__(self, avdschema: AvdSchema):
         self.avdschema = avdschema
 
-    def convert_schema(self) -> dict:
-        header = ["from pydantic import BaseModel"]
+    def convert_schema(self, root_key="root") -> dict:
+        header = [
+            "from pydantic import BaseModel",
+        ]
         footer = [""]
-        class_name, output = self.generate_class("root", self.avdschema._schema, [])
+        class_name, output = self.generate_class(root_key, self.avdschema._schema, [])
         return "\n".join(header + output + footer)
 
     def generate_class_name(self, class_key: str, path: list) -> str:
@@ -45,8 +47,13 @@ class AvdToPydanticConverter:
 
     def generate_field(self, field_key: str, schema: dict, path: list) -> tuple[str, list]:
         field_type, prepend_output = self.generate_field_type(field_key, schema, path)
-        defaultvalue = self.to_text(schema.get("default", None))
-        field = f"    {field_key}: {field_type} = {defaultvalue}"
+        defaultvalue = schema.get("default", None)
+        if schema.get("required") is True or defaultvalue is not None:
+            or_none = ""
+        else:
+            or_none = " | None"
+
+        field = f"    {field_key}: {field_type}{or_none} = {self.to_text(defaultvalue)}"
         return field, prepend_output
 
     def generate_field_type(self, field_key: str, schema: dict, path: list) -> tuple[str, list]:
@@ -66,4 +73,5 @@ class AvdToPydanticConverter:
 
         if isinstance(data, list):
             return str(data).replace("'", '"')
+
         return str(data)

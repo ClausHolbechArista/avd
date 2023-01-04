@@ -369,7 +369,6 @@
         },
         "spanning_tree_mode": {
           "type": "string",
-          "default": "none",
           "title": "Spanning Tree Mode"
         },
         "spanning_tree_priority": {
@@ -624,7 +623,7 @@
           "description": "List of uplinks with all parameters\n\nThese facts are leveraged by templates for this device when rendering uplinks\nand by templates for peer devices when rendering downlinks\n",
           "default": [],
           "items": {
-            "type": "string"
+            "type": "object"
           },
           "title": "Uplinks"
         },
@@ -818,7 +817,7 @@
               "type": "array",
               "default": [],
               "items": {
-                "type": "string"
+                "type": "object"
               },
               "title": "Remote Peers"
             }

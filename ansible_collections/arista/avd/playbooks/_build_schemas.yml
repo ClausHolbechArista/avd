@@ -50,7 +50,7 @@
 
         - name: Convert AVD Schema to Pydantic Classes
           ansible.builtin.copy:
-            content: "{{ lookup('ansible.builtin.file', schema_path) | from_yaml | arista.avd.convert_schema(type='pydantic') }}"
+            content: "{{ lookup('ansible.builtin.file', schema_path) | from_yaml | arista.avd.convert_schema(type='pydantic', root_key='avdfacts') }}"
             dest: "{{ schema_pydantic_path }}"
             mode: 0664
 
