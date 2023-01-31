@@ -42,6 +42,8 @@ class Undefined(StrictUndefined):
 
     Without this it we would have to test every level, like
     "{% if var is arista.avd.undefined or var.key is arista.avd.undefined or var.key.subkey is arista.avd.undefined %}"
+
+    Inspired from Ansible's AnsibleUndefined class.
     """
 
     def __getattr__(self, name):
@@ -53,7 +55,7 @@ class Undefined(StrictUndefined):
         return self
 
     def __repr__(self):
-        return "Undefined(hint={0!r}, obj={1!r}, name={2!r})".format(self._undefined_hint, self._undefined_obj, self._undefined_name)
+        return f"Undefined(hint={self._undefined_hint}, obj={self._undefined_obj}, name={self._undefined_name})"
 
     def __contains__(self, item):
         # Return original Undefined object to preserve the first failure context
