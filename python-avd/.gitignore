@@ -1,0 +1,6 @@
+# Some of these ignores might overlap the ignore in the parent AVD repo root.
+
+__pycache__/
+lib/
+schemas/
+tests/
