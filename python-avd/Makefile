@@ -6,6 +6,8 @@ J2_DIR = $(LIB_DIR)/j2
 TESTS_DIR = tests
 EOS_CLI_CONFIG_GEN_TEMPLATE_DIR = pyavd/templates
 EOS_CLI_CONFIG_GEN_SCHEMAS_DIR = pyavd/schemas
+EOS_DESIGNS_MODULES_DIR = pyavd/modules
+EOS_DESIGNS_SCHEMAS_DIR = pyavd/schemas
 
 .PHONY: help
 help: ## Display help message
@@ -30,6 +32,13 @@ copy-libs: ## Copy files from Ansible AVD collection
 	rm -rf $(EOS_CLI_CONFIG_GEN_SCHEMAS_DIR)
 	mkdir -p $(EOS_CLI_CONFIG_GEN_SCHEMAS_DIR)
 	cp -r $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/roles/eos_cli_config_gen/schemas/eos_cli_config_gen.schema.yml $(EOS_CLI_CONFIG_GEN_SCHEMAS_DIR)/
+	rm -rf $(EOS_DESIGNS_MODULES_DIR)
+	mkdir -p $(EOS_DESIGNS_MODULES_DIR)
+	cp -r $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/roles/eos_designs/python_modules/* $(EOS_DESIGNS_MODULES_DIR)/
+	cp $(LIB_DIR)/eos_designs_facts.py $(EOS_DESIGNS_MODULES_DIR)/
+	rm -rf $(EOS_DESIGNS_SCHEMAS_DIR)
+	mkdir -p $(EOS_DESIGNS_SCHEMAS_DIR)
+	cp -r $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/roles/eos_designs/schemas/eos_designs.schema.yml $(EOS_DESIGNS_SCHEMAS_DIR)/
 
 .PHONY: fix-libs
 fix-libs: ## Fix/remove various Ansible specifics things from python files
