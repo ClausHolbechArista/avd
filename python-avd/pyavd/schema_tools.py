@@ -42,7 +42,8 @@ class Display:
         print(f"INFO: {msg}")
 
     def v(self, msg, *args):
-        print(f"DEBUG: {msg}")
+        if self.verbosity > 2:
+            print(f"DEBUG: {msg}")
 
     def warning(self, msg, *args):
         print(f"WARNING: {msg}")

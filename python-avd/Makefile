@@ -12,8 +12,13 @@ EOS_DESIGNS_MODULES_DIR = $(LIB_DIR)/eos_designs
 help: ## Display help message
 	@grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONE: dep
+.PHONY: dep
 dep: copy-libs fix-libs copy-test-data ## Copy and Fix Ansible AVD python files
+
+.PHONY: clean
+	rm -rf $(LIB_DIR)
+	rm -rf $(EOS_CLI_CONFIG_GEN_TEMPLATE_DIR)
+	rm -rf $(SCHEMAS_DIR)
 
 .PHONY: copy-libs
 copy-libs: ## Copy files from Ansible AVD collection
@@ -68,8 +73,10 @@ copy-test-data: ## Copy inventory files from AVD collection Molecule scenario. A
 	cp $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/molecule/eos_cli_config_gen/custom_templates/* $(EOS_CLI_CONFIG_GEN_TEMPLATE_DIR)/custom_templates/
 	find -name '*.yml' -exec sed -i 's/!unsafe //g' {} +
 
-	cp $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/roles/eos_designs/defaults/main/* $(TESTS_DIR)/eos_designs/
-	for FILE in `ls -1 $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/molecule/eos_designs_unit_tests/intended/structured_configs/*.yml` ; \
+	cp $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/roles/eos_designs/defaults/main/*.yml $(TESTS_DIR)/eos_designs/
+	cp $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/molecule/eos_designs_unit_tests/intended/structured_configs/*.yml $(TESTS_DIR)/eos_designs/expected_structured_configs/
+	cp $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/molecule/eos_designs_unit_tests/intended/configs/*.cfg $(TESTS_DIR)/eos_designs/expected_configs/
+	for FILE in `ls -1 $(TESTS_DIR)/eos_designs/expected_structured_configs/*.yml` ; \
 	do \
 	basename $${FILE}; \
 	ansible-inventory -i $(ANSIBLE_AVD_DIR)/ansible_collections/arista/avd/molecule/eos_designs_unit_tests/inventory/hosts.yml \
@@ -112,14 +119,20 @@ copy-test-data: ## Copy inventory files from AVD collection Molecule scenario. A
 	find $(TESTS_DIR)/eos_designs/vars -name '*.yml' -exec sed -i -e "s/'\(\[.*\]\)'/\1/g" {} +
 	find $(TESTS_DIR)/eos_designs/vars -name '*.yml' -exec sed -i -e "s/'\({.*}\)'/\1/g" {} +
 
-.PHONY: test-3
-test-3: ## Run tests by parsing test inputs and comparing with expected configs
+.PHONY: test-0
+test-0: ## Run tests by parsing test inputs and comparing with expected configs
 	pyavd/runner.py --eos_cli_config_gen \
 	    -t $(TESTS_DIR)/eos_cli_config_gen/all.yml \
 	    -s '$(TESTS_DIR)/eos_cli_config_gen/vars/*' \
 	    -c $(TESTS_DIR)/eos_cli_config_gen/configs/
-	diff $(TESTS_DIR)/eos_cli_config_gen/expected_configs/ $(TESTS_DIR)/eos_cli_config_gen/configs/
+	diff -q $(TESTS_DIR)/eos_cli_config_gen/expected_configs/ $(TESTS_DIR)/eos_cli_config_gen/configs/
 
+.PHONY: test-3
+test-3: ## Run tests by parsing test inputs and comparing with expected configs
+	pyavd/runner.py --eos_cli_config_gen \
+	    --struct_cfgfiles '$(TESTS_DIR)/eos_designs/structured_configs/*' \
+	    --cfgfiles $(TESTS_DIR)/eos_designs/configs
+	diff -q $(TESTS_DIR)/eos_designs/expected_configs/ $(TESTS_DIR)/eos_designs/configs/
 
 .PHONY: test-2
 test-2: ## Run tests by parsing test inputs and comparing with expected structured configs
@@ -132,7 +145,7 @@ test-2: ## Run tests by parsing test inputs and comparing with expected structur
 	    --common_varfile $(TESTS_DIR)/eos_designs/default-platform-settings.yml \
 	    --common_varfile $(TESTS_DIR)/eos_designs/default-templates.yml \
 		--struct_cfgfiles $(TESTS_DIR)/eos_designs/structured_configs
-	diff $(TESTS_DIR)/eos_designs/expected_configs/ $(TESTS_DIR)/eos_designs/structured_configs/
+	diff -q $(TESTS_DIR)/eos_designs/expected_structured_configs/ $(TESTS_DIR)/eos_designs/structured_configs/
 
 .PHONY: test-1
 test-1: ## Run tests by parsing test inputs and comparing with expected configs
@@ -144,8 +157,6 @@ test-1: ## Run tests by parsing test inputs and comparing with expected configs
 	    --common_varfile $(TESTS_DIR)/eos_designs/default-node-type-keys.yml \
 	    --common_varfile $(TESTS_DIR)/eos_designs/default-platform-settings.yml \
 	    --common_varfile $(TESTS_DIR)/eos_designs/default-templates.yml
-
-	diff $(TESTS_DIR)/eos_designs/expected_configs/ $(TESTS_DIR)/eos_designs/configs/
 
 .PHONE: test
 test: test-1 test-3

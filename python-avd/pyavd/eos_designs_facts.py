@@ -2,10 +2,10 @@ import glob
 from os import path
 from typing import Iterable
 
-import yaml
 from lib.eos_designs.eos_designs_facts import EosDesignsFacts
 from read_vars import read_vars
 from write_result import write_result
+from yaml import safe_dump as yaml_dump
 
 JINJA2_TEMPLATE_PATHS = [path.join(path.realpath(path.dirname(__file__)), "templates")]
 
@@ -197,6 +197,6 @@ def run_eos_designs_facts(common_varfiles: list[str], device_varfiles: str, fact
     facts["groups"] = {fabric_name: hostnames}
 
     if facts_file:
-        write_result(facts_file, yaml.dump(facts))
+        write_result(facts_file, yaml_dump(facts, sort_keys=False))
 
     print("OK eos_designs_facts")

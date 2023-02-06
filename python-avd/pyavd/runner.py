@@ -87,6 +87,7 @@ def main():
             " Data will be deepmerged in the order of the common_struct_cfgfiles arguments."
         ),
         action="append",
+        default=[],
     )
     parser.add_argument(
         "--cfgfiles",

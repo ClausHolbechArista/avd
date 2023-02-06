@@ -11,7 +11,7 @@ from write_result import write_result
 JINJA2_TEMPLATE_PATHS = [path.join(path.realpath(path.dirname(__file__)), "templates")]
 JINJA2_CONFIG_TEMPLATE = "eos-intended-config.j2"
 JINJA2_DOCUMENTAITON_TEMPLATE = "eos-device-documentation.j2"
-AVD_SCHEMA_FILE = path.join(path.realpath(path.dirname(__file__)), "schemas", "eos_cli_config_gen.schema.yml")
+INPUT_SCHEMA_FILE = path.join(path.realpath(path.dirname(__file__)), "schemas", "eos_cli_config_gen.schema.yml")
 
 
 def eos_cli_config_gen(
@@ -53,7 +53,7 @@ def eos_cli_config_gen(
     configuration = None
     documentation = None
 
-    AvdSchemaTools(read_vars(AVD_SCHEMA_FILE), hostname, plugin="pyavd_eos_cli_config_gen", verbosity=0).validate_data(template_vars)
+    AvdSchemaTools(read_vars(INPUT_SCHEMA_FILE), hostname, plugin="pyavd_eos_cli_config_gen", verbosity=0).convert_and_validate_data(template_vars)
 
     template_vars["inventory_hostname"] = hostname
     templar = Templar(JINJA2_TEMPLATE_PATHS)

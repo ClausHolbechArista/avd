@@ -1,4 +1,5 @@
 import glob
+from collections import ChainMap
 from concurrent.futures import ProcessPoolExecutor
 from itertools import repeat
 from os import path
@@ -18,7 +19,7 @@ from lib.merge import merge
 from read_vars import read_vars
 from schema_tools import AvdSchemaTools
 from write_result import write_result
-from yaml import dump as yaml_dump
+from yaml import safe_dump as yaml_dump
 
 OUTPUT_SCHEMA_FILE = path.join(path.realpath(path.dirname(__file__)), "schemas", "eos_cli_config_gen.schema.yml")
 EOS_DESIGNS_MODULES = {
@@ -65,21 +66,29 @@ def eos_designs_structured_configs(
     """
 
     if not modules:
-        modules = EOS_DESIGNS_MODULES.keys()
-
-    vars["inventory_hostname"] = hostname
+        modules = list(EOS_DESIGNS_MODULES)
 
     output_schematools = AvdSchemaTools(read_vars(OUTPUT_SCHEMA_FILE), hostname, plugin="pyavd_eos_designs_structured_configs", verbosity=0)
 
     structured_config = {}
+    module_vars = ChainMap(
+        {"inventory_hostname": hostname},
+        structured_config,
+        vars,
+    )
     for module in modules:
         if module not in EOS_DESIGNS_MODULES:
             raise ValueError(f"Unknown eos_designs module '{module}' during render of eos_designs_structured_config for host '{hostname}'")
 
-        eos_designs_module: AvdFacts = EOS_DESIGNS_MODULES[module](vars, None)
-        result = eos_designs_module.render()
-        output_schematools.convert_data(result)
-        structured_config = merge(structured_config, result, destructive_merge=False)
+        eos_designs_module: AvdFacts = EOS_DESIGNS_MODULES[module](module_vars, None)
+        results = eos_designs_module.render()
+        if not isinstance(results, list):
+            results = [results]
+
+        for result in results:
+            output_schematools.convert_data(result)
+            merge(structured_config, result, schema=output_schematools.avdschema)
+
     return structured_config
 
 
@@ -105,12 +114,15 @@ def run_eos_designs_structured_configs_process(device_var_file: str, common_vars
 
     hostname = str(path.basename(device_var_file)).removesuffix(".yaml").removesuffix(".yml").removesuffix(".json")
 
-    device_vars = common_vars.copy()
-    device_vars.update(read_vars(device_var_file))
-    device_vars.update(common_vars["avd_switch_facts"][hostname])
+    device_vars = ChainMap(
+        {},
+        common_vars["avd_switch_facts"][hostname],
+        read_vars(device_var_file),
+        common_vars,
+    )
 
     structured_configuration = eos_designs_structured_configs(hostname, device_vars, verbosity=verbosity)
-    write_result(path.join(struct_cfg_file_dir, f"{hostname}.yml"), yaml_dump(structured_configuration))
+    write_result(path.join(struct_cfg_file_dir, f"{hostname}.yml"), yaml_dump(structured_configuration, sort_keys=False, width=260))
     print(f"OK: {hostname}")
 
 
@@ -143,7 +155,7 @@ def run_eos_designs_structured_configs(common_varfiles: list[str], fact_file: st
 
     common_vars.update(read_vars(fact_file))
 
-    with ProcessPoolExecutor(max_workers=20) as executor:
+    with ProcessPoolExecutor(max_workers=10) as executor:
         return_values = executor.map(
             run_eos_designs_structured_configs_process,
             glob.iglob(device_varfiles),
