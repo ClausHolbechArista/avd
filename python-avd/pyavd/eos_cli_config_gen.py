@@ -1,83 +1,17 @@
-#!/usr/bin/env python3
-import argparse
-import json
-from collections import ChainMap
+import glob
+from concurrent.futures import ProcessPoolExecutor
+from itertools import repeat
 from os import path
-from sys import stdin
 
-import yaml
-from jinja2 import Environment, FileSystemBytecodeCache, FileSystemLoader, StrictUndefined
-from lib.j2.filter.convert_dicts import convert_dicts
-from lib.j2.filter.default import default
-from lib.j2.filter.list_compress import list_compress
-from lib.j2.filter.natural_sort import natural_sort
-from lib.j2.filter.range_expand import range_expand
-from lib.j2.test.contains import contains
-from lib.j2.test.defined import defined
-from lib.merge.merge import merge
-from lib.schema.avdschema import AvdSchema
+from read_vars import read_vars
+from schema_tools import AvdSchemaTools
+from templater import Templar
+from write_result import write_result
 
-JINJA2_EXTENSIONS = ["jinja2.ext.loopcontrols", "jinja2.ext.do", "jinja2.ext.i18n"]
-JINJA2_CUSTOM_FILTERS = {
-    "arista.avd.default": default,
-    "arista.avd.convert_dicts": convert_dicts,
-    "arista.avd.list_compress": list_compress,
-    "arista.avd.natural_sort": natural_sort,
-    "arista.avd.range_expand": range_expand,
-}
-JINJA2_CUSTOM_TESTS = {
-    "arista.avd.defined": defined,
-    "arista.avd.contains": contains,
-}
 JINJA2_TEMPLATE_PATHS = [path.join(path.realpath(path.dirname(__file__)), "templates")]
 JINJA2_CONFIG_TEMPLATE = "eos-intended-config.j2"
 JINJA2_DOCUMENTAITON_TEMPLATE = "eos-device-documentation.j2"
 AVD_SCHEMA_FILE = path.join(path.realpath(path.dirname(__file__)), "schemas", "eos_cli_config_gen.schema.yml")
-
-
-class Undefined(StrictUndefined):
-    """
-    Allow nested checks for undefined instead of having to check on every level.
-    Example "{% if var.key.subkey is arista.avd.undefined %}" is ok.
-
-    Without this it we would have to test every level, like
-    "{% if var is arista.avd.undefined or var.key is arista.avd.undefined or var.key.subkey is arista.avd.undefined %}"
-
-    Inspired from Ansible's AnsibleUndefined class.
-    """
-
-    def __getattr__(self, name):
-        # Return original Undefined object to preserve the first failure context
-        return self
-
-    def __getitem__(self, key):
-        # Return original Undefined object to preserve the first failure context
-        return self
-
-    def __repr__(self):
-        return f"Undefined(hint={self._undefined_hint}, obj={self._undefined_obj}, name={self._undefined_name})"
-
-    def __contains__(self, item):
-        # Return original Undefined object to preserve the first failure context
-        return self
-
-
-def convert_and_validate(data: dict, verbosity: int = 0) -> None:
-    with open(AVD_SCHEMA_FILE, "r", encoding="UTF-8") as file:
-        schema = yaml.safe_load(file.read())
-
-    avdschema = AvdSchema(schema)
-    for conversion_error in avdschema.convert(data):
-        if verbosity > 0:
-            print(conversion_error)
-
-    validation_failed = False
-    for validation_error in avdschema.validate(data):
-        print(validation_error)
-        validation_failed = True
-
-    if validation_failed:
-        raise ValueError("The supplied vars are not valid according to the schema")
 
 
 def eos_cli_config_gen(
@@ -87,94 +21,125 @@ def eos_cli_config_gen(
     render_documentation: bool = False,
     verbosity: int = 0,
 ) -> tuple[str | None, str | None]:
+    """
+    Main function for eos_cli_config_gen to render configs and/or documentation for one device.
+
+    Is used by run_eos_cli_config_gen_process worker function but can also be called by other frameworks.
+
+    Parameters
+    ----------
+    hostname : str
+        Hostname of device. Set as 'inventory_hostname' on the input vars, to keep compatability with Ansible focused code.
+    template_vars : dict
+        Dictionary of variables applied to template. Variables are converted and validated according to AVD Schema first.
+    device_varfiles : str
+        Glob for device specific var files to import and merge on top of common vars.
+        Filenames will be used as hostname.
+    render_configuration: bool, default=True
+        If true, the device configuration will be rendered and returned
+    render_documentation: bool, default=False
+        If true, the device documentation will be rendered and returned
+    verbosity: int
+        Vebosity level for output. Passed along to other functions
+
+    Returns
+    -------
+    configuration : str
+        Device configuration in EOS CLI format. None if render_configuration is not true.
+    documentation : str
+        Device documentation in markdown format. None if render_documentation is not true.
+    """
+
     configuration = None
     documentation = None
-    if not isinstance(template_vars, (dict, ChainMap)):
-        raise TypeError(f"vars argument must be a dictionary. Got {type(template_vars)}")
 
-    convert_and_validate(template_vars, verbosity)
+    AvdSchemaTools(read_vars(AVD_SCHEMA_FILE), hostname, plugin="pyavd_eos_cli_config_gen", verbosity=0).validate_data(template_vars)
+
     template_vars["inventory_hostname"] = hostname
-
-    loader = FileSystemLoader(JINJA2_TEMPLATE_PATHS)
-    bytecode_cache = FileSystemBytecodeCache(path.join(JINJA2_TEMPLATE_PATHS[0], "j2cache"))
-    environment = Environment(
-        extensions=JINJA2_EXTENSIONS,
-        loader=loader,
-        undefined=Undefined,
-        trim_blocks=True,
-        bytecode_cache=bytecode_cache,
-    )
-    environment.filters.update(JINJA2_CUSTOM_FILTERS)
-    environment.tests.update(JINJA2_CUSTOM_TESTS)
+    templar = Templar(JINJA2_TEMPLATE_PATHS)
 
     if render_configuration:
-        configuration = environment.get_template(JINJA2_CONFIG_TEMPLATE).render(template_vars)
+        configuration = templar.render_template_from_file(JINJA2_CONFIG_TEMPLATE, template_vars)
 
     if render_documentation:
-        documentation = environment.get_template(JINJA2_DOCUMENTAITON_TEMPLATE).render(template_vars)
+        documentation = templar.render_template_from_file(JINJA2_DOCUMENTAITON_TEMPLATE, template_vars)
 
     return configuration, documentation
 
 
-def read_vars(filename):
-    if filename == "/dev/stdin" and stdin.isatty():
-        print("Write variables in YAML or JSON format and end with ctrl+d to exit")
-    with open(filename, "r", encoding="UTF-8") as file:
-        data = file.read()
+def run_eos_cli_config_gen_process(device_var_file: str, common_vars: dict, cfg_file_dir: str | None, doc_file_dir: str | None, verbosity: int) -> None:
+    """
+    Function run as process by ProcessPoolExecutor.
 
-    try:
-        return json.loads(data)
-    except json.JSONDecodeError:
-        pass
+    Read device variables from files and run eos_cli_config_gen for one device.
 
-    return yaml.safe_load(data) or {}
+    Parameters
+    ----------
+    device_var_file : str
+        Path to device specific var file to import and merge on top of common vars.
+        Filename will be used as hostname.
+    common_vars : dict
+        Common vars to be applied on all devices.
+    cfg_file_dir: str | None
+        Path to dir for output config file if set.
+    doc_file_dir: str | None
+        Path to dir for output documentation file if set.
+    verbosity: int
+        Vebosity level for output. Passed along to other functions
+    """
 
+    render_configuration = cfg_file_dir is not None
+    render_documentation = doc_file_dir is not None
 
-def write_result(filename, result):
-    mode = "w+"
-    if filename == "/dev/stdout":
-        mode = "w"
-
-    with open(filename, mode, encoding="UTF-8") as file:
-        file.write(result)
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        prog="eos_cli_config_gen",
-        description="Render Arista EOS Configurations from Structured Configuration variables",
-        epilog="See https://avd.sh/en/stable/roles/eos_cli_config_gen for details on supported variables",
-    )
-    parser.add_argument("hostname", help="Device hostname")
-    parser.add_argument(
-        "--varfile",
-        "-v",
-        help=(
-            "YAML or JSON File where variables are read from. Default is stdin."
-            " Multiple files can be added by repeating the argument."
-            " Data will be deepmerged in the order of the varfile arguments."
-        ),
-        action="append",
-    )
-    parser.add_argument("--cfgfile", "-c", help="Destination file for device configuration")
-    parser.add_argument("--docfile", "-d", help="Destination file for device documentation")
-    args = parser.parse_args()
-
-    vars = {}
-    files = args.varfile or ["/dev/stdin"]
-    for file in files:
-        merge(vars, read_vars(file), recursive=False)
-
-    render_configuration = args.cfgfile is not None
-    render_documentation = args.docfile is not None
-    configuration, documentation = eos_cli_config_gen(args.hostname, vars, render_configuration, render_documentation)
-
+    device_vars = common_vars.copy()
+    device_vars.update(read_vars(device_var_file))
+    hostname = str(path.basename(device_var_file)).removesuffix(".yaml").removesuffix(".yml").removesuffix(".json")
+    configuration, documentation = eos_cli_config_gen(hostname, device_vars, render_configuration, render_documentation, verbosity)
     if render_configuration:
-        write_result(args.cfgfile, configuration)
-
+        write_result(path.join(cfg_file_dir, f"{hostname}.cfg"), configuration)
     if render_documentation:
-        write_result(args.docfile, documentation)
+        write_result(path.join(doc_file_dir, f"{hostname}.md"), documentation)
+
+    print(f"OK: {hostname}")
 
 
-if __name__ == "__main__":
-    main()
+def run_eos_cli_config_gen(common_varfiles: list[str], device_varfiles: str, cfgfiles_dir: str | None, docfiles_dir: str | None, verbosity: int) -> None:
+    """
+    Read common variables from files and run eos_cli_config_gen for each device in process workers.
+
+    Intended for CLI use via runner.py
+
+    Parameters
+    ----------
+    common_varfiles : list[str]
+        List of common var files to import and merge.
+    device_varfiles : str
+        Glob for device specific var files to import and merge on top of common vars.
+        Filenames will be used as hostname.
+    cfgfiles_dir: str | None
+        Path to dir for output config files if set.
+    docfiles_dir: str | None
+        Path to dir for output documentation files if set.
+    verbosity: int
+        Vebosity level for output. Passed along to other functions
+    """
+
+    # Read common vars
+    common_vars = {}
+
+    for file in common_varfiles:
+        common_vars.update(read_vars(file))
+
+    with ProcessPoolExecutor(max_workers=20) as executor:
+        return_values = executor.map(
+            run_eos_cli_config_gen_process,
+            glob.iglob(device_varfiles),
+            repeat(common_vars),
+            repeat(cfgfiles_dir),
+            repeat(docfiles_dir),
+            repeat(verbosity),
+        )
+
+    for return_value in return_values:
+        if return_value is not None:
+            print(return_value)
