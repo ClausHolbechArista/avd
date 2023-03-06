@@ -1,0 +1,368 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://avd.sh/development/studio-design-schema.json",
+    "$def": {
+        "name": {
+            "type": "string",
+            "description": "Internal name of field. Used as reference to field"
+        },
+        "set_path": {
+            "type": "array",
+            "description": "AVD Variable path to set value in. Cannot set list items",
+            "items": {
+                "type": "string",
+                "description": "Key name"
+            }
+        },
+        "display_name": {
+            "type": "string",
+            "description": "Friendly name of field. Internal name used with Title Case if not set."
+        },
+        "description": {
+            "type": "string",
+            "description": "Field description"
+        },
+        "required": {
+            "type": "boolean",
+            "description": "Is field required?"
+        },
+        "field": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "required": [ "type", "name", "schema_path" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "avd_schema"
+                            ]
+                        },
+                        "schema_path": {
+                            "type": "array",
+                            "description": "AVD Variable path to read schema from. Ignore lists for addressing schema of list item keys",
+                            "items": {
+                                "type": "string",
+                                "description": "Key name"
+                            }
+                        },
+                        "schema_override": {
+                            "type": "object",
+                            "description": "AVD Schema overrides. Will be deepmerged over AVD schema before evaluation"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "string"
+                            ]
+                        },
+                        "default": {
+                            "type": "string",
+                            "description": "Default Value"
+                        },
+                        "static_options": {
+                            "type": "array",
+                            "description": "List of allowed values",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "min_length": {
+                            "type": "integer",
+                            "description": "Minimum length of string"
+                        },
+                        "max_length": {
+                            "type": "integer",
+                            "description": "Maximum length of string"
+                        },
+                        "format": {
+                            "type": "string",
+                            "description": "String format"
+                        },
+                        "pattern": {
+                            "type": "string",
+                            "description": "Regex pattern"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "integer"
+                            ]
+                        },
+                        "default": {
+                            "type": "integer",
+                            "description": "Default Value"
+                        },
+                        "static_options": {
+                            "type": "array",
+                            "description": "List of allowed values",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "min": {
+                            "type": "integer",
+                            "description": "Minimum value"
+                        },
+                        "max": {
+                            "type": "integer",
+                            "description": "Maximum value"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "boolean"
+                            ]
+                        },
+                        "default": {
+                            "type": "boolean",
+                            "description": "Default Value"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name", "items" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "collection"
+                            ]
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Name of primary key in item group. Only applicable if items are groups (dicts)"
+                        },
+                        "layout": {
+                            "type": "string",
+                            "description": "Layout type - TODO: Add enum. 'hierarchical' works"
+                        },
+                        "items": {
+                            "$ref": "#/$def/field"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name", "members" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "group"
+                            ]
+                        },
+                        "layout": {
+                            "type": "string",
+                            "description": "Layout type - TODO: Add enum. 'hierarchical' works"
+                        },
+                        "members": {
+                            "type": "array",
+                            "description": "List of group members (Dict keys)",
+                            "items": {
+                                "$ref": "#/$def/field"
+                            }
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name", "items" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "resolver"
+                            ]
+                        },
+                        "layout": {
+                            "type": "string",
+                            "description": "Layout type - TODO: Add enum. 'hierarchical' works"
+                        },
+                        "items": {
+                            "$ref": "#/$def/field"
+                        },
+                        "resolver_type": {
+                            "type": "string",
+                            "description": "Resolve on single or multiple tags",
+                            "enum": ["multi", "single"],
+                            "default": "multi"
+                        },
+                        "tag_type": {
+                            "type": "string",
+                            "description": "Tag type to resolve on",
+                            "enum": ["device", "interface"],
+                            "default": "device"
+                        },
+                        "tag_label": {
+                            "type": "string",
+                            "description": "Tag label to resolve on"
+                        },
+                        "tag_filter_query": {
+                            "type": "string",
+                            "description": "Tag filter query to limit available tags"
+                        },
+                        "prepopulated": {
+                            "type": "boolean",
+                            "description": "Prepopulate tags in resolver. Only applicable for resolver_type: single"
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "required": [ "type", "name", "columns" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "tagger"
+                            ]
+                        },
+                        "assignment_type": {
+                            "type": "string",
+                            "description": "Assign single or multiple tags",
+                            "enum": ["multi", "single"],
+                            "default": "multi"
+                        },
+                        "tag_type": {
+                            "type": "string",
+                            "description": "Tag type to resolve on",
+                            "enum": ["device", "interface"],
+                            "default": "device"
+                        },
+                        "columns": {
+                            "type": "array",
+                            "description": "List of tag columns",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "tag_label": {
+                                        "type": "string",
+                                        "description": "Tag label"
+                                    },
+                                    "suggested_values": {
+                                        "type": "string",
+                                        "description": "Suggested tag values in drop down"
+                                    },
+                                    "set_path": { "$ref": "#/$def/set_path"}
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "description": { "$ref": "#/$def/description"},
+                        "required": { "$ref": "#/$def/required"}
+                    },
+                    "additionalProperties": false
+                }
+
+
+
+            ]
+        }
+    },
+    "title": "AVD Studio Design Schema",
+    "type": "object",
+    "required": ["studio_id", "display_name", "studio_inputs"],
+    "properties": {
+        "studio_id": {
+            "type": "string",
+            "description": "UUID or other unique identifier of CloudVision Studio created/updated by this design"
+        },
+        "package_version": {
+            "type": "string",
+            "description": "Ex '0.1.0'",
+            "default": "0.0.0"
+        },
+        "display_name": {
+            "type": "string",
+            "description": "Friendly name of CloudVision Studio"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of CloudVision Studio"
+        },
+        "build_pipeline": {
+            "type": "object",
+            "description": "Action items to assign to the CloudVision build pipeline for this Studio",
+            "properties": {
+                "studio_prebuild_script_file": {
+                    "type": "string",
+                    "description": "Python script to use as CloudVision Studio Prebuild Action"
+                },
+                "workspace_prebuild_script_file": {
+                    "type": "string",
+                    "description": "Python script to use as CloudVision Workspace Prebuild Action. Should only be set if overriding the default action shipping with AVD."
+                },
+                "studio_prerender_script_file": {
+                    "type": "string",
+                    "description": "Python script to use as CloudVision Studio Prerender Action"
+                },
+                "additionalProperties": false
+            }
+        },
+        "template_file": {
+            "type": "string",
+            "description": "File containing Studio Mako template"
+        },
+        "studio_inputs": {
+            "type": "array",
+            "description": "List of input fields",
+            "items": {
+                "$ref": "#/$def/field"
+            }
+        }
+    },
+    "additionalProperties": false
+}
