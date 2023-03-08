@@ -17,6 +17,8 @@ from .studiofields import (
     StudioTaggerField,
 )
 
+DEFAULT_STUDIO_TEMPLATE_FILE = Path(__file__).parent.joinpath("default_action_scripts", "studio-template.mako")
+
 
 class AvdStudioBuilder:
     def __init__(
@@ -46,10 +48,8 @@ class AvdStudioBuilder:
           Complete studio object adhering to CloudVision studio.v1 resource API schema
         """
 
-        if template_file := studio_design.get("template_file"):
-            template = Path(template_file).read_text(encoding="UTF-8")
-        else:
-            template = ""
+        template_file = studio_design.get("template_file", DEFAULT_STUDIO_TEMPLATE_FILE)
+        template = Path(template_file).read_text(encoding="UTF-8")
 
         self.studio = Studio(
             display_name=studio_design["display_name"],

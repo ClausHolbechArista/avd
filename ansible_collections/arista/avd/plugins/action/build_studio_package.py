@@ -15,6 +15,9 @@ AVD_BASE_PACKAGE_NAME = "package-avd-base"
 AVD_BASE_PACKAGE_VERSION = "3.8.0"
 DEFAULT_ACTION_SCRIPT_PATH = Path(__file__).parent.parent.joinpath("plugin_utils", "studiobuilder", "default_action_scripts")
 POST_INSTALL_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
+DEFAULT_STUDIO_PREBUILD_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-studio-prebuild.py")
+DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-workspace-prebuild.py")
+DEFAULT_STUDIO_PRERENDER_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-studio-prerender.py")
 
 
 class ActionModule(ActionBase):
@@ -172,38 +175,33 @@ class ActionModule(ActionBase):
         )
 
     def create_actions(self, studio_design: dict) -> None:
-        studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file")
-        workspace_prebuild_action_file = get(studio_design, "build_pipeline.workspace_prebuild_action_file")
-        studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file")
+        studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file", default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE)
+        description = f"Studio Pre-build action for Studio {self.studio_name}"
+        action_id = f"action-studio-prebuild-{self.studio_id}"
+        self.create_action(studio_prebuild_action_file, description, action_id)
+        self.action_ids.append(action_id)
+        self.action_associations["StudioPreBuildActionIDs"].append(action_id)
 
-        if studio_prebuild_action_file:
-            description = f"Studio Pre-build action for Studio {self.studio_name}"
-            action_id = f"action-studio-prebuild-{self.studio_id}"
-            self.create_action(studio_prebuild_action_file, description, action_id)
-            self.action_ids.append(action_id)
-            self.action_associations["StudioPreBuildActionIDs"].append(action_id)
+        workspace_prebuild_action_file = get(studio_design, "build_pipeline.workspace_prebuild_action_file", default=DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE)
+        self.depends_on_avd_package = False
+        description = f"Workspace Pre-build action for Studio {self.studio_name}"
+        action_id = f"action-workspace-prebuild-{self.studio_id}"
+        self.create_action(workspace_prebuild_action_file, description, action_id)
+        self.action_ids.append(action_id)
+        self.action_associations["WorkspacePreBuildActionIDs"].append(action_id)
 
-        if workspace_prebuild_action_file:
-            self.depends_on_avd_package = False
-            description = f"Workspace Pre-build action for Studio {self.studio_name}"
-            action_id = f"action-workspace-prebuild-{self.studio_id}"
-            self.create_action(workspace_prebuild_action_file, description, action_id)
-            self.action_ids.append(action_id)
-            self.action_associations["WorkspacePreBuildActionIDs"].append(action_id)
+        studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file", default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE)
+        description = f"Studio Pre-render action for Studio {self.studio_name}"
+        action_id = f"action-studio-prerender-{self.studio_id}"
+        self.create_action(studio_prerender_action_file, description, action_id)
+        self.action_ids.append(action_id)
+        self.action_associations["StudioPreRenderActionIDs"].append(action_id)
 
-        if studio_prerender_action_file:
-            description = f"Studio Pre-render action for Studio {self.studio_name}"
-            action_id = f"action-studio-prerender-{self.studio_id}"
-            self.create_action(studio_prerender_action_file, description, action_id)
-            self.action_ids.append(action_id)
-            self.action_associations["StudioPreRenderActionIDs"].append(action_id)
-
-        if studio_prebuild_action_file or workspace_prebuild_action_file or studio_prerender_action_file:
-            post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
-            description = f"Post-install action for Studio {self.studio_name}"
-            # Storing in class since we need this when creating the package.
-            self.post_install_action_id = f"action-post-install-{self.studio_id}"
-            self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
+        post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
+        description = f"Post-install action for Studio {self.studio_name}"
+        # Storing in class since we need this when creating the package.
+        self.post_install_action_id = f"action-post-install-{self.studio_id}"
+        self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
 
     def create_action(self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_AUTOFILL"):
         action_script_path = Path(action_script_file)
