@@ -222,7 +222,7 @@ def map_data(data_maps, studio_inputs, start_path):
 
     value = None
     for _data_map in _data_maps:
-        if "input" in _data_map:ssssssssssssssssssssssssssssssssssss
+        if "input" in _data_map:
             # Get value from studio_inputs
             data_pointer = studio_inputs[device]
             keys = _data_map["input"].split("-")
