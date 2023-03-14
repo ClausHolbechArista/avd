@@ -17,6 +17,7 @@ class StudioField:
     required: bool | None = None
     parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None
     type: str
+    set_path: list = None
 
     def __init__(
         self,
@@ -26,6 +27,7 @@ class StudioField:
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
     ) -> None:
         if parent is not None:
             self.parent = parent
@@ -41,6 +43,7 @@ class StudioField:
         self.required = required
         self.description = description
         setattr_if_not_none(self, "label", label)
+        setattr_if_not_none(self, "set_path", set_path)
 
     def render_input(self) -> dict[str, dict]:
         """
@@ -64,6 +67,32 @@ class StudioField:
         # TODO add other layout schema options
         """
         return {}
+
+    @property
+    def path(self) -> list[str | int]:
+        """
+        Render path for field as list of strings or integers.
+        A string means a dict key name and 0 means a list element
+        """
+        if getattr(self, "parent", None) is None:
+            # This must be "root" which should not be part of the path, since "root" is not part of the data model for studio inputs.
+            return []
+        elif isinstance(self.parent, StudioCollectionField):
+            return self.parent.path + [0, self.name]
+        else:
+            return self.parent.path + [self.name]
+
+    def render_datamapping(self) -> dict | None:
+        """
+        Render data mapping for this field if set_path is defined
+        """
+        if self.set_path is None:
+            return None
+
+        return {
+            "from_path": self.path,
+            "to_path": self.set_path,
+        }
 
 
 class StudioGroupField(StudioField):
@@ -92,9 +121,10 @@ class StudioGroupField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         layout: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.layout = layout
         self.members = []
@@ -159,10 +189,11 @@ class StudioCollectionField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         layout: str | None = None,
         key: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.layout = layout
         self.key = key
@@ -225,6 +256,7 @@ class StudioStringField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         default_value: str | None = None,
         min_length: int | None = None,
         max_length: int | None = None,
@@ -232,7 +264,7 @@ class StudioStringField(StudioField):
         static_options: list[str] | None = None,
         string_format: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.default_value = default_value
         self.min_length = min_length
@@ -311,12 +343,13 @@ class StudioIntegerField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         default_value: int | None = None,
         min: int | None = None,
         max: int | None = None,
         static_options: list[int] | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.default_value = default_value
         self.min = min
@@ -388,9 +421,10 @@ class StudioBooleanField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         default_value: bool | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.default_value = default_value
 
@@ -440,6 +474,7 @@ class StudioResolverField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         layout: str | None = None,
         prepopulated: bool | None = None,
         resolver_type: str | None = None,
@@ -447,7 +482,7 @@ class StudioResolverField(StudioField):
         tag_label: str | None = None,
         tag_filter_query: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id)
+        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
 
         self.layout = layout
         setattr_if_not_none(self, "prepopulated", prepopulated)
@@ -528,11 +563,12 @@ class StudioTaggerField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
+        set_path: list = None,
         tag_type: str | None = None,
         assignment_type: str | None = None,
     ) -> None:
         # Notice that we remove parent from the options, since taggers are not regular members of parent groups.
-        super().__init__(name=name, description=description, required=required, id=id or f"{parent.id}-{name}")
+        super().__init__(name=name, description=description, required=required, id=id or f"{parent.id}-{name}", set_path=set_path)
 
         self.parent = parent
         self.columns = columns

@@ -73,3 +73,9 @@ class Studio:
             layouts.update(field.render_layout())
 
         return json.dumps(layouts)
+
+    def render_datamappings(self) -> list[dict]:
+        """
+        Render list of data mappings
+        """
+        return [datamapping for datamapping in [field.render_datamapping() for field in self.input_fields] if datamapping is not None]

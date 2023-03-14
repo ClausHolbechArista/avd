@@ -38,7 +38,7 @@ class AvdStudioBuilder:
             "tagger": self.buildtaggerfield,
         }
 
-    def build(self, studio_design: dict):
+    def build(self, studio_design: dict) -> tuple[dict, list]:
         """
         Build CloudVision Studio based on studio_design.
 
@@ -46,6 +46,8 @@ class AvdStudioBuilder:
         -------
         dict
           Complete studio object adhering to CloudVision studio.v1 resource API schema
+        list
+          Data mappings
         """
 
         template_file = studio_design.get("template_file", DEFAULT_STUDIO_TEMPLATE_FILE)
@@ -62,7 +64,7 @@ class AvdStudioBuilder:
         # Everything else is built recursively in build_fields.
         self.build_fields(fields=studio_design.get("studio_inputs", []), parent=self.studio.root)
 
-        return self.studio.render()
+        return self.studio.render(), self.studio.render_datamappings()
 
     def build_fields(self, fields: list[dict], parent: StudioField):
         for field in fields:
@@ -72,7 +74,8 @@ class AvdStudioBuilder:
             self.builders[field_type](field=field, parent=parent)
 
     def buildfromavdschema(self, field: dict, parent: StudioField):
-        self.studio.input_fields.extend(self._converter.convert_schema(field.get("schema_path"), field.get("name"), parent=parent))
+        set_path = field.get("set_path", field.get("schema_path"))
+        self.studio.input_fields.extend(self._converter.convert_schema(field.get("schema_path"), field.get("name"), parent=parent, set_path=set_path))
 
     def buildstringfield(self, field: dict, parent: StudioField):
         self.studio.input_fields.append(
@@ -82,6 +85,7 @@ class AvdStudioBuilder:
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
                 default_value=field.get("default"),
                 required=field.get("required"),
+                set_path=field.get("set_path"),
                 min_length=field.get("min_length"),
                 max_length=field.get("max_length"),
                 static_options=field.get("static_options"),
@@ -98,6 +102,7 @@ class AvdStudioBuilder:
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
                 default_value=field.get("default"),
                 required=field.get("required"),
+                set_path=field.get("set_path"),
                 min=field.get("min"),
                 max=field.get("max"),
                 static_options=field.get("static_options"),
@@ -112,6 +117,7 @@ class AvdStudioBuilder:
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
                 default_value=field.get("default"),
                 required=field.get("required"),
+                set_path=field.get("set_path"),
             )
         )
 
@@ -121,6 +127,7 @@ class AvdStudioBuilder:
             parent=parent,
             label=field.get("display_name", key_to_display_name(field.get("name"))),
             required=field.get("required"),
+            set_path=field.get("set_path"),
             key=field.get("key"),
             layout=field.get("layout"),
         )
@@ -141,6 +148,7 @@ class AvdStudioBuilder:
                 ),
             ),
             required=field.get("required"),
+            set_path=field.get("set_path"),
         )
         self.studio.input_fields.append(group)
 
@@ -156,6 +164,7 @@ class AvdStudioBuilder:
             label=field.get("display_name", key_to_display_name(field.get("name"))),
             description=field.get("description"),
             required=field.get("required"),
+            set_path=field.get("set_path"),
             layout=field.get("layout"),
             prepopulated=field.get("prepopulated"),
             resolver_type=field.get("resolver_type"),
@@ -177,6 +186,7 @@ class AvdStudioBuilder:
                 description=field.get("description"),
                 parent=parent,
                 required=field.get("required"),
+                set_path=field.get("set_path"),
                 tag_type=field.get("tag_type"),
                 assignment_type=field.get("assignment_type"),
             )

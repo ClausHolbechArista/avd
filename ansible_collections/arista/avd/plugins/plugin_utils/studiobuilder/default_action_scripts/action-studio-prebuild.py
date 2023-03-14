@@ -14,7 +14,6 @@ The purpose of this action is:
 """
 
 import json
-import re
 
 from arista.studio.v1 import models
 from arista.studio.v1.services import AssignedTagsServiceStub, InputsServiceStub
@@ -24,7 +23,7 @@ from google.protobuf.wrappers_pb2 import StringValue
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2, TagValueSearchRequest
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
-DATA_MAPS = []
+DATAMAPPINGS = []
 WORKSPACE_ID = ctx.action.args["WorkspaceID"]
 STUDIO_ID = ctx.action.args["StudioID"]
 
@@ -85,13 +84,14 @@ class InputParser:
         }
     ]
     """
+
     queue: list
 
     def __init__(self, interface_resolver_paths: list[list[str]] = []):
         self.interface_resolver_paths = interface_resolver_paths
         self.queue = []
 
-    def parse_inputs(self, inputs):
+    def parse_inputs(self, inputs: dict) -> list[dict]:
         self.queue.append({"inputs": inputs, "path": [], "device_queries": []})
         datasets = []
 
@@ -109,18 +109,12 @@ class InputParser:
         if isinstance(inputs, dict):
             parsed = {}
             for key, val in inputs.items():
-                if (
-                    parsed_val := self._parse_inputs(val, path + [key], device_queries)
-                ) is not None:
+                if (parsed_val := self._parse_inputs(val, path + [key], device_queries)) is not None:
                     parsed[key] = parsed_val
             return parsed
 
         if isinstance(inputs, list) and inputs:
-            if (
-                isinstance(inputs[0], dict)
-                and "tags" in inputs[0]
-                and "inputs" in inputs[0]
-            ):
+            if isinstance(inputs[0], dict) and "tags" in inputs[0] and "inputs" in inputs[0]:
                 # this is a type of resolver
                 # check which one - default to device resolver
                 if path in self.interface_resolver_paths:
@@ -132,17 +126,13 @@ class InputParser:
                             {
                                 "inputs": resolver_item["inputs"],
                                 "path": path,
-                                "device_queries": device_queries
-                                + [resolver_item["tags"]["query"]],
+                                "device_queries": device_queries + [resolver_item["tags"]["query"]],
                             }
                         )
                     return None
 
             # collection type
-            return [
-                self._parse_inputs(element, path + [index], device_queries)
-                for index, element in enumerate(inputs)
-            ]
+            return [self._parse_inputs(element, path + [index], device_queries) for index, element in enumerate(inputs)]
         # base case for other python basic classes
         return inputs
 
@@ -163,97 +153,139 @@ def get_raw_studio_inputs(studio_id, workspace_id):
     return json.loads(get_res.value.inputs.value)
 
 
-def transform_studio_inputs_to_AVD(raw_studio_inputs: dict):
+class DataMapper:
+    def __init__(self, mappings: list[dict]):
+        """
+        Parameters
+        ----------
+        mappings : list[dict]
+            List of variable mappings like:
+            [
+                {
+                    "from_path": ["dc_vars", "dc", "role_vars", "role", "bgp_as"],
+                    "to_path": ["network_type", "defaults", "bgp_as"],
+                }
+            ]
+        """
+        self.mappings = mappings
+
+    def __mappings_under_path(self, path: list[str | int]) -> list:
+        pathlen = len(path)
+        return [{**mapping, "from_path": mapping["from_path"][pathlen:]} for mapping in self.mappings if mapping["from_path"][:pathlen] == path]
+
+    def __get_value_from_path(self, path: list, data):
+        """Recursive function to walk through data to find value of path. Returns None if not found."""
+        if not path:
+            return data
+
+        if isinstance(data, dict):
+            if path[0] in data:
+                return self.__get_value_from_path(path[1:], data[path[0]])
+
+        elif isinstance(data, list) and isinstance(path[0], int):
+            if path[0] < len(data):
+                return self.__get_value_from_path(path[1:], data[path[0]])
+
+        return None
+
+    def __set_value_from_path(self, path: list, data: list | dict, value):
+        """Recursive function to walk through data to set value of path, creating any level needed."""
+        if not path:
+            raise ValueError("Path is empty. Something bad happened.")
+
+        if len(path) == 1:
+            if isinstance(data, dict):
+                data[path[0]] = value
+            elif isinstance(data, list) and isinstance(path[0], int):
+                # We ignore the actual integer value and just append the item to the list.
+                data.append(value)
+            else:
+                raise ValueError(f"Path '{path}' cannot be set on data of type '{type(data)}'")
+            return
+
+        # Two or more elements in path.
+        if isinstance(data, dict):
+            # For dict, create the child key with correct type and call recursively.
+            if isinstance(path[1], int):
+                data.setdefault(path[0], [])
+                self.__set_value_from_path(path[1:], data[path[0]], value)
+            else:
+                data.setdefault(path[0], {})
+                self.__set_value_from_path(path[1:], data[path[0]], value)
+        elif isinstance(data, list) and isinstance(path[0], int):
+            # For list, append item of correct type and call recursively.
+            # Notice that the actual index in path[0] is ignored.
+            # TODO: Consider accepting index or lookup based on key, to ensure consistency when updating multiple fields.
+            index = len(data)
+            if isinstance(path[1], int):
+                data.append([])
+                self.__set_value_from_path(path[1:], data[index], value)
+            else:
+                data.append({})
+                self.__set_value_from_path(path[1:], data[index], value)
+
+        else:
+            raise ValueError(f"Path '{path}' cannot be set on data of type '{type(data)}'")
+
+        return None
+
+    def map_dataset(self, dataset: dict) -> dict:
+        """
+        Map inputs from given dataset according to mappings given at initilization.
+        If mappings do not cover a key, it will not be part of the output (lost!)
+
+        Parameters
+        ----------
+        dataset : dict
+            One dataset like returned by InputParser
+            {
+                "device_queries": ["DC_Name:DC2", "Role:L3leaf"],
+                "path": ["dc_vars", "dc", "role_vars"],
+                "inputs": {
+                    "role": {
+                        "bgp_as": "5678",
+                    },
+                },
+            }
+
+        Returns
+        -------
+        dict
+            Dataset only containing device_queries and mapped_vars
+            {
+                "device_queries": ["DC_Name:DC2", "Role:L3leaf"],
+                "avd_vars": {"network_type": {"defaults": {"bgp_as": "5678"}}}
+            }
+        """
+        path = dataset["path"]
+        inputs = dataset["inputs"]
+        output = {
+            "device_queries": dataset["device_queries"],
+            "avd_vars": {},
+        }
+        for mapping in self.__mappings_under_path(path):
+            if (value := self.__get_value_from_path(mapping["from_path"], inputs)) is not None:
+                self.__set_value_from_path(mapping["to_path"], output["avd_vars"], value)
+
+        return output
+
+    def map_datasets(self, datasets: list[dict]) -> list:
+        """
+        Run map_dataset for each list item and return list with updated datasets
+        """
+        return [self.map_dataset(dataset) for dataset in datasets]
+
+
+def transform_studio_inputs_to_avd(raw_studio_inputs: dict) -> list[dict]:
     """
     First parse raw studio inputs and expand into a list of data sets
-    Next for each data set perform variable mapping into AVD variables
+    Next perform variable mapping into AVD variables for each dataset.
+    Returns list of datasets with mapped avd_vars.
     """
     parser = InputParser()
-    parser.parse_inputs(raw_studio_inputs)
+    datasets = parser.parse_inputs(raw_studio_inputs)
+    mapper = DataMapper(DATAMAPPINGS)
+    return mapper.map_datasets(datasets)
 
 
-def __strip_and_resolve(_input, _device):
-    # Resolve any nested resolvers and strip empty strings
-    if isinstance(_input, DeviceResolver):
-        _resolved_input = _input.resolve(device=_device)
-        return __strip_and_resolve(_resolved_input, _device)
-    if isinstance(_input, dict):
-        _data = {}
-        for _key in _input:
-            _tmp_value = __strip_and_resolve(_input[_key], _device)
-            if _tmp_value is None:
-                continue
-            _data[_key] = _tmp_value
-        return _data
-    if isinstance(_input, list):
-        _data = []
-        for _item in _input:
-            _tmp_value = __strip_and_resolve(_item, _device)
-            if _tmp_value is None:
-                continue
-            _data.append(_tmp_value)
-        return _data
-    if isinstance(_input, str):
-        if _input == "":
-            return None
-    return _input
-
-
-def __node_groups(_data_maps, _input_data, _tag_data):
-    _node_groups = {}
-    for _device in sorted(_input_data):
-        for _data_map in _data_maps:
-            if "tag" in _data_map and _data_map.get("type") == "node_group":
-                value = _tag_data.get(_device, {}).get(_data_map["tag"])
-                if value is None:
-                    break
-                _node_groups.setdefault(value, {"nodes": {}})
-                _node_groups[value]["nodes"][_device] = {}
-                break
-    return _node_groups
-
-
-def map_data(data_maps, studio_inputs, start_path):
-    output = {}
-    pointer = output
-    for element in start_path:
-        if isinstance(element, str):
-
-
-    value = None
-    for _data_map in _data_maps:
-        if "input" in _data_map:
-            # Get value from studio_inputs
-            data_pointer = studio_inputs[device]
-            keys = _data_map["input"].split("-")
-            # First key in path would be "root" so we skip that
-            for key in keys[1:-1]:
-                if data_pointer.get(key) is None:
-                    data_pointer = {}
-                    break
-                data_pointer = data_pointer[key]
-            value = data_pointer.get(keys[-1])
-            if value is None:
-                continue
-
-        if "tag" in _data_map:
-            # Get value from _tag_data
-            value = _tag_data.get(_device, {}).get(_data_map["tag"])
-            if value is None:
-                continue
-            if _data_map.get("type") == "int":
-                value = int(value)
-            elif _data_map.get("type") == "list":
-                value = value.split(",")
-
-        if (value is not None) and "avd_var" in _data_map:
-            # Set avd_var with value
-            data_pointer = studio_inputs[device]
-            keys = list(map(lambda p: p.replace("\\\\.", "."), re.split(r"(?<!\\\\)\.", _data_map["avd_var"])))
-
-            for key in keys[:-1]:
-                data_pointer.setdefault(key, {})
-                data_pointer = data_pointer[key]
-            data_pointer[keys[-1]] = value
-
-ctx.alog(f"{get_studio_inputs()}")
+ctx.alog(f"{transform_studio_inputs_to_avd(get_raw_studio_inputs())}")

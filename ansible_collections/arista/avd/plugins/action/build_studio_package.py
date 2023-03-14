@@ -59,7 +59,6 @@ class ActionModule(ActionBase):
         avdschema = AvdSchema(avd_schema)
         builder = AvdStudioBuilder(avdschema)
         self.depends_on_avd_package = True
-        self.action_ids = []
         self.action_associations = {
             "StudioPreBuildActionIDs": [],
             "WorkspacePreBuildActionIDs": [],
@@ -67,11 +66,11 @@ class ActionModule(ActionBase):
         }
 
         # build return the complete studio object. This is broken down and written into separate files
-        self.studio: dict = builder.build(studio_design)
+        self.studio, datamappings = builder.build(studio_design)
 
         self.create_package_path(package_dir_path)
         self.create_studio()
-        self.create_actions(studio_design)
+        self.create_actions(studio_design, datamappings)
         self.create_package(studio_design)
 
         result.update(
@@ -111,8 +110,6 @@ class ActionModule(ActionBase):
             "name": self.package_name,
             "description": description,
             "version": self.package_version,
-            # "studios": [self.studio_id],
-            # "actions": self.action_ids,
             "install-hooks": {
                 f"STUDIO:{self.studio_id}": {
                     "post-install": self.post_install_action_id,
@@ -174,12 +171,11 @@ class ActionModule(ActionBase):
             encoding="UTF-8",
         )
 
-    def create_actions(self, studio_design: dict) -> None:
+    def create_actions(self, studio_design: dict, datamappings: list) -> None:
         studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file", default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE)
         description = f"Studio Pre-build action for Studio {self.studio_name}"
         action_id = f"action-studio-prebuild-{self.studio_id}"
-        self.create_action(studio_prebuild_action_file, description, action_id)
-        self.action_ids.append(action_id)
+        self.create_action(studio_prebuild_action_file, description, action_id, datamappings=datamappings)
         self.action_associations["StudioPreBuildActionIDs"].append(action_id)
 
         workspace_prebuild_action_file = get(studio_design, "build_pipeline.workspace_prebuild_action_file", default=DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE)
@@ -187,14 +183,12 @@ class ActionModule(ActionBase):
         description = f"Workspace Pre-build action for Studio {self.studio_name}"
         action_id = f"action-workspace-prebuild-{self.studio_id}"
         self.create_action(workspace_prebuild_action_file, description, action_id)
-        self.action_ids.append(action_id)
         self.action_associations["WorkspacePreBuildActionIDs"].append(action_id)
 
         studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file", default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE)
         description = f"Studio Pre-render action for Studio {self.studio_name}"
         action_id = f"action-studio-prerender-{self.studio_id}"
         self.create_action(studio_prerender_action_file, description, action_id)
-        self.action_ids.append(action_id)
         self.action_associations["StudioPreRenderActionIDs"].append(action_id)
 
         post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
@@ -203,7 +197,7 @@ class ActionModule(ActionBase):
         self.post_install_action_id = f"action-post-install-{self.studio_id}"
         self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
 
-    def create_action(self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_AUTOFILL"):
+    def create_action(self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_AUTOFILL", datamappings: list | None = None):
         action_script_path = Path(action_script_file)
         if not action_script_path.is_file():
             raise FileNotFoundError(action_script_file)
@@ -289,7 +283,14 @@ class ActionModule(ActionBase):
             yaml.dump(action_config, indent=2, sort_keys=False, Dumper=AnsibleDumper),
             encoding="UTF-8",
         )
+
+        script = action_script_path.read_text(encoding="UTF-8")
+        if datamappings is not None:
+            # Replace DATAMAPPINGS = [] with DATAMAPPINGS = <the list of datamappings passed to this function> in the script
+            script = script.replace("DATAMAPPINGS = []", f"DATAMAPPINGS = {json.dumps(datamappings)}")
+
+        # Write script
         action_path.joinpath("script.py").write_text(
-            action_script_path.read_text(encoding="UTF-8"),
+            script,
             encoding="UTF-8",
         )

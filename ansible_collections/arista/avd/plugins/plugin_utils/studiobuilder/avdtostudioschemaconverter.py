@@ -16,18 +16,20 @@ class AvdToStudioSchemaConverter:
             "dict": self.dictconverter,
         }
 
-    def convert_schema(self, avd_schema_path: list[str], name: str, parent: StudioGroupField | StudioCollectionField | StudioResolverField):
+    def convert_schema(
+        self, avd_schema_path: list[str], name: str, parent: StudioGroupField | StudioCollectionField | StudioResolverField, set_path: list | None
+    ):
         schema = self.avdschema.subschema(avd_schema_path)
 
-        return self.convert_key(schema=schema, name=name, parent=parent)
+        return self.convert_key(schema=schema, name=name, parent=parent, set_path=set_path)
 
-    def convert_key(self, schema: dict, name: str, parent: StudioGroupField | StudioCollectionField | StudioResolverField):
+    def convert_key(self, schema: dict, name: str, parent: StudioGroupField | StudioCollectionField | StudioResolverField, set_path: list | None = None):
         if (schema_type := schema.get("type")) not in self.converters:
             raise ValueError(f"Unable to convert schema type {schema_type} on name {name}. Must be one of {list(self.converters)}")
 
-        return self.converters[schema_type](schema, name, parent)
+        return self.converters[schema_type](schema, name, parent, set_path)
 
-    def strconverter(self, schema, name, parent):
+    def strconverter(self, schema, name, parent, set_path: list | None):
         format_converters = {
             "ipv4": "ip",
             "ipv4_cidr": "cidr",
@@ -44,6 +46,7 @@ class AvdToStudioSchemaConverter:
                 label=schema.get("display_name", key_to_display_name(name)),
                 default_value=schema.get("default"),
                 required=schema.get("required"),
+                set_path=set_path,
                 min_length=schema.get("min_length"),
                 max_length=schema.get("max_length"),
                 static_options=schema.get("valid_values"),
@@ -52,7 +55,7 @@ class AvdToStudioSchemaConverter:
             )
         ]
 
-    def intconverter(self, schema, name, parent):
+    def intconverter(self, schema, name, parent, set_path: list | None):
         return [
             StudioIntegerField(
                 name=name,
@@ -60,13 +63,14 @@ class AvdToStudioSchemaConverter:
                 label=schema.get("display_name", key_to_display_name(name)),
                 default_value=schema.get("default"),
                 required=schema.get("required"),
+                set_path=set_path,
                 min=schema.get("min"),
                 max=schema.get("max"),
                 static_options=schema.get("valid_values"),
             )
         ]
 
-    def boolconverter(self, schema, name, parent):
+    def boolconverter(self, schema, name, parent, set_path: list | None):
         return [
             StudioBooleanField(
                 name=name,
@@ -74,10 +78,11 @@ class AvdToStudioSchemaConverter:
                 label=schema.get("display_name", key_to_display_name(name)),
                 default_value=schema.get("default"),
                 required=schema.get("required"),
+                set_path=set_path,
             )
         ]
 
-    def listconverter(self, schema, name, parent):
+    def listconverter(self, schema, name, parent, set_path: list | None):
         if not (item_schema := schema.get("items")):
             return []
 
@@ -86,13 +91,14 @@ class AvdToStudioSchemaConverter:
             parent=parent,
             label=schema.get("display_name", key_to_display_name(name)),
             required=schema.get("required"),
+            set_path=set_path,
             key=schema.get("primary_key"),
         )
         fields = [collection_field]
-        fields.extend(self.convert_key(item_schema, "item", collection_field))
+        fields.extend(self.convert_key(item_schema, "item", collection_field, set_path=None))
         return fields
 
-    def dictconverter(self, schema, name, parent):
+    def dictconverter(self, schema, name, parent, set_path: list | None):
         if not (keys := schema.get("keys")):
             return []
 
@@ -101,9 +107,10 @@ class AvdToStudioSchemaConverter:
             parent=parent,
             label=schema.get("display_name", key_to_display_name(name)),
             required=schema.get("required"),
+            set_path=set_path,
         )
         fields = [group_field]
         for key, subschema in keys.items():
-            fields.extend(self.convert_key(subschema, key, group_field))
+            fields.extend(self.convert_key(subschema, key, group_field, set_path=None))
 
         return fields
