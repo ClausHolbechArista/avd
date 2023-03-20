@@ -1,0 +1,9 @@
+---
+
+- name: Generate eos intended configuration
+  arista.avd.validate_and_template:
+    template: eos-intended-config.j2
+    schema: "{{ lookup('ansible.builtin.file', role_schema_path) | from_yaml }}"
+    conversion_mode: disabled
+    validation_mode: error
+  delegate_to: localhost
