@@ -26,10 +26,11 @@ class ActionModule(ActionBase):
     """
 
     argspec = {
-        "avd_schema": {
-            "description": "AVD schema",
-            "type": "dict",
+        "schema_id": {
+            "description": "ID of AVD schema",
+            "type": "str",
             "required": True,
+            "valid_valued": ["eos_cli_config_gen", "eos_designs"],
         },
         "studio_design": {
             "description": "Studio Design",
@@ -52,11 +53,11 @@ class ActionModule(ActionBase):
 
         _res, args = self.validate_argument_spec(self.argspec)
 
-        avd_schema = args["avd_schema"]
+        schema_id = args["schema_id"]
         studio_design = args["studio_design"]
         package_dir_path = Path(args["package_dir"])
 
-        avdschema = AvdSchema(avd_schema)
+        avdschema = AvdSchema(schema_id=schema_id)
         builder = AvdStudioBuilder(avdschema)
         self.depends_on_avd_package = True
         self.action_associations = {
