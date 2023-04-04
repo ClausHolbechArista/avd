@@ -1,0 +1,150 @@
+---
+- name: Create AVD Studio package
+  hosts: localhost
+  gather_facts: false
+  vars:
+    pwd: "{{ lookup('env', 'PWD') }}"
+    package_dir: "{{ pwd }}"
+    studio_design_file: "{{ pwd ~ '/studio-design.yml' }}"
+  tasks:
+    - name: Build AVD Studio from Studio Design
+      tags: [always, build]
+      delegate_to: localhost
+      arista.avd.build_studio_package:
+        avd_schema: "{{ lookup('file', '../roles/eos_designs/schemas/eos_designs.schema.yml') | from_yaml }}"
+        studio_design: "{{ lookup('file', studio_design_file) | from_yaml }}"
+        package_dir: "{{ package_dir }}"
+      register: build_studio_package
+
+    - name: Set tar_archive var
+      delegate_to: localhost
+      set_fact:
+        tar_archive: "{{ build_studio_package.package_id }}-{{ build_studio_package.package_version }}.tar"
+        org_package_dir: "{{ package_dir }}"
+
+    - name: Tar Studio package
+      tags: [always, build]
+      delegate_to: localhost
+      ansible.builtin.shell:
+        cmd: "tar -cf {{ tar_archive }} {{ build_studio_package.package_id }}"
+        chdir: "{{ package_dir }}"
+
+- name: Upload avd-base package
+  hosts: all
+  gather_facts: false
+  vars:
+    tar_archive: "{{ hostvars.localhost.tar_archive }}"
+    package_dir: "{{ hostvars.localhost.org_package_dir }}"
+  tasks:
+    - name: Upload avd-base package
+      tags: [deploy]
+      delegate_to: localhost
+      ansible.builtin.shell:
+        chdir: "{{ package_dir }}"
+        cmd: >-
+          curl -X 'POST' -k
+          --cookie "access_token={{ ansible_password }}"
+          -H 'accept: application/json'
+          -H 'Content-Type: multipart/form-data'
+          -F 'file=@{{tar_archive}};type=application/x-tar'
+          https://{{ inventory_hostname }}/cvpservice/packaging/v1/packages
+      register: curl_output
+      failed_when: curl_output.stdout.code | default(0) != 0
+
+
+
+    # - name: Generate UUIDs
+    #   tags: [deploy]
+    #   # Studio ID
+    #   ansible.builtin.set_fact:
+    #     workspace_uuid: "{{ lookup('password', '/dev/null length=32') | to_uuid }}"
+    #     new_studio_uuid: "{{ lookup('password', '/dev/null length=32') | to_uuid }}"
+    #   delegate_to: localhost
+
+    # - name: Create Workspace on CloudVision
+    #   tags: [deploy]
+    #   delegate_to: localhost
+    #   ansible.builtin.uri:
+    #     url: "https://{{ inventory_hostname }}/api/resources/workspace/v1/WorkspaceConfig"
+    #     validate_certs: false
+    #     headers:
+    #       Cookie: "access_token={{ ansible_password }}"
+    #     method: POST
+    #     body_format: json
+    #     body: {
+    #       "key": {"workspace_id": "{{ workspace_uuid }}"},
+    #       "display_name": "Ansible-test",
+    #       "description": "Testing from Ansible"
+    #     }
+
+    # - name: Create Studio on CloudVision
+    #   tags: [deploy]
+    #   ansible.builtin.debug:
+    #     msg: "{{ body | ansible.builtin.combine(studio, recursive=true) }}"
+    #   vars:
+    #     body: {
+    #       "key": {
+    #         "studio_id": "{{ new_studio_uuid }}",
+    #         "workspace_id": "{{ workspace_uuid }}"
+    #       }
+    #     }
+    #   delegate_to: localhost
+
+    # - name: Create Studio on CloudVision
+    #   tags: [deploy]
+    #   delegate_to: localhost
+    #   ansible.builtin.uri:
+    #     url: "https://{{ inventory_hostname }}/api/resources/studio/v1/StudioConfig"
+    #     validate_certs: false
+    #     headers:
+    #       Cookie: "access_token={{ ansible_password }}"
+    #     method: POST
+    #     body_format: json
+    #     body: "{{ body | ansible.builtin.combine(studio, recursive=true) }}"
+    #   vars:
+    #     body: {
+    #       "key": {
+    #         "studio_id": "{{ new_studio_uuid }}",
+    #         "workspace_id": "{{ workspace_uuid }}"
+    #       }
+    #     }
+
+    # - name: Build Workspace on CloudVision
+    #   tags: [build]
+    #   delegate_to: localhost
+    #   ansible.builtin.uri:
+    #     url: "https://{{ inventory_hostname }}/api/resources/workspace/v1/WorkspaceConfig"
+    #     validate_certs: false
+    #     headers:
+    #       Cookie: "access_token={{ ansible_password }}"
+    #     method: POST
+    #     body_format: json
+    #     body: {
+    #       "key": {"workspace_id": "{{ workspace_uuid }}"},
+    #       "request": "REQUEST_START_BUILD",
+    #       "request_params": {
+    #         "request_id": "{{ request_uuid }}"
+    #       }
+    #     }
+    #   vars:
+    #     request_uuid: "{{ lookup( 'password', '/dev/null length=32' ) | to_uuid }}"
+
+    # - name: Submit Workspace on CloudVision
+    #   tags: [submit]
+    #   delegate_to: localhost
+    #   ansible.builtin.uri:
+    #     url: "https://{{ inventory_hostname }}/api/resources/workspace/v1/WorkspaceConfig"
+    #     validate_certs: false
+    #     headers:
+    #       Cookie: "access_token={{ ansible_password }}"
+    #     method: POST
+    #     body_format: json
+    #     body: {
+    #       "key": {"workspace_id": "{{ workspace_uuid }}"},
+    #       "request":"REQUEST_SUBMIT",
+    #       "request_params": {
+    #         "request_id": "{{ request_uuid }}"
+    #       }
+    #     }
+    #   vars:
+    #     request_uuid: "{{ lookup( 'password', '/dev/null length=32' ) | to_uuid }}"

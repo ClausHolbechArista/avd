@@ -1,0 +1,49 @@
+---
+- name: Create avd-base package
+  hosts: localhost
+  gather_facts: false
+  vars:
+    pwd: "{{ lookup('env', 'PWD') }}"
+    package_dir: "{{ pwd }}"
+  tasks:
+    - name: Build AVD Base package
+      tags: [always, build]
+      delegate_to: localhost
+      arista.avd.build_avd_base_package:
+        package_dir: "{{ package_dir }}"
+      register: avd_base_package
+
+    - name: Set tar_archive var
+      delegate_to: localhost
+      set_fact:
+        tar_archive: "{{ avd_base_package.package_id }}-{{ avd_base_package.package_version }}.tar"
+        org_package_dir: "{{ package_dir }}"
+
+    - name: Tar base package
+      tags: [always, build]
+      delegate_to: localhost
+      ansible.builtin.shell:
+        cmd: "tar -cf {{ tar_archive }} {{ avd_base_package.package_id }}"
+        chdir: "{{ package_dir }}"
+
+- name: Upload avd-base package
+  hosts: all
+  gather_facts: false
+  vars:
+    tar_archive: "{{ hostvars.localhost.tar_archive }}"
+    package_dir: "{{ hostvars.localhost.org_package_dir }}"
+  tasks:
+    - name: Upload avd-base package
+      tags: [deploy]
+      delegate_to: localhost
+      ansible.builtin.shell:
+        chdir: "{{ package_dir }}"
+        cmd: >-
+          curl -X 'POST' -k
+          --cookie "access_token={{ ansible_password }}"
+          -H 'accept: application/json'
+          -H 'Content-Type: multipart/form-data'
+          -F 'file=@{{tar_archive}};type=application/x-tar'
+          https://{{ inventory_hostname }}/cvpservice/packaging/v1/packages
+      register: curl_output
+      failed_when: curl_output.stdout.code | default(0) != 0
