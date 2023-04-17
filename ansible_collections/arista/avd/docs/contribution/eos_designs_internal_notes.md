@@ -398,6 +398,13 @@ outside of that, so any inline Jinja2 could not use these values.
 | switch.id | ip_addressing/p2p-uplinks-peer-ip.j2 |
 | switch.max_uplink_switches | ip_addressing/p2p-uplinks-peer-ip.j2 |
 | switch.max_parallel_uplinks | ip_addressing/p2p-uplinks-peer-ip.j2 |
+| switch.bgp_as | Known customer deployments |
+| switch.group | Known customer deployments |
+| switch.hostname | Known customer deployments |
+| switch.id | Known customer deployments |
+| switch.mgmt_interface | Known customer deployments |
+| switch.mgmt_ip | Known customer deployments |
+| switch.router_id | Known customer deployments |
 
 #### Other switch.* variables set in eos_designs_facts
 
