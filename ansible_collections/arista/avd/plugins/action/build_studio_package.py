@@ -287,8 +287,8 @@ class ActionModule(ActionBase):
 
         script = action_script_path.read_text(encoding="UTF-8")
         if datamappings is not None:
-            # Replace DATAMAPPINGS = [] with DATAMAPPINGS = <the list of datamappings passed to this function> in the script
-            script = script.replace("DATAMAPPINGS = []", f"DATAMAPPINGS = {json.dumps(datamappings)}")
+            # Replace INPUTMAPPINGS = [] with INPUTMAPPINGS = <the list of datamappings passed to this function> in the script
+            script = script.replace("INPUTMAPPINGS = []", f"INPUTMAPPINGS = {json.dumps(datamappings)}")
 
         # Write script
         action_path.joinpath("script.py").write_text(
