@@ -20,9 +20,12 @@ DOCUMENTATION = r"""
         - By default the lookup will read the variables for the current node.
         - It is possible to read variables for another by setting variables=hostvars[<other hostname>]
 """
+from copy import deepcopy
+
 from ansible.plugins.lookup import LookupBase, display
 
 from ansible_collections.arista.avd.plugins.plugin_utils.eos_designs_shared_utils import SharedUtils
+from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschematools import AvdSchemaTools
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import get
 
 
@@ -33,7 +36,17 @@ class LookupModule(LookupBase):
         self.set_options(var_options=variables, direct=kwargs)
 
         ret = []
-        avd_shared_utils = SharedUtils(variables, self._templar)
+        avd_schema_tools = AvdSchemaTools(
+            variables["inventory_hostname"],
+            display,
+            schema_id="eos_designs",
+            conversion_mode="debug",
+            validation_mode="error",
+            plugin_name="get_node_config",
+        )
+        hostvars = deepcopy(variables)
+        avd_schema_tools.convert_and_validate_data(hostvars)
+        avd_shared_utils = SharedUtils(hostvars, self._templar)
         node_config = avd_shared_utils.switch_data_combined
 
         for term in terms:
