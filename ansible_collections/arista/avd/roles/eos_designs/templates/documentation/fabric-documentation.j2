@@ -9,11 +9,12 @@
 {% for node in groups[fabric_name] | arista.avd.natural_sort %}
 {%     set node_hostvars = hostvars[node] %}
 {%     set node_facts = avd_switch_facts[node] %}
+{%     set node_config = lookup("arista.avd.get_node_config", hostname=node) %}
 {%     if node_facts.switch.type | arista.avd.default('undefined') in node_types %}
 {# Populate network summaries #}
-{%         do uplink_ipv4_pools.append(node_facts.switch.uplink_ipv4_pool | arista.avd.default()) %}
-{%         do loopback_ipv4_pools.append(node_facts.switch.loopback_ipv4_pool | arista.avd.default()) %}
-{%         do vtep_loopback_ipv4_pools.append(node_facts.switch.vtep_loopback_ipv4_pool | arista.avd.default()) %}
+{%         do uplink_ipv4_pools.append(node_config.uplink_ipv4_pool | arista.avd.default()) %}
+{%         do loopback_ipv4_pools.append(node_config.loopback_ipv4_pool | arista.avd.default()) %}
+{%         do vtep_loopback_ipv4_pools.append(node_config.vtep_loopback_ipv4_pool | arista.avd.default()) %}
 {# Populate fabric_switch #}
 {%         set fabric_switch = namespace() %}
 {%         set fabric_switch.pod = node_hostvars.pod_name | arista.avd.default(node_hostvars.dc_name, fabric_name) %}
@@ -25,7 +26,7 @@
 {%             set fabric_switch.inband_management_interface = "Vlan" ~ node_facts.switch.inband_management_vlan %}
 {%             set fabric_switch.inband_management_ip = node_hostvars.management_interfaces | selectattr("name", "eq", fabric_switch.inband_management_interface) | map(attribute="ip_address") | first %}
 {%         endif %}
-{%         set fabric_switch.platform = node_facts.switch.platform | arista.avd.default('-') %}
+{%         set fabric_switch.platform = node_config.platform | arista.avd.default('-') %}
 {%         set fabric_switch.provisioned = 'Not Available' if node_hostvars.is_deployed is arista.avd.defined(false) else 'Provisioned' %}
 {%         set fabric_switch.serial_number = node_facts.switch.serial_number | arista.avd.default("-") %}
 {%         if node_hostvars.loopback_interfaces is arista.avd.defined %}
