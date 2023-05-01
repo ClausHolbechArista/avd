@@ -218,7 +218,9 @@ class AvdSchema:
                     return recursive_function(datapath[1:], schema["keys"][key])
                 if key in schema.get("dynamic_keys", []):
                     return recursive_function(datapath[1:], schema["dynamic_keys"][key])
-
+                if key == "$defs" and key in schema:
+                    if (subkey := datapath[1]) in schema[key]:
+                        return recursive_function(datapath[2:], schema[key][subkey])
             if schema["type"] == "list" and key in schema.get("items", {}).get("keys", []):
                 return recursive_function(datapath[1:], schema["items"]["keys"][key])
 
