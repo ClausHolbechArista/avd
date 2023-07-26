@@ -6,9 +6,10 @@
 import requests
 
 hooks = [
-    ("BUILD_STAGE_STUDIO_PRE_BUILD", ctx.action.args["StudioPreBuildActionIDs"].split(",")[0]),
-    ("BUILD_STAGE_WORKSPACE_PRE_BUILD", ctx.action.args["WorkspacePreBuildActionIDs"].split(",")[0]),
-    ("BUILD_STAGE_STUDIO_PRE_RENDER", ctx.action.args["StudioPreRenderActionIDs"].split(",")[0]),
+    # (stage, scope, actionId, dependsOn?)
+    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_STUDIO", ctx.action.args["StudioPreBuildActionIDs"].split(",")[0]),
+    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_WORKSPACE", ctx.action.args["WorkspacePreBuildActionIDs"].split(",")[0]),
+    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_STUDIO", ctx.action.args["StudioPreRenderActionIDs"].split(",")[0]),
 ]
 
 cookies = {"access_token": ctx.user.token}
@@ -18,15 +19,23 @@ ctx.alog("Postinstall script trying to associate build actions")
 
 url = f"https://{ctx.connections.serviceAddr}/api/resources/studio/v1/BuildHookConfig"
 
-for stage, action in hooks:
+prev_hook_id = None
+for stage, scope, action in hooks:
+    if prev_hook_id:
+        dependsOn = {"values": [prev_hook_id]}
+    else:
+        dependsOn = {}
+
     data = {
         "key": {
             "workspaceId": ctx.action.args["WorkspaceID"],
             "studioId": ctx.action.args["StudioID"],
-            "stage": stage,
-            "hookId": "something",
+            "hookId": action,
         },
+        "scope": scope,
+        "stage": stage,
         "actionId": action,
+        "dependsOn": dependsOn,
     }
 
     response = requests.post(url, json=data, verify=False, cookies=cookies)

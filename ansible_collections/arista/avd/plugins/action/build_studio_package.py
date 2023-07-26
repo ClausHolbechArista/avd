@@ -198,7 +198,9 @@ class ActionModule(ActionBase):
         self.post_install_action_id = f"action-post-install-{self.studio_id}"
         self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
 
-    def create_action(self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_AUTOFILL", datamappings: list | None = None):
+    def create_action(
+        self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_BUILD_HOOK", datamappings: list | None = None
+    ):
         action_script_path = Path(action_script_file)
         if not action_script_path.is_file():
             raise FileNotFoundError(action_script_file)
@@ -217,20 +219,27 @@ class ActionModule(ActionBase):
                 {
                     "name": "StudioID",
                     "description": "",
-                    "required": True,
+                    "required": False,
+                    "hidden": False,
+                    "default": "",
+                },
+                {
+                    "name": "StudioIDs",
+                    "description": "",
+                    "required": False,
                     "hidden": False,
                     "default": "",
                 },
                 {
                     "name": "WorkspaceID",
                     "description": "",
-                    "required": True,
+                    "required": False,
                     "hidden": False,
                     "default": "",
                 },
             ],
         }
-        if action_type == "STUDIO_AUTOFILL":
+        if action_type == "STUDIO_BUILD_HOOK":
             action_config["static-params"].append(
                 {
                     "name": "AVDVersion",
@@ -239,17 +248,6 @@ class ActionModule(ActionBase):
                     "hidden": False,
                     "default": AVD_VERSION,
                 }
-            )
-            action_config["dynamic-params"].extend(
-                [
-                    {
-                        "name": "InputPath",
-                        "description": "",
-                        "required": True,
-                        "hidden": False,
-                        "default": "",
-                    },
-                ]
             )
         elif action_type == "PACKAGING_INSTALL_HOOK":
             action_config["static-params"].extend(

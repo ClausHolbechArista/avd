@@ -17,12 +17,12 @@ import json
 from copy import deepcopy
 
 from deepmerge import always_merger
-from pyavd import eos_designs_facts
+from pyavd import get_avd_facts
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2, TagValueSearchRequest
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
 WORKSPACE_ID = ctx.action.args["WorkspaceID"]
-STUDIO_ID = ctx.action.args["StudioID"]
+STUDIO_IDS = ctx.action.args["StudioIDs"]
 
 
 def __resolve_device_tag_query(query):
@@ -83,5 +83,5 @@ avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delet
 device_list = json.loads(ctx.retrieve(path=["avd"], customKey="device_list", delete=False))
 
 device_vars = __build_device_vars(avd_inputs)
-avd_switch_facts = eos_designs_facts(device_vars)
+avd_switch_facts = get_avd_facts(device_vars)
 ctx.store(json.dumps(avd_switch_facts), customKey="avd_switch_facts", path=["avd"])

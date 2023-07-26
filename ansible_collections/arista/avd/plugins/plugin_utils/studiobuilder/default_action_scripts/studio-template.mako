@@ -18,7 +18,7 @@ import json
 from copy import deepcopy
 
 from deepmerge import always_merger
-from pyavd import eos_designs_structured_configs, eos_cli_config_gen
+from pyavd import get_device_structured_config, get_device_config
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2, TagValueSearchRequest
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
@@ -80,22 +80,16 @@ def __build_device_vars(datasets: list[dict], device_id: str):
     return one_device_vars
 
 
-avd_inputs =       json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
+avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
 avd_switch_facts = json.loads(ctx.retrieve(path=["avd"], customKey="avd_switch_facts", delete=False))
 
 device_vars = __build_device_vars(avd_inputs, DEVICE_ID)
-device_vars.update(avd_switch_facts)
-device_vars["switch"] = avd_switch_facts["avd_switch_facts"][DEVICE_ID]["switch"]
-
-### TMP/HACKS
-device_vars.setdefault("default_igmp_snooping_enabled", True)
-
 ctx.store(json.dumps(device_vars), customKey="device_vars", path=["avd"])
 
-structured_config = eos_designs_structured_configs(DEVICE_ID, device_vars)
+structured_config = get_device_structured_config(DEVICE_ID, device_vars, avd_switch_facts)
 ctx.store(json.dumps(structured_config), customKey=f"{DEVICE_ID}_structured_config", path=["avd"])
 
-eos_config, _ = eos_cli_config_gen(DEVICE_ID, structured_config)
+eos_config = get_device_config(DEVICE_ID, structured_config)
 ctx.store(json.dumps(eos_config), customKey=f"{DEVICE_ID}_config", path=["avd"])
 
 %>
