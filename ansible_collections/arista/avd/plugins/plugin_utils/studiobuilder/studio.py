@@ -19,11 +19,13 @@ class Studio:
         description: str,
         template: str,
         id: str | None = None,
+        layout: str | None = None,
     ):
         self.display_name = display_name
         self.description = description
         self.template = template
         self.id = id
+        self.layout = layout
 
         self.root = StudioGroupField(
             name="",
@@ -72,6 +74,15 @@ class Studio:
         for field in self.input_fields:
             layouts.update(field.render_layout())
 
+        if self.layout:
+            layouts.update(
+                {
+                    "STUDIO": {
+                        "type": "STUDIO",
+                        "layout": self.layout,
+                    }
+                }
+            )
         return json.dumps(layouts)
 
     def render_datamappings(self) -> list[dict]:

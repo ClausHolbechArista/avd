@@ -58,6 +58,7 @@ class AvdStudioBuilder:
             description=studio_design["description"],
             template=template,
             id=studio_design.get("studio_id", uuid4()),
+            layout=studio_design.get("studio_layout"),
         )
 
         # Builder all studio input fields at root level giving the root group as parent.

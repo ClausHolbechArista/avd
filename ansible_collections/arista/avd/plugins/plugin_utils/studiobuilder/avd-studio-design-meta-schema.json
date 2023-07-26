@@ -362,6 +362,11 @@
             "items": {
                 "$ref": "#/$def/field"
             }
+        },
+        "studio_layout": {
+            "type": "string",
+            "description": "Studio Layout",
+            "enum": ["PAGE", "TREE"]
         }
     },
     "additionalProperties": false

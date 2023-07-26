@@ -89,7 +89,7 @@ ctx.store(json.dumps(device_vars), customKey="device_vars", path=["avd"])
 structured_config = get_device_structured_config(DEVICE_ID, device_vars, avd_switch_facts)
 ctx.store(json.dumps(structured_config), customKey=f"{DEVICE_ID}_structured_config", path=["avd"])
 
-eos_config = get_device_config(DEVICE_ID, structured_config)
+eos_config = get_device_config(structured_config)
 ctx.store(json.dumps(eos_config), customKey=f"{DEVICE_ID}_config", path=["avd"])
 
 %>
