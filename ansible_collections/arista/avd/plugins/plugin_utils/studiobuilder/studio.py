@@ -1,6 +1,6 @@
 import json
 
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import setattr_if_not_none
+from ansible_collections.arista.avd.plugins.plugin_utils.strip_empties import strip_null_from_data
 
 from .studiofields import StudioField, StudioGroupField
 
@@ -90,3 +90,15 @@ class Studio:
         Render list of data mappings
         """
         return [datamapping for datamapping in [field.render_datamapping() for field in self.input_fields] if datamapping is not None]
+
+    def render_tagmappings(self) -> list[dict]:
+        """
+        Render list of tag mappings
+        """
+        tagmappings = []
+        for field in self.input_fields:
+            if (field_tagmappings := field.render_tagmappings()) is None:
+                continue
+            tagmappings.extend(field_tagmappings)
+
+        return strip_null_from_data(tagmappings)

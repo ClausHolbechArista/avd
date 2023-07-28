@@ -19,6 +19,8 @@ ctx.alog("Postinstall script trying to associate build actions")
 
 url = f"https://{ctx.connections.serviceAddr}/api/resources/studio/v1/BuildHookConfig"
 
+# TODO: Remove any previous hooks associated with this studio
+
 prev_hook_id = None
 for stage, scope, action in hooks:
     if prev_hook_id:

@@ -67,11 +67,12 @@ class ActionModule(ActionBase):
         }
 
         # build return the complete studio object. This is broken down and written into separate files
-        self.studio, datamappings = builder.build(studio_design)
+        self.studio, datamappings, tagmappings = builder.build(studio_design)
 
+        self.update_template_tagmappings(tagmappings)
         self.create_package_path(package_dir_path)
         self.create_studio()
-        self.create_actions(studio_design, datamappings)
+        self.create_actions(studio_design, datamappings, tagmappings)
         self.create_package(studio_design)
 
         result.update(
@@ -172,7 +173,7 @@ class ActionModule(ActionBase):
             encoding="UTF-8",
         )
 
-    def create_actions(self, studio_design: dict, datamappings: list) -> None:
+    def create_actions(self, studio_design: dict, datamappings: list, tagmappings: list) -> None:
         studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file", default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE)
         description = f"Studio Pre-build action for Studio {self.studio_name}"
         action_id = f"action-studio-prebuild-{self.studio_id}"
@@ -183,7 +184,7 @@ class ActionModule(ActionBase):
         self.depends_on_avd_package = False
         description = f"Workspace Pre-build action for Studio {self.studio_name}"
         action_id = f"action-workspace-prebuild-{self.studio_id}"
-        self.create_action(workspace_prebuild_action_file, description, action_id)
+        self.create_action(workspace_prebuild_action_file, description, action_id, tagmappings=tagmappings)
         self.action_associations["WorkspacePreBuildActionIDs"].append(action_id)
 
         studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file", default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE)
@@ -199,7 +200,13 @@ class ActionModule(ActionBase):
         self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
 
     def create_action(
-        self, action_script_file: str, description: str, action_id: str, action_type: str = "STUDIO_BUILD_HOOK", datamappings: list | None = None
+        self,
+        action_script_file: str,
+        description: str,
+        action_id: str,
+        action_type: str = "STUDIO_BUILD_HOOK",
+        datamappings: list | None = None,
+        tagmappings: list | None = None,
     ):
         action_script_path = Path(action_script_file)
         if not action_script_path.is_file():
@@ -224,13 +231,6 @@ class ActionModule(ActionBase):
                     "default": "",
                 },
                 {
-                    "name": "StudioIDs",
-                    "description": "",
-                    "required": False,
-                    "hidden": False,
-                    "default": "",
-                },
-                {
                     "name": "WorkspaceID",
                     "description": "",
                     "required": False,
@@ -242,12 +242,19 @@ class ActionModule(ActionBase):
         if action_type == "STUDIO_BUILD_HOOK":
             action_config["static-params"].append(
                 {
+                    "name": "StudioIDs",
+                    "description": "",
+                    "required": False,
+                    "hidden": False,
+                    "default": "",
+                },
+                {
                     "name": "AVDVersion",
                     "description": "",
                     "required": False,
                     "hidden": False,
                     "default": AVD_VERSION,
-                }
+                },
             )
         elif action_type == "PACKAGING_INSTALL_HOOK":
             action_config["static-params"].extend(
@@ -288,8 +295,17 @@ class ActionModule(ActionBase):
             # Replace INPUTMAPPINGS = [] with INPUTMAPPINGS = <the list of datamappings passed to this function> in the script
             script = script.replace("INPUTMAPPINGS = []", f"INPUTMAPPINGS = {json.dumps(datamappings)}")
 
+        if tagmappings is not None:
+            # Replace TAGMAPPINGS = [] with INPUTMAPPINGS = <the list of tagmappings passed to this function> in the script
+            script = script.replace("TAGMAPPINGS = []", f"TAGMAPPINGS = {json.dumps(tagmappings)}")
+
         # Write script
         action_path.joinpath("script.py").write_text(
             script,
             encoding="UTF-8",
         )
+
+    def update_template_tagmappings(self, tagmappings):
+        # Replace TAGMAPPINGS = [] with TAGMAPPINGS = <the list of tagmappings passed to this function> in the script
+        template_body: str = get(self.studio, "template.body", required=True)
+        self.studio["template"]["body"] = template_body.replace("TAGMAPPINGS = []", f"TAGMAPPINGS = {json.dumps(tagmappings)}")

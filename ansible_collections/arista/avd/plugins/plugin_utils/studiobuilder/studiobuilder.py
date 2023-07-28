@@ -36,9 +36,10 @@ class AvdStudioBuilder:
             "group": self.buildgroupfield,
             "resolver": self.buildresolverfield,
             "tagger": self.buildtaggerfield,
+            "yaml": self.buildyamlfield,
         }
 
-    def build(self, studio_design: dict) -> tuple[dict, list]:
+    def build(self, studio_design: dict) -> tuple[dict, list, list]:
         """
         Build CloudVision Studio based on studio_design.
 
@@ -65,7 +66,7 @@ class AvdStudioBuilder:
         # Everything else is built recursively in build_fields.
         self.build_fields(fields=studio_design.get("studio_inputs", []), parent=self.studio.root)
 
-        return self.studio.render(), self.studio.render_datamappings()
+        return self.studio.render(), self.studio.render_datamappings(), self.studio.render_tagmappings()
 
     def build_fields(self, fields: list[dict], parent: StudioField):
         for field in fields:
@@ -84,6 +85,7 @@ class AvdStudioBuilder:
                 name=field.get("name"),
                 parent=parent,
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
+                description=field.get("description"),
                 default_value=field.get("default"),
                 required=field.get("required"),
                 set_path=field.get("set_path"),
@@ -101,6 +103,7 @@ class AvdStudioBuilder:
                 name=field.get("name"),
                 parent=parent,
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
+                description=field.get("description"),
                 default_value=field.get("default"),
                 required=field.get("required"),
                 set_path=field.get("set_path"),
@@ -116,6 +119,7 @@ class AvdStudioBuilder:
                 name=field.get("name"),
                 parent=parent,
                 label=field.get("display_name", key_to_display_name(field.get("name"))),
+                description=field.get("description"),
                 default_value=field.get("default"),
                 required=field.get("required"),
                 set_path=field.get("set_path"),
@@ -127,6 +131,7 @@ class AvdStudioBuilder:
             name=field.get("name"),
             parent=parent,
             label=field.get("display_name", key_to_display_name(field.get("name"))),
+            description=field.get("description"),
             required=field.get("required"),
             set_path=field.get("set_path"),
             key=field.get("key"),
@@ -148,6 +153,7 @@ class AvdStudioBuilder:
                     field.get("name"),
                 ),
             ),
+            description=field.get("description"),
             required=field.get("required"),
             set_path=field.get("set_path"),
         )
@@ -187,8 +193,27 @@ class AvdStudioBuilder:
                 description=field.get("description"),
                 parent=parent,
                 required=field.get("required"),
-                set_path=field.get("set_path"),
                 tag_type=field.get("tag_type"),
                 assignment_type=field.get("assignment_type"),
+            )
+        )
+
+    def buildyamlfield(self, field: dict, parent: StudioField):
+        self.studio.input_fields.append(
+            StudioStringField(
+                name=field.get("name"),
+                parent=parent,
+                label=field.get("display_name", key_to_display_name(field.get("name"))),
+                description=field.get("description"),
+                # default_value=field.get("default"),
+                # required=field.get("required"),
+                set_path=field.get("set_path"),
+                convert_value="load_yaml",
+                # min_length=field.get("min_length"),
+                # max_length=field.get("max_length"),
+                # static_options=field.get("static_options"),
+                # string_format=field.get("format"),
+                # pattern=field.get("pattern"),
+                multi_line=True,
             )
         )

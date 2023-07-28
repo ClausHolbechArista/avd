@@ -18,6 +18,7 @@ class StudioField:
     parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None
     type: str
     set_path: list = None
+    convert_value: str = None
 
     def __init__(
         self,
@@ -28,6 +29,7 @@ class StudioField:
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
     ) -> None:
         if parent is not None:
             self.parent = parent
@@ -44,6 +46,7 @@ class StudioField:
         self.description = description
         setattr_if_not_none(self, "label", label)
         setattr_if_not_none(self, "set_path", set_path)
+        setattr_if_not_none(self, "convert_value", convert_value)
 
     def render_input(self) -> dict[str, dict]:
         """
@@ -92,7 +95,14 @@ class StudioField:
         return {
             "from_path": self.path,
             "to_path": self.set_path,
+            "convert_value": self.convert_value,
         }
+
+    def render_tagmappings(self) -> None:
+        """
+        Render tag mappings. Only relevant for certain subclasses so this should be overloaded
+        """
+        return None
 
 
 class StudioGroupField(StudioField):
@@ -122,9 +132,12 @@ class StudioGroupField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         layout: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.layout = layout
         self.members = []
@@ -190,10 +203,13 @@ class StudioCollectionField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         layout: str | None = None,
         key: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.layout = layout
         self.key = key
@@ -247,6 +263,7 @@ class StudioStringField(StudioField):
     pattern: str | None = None
     static_options: list[str] | None = None
     string_format: str | None = None
+    multi_line: bool | None = None
 
     def __init__(
         self,
@@ -257,14 +274,18 @@ class StudioStringField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         default_value: str | None = None,
         min_length: int | None = None,
         max_length: int | None = None,
         pattern: int | None = None,
         static_options: list[str] | None = None,
         string_format: str | None = None,
+        multi_line: bool | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.default_value = default_value
         self.min_length = min_length
@@ -272,6 +293,7 @@ class StudioStringField(StudioField):
         self.pattern = pattern
         self.static_options = static_options
         self.string_format = string_format
+        self.multi_line = multi_line
 
     def length(self) -> str | None:
         """
@@ -318,7 +340,17 @@ class StudioStringField(StudioField):
 
         # TODO add other layout schema options
         """
+
         schema = super().render_layout()
+        if self.multi_line:
+            schema.setdefault(self.id, {}).update(
+                {
+                    "key": self.id,
+                    "type": "INPUT",
+                    "isMultiLine": True,
+                }
+            )
+
         return schema
 
 
@@ -344,12 +376,15 @@ class StudioIntegerField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         default_value: int | None = None,
         min: int | None = None,
         max: int | None = None,
         static_options: list[int] | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.default_value = default_value
         self.min = min
@@ -422,9 +457,12 @@ class StudioBooleanField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         default_value: bool | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.default_value = default_value
 
@@ -475,6 +513,7 @@ class StudioResolverField(StudioField):
         required: bool | None = None,
         id: str = None,
         set_path: list = None,
+        convert_value: str = None,
         layout: str | None = None,
         prepopulated: bool | None = None,
         resolver_type: str | None = None,
@@ -482,7 +521,9 @@ class StudioResolverField(StudioField):
         tag_label: str | None = None,
         tag_filter_query: str | None = None,
     ) -> None:
-        super().__init__(name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path)
+        super().__init__(
+            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+        )
 
         self.layout = layout
         setattr_if_not_none(self, "prepopulated", prepopulated)
@@ -563,12 +604,13 @@ class StudioTaggerField(StudioField):
         parent: "StudioGroupField" | "StudioCollectionField" | "StudioResolverField" | None = None,
         required: bool | None = None,
         id: str = None,
-        set_path: list = None,
+        # set_path: list = None ## set_path is not supported on taggers, only on the underlying columns.
+        # convert_value: str = None, ## convert_value is not supported on taggers, only on the underlying columns.
         tag_type: str | None = None,
         assignment_type: str | None = None,
     ) -> None:
         # Notice that we remove parent from the options, since taggers are not regular members of parent groups.
-        super().__init__(name=name, description=description, required=required, id=id or f"{parent.id}-{name}", set_path=set_path)
+        super().__init__(name=name, description=description, required=required, id=id or f"{parent.id}-{name}")
 
         self.parent = parent
         self.columns = columns
@@ -611,3 +653,17 @@ class StudioTaggerField(StudioField):
             }
         )
         return schema
+
+    def render_tagmappings(self) -> list:
+        """
+        Render tag mappings for columns if set_path is defined
+        """
+        return [
+            {
+                "from_tag": column["tag_label"],
+                "to_path": column["set_path"],
+                "convert_value": column.get("convert_value"),
+            }
+            for column in self.columns
+            if column.get("set_path") is not None
+        ]

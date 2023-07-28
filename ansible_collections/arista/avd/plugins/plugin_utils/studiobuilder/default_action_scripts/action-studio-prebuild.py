@@ -32,6 +32,7 @@ from fmp.wrappers_pb2 import RepeatedString
 from google.protobuf.wrappers_pb2 import StringValue
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
+from yaml import safe_load as yaml_safe_load
 
 INPUTMAPPINGS = []
 TAGMAPPINGS = []
@@ -170,6 +171,10 @@ class InputParser:
 class DataMapper:
     def __init__(self, mappings: list[dict]):
         """
+        Maps data from studio inputs to AVD data model.
+
+        If "convert_value" is set (Currently only supporting "yaml_to_dict"), the data will be converted.
+
         Parameters
         ----------
         mappings : list[dict]
@@ -178,6 +183,7 @@ class DataMapper:
                 {
                     "from_path": ["dc_vars", "dc", "role_vars", "role", "bgp_as"],
                     "to_path": ["network_type", "defaults", "bgp_as"],
+                    "convert_value": "yaml_to_dict"
                 }
             ]
         """
@@ -202,9 +208,23 @@ class DataMapper:
 
         return None
 
+    def __convert_value(self, convert_value: str, value):
+        ctx.alog(f"Converting value {value} using {convert_value}")
+        """Convert value if supported. Raise if not."""
+        if convert_value == "load_yaml" and isinstance(value, str):
+            return yaml_safe_load(value)
+
+        raise ValueError(f"Unsupported convert_value: {convert_value}")
+
     def __set_value_from_path(self, path: list, data: list | dict, value):
         """Recursive function to walk through data to set value of path, creating any level needed."""
         if not path:
+            # Empty path. For dicts we can update value directly.
+            if isinstance(data, dict) and isinstance(value, dict):
+                ctx.alog(f"Updating value {value} on data {data}")
+                data.update(value)
+                return
+
             raise ValueError("Path is empty. Something bad happened.")
 
         if len(path) == 1:
@@ -279,6 +299,9 @@ class DataMapper:
         }
         for mapping in self.__mappings_under_path(path):
             if (value := self.__get_value_from_path(mapping["from_path"], inputs)) is not None:
+                if (convert_value := mapping.get("convert_value")) is not None:
+                    value = self.__convert_value(convert_value, value)
+
                 self.__set_value_from_path(mapping["to_path"], output["avd_vars"], value)
 
         return output

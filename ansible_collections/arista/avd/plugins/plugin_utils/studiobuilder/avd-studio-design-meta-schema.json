@@ -56,6 +56,22 @@
                     "additionalProperties": false
                 },
                 {
+                    "required": [ "type", "name", "set_path" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "yaml"
+                            ]
+                        },
+                        "name": { "$ref": "#/$def/name"},
+                        "set_path": { "$ref": "#/$def/set_path"},
+                        "display_name": { "$ref": "#/$def/display_name"},
+                        "description": { "$ref": "#/$def/description"}
+                    },
+                    "additionalProperties": false
+                },
+                {
                     "required": [ "type", "name" ],
                     "properties": {
                         "type": {
@@ -292,10 +308,17 @@
                                         "description": "Tag label"
                                     },
                                     "suggested_values": {
-                                        "type": "string",
-                                        "description": "Suggested tag values in drop down"
+                                        "type": "array",
+                                        "description": "Suggested tag values in drop down",
+                                        "items": {
+                                            "type": "string"
+                                        }
                                     },
-                                    "set_path": { "$ref": "#/$def/set_path"}
+                                    "set_path": { "$ref": "#/$def/set_path"},
+                                    "convert_value": {
+                                        "type": "string",
+                                        "enum": ["int"]
+                                    }
                                 },
                                 "additionalProperties": false
                             }
@@ -306,9 +329,6 @@
                     },
                     "additionalProperties": false
                 }
-
-
-
             ]
         }
     },

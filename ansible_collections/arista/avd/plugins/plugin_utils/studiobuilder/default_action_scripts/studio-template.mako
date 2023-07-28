@@ -22,10 +22,13 @@ from pyavd import get_device_structured_config, get_device_config
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2, TagValueSearchRequest
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
+TAGMAPPINGS = []
+
 # Get studio info from ctx
 DEVICE = ctx.getDevice()
 DEVICE_ID = DEVICE.id
 WORKSPACE_ID = ctx.studio.workspaceId
+
 
 def __resolve_device_tag_query(query):
     if query == "":
@@ -53,6 +56,104 @@ def __get_device_tags(device_id, labels):
     return {tag.label: tag.value for tag in matching_tags}
 
 
+class TagMapper:
+    def __init__(self, mappings):
+        """
+        Maps data from studio inputs to AVD data model.
+
+        If "convert_value" is set (Currently only supporting "int"), the data will be converted.
+
+        Parameters
+        ----------
+        mappings : list[dict]
+            List of variable mappings like:
+            [
+                {
+                    "from_tag": "Fabric_Name",
+                    "to_path": ["fabric_name"],
+                    "convert_value": "int"
+                }
+            ]
+        """
+        self.mappings = mappings
+        self.labels = [mapping["from_tag"] for mapping in mappings]
+
+    def __convert_value(self, convert_value: str, value):
+        ctx.alog(f"Converting value {value} using {convert_value}")
+        """Convert value if supported. Raise if not."""
+        if convert_value == "int" and isinstance(value, str):
+            return int(value)
+
+        raise ValueError(f"Unsupported convert_value: {convert_value}")
+
+    def __set_value_from_path(self, path: list, data: list | dict, value):
+        """Recursive function to walk through data to set value of path, creating any level needed."""
+        if not path:
+            raise ValueError("Path is empty. Something bad happened.")
+
+        if len(path) == 1:
+            if isinstance(data, dict):
+                data[path[0]] = value
+            elif isinstance(data, list) and isinstance(path[0], int):
+                # We ignore the actual integer value and just append the item to the list.
+                data.append(value)
+            else:
+                raise ValueError(f"Path '{path}' cannot be set on data of type '{type(data)}'")
+            return
+
+        # Two or more elements in path.
+        if isinstance(data, dict):
+            # For dict, create the child key with correct type and call recursively.
+            if isinstance(path[1], int):
+                data.setdefault(path[0], [])
+                self.__set_value_from_path(path[1:], data[path[0]], value)
+            else:
+                data.setdefault(path[0], {})
+                self.__set_value_from_path(path[1:], data[path[0]], value)
+        elif isinstance(data, list) and isinstance(path[0], int):
+            # For list, append item of correct type and call recursively.
+            # Notice that the actual index in path[0] is ignored.
+            # TODO: Consider accepting index or lookup based on key, to ensure consistency when updating multiple fields.
+            index = len(data)
+            if isinstance(path[1], int):
+                data.append([])
+                self.__set_value_from_path(path[1:], data[index], value)
+            else:
+                data.append({})
+                self.__set_value_from_path(path[1:], data[index], value)
+
+        else:
+            raise ValueError(f"Path '{path}' cannot be set on data of type '{type(data)}'")
+
+        return None
+
+    def map_device_tags(self, device_tag_values: dict) -> dict:
+        """
+        Map tags for the given device_id according to mappings given at initilization.
+
+        Returns a dict with values from tags.
+
+        Parameters
+        ----------
+        device_tag_values : dict
+            Dictionary with all device tags and values
+
+        Returns
+        -------
+        dict
+            mapped data from tags for one device
+        """
+        output = {}
+        for mapping in self.mappings:
+            if (value := device_tag_values.get(mapping["from_tag"])) is not None:
+                if (convert_value := mapping.get("convert_value")) is not None:
+                    value = self.__convert_value(convert_value, value)
+
+                self.__set_value_from_path(mapping["to_path"], output, value)
+
+        return output
+
+
 def __build_device_vars(datasets: list[dict], device_id: str):
     """
     Parse avd_inputs data structure and build a nested dict with all vars for each host
@@ -69,8 +170,6 @@ def __build_device_vars(datasets: list[dict], device_id: str):
     Returns
     -------
     dict
-        hostname1 : dict
-        hostname2 : dict
     """
     one_device_vars = {}
     for dataset in datasets:
@@ -80,10 +179,30 @@ def __build_device_vars(datasets: list[dict], device_id: str):
     return one_device_vars
 
 
+def __update_device_vars_with_tag_values(device_id: str, one_device_vars: dict):
+    """
+    inplace merge data from tag mappings
+
+    Parameters
+    ----------
+    device_id : str
+    device_vars : dict
+
+    Returns
+    -------
+    dict
+    """
+    tag_mapper = TagMapper(TAGMAPPINGS)
+    device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
+    mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
+    always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
+
+
 avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
 avd_switch_facts = json.loads(ctx.retrieve(path=["avd"], customKey="avd_switch_facts", delete=False))
 
 device_vars = __build_device_vars(avd_inputs, DEVICE_ID)
+__update_device_vars_with_tag_values(DEVICE_ID, device_vars)
 ctx.store(json.dumps(device_vars), customKey="device_vars", path=["avd"])
 
 structured_config = get_device_structured_config(DEVICE_ID, device_vars, avd_switch_facts)
