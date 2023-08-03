@@ -179,19 +179,20 @@ def __build_device_vars(device_list: list, datasets: list[dict]):
     device_id_vars = {}
 
     for dataset in datasets:
-        devices = __resolve_device_tag_query(dataset["device_query"])
-        for device in devices:
-            one_device_vars = device_id_vars.setdefault(device, {})
+        matching_device_ids = __resolve_device_tag_query(dataset["device_query"])
+        for device_id in matching_device_ids:
+            if device_id not in device_list:
+                continue
+
+            one_device_vars = device_id_vars.setdefault(device_id, {})
             always_merger.merge(one_device_vars, deepcopy(dataset["avd_vars"]))
 
+    device_vars = {}
     for device_id in device_list:
         device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
         mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
         one_device_vars = device_id_vars.setdefault(device_id, {})
         always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
-
-    device_vars = {}
-    for device_id, one_device_vars in device_id_vars.items():
         if not one_device_vars.get("hostname"):
             raise KeyError(f"Key 'hostname' not found in vars for device ID '{device_id}'")
         hostname = one_device_vars["hostname"]
