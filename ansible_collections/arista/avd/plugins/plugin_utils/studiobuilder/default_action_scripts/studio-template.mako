@@ -198,18 +198,58 @@ def __update_device_vars_with_tag_values(device_id: str, one_device_vars: dict):
     always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
 
 
+def __build_device_vars(device_id: str, datasets: list[dict]):
+    """
+    Parse avd_inputs data structure and build a nested dict with all vars for the given device_id
+    Then merge data from tag mappings
+
+    Parameters
+    ----------
+    device_id : str
+        Device IDs
+    list
+        dict
+            Dataset only containing device_query and mapped_vars
+            {
+                "device_query": "DC_Name:DC2 AND Role:L3leaf",
+                "avd_vars": {"network_type": {"defaults": {"bgp_as": "5678"}}}
+            }
+    Returns
+    -------
+    dict
+    """
+    tag_mapper = TagMapper(TAGMAPPINGS)
+
+    one_device_vars = {}
+    for dataset in datasets:
+        devices = __resolve_device_tag_query(dataset["device_query"])
+        if device_id in devices:
+            always_merger.merge(one_device_vars, deepcopy(dataset["avd_vars"]))
+
+    device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
+    mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
+    always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
+
+    if not one_device_vars.get("hostname"):
+        raise KeyError(
+            f"Key 'hostname' not found in vars for device ID '{device_id}'"
+        )
+
+    return one_device_vars
+
+
 avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
 avd_switch_facts = json.loads(ctx.retrieve(path=["avd"], customKey="avd_switch_facts", delete=False))
 
-device_vars = __build_device_vars(avd_inputs, DEVICE_ID)
-__update_device_vars_with_tag_values(DEVICE_ID, device_vars)
-ctx.store(json.dumps(device_vars), customKey="device_vars", path=["avd"])
+device_vars = __build_device_vars(DEVICE_ID, avd_inputs)
+hostname = device_vars["hostname"]
+ctx.store(json.dumps(device_vars), customKey=f"{hostname}_device_vars", path=["avd"])
 
-structured_config = get_device_structured_config(DEVICE_ID, device_vars, avd_switch_facts)
-ctx.store(json.dumps(structured_config), customKey=f"{DEVICE_ID}_structured_config", path=["avd"])
+structured_config = get_device_structured_config(hostname, device_vars, avd_switch_facts)
+ctx.store(json.dumps(structured_config), customKey=f"{hostname}_structured_config", path=["avd"])
 
 eos_config = get_device_config(structured_config)
-ctx.store(json.dumps(eos_config), customKey=f"{DEVICE_ID}_config", path=["avd"])
+ctx.store(json.dumps(eos_config), customKey=f"{hostname}_config", path=["avd"])
 
 %>
 ${eos_config}

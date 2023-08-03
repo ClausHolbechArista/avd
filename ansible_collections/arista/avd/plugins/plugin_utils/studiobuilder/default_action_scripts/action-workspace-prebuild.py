@@ -3,6 +3,7 @@
 # Subject to Arista Networks, Inc.'s EULA.
 # FOR INTERNAL USE ONLY. NOT FOR DISTRIBUTION.
 # pylint: skip-file
+# flake8: noqa
 """
 action-workspace-prebuild.py
 
@@ -150,12 +151,15 @@ class TagMapper:
         return output
 
 
-def __build_device_vars(datasets: list[dict]):
+def __build_device_vars(device_list: list, datasets: list[dict]):
     """
     Parse avd_inputs data structure and build a nested dict with all vars for each host
+    Then merge data from tag mappings
 
     Parameters
     ----------
+    device_list : list
+        List of device IDs
     list
         dict
             Dataset only containing device_query and mapped_vars
@@ -169,46 +173,37 @@ def __build_device_vars(datasets: list[dict]):
         hostname1 : dict
         hostname2 : dict
     """
-    device_vars = {}
+    tag_mapper = TagMapper(TAGMAPPINGS)
+
+    # device_id_vars is using device_id as key, since we may not have the hostname yet. Hostname could come from tags.
+    device_id_vars = {}
+
     for dataset in datasets:
         devices = __resolve_device_tag_query(dataset["device_query"])
         for device in devices:
-            one_device_vars = device_vars.setdefault(device, {})
+            one_device_vars = device_id_vars.setdefault(device, {})
             always_merger.merge(one_device_vars, deepcopy(dataset["avd_vars"]))
-    return device_vars
 
-
-def __update_device_vars_with_tag_values(device_list: list, device_vars: dict):
-    """
-    Run over all devices in device_vars and inplace merge data from tag mappings
-
-    Parameters
-    ----------
-    device_list : list
-        List of device IDs
-    device_vars : dict
-        hostname1 : dict
-        hostname2 : dict
-
-    Returns
-    -------
-    dict
-        hostname1 : dict
-        hostname2 : dict
-    """
-    tag_mapper = TagMapper(TAGMAPPINGS)
     for device_id in device_list:
         device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
         mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
-        one_device_vars = device_vars.setdefault(device_id, {})
+        one_device_vars = device_id_vars.setdefault(device_id, {})
         always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
+
+    device_vars = {}
+    for device_id, one_device_vars in device_id_vars.items():
+        if not one_device_vars.get("hostname"):
+            raise KeyError(f"Key 'hostname' not found in vars for device ID '{device_id}'")
+        hostname = one_device_vars["hostname"]
+        device_vars[hostname] = one_device_vars
+
+    return device_vars
 
 
 avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
 device_list = json.loads(ctx.retrieve(path=["avd"], customKey="device_list", delete=False))
 
-device_vars = __build_device_vars(avd_inputs)
-__update_device_vars_with_tag_values(device_list, device_vars)
+device_vars = __build_device_vars(device_list, avd_inputs)
 ctx.store(json.dumps(device_vars), customKey="devices_vars_with_tags", path=["avd"])
 
 avd_switch_facts = get_avd_facts(device_vars)
