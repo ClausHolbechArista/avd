@@ -558,9 +558,11 @@ class StudioResolverField(StudioField):
             "base_field_id": self.base_field.id,
             "display_mode": self.display_mode(),
             "input_mode": self.input_mode(),
-            "input_tag_label": self.tag_label,
             "tag_filter_query": self.tag_filter_query,
         }
+        if self.resolver_type == "single":
+            props["input_tag_label"] = self.tag_label
+
         schema[self.id].update({"resolver_props": props})
 
         return schema

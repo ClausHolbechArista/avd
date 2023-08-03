@@ -240,21 +240,27 @@ class ActionModule(ActionBase):
             ],
         }
         if action_type == "STUDIO_BUILD_HOOK":
-            action_config["static-params"].append(
-                {
-                    "name": "StudioIDs",
-                    "description": "",
-                    "required": False,
-                    "hidden": False,
-                    "default": "",
-                },
-                {
-                    "name": "AVDVersion",
-                    "description": "",
-                    "required": False,
-                    "hidden": False,
-                    "default": AVD_VERSION,
-                },
+            action_config["static-params"].extend(
+                [
+                    {
+                        "name": "AVDVersion",
+                        "description": "",
+                        "required": False,
+                        "hidden": False,
+                        "default": AVD_VERSION,
+                    },
+                ]
+            )
+            action_config["dynamic-params"].extend(
+                [
+                    {
+                        "name": "StudioIDs",
+                        "description": "",
+                        "required": False,
+                        "hidden": False,
+                        "default": "",
+                    },
+                ]
             )
         elif action_type == "PACKAGING_INSTALL_HOOK":
             action_config["static-params"].extend(
