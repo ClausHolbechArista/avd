@@ -219,7 +219,7 @@ device_vars = __build_device_vars(device_list, avd_inputs)
 
 pyavd_timer = time()
 avd_switch_facts = get_avd_facts(device_vars)
-runtimes["pyavd"] = str(time() - pyavd_timer)
+runtimes["pyavd_facts"] = str(time() - pyavd_timer)
 
 storage_timer = time()
 ctx.store(json.dumps(avd_switch_facts), customKey="avd_switch_facts", path=["avd"])
