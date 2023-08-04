@@ -7,9 +7,21 @@ import requests
 
 hooks = [
     # (stage, scope, actionId, dependsOn?)
-    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_STUDIO", ctx.action.args["StudioPreBuildActionIDs"].split(",")[0]),
-    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_WORKSPACE", ctx.action.args["WorkspacePreBuildActionIDs"].split(",")[0]),
-    ("BUILD_STAGE_INPUT_VALIDATION", "SCOPE_STUDIO", ctx.action.args["StudioPreRenderActionIDs"].split(",")[0]),
+    (
+        "BUILD_STAGE_INPUT_VALIDATION",
+        "SCOPE_STUDIO",
+        ctx.action.args["StudioPreBuildActionIDs"].split(",")[0],
+    ),
+    (
+        "BUILD_STAGE_INPUT_VALIDATION",
+        "SCOPE_WORKSPACE",
+        ctx.action.args["WorkspacePreBuildActionIDs"].split(",")[0],
+    ),
+    (
+        "BUILD_STAGE_INPUT_VALIDATION",
+        "SCOPE_STUDIO",
+        ctx.action.args["StudioPreRenderActionIDs"].split(",")[0],
+    ),
 ]
 
 cookies = {"access_token": ctx.user.token}
@@ -27,6 +39,7 @@ for stage, scope, action in hooks:
         dependsOn = {"values": [prev_hook_id]}
     else:
         dependsOn = {}
+    prev_hook_id = action
 
     data = {
         "key": {
@@ -39,6 +52,7 @@ for stage, scope, action in hooks:
         "actionId": action,
         "dependsOn": dependsOn,
     }
+    ctx.alog(f"Postinstall script posting {data}.")
 
     response = requests.post(url, json=data, verify=False, cookies=cookies)
 

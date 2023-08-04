@@ -15,11 +15,13 @@ The purpose of this template is:
  - Print configuration
 """
 import json
+
 from copy import deepcopy
+from time import time
 
 from deepmerge import always_merger
 from pyavd import get_device_structured_config, get_device_config
-from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2, TagValueSearchRequest
+from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
 TAGMAPPINGS = []
@@ -28,6 +30,9 @@ TAGMAPPINGS = []
 DEVICE = ctx.getDevice()
 DEVICE_ID = DEVICE.id
 WORKSPACE_ID = ctx.studio.workspaceId
+
+
+runtimes = {"start_time": time()}
 
 
 def __resolve_device_tag_query(query):
@@ -42,18 +47,17 @@ def __resolve_device_tag_query(query):
 
 
 def __get_device_tags(device_id, labels):
-    tsclient = ctx.getApiClient(TagSearchStub)
-    matching_tags = []
+    timer = time()
+    device_tags = {}
+    all_device_tags = ctx.tags._getDeviceTags(device_id)
     for label in labels:
-        label_search_req = TagValueSearchRequest(label=label, workspace_id=WORKSPACE_ID)
-        for tag in tsclient.GetTagValueSuggestions(label_search_req).tags:
-            query = '{}:"{}" AND device:{}'.format(tag.label, tag.value, device_id)
-            value_search_req = TagMatchRequestV2(query=query, workspace_id=WORKSPACE_ID)
-            value_search_res = tsclient.GetTagMatchesV2(value_search_req)
-            for match in value_search_res.matches:
-                if match.device.device_id == device_id:
-                    matching_tags.append(tag)
-    return {tag.label: tag.value for tag in matching_tags}
+        if value_list := all_device_tags.get(label):
+            if len(value_list) == 1:
+                device_tags[label] = value_list[0]
+            else:
+                device_tags[label] = value_list
+    runtimes.setdefault("get_device_tags", []).append(str(time() - timer))
+    return device_tags
 
 
 class TagMapper:
@@ -79,8 +83,8 @@ class TagMapper:
         self.labels = [mapping["from_tag"] for mapping in mappings]
 
     def __convert_value(self, convert_value: str, value):
-        ctx.alog(f"Converting value {value} using {convert_value}")
         """Convert value if supported. Raise if not."""
+        # ctx.alog(f"Converting value {value} using {convert_value}")
         if convert_value == "int" and isinstance(value, str):
             return int(value)
 
@@ -238,18 +242,30 @@ def __build_device_vars(device_id: str, datasets: list[dict]):
     return one_device_vars
 
 
+retrieval_timer = time()
 avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
 avd_switch_facts = json.loads(ctx.retrieve(path=["avd"], customKey="avd_switch_facts", delete=False))
+runtimes["retrieve"] = str(time() - retrieval_timer)
 
 device_vars = __build_device_vars(DEVICE_ID, avd_inputs)
 hostname = device_vars["hostname"]
-ctx.store(json.dumps(device_vars), customKey=f"{hostname}_device_vars", path=["avd"])
 
+pyavd_timer = time()
 structured_config = get_device_structured_config(hostname, device_vars, avd_switch_facts)
-ctx.store(json.dumps(structured_config), customKey=f"{hostname}_structured_config", path=["avd"])
-
+runtimes["pyavd_struct_cfg"] = str(time() - pyavd_timer)
+pyavd_timer = time()
 eos_config = get_device_config(structured_config)
-ctx.store(json.dumps(eos_config), customKey=f"{hostname}_config", path=["avd"])
+runtimes["pyavd_eos_cfg"] = str(time() - pyavd_timer)
+
+# storage_timer = time()
+# ctx.store(json.dumps(device_vars), customKey=f"{hostname}_device_vars", path=["avd"])
+# ctx.store(json.dumps(structured_config), customKey=f"{hostname}_structured_config", path=["avd"])
+# ctx.store(json.dumps(eos_config), customKey=f"{hostname}_config", path=["avd"])
+# runtimes["store"] = str(time() - storage_timer)
+
+runtimes["total"] = str(time() - runtimes["start_time"])
+
+ctx.alog(f"Completed studio template for '{ctx.studio.studioId}' with runtimes {runtimes}.")
 
 %>
 ${eos_config}

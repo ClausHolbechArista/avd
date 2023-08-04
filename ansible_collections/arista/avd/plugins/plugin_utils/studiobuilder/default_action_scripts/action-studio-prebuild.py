@@ -18,12 +18,12 @@ The purpose of this action is:
  - store AVD vars
 
 TODO:
-- TAG mappings
 - Interface tags in resolvers and other places
 - something with lists
 """
 
 import json
+from time import time
 
 from arista.studio.v1 import models
 from arista.studio.v1.services import AssignedTagsConfigServiceStub, AssignedTagsServiceStub, InputsServiceStub
@@ -40,6 +40,9 @@ WORKSPACE_ID = ctx.action.args["WorkspaceID"]
 STUDIO_ID = ctx.action.args["StudioID"]
 
 
+runtimes = {"start_time": time()}
+
+
 def __get_studio_assigned_tagquery():
     """
     Resolve the actual assigned tags.
@@ -52,9 +55,9 @@ def __get_studio_assigned_tagquery():
     client = ctx.getApiClient(AssignedTagsConfigServiceStub)
     try:
         resp = client.GetOne(get_req)
-        query = str(resp.value.query)
+        query = str(resp.value.query.value)
         if resp.value.remove:
-            query = None  # Default is None which translates to all devices
+            return None  # Default is None which translates to all devices
         return query
     except Exception as e:
         # ctx.alog(f"workspace request failed {e}")
@@ -67,7 +70,7 @@ def __get_studio_assigned_tagquery():
     client = ctx.getApiClient(AssignedTagsServiceStub)
     try:
         resp = client.GetOne(get_req)
-        return str(resp.value.query)
+        return str(resp.value.query.value)
     except Exception as e:
         # ctx.alog(f"mainline request failed {e}")
         # The API raises if no tag query is set - which is the default and translates to all devices
@@ -100,7 +103,11 @@ class InputParser:
     queue: list
     studio_device_query: str
 
-    def __init__(self, studio_device_query: str | None, interface_resolver_paths: list[list[str]] = []):
+    def __init__(
+        self,
+        studio_device_query: str | None,
+        interface_resolver_paths: list[list[str]] = [],
+    ):
         self.studio_device_query = studio_device_query
         self.interface_resolver_paths = interface_resolver_paths
         self.queue = []
@@ -140,7 +147,11 @@ class InputParser:
                 else:
                     for resolver_item in inputs:
                         self.queue.append(
-                            {"inputs": resolver_item["inputs"], "path": path, "device_queries": device_queries + [resolver_item["tags"]["query"]]}
+                            {
+                                "inputs": resolver_item["inputs"],
+                                "path": path,
+                                "device_queries": device_queries + [resolver_item["tags"]["query"]],
+                            }
                         )
                     return None
 
@@ -209,8 +220,8 @@ class DataMapper:
         return None
 
     def __convert_value(self, convert_value: str, value):
-        ctx.alog(f"Converting value {value} using {convert_value}")
         """Convert value if supported. Raise if not."""
+        # ctx.alog(f"Converting value {value} using {convert_value}")
         if convert_value == "load_yaml" and isinstance(value, str):
             return yaml_safe_load(value)
 
@@ -221,7 +232,7 @@ class DataMapper:
         if not path:
             # Empty path. For dicts we can update value directly.
             if isinstance(data, dict) and isinstance(value, dict):
-                ctx.alog(f"Updating value {value} on data {data}")
+                # ctx.alog(f"Updating value {value} on data {data}")
                 data.update(value)
                 return
 
@@ -360,13 +371,20 @@ def __resolve_device_tag_query(query):
 
 
 raw_studio_inputs = get_raw_studio_inputs()
-ctx.alog(f"{raw_studio_inputs}")
+# ctx.alog(f"{raw_studio_inputs}")
 
 studio_assigned_tagquery = __get_studio_assigned_tagquery()
 avd_inputs = transform_studio_inputs_to_avd(raw_studio_inputs, studio_assigned_tagquery)
 device_list = __resolve_device_tag_query(studio_assigned_tagquery)
 
+storage_timer = time()
 ctx.store(json.dumps(avd_inputs), customKey="avd_inputs", path=["avd"])
 ctx.store(json.dumps(device_list), customKey="device_list", path=["avd"])
-ctx.alog(f"{avd_inputs}")
-ctx.alog(f"{device_list}")
+runtimes["store"] = str(time() - storage_timer)
+
+# ctx.alog(f"{avd_inputs}")
+# ctx.alog(f"{device_list}")
+
+runtimes["total"] = str(time() - runtimes["start_time"])
+
+ctx.alog(f"Completed build-hook 'action-studio-prebuild' for '{STUDIO_ID}' with runtimes {runtimes}.")
