@@ -20,7 +20,7 @@ from time import time
 
 from cloudvision.cvlib import Studio
 from deepmerge import always_merger
-from pyavd import get_avd_facts
+from pyavd import get_avd_facts, validate_inputs
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
@@ -216,6 +216,14 @@ runtimes["retrieve"] = str(time() - retrieval_timer)
 
 device_vars = __build_device_vars(device_list, avd_inputs)
 # ctx.store(json.dumps(device_vars), customKey="devices_vars_with_tags", path=["avd"])
+
+pyavd_timer = time()
+for hostname, one_device_vars in device_vars.items():
+    validation_result = validate_inputs(one_device_vars)
+    if validation_result.failed:
+        err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
+        raise Exception(f"[{hostname}]: {err}")
+runtimes["pyavd_validate_inputs"] = str(time() - pyavd_timer)
 
 pyavd_timer = time()
 avd_switch_facts = get_avd_facts(device_vars)

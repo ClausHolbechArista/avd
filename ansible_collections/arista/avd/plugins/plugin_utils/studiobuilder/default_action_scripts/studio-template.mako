@@ -20,7 +20,7 @@ from copy import deepcopy
 from time import time
 
 from deepmerge import always_merger
-from pyavd import get_device_structured_config, get_device_config
+from pyavd import get_device_structured_config, get_device_config, validate_inputs, validate_structured_config
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
@@ -250,9 +250,25 @@ runtimes["retrieve"] = str(time() - retrieval_timer)
 device_vars = __build_device_vars(DEVICE_ID, avd_inputs)
 hostname = device_vars["hostname"]
 
+
+pyavd_timer = time()
+validation_result = validate_inputs(device_vars)
+if validation_result.failed:
+    err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
+    raise Exception(f"[{hostname}]: {err}")
+runtimes["pyavd_validate_inputs"] = str(time() - pyavd_timer)
+
 pyavd_timer = time()
 structured_config = get_device_structured_config(hostname, device_vars, avd_switch_facts)
 runtimes["pyavd_struct_cfg"] = str(time() - pyavd_timer)
+
+pyavd_timer = time()
+validation_result = validate_structured_config(structured_config)
+if validation_result.failed:
+    err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
+    raise Exception(f"[{hostname}]: {err}")
+runtimes["pyavd_validate_structured_config"] = str(time() - pyavd_timer)
+
 pyavd_timer = time()
 eos_config = get_device_config(structured_config)
 runtimes["pyavd_eos_cfg"] = str(time() - pyavd_timer)
