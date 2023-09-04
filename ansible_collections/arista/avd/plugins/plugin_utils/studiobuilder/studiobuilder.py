@@ -215,5 +215,6 @@ class AvdStudioBuilder:
                 # string_format=field.get("format"),
                 # pattern=field.get("pattern"),
                 multi_line=True,
+                syntax="yaml",
             )
         )

@@ -136,7 +136,14 @@ class StudioGroupField(StudioField):
         layout: str | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.layout = layout
@@ -208,7 +215,14 @@ class StudioCollectionField(StudioField):
         key: str | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.layout = layout
@@ -264,6 +278,7 @@ class StudioStringField(StudioField):
     static_options: list[str] | None = None
     string_format: str | None = None
     multi_line: bool | None = None
+    syntax: str | None = None
 
     def __init__(
         self,
@@ -282,9 +297,17 @@ class StudioStringField(StudioField):
         static_options: list[str] | None = None,
         string_format: str | None = None,
         multi_line: bool | None = None,
+        syntax: str | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.default_value = default_value
@@ -294,6 +317,7 @@ class StudioStringField(StudioField):
         self.static_options = static_options
         self.string_format = string_format
         self.multi_line = multi_line
+        self.syntax = syntax
 
     def length(self) -> str | None:
         """
@@ -350,6 +374,8 @@ class StudioStringField(StudioField):
                     "isMultiLine": True,
                 }
             )
+            if self.syntax:
+                schema[self.id]["syntax"] = self.syntax
 
         return schema
 
@@ -383,7 +409,14 @@ class StudioIntegerField(StudioField):
         static_options: list[int] | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.default_value = default_value
@@ -461,7 +494,14 @@ class StudioBooleanField(StudioField):
         default_value: bool | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.default_value = default_value
@@ -522,7 +562,14 @@ class StudioResolverField(StudioField):
         tag_filter_query: str | None = None,
     ) -> None:
         super().__init__(
-            name=name, label=label, description=description, parent=parent, required=required, id=id, set_path=set_path, convert_value=convert_value
+            name=name,
+            label=label,
+            description=description,
+            parent=parent,
+            required=required,
+            id=id,
+            set_path=set_path,
+            convert_value=convert_value,
         )
 
         self.layout = layout
@@ -612,7 +659,12 @@ class StudioTaggerField(StudioField):
         assignment_type: str | None = None,
     ) -> None:
         # Notice that we remove parent from the options, since taggers are not regular members of parent groups.
-        super().__init__(name=name, description=description, required=required, id=id or f"{parent.id}-{name}")
+        super().__init__(
+            name=name,
+            description=description,
+            required=required,
+            id=id or f"{parent.id}-{name}",
+        )
 
         self.parent = parent
         self.columns = columns
