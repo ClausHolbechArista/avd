@@ -4,39 +4,37 @@
 # Subject to Arista Networks, Inc.'s EULA.
 # FOR INTERNAL USE ONLY. NOT FOR DISTRIBUTION.
 # pylint: skip-file
-# flake8: noqa
 """
-action-workspace-prebuild.py
+studio-template.py
 
-This is a prebuild action running after studio prebuild in a studio build pipeline.
-This action is running once per workspace, so it handles all studios and devices.
+This is a Python Studio template being rendered per device per studio
 
-The purpose of this action is:
- - Run AVD Topology (eos_designs_facts)
- - Store result in cache
+The purpose of this template is:
+ - Run AVD Structured Config for the scope of the studio (eos_designs / yaml_templates_to_facts)
+ - Run AVD eos_cli_config_gen
+ - Print configuration
 """
 import json
 from copy import deepcopy
 from time import time
 
-from cloudvision.cvlib import Studio
 from deepmerge import always_merger
-from pyavd import get_avd_facts, validate_inputs
+from pyavd import get_device_config, get_device_structured_config, validate_inputs, validate_structured_config
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
 from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 
-WORKSPACE_ID = ctx.action.args["WorkspaceID"]
-STUDIO_IDS = str(ctx.action.args["StudioIDs"]).split(",")
 TAGMAPPINGS = []
+
+# Get studio info from ctx
+DEVICE = ctx.getDevice()
+DEVICE_ID = DEVICE.id
+WORKSPACE_ID = ctx.studio.workspaceId
+
 
 runtimes = {"start_time": time()}
 
-# Hack to get ctx.tags working outside of a studio template:
-ctx.studio = Studio(workspaceId=WORKSPACE_ID, studioId="")
-
 
 def __resolve_device_tag_query(query):
-    timer = time()
     if query == "":
         return []
     if query is None:
@@ -44,7 +42,6 @@ def __resolve_device_tag_query(query):
     tsclient = ctx.getApiClient(TagSearchStub)
     search_req = TagMatchRequestV2(query=query, workspace_id=WORKSPACE_ID)
     search_res = tsclient.GetTagMatchesV2(search_req)
-    runtimes.setdefault("resolve_device_tag_query", []).append(str(time() - timer))
     return [match.device.device_id for match in search_res.matches]
 
 
@@ -160,15 +157,12 @@ class TagMapper:
         return output
 
 
-def __build_device_vars(device_list: list, datasets: list[dict]):
+def __build_device_vars(datasets: list[dict], device_id: str):
     """
     Parse avd_inputs data structure and build a nested dict with all vars for each host
-    Then merge data from tag mappings
 
     Parameters
     ----------
-    device_list : list
-        List of device IDs
     list
         dict
             Dataset only containing device_query and mapped_vars
@@ -179,61 +173,91 @@ def __build_device_vars(device_list: list, datasets: list[dict]):
     Returns
     -------
     dict
-        hostname1 : dict
-        hostname2 : dict
+    """
+    one_device_vars = {}
+    for dataset in datasets:
+        devices = __resolve_device_tag_query(dataset["device_query"])
+        if device_id in devices:
+            always_merger.merge(one_device_vars, deepcopy(dataset["avd_vars"]))
+    return one_device_vars
+
+
+def __build_device_vars(device_id: str, datasets: list[dict]):
+    """
+    Parse avd_inputs data structure and build a nested dict with all vars for the given device_id
+    Then merge data from tag mappings
+
+    Parameters
+    ----------
+    device_id : str
+        Device IDs
+    list
+        dict
+            Dataset only containing device_query and mapped_vars
+            {
+                "device_query": "DC_Name:DC2 AND Role:L3leaf",
+                "avd_vars": {"network_type": {"defaults": {"bgp_as": "5678"}}}
+            }
+    Returns
+    -------
+    dict
     """
     tag_mapper = TagMapper(TAGMAPPINGS)
 
-    # device_id_vars is using device_id as key, since we may not have the hostname yet. Hostname could come from tags.
-    device_id_vars = {}
-
+    one_device_vars = {}
     for dataset in datasets:
-        matching_device_ids = __resolve_device_tag_query(dataset["device_query"])
-        for device_id in matching_device_ids:
-            if device_id not in device_list:
-                continue
-
-            one_device_vars = device_id_vars.setdefault(device_id, {})
+        devices = __resolve_device_tag_query(dataset["device_query"])
+        if device_id in devices:
             always_merger.merge(one_device_vars, deepcopy(dataset["avd_vars"]))
 
-    device_vars = {}
-    for device_id in device_list:
-        device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
-        mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
-        one_device_vars = device_id_vars.setdefault(device_id, {})
-        always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
-        if not one_device_vars.get("hostname"):
-            raise KeyError(f"Key 'hostname' not found in vars for device ID '{device_id}'")
-        hostname = one_device_vars["hostname"]
-        device_vars[hostname] = one_device_vars
+    device_tag_values = __get_device_tags(device_id, tag_mapper.labels)
+    mapped_tag_data = tag_mapper.map_device_tags(device_tag_values)
+    always_merger.merge(one_device_vars, deepcopy(mapped_tag_data))
 
-    return device_vars
+    if not one_device_vars.get("hostname"):
+        raise KeyError(f"Key 'hostname' not found in vars for device ID '{device_id}'")
+
+    return one_device_vars
 
 
 retrieval_timer = time()
 avd_inputs = json.loads(ctx.retrieve(path=["avd"], customKey="avd_inputs", delete=False))
-device_list = json.loads(ctx.retrieve(path=["avd"], customKey="device_list", delete=False))
+avd_switch_facts = json.loads(ctx.retrieve(path=["avd"], customKey="avd_switch_facts", delete=False))
 runtimes["retrieve"] = str(time() - retrieval_timer)
 
-device_vars = __build_device_vars(device_list, avd_inputs)
-# ctx.store(json.dumps(device_vars), customKey="devices_vars_with_tags", path=["avd"])
+device_vars = __build_device_vars(DEVICE_ID, avd_inputs)
+hostname = device_vars["hostname"]
+
 
 pyavd_timer = time()
-for hostname, one_device_vars in device_vars.items():
-    validation_result = validate_inputs(one_device_vars)
-    if validation_result.failed:
-        err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
-        raise Exception(f"[{hostname}]: {err}")
+validation_result = validate_inputs(device_vars)
+if validation_result.failed:
+    err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
+    raise Exception(f"[{hostname}]: {err}")
 runtimes["pyavd_validate_inputs"] = str(time() - pyavd_timer)
 
 pyavd_timer = time()
-avd_switch_facts = get_avd_facts(device_vars)
-runtimes["pyavd_facts"] = str(time() - pyavd_timer)
+structured_config = get_device_structured_config(hostname, device_vars, avd_switch_facts)
+runtimes["pyavd_struct_cfg"] = str(time() - pyavd_timer)
 
-storage_timer = time()
-ctx.store(json.dumps(avd_switch_facts), customKey="avd_switch_facts", path=["avd"])
-runtimes["store"] = str(time() - storage_timer)
+pyavd_timer = time()
+validation_result = validate_structured_config(structured_config)
+if validation_result.failed:
+    err = ",".join(str(validation_error.message) for validation_error in validation_result.validation_errors)
+    raise Exception(f"[{hostname}]: {err}")
+runtimes["pyavd_validate_structured_config"] = str(time() - pyavd_timer)
+
+pyavd_timer = time()
+eos_config = get_device_config(structured_config)
+runtimes["pyavd_eos_cfg"] = str(time() - pyavd_timer)
+
+# storage_timer = time()
+# ctx.store(json.dumps(device_vars), customKey=f"{hostname}_device_vars", path=["avd"])
+# ctx.store(json.dumps(structured_config), customKey=f"{hostname}_structured_config", path=["avd"])
+# ctx.store(json.dumps(eos_config), customKey=f"{hostname}_config", path=["avd"])
+# runtimes["store"] = str(time() - storage_timer)
 
 runtimes["total"] = str(time() - runtimes["start_time"])
 
-ctx.alog(f"Completed build-hook 'action-workspace-prebuild' with runtimes {runtimes}.")
+ctx.info(f"! Completed studio template for '{ctx.studio.studioId}' with runtimes {runtimes}.")
+ctx.info(f"{eos_config}")

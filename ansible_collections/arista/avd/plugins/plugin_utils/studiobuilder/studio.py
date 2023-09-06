@@ -10,6 +10,7 @@ class Studio:
     description: str = ""
     input_fields: list[StudioField] = []
     template: str = ""
+    template_type: str = ""
     root: StudioField
     id: str | None = None
 
@@ -18,12 +19,14 @@ class Studio:
         display_name: str,
         description: str,
         template: str,
+        template_type: str,
         id: str | None = None,
         layout: str | None = None,
     ):
         self.display_name = display_name
         self.description = description
         self.template = template
+        self.template_type = template_type
         self.id = id
         self.layout = layout
 
@@ -51,7 +54,7 @@ class Studio:
                     "value": self.render_layouts(),
                 },
             },
-            "template": {"type": "TEMPLATE_TYPE_MAKO", "body": self.template},
+            "template": {"type": self.template_type, "body": self.template},
         }
 
         return studio

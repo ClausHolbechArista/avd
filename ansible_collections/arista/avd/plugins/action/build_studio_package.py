@@ -10,9 +10,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.studiobuilder.studiobui
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import get
 
 CONFIG_FILE = "config.yaml"
-AVD_VERSION = "3.8.0-studios0"
-AVD_BASE_PACKAGE_NAME = "package-avd-base"
-AVD_BASE_PACKAGE_VERSION = "3.8.0"
+AVD_VERSION = "4.3.0b1"
 DEFAULT_ACTION_SCRIPT_PATH = Path(__file__).parent.parent.joinpath("plugin_utils", "studiobuilder", "default_action_scripts")
 POST_INSTALL_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
 DEFAULT_STUDIO_PREBUILD_ACTION_FILE = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-studio-prebuild.py")
@@ -118,16 +116,6 @@ class ActionModule(ActionBase):
                 }
             },
         }
-        # Not supported yet
-        # if self.depends_on_avd_package:
-        #     package_config.update(
-        #         {
-        #             "depends-on": {
-        #                 AVD_BASE_PACKAGE_NAME: AVD_BASE_PACKAGE_VERSION,
-        #             }
-        #         }
-        #     )
-
         self.package_path.joinpath(CONFIG_FILE).write_text(
             yaml.dump(package_config, indent=2, sort_keys=False, Dumper=AnsibleDumper),
             encoding="UTF-8",
@@ -139,6 +127,11 @@ class ActionModule(ActionBase):
         # The API format has layout as a string containing json, so we have to load it.
         studio_layout = json.loads(get(self.studio, "input_schema.layout.value", required=True))
         studio_template = get(self.studio, "template.body", required=True)
+        studio_template_type = get(self.studio, "template.type", required=True)
+        if studio_template_type == "TEMPLATE_TYPE_GO":
+            template = {"language": "GO", "file": "template.py"}
+        else:
+            template = {"language": "MAKO", "file": "template.mako"}
         studio_config = {
             "type": "STUDIO",
             "name": self.studio_name,
@@ -149,10 +142,7 @@ class ActionModule(ActionBase):
             "layout": {
                 "file": "layout.yaml",
             },
-            "template": {
-                "language": "MAKO",
-                "file": "template.mako",
-            },
+            "template": template,
         }
         studio_path = self.package_path.joinpath(self.studio_id)
         studio_path.mkdir(mode=0o775, exist_ok=True)
@@ -168,7 +158,7 @@ class ActionModule(ActionBase):
             yaml.dump(studio_layout, indent=2, sort_keys=False, Dumper=AnsibleDumper),
             encoding="UTF-8",
         )
-        studio_path.joinpath("template.mako").write_text(
+        studio_path.joinpath(template["file"]).write_text(
             studio_template,
             encoding="UTF-8",
         )

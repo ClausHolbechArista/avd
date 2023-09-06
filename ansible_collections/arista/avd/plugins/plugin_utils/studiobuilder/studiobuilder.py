@@ -53,11 +53,16 @@ class AvdStudioBuilder:
 
         template_file = studio_design.get("template_file", DEFAULT_STUDIO_TEMPLATE_FILE)
         template = Path(template_file).read_text(encoding="UTF-8")
+        if str(template_file).endswith((".go", ".py")):
+            template_type = "TEMPLATE_TYPE_GO"
+        else:
+            template_type = "TEMPLATE_TYPE_MAKO"
 
         self.studio = Studio(
             display_name=studio_design["display_name"],
             description=studio_design["description"],
             template=template,
+            template_type=template_type,
             id=studio_design.get("studio_id", uuid4()),
             layout=studio_design.get("studio_layout"),
         )

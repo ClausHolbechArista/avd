@@ -1,3 +1,4 @@
+#!python
 # Copyright (c) 2022 Arista Networks, Inc.  All rights reserved.
 # Arista Networks, Inc. Confidential and Proprietary.
 # Subject to Arista Networks, Inc.'s EULA.
@@ -343,8 +344,15 @@ def get_raw_studio_inputs():
     key = models.InputsKey(studio_id=sid, workspace_id=wid, path=path)
     get_req = InputsRequest(key=key)
     tsclient = ctx.getApiClient(InputsServiceStub)
-    get_res = tsclient.GetOne(get_req)
-    return json.loads(get_res.value.inputs.value)
+    try:
+        get_res = tsclient.GetOne(get_req)
+        return json.loads(get_res.value.inputs.value)
+    except Exception:
+        # No inputs in mainline.
+        # Could be a build of a new studio which doesn't exist in mainline yet.
+        pass
+
+    return {}
 
 
 def transform_studio_inputs_to_avd(raw_studio_inputs: dict, studio_assigned_tagquery: str) -> list[dict]:
