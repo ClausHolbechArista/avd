@@ -18,6 +18,7 @@ import json
 from copy import deepcopy
 from time import time
 
+from cloudvision.cvlib import Studio
 from deepmerge import always_merger
 from pyavd import get_device_config, get_device_structured_config, validate_inputs, validate_structured_config
 from tagsearch_python.tagsearch_pb2 import TagMatchRequestV2
@@ -26,9 +27,11 @@ from tagsearch_python.tagsearch_pb2_grpc import TagSearchStub
 TAGMAPPINGS = []
 
 # Get studio info from ctx
-DEVICE = ctx.getDevice()
-DEVICE_ID = DEVICE.id
-WORKSPACE_ID = ctx.studio.workspaceId
+DEVICE_ID = ctx.action.args["DeviceID"]
+WORKSPACE_ID = ctx.action.args["WorkspaceID"]
+
+# Hack to get ctx.tags working outside of a studio template:
+ctx.studio = Studio(workspaceId=WORKSPACE_ID, studioId="")
 
 
 runtimes = {"start_time": time()}
@@ -259,5 +262,5 @@ runtimes["pyavd_eos_cfg"] = str(time() - pyavd_timer)
 
 runtimes["total"] = str(time() - runtimes["start_time"])
 
-ctx.info(f"! Completed studio template for '{ctx.studio.studioId}' with runtimes {runtimes}.")
+# ctx.info(f"! Completed studio template for '{ctx.studio.studioId}' with runtimes {runtimes}.")
 ctx.info(f"{eos_config}")
