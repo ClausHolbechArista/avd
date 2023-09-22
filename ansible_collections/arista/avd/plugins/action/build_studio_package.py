@@ -192,10 +192,19 @@ class ActionModule(ActionBase):
         )
 
     def create_actions(self, studio_design: dict, datamappings: list, tagmappings: list) -> None:
-        studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file", default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE)
+        studio_prebuild_action_file = get(
+            studio_design,
+            "build_pipeline.studio_prebuild_action_file",
+            default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE,
+        )
         description = f"Studio Pre-build action for Studio {self.studio_name}"
         action_id_1 = f"action-studio-prebuild-{self.studio_id}"
-        self.create_action(studio_prebuild_action_file, description, action_id_1, datamappings=datamappings)
+        self.create_action(
+            studio_prebuild_action_file,
+            description,
+            action_id_1,
+            datamappings=datamappings,
+        )
         self.studio_build_hooks.append(
             {
                 "id": f"{self.studio_id}-{action_id_1}",
@@ -205,11 +214,20 @@ class ActionModule(ActionBase):
             }
         )
 
-        workspace_prebuild_action_file = get(studio_design, "build_pipeline.workspace_prebuild_action_file", default=DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE)
+        workspace_prebuild_action_file = get(
+            studio_design,
+            "build_pipeline.workspace_prebuild_action_file",
+            default=DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE,
+        )
         self.depends_on_avd_package = False
         description = f"Workspace Pre-build action for Studio {self.studio_name}"
         action_id_2 = f"action-workspace-prebuild-{self.studio_id}"
-        self.create_action(workspace_prebuild_action_file, description, action_id_2, tagmappings=tagmappings)
+        self.create_action(
+            workspace_prebuild_action_file,
+            description,
+            action_id_2,
+            tagmappings=tagmappings,
+        )
         self.studio_build_hooks.append(
             {
                 "id": f"{self.studio_id}-{action_id_2}",
@@ -220,7 +238,11 @@ class ActionModule(ActionBase):
             }
         )
 
-        studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file", default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE)
+        studio_prerender_action_file = get(
+            studio_design,
+            "build_pipeline.studio_prerender_action_file",
+            default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE,
+        )
         description = f"Studio Pre-render action for Studio {self.studio_name}"
         action_id_3 = f"action-studio-prerender-{self.studio_id}"
         self.create_action(studio_prerender_action_file, description, action_id_3)
@@ -234,6 +256,18 @@ class ActionModule(ActionBase):
             }
         )
 
+        if studio_prevalidation_action_file := get(studio_design, "build_pipeline.studio_prevalidation_action_file"):
+            description = f"Studio Pre-validation action for Studio {self.studio_name}"
+            action_id_4 = f"action-studio-prevalidation-{self.studio_id}"
+            self.create_action(studio_prevalidation_action_file, description, action_id_4)
+            self.studio_build_hooks.append(
+                {
+                    "id": f"{self.studio_id}-{action_id_4}",
+                    "action-id": action_id_4,
+                    "stage": "CONFIG_VALIDATION",
+                    "scope": "SCOPE_STUDIO",
+                }
+            )
         # post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
         # description = f"Post-install action for Studio {self.studio_name}"
         # # Storing in class since we need this when creating the package.
