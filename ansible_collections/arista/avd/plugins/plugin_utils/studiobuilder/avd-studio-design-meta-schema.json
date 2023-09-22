@@ -372,9 +372,17 @@
                 "additionalProperties": false
             }
         },
+        "inputs_file": {
+            "type": "string",
+            "description": "Yaml file with inputs to be preloaded into the studio"
+        },
         "template_file": {
             "type": "string",
             "description": "File containing Studio Mako template"
+        },
+        "assigned_tags_query": {
+            "type": "string",
+            "description": "Tags query to apply to the studio."
         },
         "studio_inputs": {
             "type": "array",

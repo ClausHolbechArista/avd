@@ -22,6 +22,7 @@ class Studio:
         template_type: str,
         id: str | None = None,
         layout: str | None = None,
+        studio_inputs: str | None = None,
     ):
         self.display_name = display_name
         self.description = description

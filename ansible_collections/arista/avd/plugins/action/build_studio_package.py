@@ -4,6 +4,7 @@ from pathlib import Path
 import yaml
 from ansible.parsing.yaml.dumper import AnsibleDumper
 from ansible.plugins.action import ActionBase
+from yaml import safe_load
 
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschema import AvdSchema
 from ansible_collections.arista.avd.plugins.plugin_utils.studiobuilder.studiobuilder import AvdStudioBuilder
@@ -58,19 +59,17 @@ class ActionModule(ActionBase):
         avdschema = AvdSchema(schema_id=schema_id)
         builder = AvdStudioBuilder(avdschema)
         self.depends_on_avd_package = True
-        self.action_associations = {
-            "StudioPreBuildActionIDs": [],
-            "WorkspacePreBuildActionIDs": [],
-            "StudioPreRenderActionIDs": [],
-        }
+        self.studio_build_hooks = []
 
         # build return the complete studio object. This is broken down and written into separate files
         self.studio, datamappings, tagmappings = builder.build(studio_design)
 
         self.update_template_tagmappings(tagmappings)
         self.create_package_path(package_dir_path)
-        self.create_studio()
+        self.set_studio_inputs(studio_design)
+        self.set_assigned_tags_query(studio_design)
         self.create_actions(studio_design, datamappings, tagmappings)
+        self.create_studio()
         self.create_package(studio_design)
 
         result.update(
@@ -97,6 +96,15 @@ class ActionModule(ActionBase):
     def package_name(self) -> str:
         return f"Studio Package for {self.studio_name}"
 
+    def set_studio_inputs(self, studio_design: dict) -> None:
+        if inputs_file := studio_design.get("inputs_file"):
+            self.studio_inputs = safe_load(Path(inputs_file).read_text(encoding="UTF-8"))
+        else:
+            self.studio_inputs = None
+
+    def set_assigned_tags_query(self, studio_design: dict) -> None:
+        self.assigned_tags_query = studio_design.get("assigned_tags_query")
+
     def create_package_path(self, package_dir_path: Path) -> None:
         self.package_path = package_dir_path.joinpath(self.package_id)
         self.package_path.mkdir(mode=0o775, exist_ok=True)
@@ -110,11 +118,11 @@ class ActionModule(ActionBase):
             "name": self.package_name,
             "description": description,
             "version": self.package_version,
-            "install-hooks": {
-                f"STUDIO:{self.studio_id}": {
-                    "post-install": self.post_install_action_id,
-                }
-            },
+            # "install-hooks": {
+            #     f"STUDIO:{self.studio_id}": {
+            #         "post-install": self.post_install_action_id,
+            #     }
+            # },
         }
         self.package_path.joinpath(CONFIG_FILE).write_text(
             yaml.dump(package_config, indent=2, sort_keys=False, Dumper=AnsibleDumper),
@@ -143,9 +151,29 @@ class ActionModule(ActionBase):
                 "file": "layout.yaml",
             },
             "template": template,
+            "build-hooks": self.studio_build_hooks,
         }
+        if self.assigned_tags_query is not None:
+            # None means default -> all devices.
+            # "" means empty -> no devices.
+            # Anything else is evaluated as a query string.
+            studio_config.update({"assigned-tags-query": self.assigned_tags_query})
+
         studio_path = self.package_path.joinpath(self.studio_id)
         studio_path.mkdir(mode=0o775, exist_ok=True)
+        if self.studio_inputs:
+            studio_config.update(
+                {
+                    "inputs": {
+                        "file": "inputs.yaml",
+                    }
+                }
+            )
+            studio_path.joinpath("inputs.yaml").write_text(
+                yaml.dump(self.studio_inputs, indent=2, sort_keys=False, Dumper=AnsibleDumper),
+                encoding="UTF-8",
+            )
+
         studio_path.joinpath(CONFIG_FILE).write_text(
             yaml.dump(studio_config, indent=2, sort_keys=False, Dumper=AnsibleDumper),
             encoding="UTF-8",
@@ -166,28 +194,51 @@ class ActionModule(ActionBase):
     def create_actions(self, studio_design: dict, datamappings: list, tagmappings: list) -> None:
         studio_prebuild_action_file = get(studio_design, "build_pipeline.studio_prebuild_action_file", default=DEFAULT_STUDIO_PREBUILD_ACTION_FILE)
         description = f"Studio Pre-build action for Studio {self.studio_name}"
-        action_id = f"action-studio-prebuild-{self.studio_id}"
-        self.create_action(studio_prebuild_action_file, description, action_id, datamappings=datamappings)
-        self.action_associations["StudioPreBuildActionIDs"].append(action_id)
+        action_id_1 = f"action-studio-prebuild-{self.studio_id}"
+        self.create_action(studio_prebuild_action_file, description, action_id_1, datamappings=datamappings)
+        self.studio_build_hooks.append(
+            {
+                "id": f"{self.studio_id}-{action_id_1}",
+                "action-id": action_id_1,
+                "stage": "INPUT_VALIDATION",
+                "scope": "SCOPE_STUDIO",
+            }
+        )
 
         workspace_prebuild_action_file = get(studio_design, "build_pipeline.workspace_prebuild_action_file", default=DEFAULT_WORKSPACE_PREBUILD_ACTION_FILE)
         self.depends_on_avd_package = False
         description = f"Workspace Pre-build action for Studio {self.studio_name}"
-        action_id = f"action-workspace-prebuild-{self.studio_id}"
-        self.create_action(workspace_prebuild_action_file, description, action_id, tagmappings=tagmappings)
-        self.action_associations["WorkspacePreBuildActionIDs"].append(action_id)
+        action_id_2 = f"action-workspace-prebuild-{self.studio_id}"
+        self.create_action(workspace_prebuild_action_file, description, action_id_2, tagmappings=tagmappings)
+        self.studio_build_hooks.append(
+            {
+                "id": f"{self.studio_id}-{action_id_2}",
+                "action-id": action_id_2,
+                "stage": "INPUT_VALIDATION",
+                "scope": "SCOPE_WORKSPACE",
+                "depends-on": [f"{self.studio_id}-{action_id_1}"],
+            }
+        )
 
         studio_prerender_action_file = get(studio_design, "build_pipeline.studio_prerender_action_file", default=DEFAULT_STUDIO_PRERENDER_ACTION_FILE)
         description = f"Studio Pre-render action for Studio {self.studio_name}"
-        action_id = f"action-studio-prerender-{self.studio_id}"
-        self.create_action(studio_prerender_action_file, description, action_id)
-        self.action_associations["StudioPreRenderActionIDs"].append(action_id)
+        action_id_3 = f"action-studio-prerender-{self.studio_id}"
+        self.create_action(studio_prerender_action_file, description, action_id_3)
+        self.studio_build_hooks.append(
+            {
+                "id": f"{self.studio_id}-{action_id_3}",
+                "action-id": action_id_3,
+                "stage": "INPUT_VALIDATION",
+                "scope": "SCOPE_STUDIO",
+                "depends-on": [f"{self.studio_id}-{action_id_2}"],
+            }
+        )
 
-        post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
-        description = f"Post-install action for Studio {self.studio_name}"
-        # Storing in class since we need this when creating the package.
-        self.post_install_action_id = f"action-post-install-{self.studio_id}"
-        self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
+        # post_install_action_file = DEFAULT_ACTION_SCRIPT_PATH.joinpath("action-post-install.py")
+        # description = f"Post-install action for Studio {self.studio_name}"
+        # # Storing in class since we need this when creating the package.
+        # self.post_install_action_id = f"action-post-install-{self.studio_id}"
+        # self.create_action(post_install_action_file, description, self.post_install_action_id, action_type="PACKAGING_INSTALL_HOOK")
 
     def create_action(
         self,
@@ -252,32 +303,32 @@ class ActionModule(ActionBase):
                     },
                 ]
             )
-        elif action_type == "PACKAGING_INSTALL_HOOK":
-            action_config["static-params"].extend(
-                [
-                    {
-                        "name": "StudioPreBuildActionIDs",
-                        "description": "",
-                        "required": False,
-                        "hidden": True,
-                        "default": ",".join(self.action_associations["StudioPreBuildActionIDs"]),
-                    },
-                    {
-                        "name": "WorkspacePreBuildActionIDs",
-                        "description": "",
-                        "required": False,
-                        "hidden": True,
-                        "default": ",".join(self.action_associations["WorkspacePreBuildActionIDs"]),
-                    },
-                    {
-                        "name": "StudioPreRenderActionIDs",
-                        "description": "",
-                        "required": False,
-                        "hidden": True,
-                        "default": ",".join(self.action_associations["StudioPreRenderActionIDs"]),
-                    },
-                ]
-            )
+        # elif action_type == "PACKAGING_INSTALL_HOOK":
+        #     action_config["static-params"].extend(
+        #         [
+        #             {
+        #                 "name": "StudioPreBuildActionIDs",
+        #                 "description": "",
+        #                 "required": False,
+        #                 "hidden": True,
+        #                 "default": ",".join(self.action_associations["StudioPreBuildActionIDs"]),
+        #             },
+        #             {
+        #                 "name": "WorkspacePreBuildActionIDs",
+        #                 "description": "",
+        #                 "required": False,
+        #                 "hidden": True,
+        #                 "default": ",".join(self.action_associations["WorkspacePreBuildActionIDs"]),
+        #             },
+        #             {
+        #                 "name": "StudioPreRenderActionIDs",
+        #                 "description": "",
+        #                 "required": False,
+        #                 "hidden": True,
+        #                 "default": ",".join(self.action_associations["StudioPreRenderActionIDs"]),
+        #             },
+        #         ]
+        #     )
 
         action_path = self.package_path.joinpath(action_id)
         action_path.mkdir(mode=0o775, exist_ok=True)
