@@ -850,6 +850,8 @@ keys:
     type: str
   fabric_ip_addressing:
     type: dict
+    description: Configuration of the builtin IP addressing logic. These settings
+      may not apply when using custom templates.
     keys:
       mlag:
         type: dict
@@ -867,11 +869,57 @@ keys:
               `odd_id`.\n  - odd_id: `(odd_id - 1) / 2`. Requires the node_group to
               have a node with an odd ID and a node with an even ID.\n  - same_subnet:
               the offset will always be zero.\n    This allocation method will cause
-              every MLAG link to be addressed with the same /31 subnet.\n"
+              every MLAG link to be addressed with the same /31 subnet."
             valid_values:
             - first_id
             - odd_id
             - same_subnet
+      inband_mgmt_ip:
+        type: dict
+        description: 'Automatic assigment of `inband_mgmt_ip` unless it is statically
+          configured under the node settings.
+
+
+          For L2 devices, the `inband_mgmt_ip` will be automatically assigned from
+          either the configured `inband_mgmt_subnet` or
+
+          the subnet of the VLAN set with `inband_mgmt_vlan`. No IP will be assigned
+          if no subnet is found.
+
+
+          L3 devices are not supported for automatic assignment of `inband_mgmt_ip`.'
+        keys:
+          algorithm:
+            type: str
+            default: id
+            valid_values:
+            - id
+            - pool_manager
+            description: "The IP address assignment is calculated using one of the
+              following algorithms:\n- id: Offset into the subnet with `node_id +
+              <ips_reserved_for_gateways>`.\n- pool_manager: Activate the pool manager.\n\n
+              \ The pools are dynamically built and matched on the following data:\n
+              \ - Subnet from either the configured `inband_mgmt_subnet` or the subnet
+              of the VLAN set with `inband_mgmt_vlan`\n  - `inband_mgmt_vrf`\n  -
+              The VRF under which the `inband_mgmt_vlan` is configured.\n\n  Note:
+              This means changing any of these fields may renumber the devices!\n\n
+              \ Each pool will assign the first available IP starting from `1 + <ips_reserved_for_gateways>`.\n\n
+              \ Stale entries will be reclaimed from each pool automatically after
+              every run.\n  A stale entry is an entry that was not accessed during
+              the run."
+          ips_reserved_for_gateways:
+            type: int
+            default: 3
+      pools_file:
+        type: str
+        description: 'Path to file to use for storing IP pool data when using "pool_manager"
+          as algorithm.
+
+          By default the path is "intended/data/<fabric_name>-ips.yml".
+
+
+          Note: Since the pool manager will remove stale entries after every run,
+          each fabric should be using it''s own file.'
   fabric_name:
     documentation_options:
       table: fabric-topology
