@@ -6,12 +6,31 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-# Dummy placeholder for future types.
+# Dummy placeholders for future types.
 DeviceHostname = str
 DeviceInputs = object
+FeatureConfig = object
 FeatureFacts = object
 IntrastructureLink = object
 StructuredConfig = object
+
+
+class Feature(ABC):
+    """
+    Abstract class to be subclassed per feature.
+    Contains types to be instantiated for this feature.
+    Also contains a helper method to quickly detect if the feature should be enabled or not.
+    """
+
+    name: str
+    FactsFactory: type[FeatureFactsFactory]
+    FactsCollection: type[FeatureFactsCollection]
+    StructuredConfigFactory: type[FeatureStructuredConfigFactory]
+
+    @staticmethod
+    @abstractmethod
+    def is_enabled(feature_config: FeatureConfig, device: DeviceHostname, device_inputs: DeviceInputs) -> bool:
+        """Return if feature should be enabled for this device"""
 
 
 class FeatureFactsFactory(ABC):
@@ -45,10 +64,12 @@ class FeatureFactsFactory(ABC):
 
     device: DeviceHostname
     device_inputs: DeviceInputs
+    feature: Feature
 
-    def __init__(self, device: DeviceHostname, device_inputs: DeviceInputs) -> None:
+    def __init__(self, device: DeviceHostname, device_inputs: DeviceInputs, feature: Feature) -> None:
         self.device = device
         self.device_inputs = device_inputs
+        self.feature = feature
 
     @abstractmethod
     def get_facts(self) -> FeatureFacts:
@@ -108,11 +129,13 @@ class FeatureStructuredConfigFactory(ABC):
     device: DeviceHostname
     device_inputs: DeviceInputs
     facts: FeatureFactsCollection
+    feature: Feature
 
-    def __init__(self, device: DeviceHostname, device_inputs: DeviceInputs, facts: FeatureFactsCollection) -> None:
+    def __init__(self, device: DeviceHostname, device_inputs: DeviceInputs, facts: FeatureFactsCollection, feature: Feature) -> None:
         self.device = device
         self.device_inputs = device_inputs
         self.facts = facts
+        self.feature = feature
 
     def get_structured_config(self) -> StructuredConfig | None:
         """
