@@ -6,7 +6,7 @@ from __future__ import annotations
 from abc import ABC
 from enum import Enum
 from functools import cached_property
-from typing import Annotated, Any, ClassVar, Generator, Literal
+from typing import Annotated, Any, ClassVar, Generator, Literal, Union
 
 from pydantic import BaseModel, ConfigDict, Field, constr
 
@@ -27,14 +27,14 @@ from .resolvemodel import merge_schema_from_ref
 """
 This module provides Pydantic models (classes) representing the meta-schema of the AVD Schema.
 
-Each variable in the schema is called a field, and for each type of field we have a corrosponding Pydantic model:
+Each variable in the schema is called a field, and for each type of field we have a corresponding Pydantic model:
 - AvdSchemaInt
 - AvdSchemaBool
 - AvdSchemaStr
 - AvdSchemaList
 - AvdSchemaDict
 
-The alias "AvdSchemaField" is a union of of all the models above, and can be used as easy type hint for any field type.
+The alias "AvdSchemaField" is a union of all the models above, and can be used as an easy type hint for any field type.
 
 All the type-specific Pydantic models inherit the common base class "AvdSchemaBaseModel", and have local overrides
 as needed. For example, only "AvdSchemaList" and "AvdSchemaDict" need to parse child fields.
@@ -45,10 +45,6 @@ The overall schema is covered by the class "AristaAvdSchema" which inherits from
 
 KEY_PATTERN = r"^[a-z][a-z0-9_]*$"
 """Common pattern to match legal key strings"""
-DYNAMIC_KEY_PATTERN = r"^[a-z][a-z0-9_.]*$"
-"""Common pattern to match legal dynamic key strings"""
-KEY_PATTERN_WITH_UPPERCASE = r"^[a-zA-Z][a-zA-Z0-9_]*$"
-"""This is a temporary pattern allowing uppercase keys too"""
 
 
 class AvdSchemaBaseModel(BaseModel, ABC):
@@ -99,7 +95,7 @@ class AvdSchemaBaseModel(BaseModel, ABC):
     display_name: str | None = Field(None, pattern=r"^[^\n]+$")
     """Free text display name for forms and documentation (single line)"""
     description: Annotated[str, constr(min_length=1)] | None = None
-    """Free text description for forms and documentation (multi line)"""
+    """Free text description for forms and documentation (multi-line)"""
     required: bool | None = None
     """Key is required"""
     deprecation: Deprecation | None = None
@@ -133,7 +129,7 @@ class AvdSchemaBaseModel(BaseModel, ABC):
     Simple types or the first key of a dict contained in a list will be rendered with a hyphen as part of the indentation.
     """
 
-    # Signal to __init__ if the $ref in the schema should be resolved before initilizing the pydantic model.
+    # Signal to __init__ if the $ref in the schema should be resolved before initializing the pydantic model.
     _resolve_schema: ClassVar[bool] = True
     _only_resolve_schema: ClassVar[str | None] = None
 
@@ -454,7 +450,7 @@ class AvdSchemaList(AvdSchemaBaseModel):
     def model_post_init(self, __context: Any) -> None:
         """
         Overrides BaseModel.model_post_init().
-        Runs after this model including all child models have been initilized.
+        Runs after this model including all child models have been initialized.
 
         Sets Internal attributes on child schema (if set):
             - _parent_schema
@@ -509,14 +505,13 @@ class AvdSchemaDict(AvdSchemaBaseModel):
     default: dict[str, Any] | None = None
     """Default value"""
 
-    # TODO: Change pattern to KEY_PATTERN once we have removed all upper case keys from the schema
-    keys: dict[constr(pattern=KEY_PATTERN_WITH_UPPERCASE), Annotated[AvdSchemaField, Field(discriminator="type")]] | None = None
+    keys: dict[str, Annotated[AvdSchemaField, Field(discriminator="type")]] | None = None
     """
     Dictionary of dictionary-keys in the format `{<keyname>: {<schema>}}`.
     `keyname` must use snake_case.
     `schema` is the schema for each key. This is a recursive schema, so the value must conform to AVD Schema.
     """
-    dynamic_keys: dict[constr(pattern=DYNAMIC_KEY_PATTERN), Annotated[AvdSchemaField, Field(discriminator="type")]] | None = None
+    dynamic_keys: dict[str, Annotated[AvdSchemaField, Field(discriminator="type")]] | None = None
     """
     Dictionary of dynamic dictionary-keys in the format `{<variable.path>: {<schema>}}`.
     `variable.path` is a variable path using dot-notation and pointing to a variable under the parent dictionary containing dictionary-keys.
@@ -532,7 +527,7 @@ class AvdSchemaDict(AvdSchemaBaseModel):
     """Schema name used when exporting to JSON schema"""
     field_id: str | None = Field(None, alias="$id")
     """Schema ID used when exporting to JSON schema"""
-    field_defs: dict[constr(pattern=KEY_PATTERN), Annotated[AvdSchemaField, Field(discriminator="type")]] = Field(None, alias="$defs")
+    field_defs: dict[str, Annotated[AvdSchemaField, Field(discriminator="type")]] = Field(None, alias="$defs")
     """Storage for reusable schema fragments"""
 
     # Type of schema docs generators to use for this schema field.
@@ -565,7 +560,7 @@ class AvdSchemaDict(AvdSchemaBaseModel):
     def model_post_init(self, __context: Any) -> None:
         """
         Overrides BaseModel.model_post_init().
-        Runs after this model including all child models have been initilized.
+        Runs after this model including all child models have been initialized.
 
         Set Internal attributes on child schemas:
             - _key
@@ -614,5 +609,8 @@ class AristaAvdSchema(AvdSchemaDict):
         return []
 
 
-AvdSchemaField = AvdSchemaInt | AvdSchemaBool | AvdSchemaStr | AvdSchemaList | AvdSchemaDict
+# Workaround for tox until Python 3.9 is dropped
+# https://github.com/microsoft/pyright/issues/4615#issuecomment-1426685471
+AvdSchemaField = Union[AvdSchemaInt, AvdSchemaBool, AvdSchemaStr, AvdSchemaList, AvdSchemaDict]
+# AvdSchemaField = AvdSchemaInt | AvdSchemaBool | AvdSchemaStr | AvdSchemaList | AvdSchemaDict
 """Alias for any of the AvdSchema field types"""
