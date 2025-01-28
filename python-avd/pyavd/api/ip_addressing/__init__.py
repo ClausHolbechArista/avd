@@ -3,16 +3,16 @@
 # that can be found in the LICENSE file.
 import ipaddress
 from collections import ChainMap
-from typing import Any
+from typing import Any, Protocol
 
-from pyavd._eos_designs.avdfacts import AvdFacts
+from pyavd._eos_designs.avdfacts import AvdFactsProtocol
 from pyavd._errors import AristaAvdError
 from pyavd._utils import get_ip_from_pool
 
 from .utils import UtilsMixin
 
 
-class AvdIpAddressing(AvdFacts, UtilsMixin):
+class AvdIpAddressingProtocol(AvdFactsProtocol, UtilsMixin, Protocol):
     """
     Class used to render IP addresses either from custom Jinja2 templates or using default Python Logic.
 
@@ -360,3 +360,7 @@ class AvdIpAddressing(AvdFacts, UtilsMixin):
             ip_address = get_ip_from_pool(wan_ha_ipv4_pool, prefixlen, 0, 0)
 
         return f"{ip_address}/{prefixlen}"
+
+
+class AvdIpAddressing(AvdIpAddressingProtocol):
+    """TODO: Add docstring."""
