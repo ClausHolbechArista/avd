@@ -6,16 +6,16 @@
 from __future__ import annotations
 
 from collections import ChainMap
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any
 
-from pyavd._eos_designs.avdfacts import AvdFactsProtocol
+from pyavd._eos_designs.avdfacts import AvdFacts
 from pyavd._utils import AvdStringFormatter, default, strip_null_from_data
 
 if TYPE_CHECKING:
-    from pyavd._eos_designs.shared_utils import SharedUtilsProtocol
+    from pyavd._eos_designs.shared_utils import SharedUtils
 
 
-class AvdInterfaceDescriptionsProtocol(AvdFactsProtocol, Protocol):
+class AvdInterfaceDescriptions(AvdFacts):
     """
     Class used to render Interface Descriptions either from custom Jinja2 templates or using default Python Logic.
 
@@ -485,7 +485,7 @@ class InterfaceDescriptionData:
     - Breaking changes may happen between major releases.
     """
 
-    _shared_utils: SharedUtilsProtocol
+    _shared_utils: SharedUtils
     description: str | None
     """Set description for interface"""
     interface: str | None
@@ -514,6 +514,40 @@ class InterfaceDescriptionData:
     """The WAN Carrier this interface is connected to"""
     wan_circuit_id: str | None
     """The WAN Circuit ID for this interface."""
+
+    def __init__(
+        self,
+        shared_utils: SharedUtils,
+        description: str | None = None,
+        interface: str | None = None,
+        link_type: str | None = None,
+        peer: str | None = None,
+        peer_interface: str | None = None,
+        peer_channel_group_id: int | None = None,
+        peer_node_group: str | None = None,
+        peer_type: str | None = None,
+        port_channel_id: int | None = None,
+        port_channel_description: str | None = None,
+        vlan: int | None = None,
+        vrf: str | None = None,
+        wan_carrier: str | None = None,
+        wan_circuit_id: str | None = None,
+    ) -> None:
+        self._shared_utils = shared_utils
+        self.description = description
+        self.interface = interface
+        self.link_type = link_type
+        self.peer = peer
+        self.peer_interface = peer_interface
+        self.peer_channel_group_id = peer_channel_group_id
+        self.peer_node_group = peer_node_group
+        self.peer_type = peer_type
+        self.port_channel_id = port_channel_id
+        self.port_channel_description = port_channel_description
+        self.vlan = vlan
+        self.vrf = vrf
+        self.wan_carrier = wan_carrier
+        self.wan_circuit_id = wan_circuit_id
 
     @property
     def mpls_overlay_role(self) -> str | None:
@@ -554,40 +588,3 @@ class InterfaceDescriptionData:
     @property
     def type(self) -> str:
         return self._shared_utils.type
-
-class AvdInterfaceDescriptions(AvdInterfaceDescriptionsProtocol):
-    """TODO: fix this."""
-    def __init__(
-        self,
-        shared_utils: SharedUtilsProtocol,
-        description: str | None = None,
-        interface: str | None = None,
-        link_type: str | None = None,
-        peer: str | None = None,
-        peer_interface: str | None = None,
-        peer_channel_group_id: int | None = None,
-        peer_node_group: str | None = None,
-        peer_type: str | None = None,
-        port_channel_id: int | None = None,
-        port_channel_description: str | None = None,
-        vlan: int | None = None,
-        vrf: str | None = None,
-        wan_carrier: str | None = None,
-        wan_circuit_id: str | None = None,
-    ) -> None:
-        self._shared_utils = shared_utils
-        self.description = description
-        self.interface = interface
-        self.link_type = link_type
-        self.peer = peer
-        self.peer_interface = peer_interface
-        self.peer_channel_group_id = peer_channel_group_id
-        self.peer_node_group = peer_node_group
-        self.peer_type = peer_type
-        self.port_channel_id = port_channel_id
-        self.port_channel_description = port_channel_description
-        self.vlan = vlan
-        self.vrf = vrf
-        self.wan_carrier = wan_carrier
-        self.wan_circuit_id = wan_circuit_id
-
