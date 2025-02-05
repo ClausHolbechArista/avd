@@ -15,9 +15,12 @@ from .avd_base import AvdBase
 from .avd_indexed_list import AvdIndexedList
 
 if TYPE_CHECKING:
+    from typing import Iterator
+
     from typing_extensions import Self
 
-    from .type_vars import T_AvdModel
+    from .type_vars import T_AvdModel, T
+
 
 LOGGER = getLogger(__name__)
 
@@ -137,9 +140,13 @@ class AvdModel(AvdBase):
 
         We only get here if the attribute is not set already, and next call will skip this since the attribute is set.
         """
-        default_value = self._get_field_default_value(name)
-        setattr(self, name, default_value)
-        return default_value
+        # default_value = self._get_field_default_value(name)
+        # setattr(self, name, default_value)
+        # return default_value
+        try:
+            return UndefinedAttribute(name, self, self._fields[name]["type"])
+        except KeyError:
+            raise AttributeError(name=name, obj=self)
 
     def _get_defined_attr(self, name: str) -> Any | UndefinedType:
         """
@@ -459,3 +466,41 @@ class AvdModel(AvdBase):
                 return False
 
         return True
+
+class UndefinedAttribute(UndefinedType):
+    slots = ("name", "parent")
+
+    # Avoid inheriting the singleton new from UndefinedType
+    def __new__(cls, name: str, parent: AvdModel, my_type: T) -> T | Self:
+        if not issubclass(my_type, AvdBase):
+            new_me = parent._get_field_default_value(name)
+            setattr(parent, name, new_me)
+            return new_me
+
+        return object.__new__(cls)
+
+    def __init__(self, name: str, parent: AvdModel, my_type: type):
+        self.name = name
+        self.parent = parent
+        self.parent_type = type(parent)
+        self.__setattr__ = self.setattr
+
+    def __bool__(self) -> Literal[False]:
+        return False
+
+    def __getattr__(self, name: str) -> Self:
+        return UndefinedAttribute(name, self)
+
+    def setattr(self, name: str, value: Any) -> None:
+        new_me = self.parent._get_field_default_value(self.name)
+        if not isinstance(new_me, AvdBase):
+            raise AttributeError(name=name, obj=new_me)
+
+        # Set the attribute on the new instance, so we raise here in case the attribute is invalid.
+        setattr(new_me, name, value)
+        # It worked, so we can set the new instance on the parent,
+        # so next time the same attribute is accessed, it will get the real class instead of this UndefinedAttribute.
+        setattr(self.parent, self.name, new_me)
+
+    def __iter__(self) -> Iterator:
+        return iter(())
