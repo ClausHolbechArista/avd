@@ -16,14 +16,7 @@ metadata:
 service_routing_protocols_model: multi-agent
 snmp_server:
   hosts:
-  - host: 10.6.75.125
-    version: 2c
-    community: SNMP-COMMUNITY-2
-  - host: 10.6.75.125
-    vrf: SNMPVRF
-    version: 2c
-    community: SNMP-COMMUNITY-2
-  - host: 10.6.75.126
+  - host: 10.6.75.128
     version: '3'
     users:
     - username: USER-WRITE
@@ -35,7 +28,14 @@ snmp_server:
     vrf: SNMPVRF
     version: 2c
     community: SNMP-COMMUNITY-2
-  - host: 10.6.75.128
+  - host: 10.6.75.125
+    version: 2c
+    community: SNMP-COMMUNITY-2
+  - host: 10.6.75.125
+    vrf: SNMPVRF
+    version: 2c
+    community: SNMP-COMMUNITY-2
+  - host: 10.6.75.126
     version: '3'
     users:
     - username: USER-WRITE

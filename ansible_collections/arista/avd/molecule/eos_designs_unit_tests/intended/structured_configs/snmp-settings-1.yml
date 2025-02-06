@@ -75,21 +75,17 @@ snmp_server:
     vrf: SNMPVRF
     version: '1'
     community: SNMP-COMMUNITY-1
-  - host: 10.6.75.123
-    vrf: MGMT
-    version: 2c
-    community: SNMP-COMMUNITY-2
-  - host: 10.6.75.123
-    vrf: SNMPVRF
-    version: 2c
-    community: SNMP-COMMUNITY-2
-  - host: 10.6.75.124
+  - host: 10.6.75.128
     vrf: MGMT
     version: '3'
     users:
     - username: USER-WRITE
       authentication_level: auth
-  - host: 10.6.75.125
+  - host: 10.6.75.123
+    vrf: MGMT
+    version: 2c
+    community: SNMP-COMMUNITY-2
+  - host: 10.6.75.123
     vrf: SNMPVRF
     version: 2c
     community: SNMP-COMMUNITY-2
@@ -101,7 +97,11 @@ snmp_server:
     vrf: SNMPVRF
     version: 2c
     community: SNMP-COMMUNITY-2
-  - host: 10.6.75.128
+  - host: 10.6.75.125
+    vrf: SNMPVRF
+    version: 2c
+    community: SNMP-COMMUNITY-2
+  - host: 10.6.75.124
     vrf: MGMT
     version: '3'
     users:

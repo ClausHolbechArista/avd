@@ -62,8 +62,8 @@ sflow:
     - destination: 10.10.10.12
     source_interface: Management1
   destinations:
-  - destination: 10.10.10.10
   - destination: 10.10.10.11
+  - destination: 10.10.10.10
   source_interface: Vlan4092
   run: true
 static_routes:

@@ -6,6 +6,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from logging import getLogger
+from operator import itemgetter
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, cast
 
 from pyavd._schema.coerce_type import coerce_type
@@ -27,7 +28,11 @@ LOGGER = getLogger(__name__)
 class AvdModel(AvdBase):
     """Base class used for schema-based data classes holding dictionaries loaded from AVD inputs."""
 
-    __slots__ = ("_custom_data",)
+    __slots__ = (
+        "_custom_data",
+        "_keep_extra_keys",
+        "_raw_data",
+    )
 
     _allow_other_keys: ClassVar[bool] = False
     """Attribute telling if this class should fail or ignore unknown keys found during loading in _from_dict()."""
@@ -40,12 +45,30 @@ class AvdModel(AvdBase):
     """Map of field name to original dict key. Used when fields have the field_ prefix to get the original key."""
     _key_to_field_map: ClassVar[dict[str, str]] = {}
     """Map of dict key to field name. Used when the key is names with a reserved keyword or mixed case. E.g. `Vxlan1` or `as`."""
-
     _custom_data: dict[str, Any]
     """
     Dictionary holding extra keys given in _from_dict.
     These keys are either keys starting with underscore or any non-schema key if _from_dict was called with 'keep_extra_keys'.
     """
+    _keep_extra_keys: bool
+    """
+    Include all unknown keys from raw_data when dumping this class.
+    This can be set when the class is loaded.
+    """
+    _raw_data: dict
+    """
+    Raw data to be loaded into the this class before sub classes has been coerced into classes.
+    Keyed by the field name instead of the original key.
+    Keys will be popped from here as they are loaded.
+    """
+
+    @classmethod
+    def __new__(cls, *args, **kwargs) -> Self:
+        instance = object.__new__(cls)
+        instance._raw_data = {}
+        instance._keep_extra_keys = False
+        instance._custom_data = {}
+        return instance
 
     @classmethod
     def _load(cls, data: Mapping) -> Self:
@@ -63,28 +86,12 @@ class AvdModel(AvdBase):
             msg = f"Expecting 'data' as a 'Mapping' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
 
-        cls_args = {}
-        custom_data = {}
+        instance = cls()
 
-        for key in data:
-            if not (field := cls._get_field_name(key)):
-                if keep_extra_keys or str(key).startswith("_"):
-                    custom_data[key] = data[key]
-                    continue
-
-                if cls._allow_other_keys:
-                    # Ignore unknown keys.
-                    continue
-
-                msg = f"Invalid key '{key}'. Not available on '{cls.__name__}'."
-                raise KeyError(msg)
-
-            cls_args[field] = coerce_type(data[key], cls._fields[field]["type"])
-
-        if custom_data:
-            cls_args["_custom_data"] = custom_data
-
-        return cls(**cls_args)
+        # Shallow copy into dict and rename key to the field name.
+        instance._raw_data = {cls._key_to_field_map.get(key, key): value for key, value in data.items()}
+        instance._keep_extra_keys = keep_extra_keys
+        return instance
 
     @classmethod
     def _get_field_name(cls, key: str) -> str | None:
@@ -128,10 +135,20 @@ class AvdModel(AvdBase):
 
         This method is typically overridden when TYPE_CHECKING is True, to provider proper suggestions and type hints for the arguments.
         """
-        self._custom_data = {}
         [setattr(self, arg, arg_value) for arg, arg_value in kwargs.items() if arg_value is not Undefined]
 
         super().__init__()
+
+    def _delayed_load(self, name: str) -> Any:
+        """
+        Delayed loading of one attribute from raw_data if set.
+
+        Raises:
+            KeyError if the name is not found in either _raw_data or in the _fields.
+        """
+        value = coerce_type(self._raw_data.pop(name), self._fields[name]["type"])
+        setattr(self, name, value)
+        return value
 
     def __getattr__(self, name: str) -> Any:
         """
@@ -139,9 +156,12 @@ class AvdModel(AvdBase):
 
         We only get here if the attribute is not set already, and next call will skip this since the attribute is set.
         """
-        default_value = self._get_field_default_value(name)
-        setattr(self, name, default_value)
-        return default_value
+        if name in self._raw_data:
+            value = self._delayed_load(name)
+        else:
+            value = self._get_field_default_value(name)
+            setattr(self, name, value)
+        return value
 
     def _get_defined_attr(self, name: str) -> Any | UndefinedType:
         """
@@ -149,6 +169,9 @@ class AvdModel(AvdBase):
 
         Avoids the overridden __getattr__ to avoid default values.
         """
+        if name not in self.__dict__ and name in self._raw_data:
+            return self._delayed_load(name)
+
         return self.__dict__.get(name, Undefined)
 
     def __repr__(self) -> str:
@@ -167,12 +190,15 @@ class AvdModel(AvdBase):
 
         The check ignores the default values and is performed recursively on any nested models.
         """
-        return bool(self.__dict__) or bool(self._custom_data)
+        return bool(self.items()) or bool(self._custom_data)
 
     def __eq__(self, other: object) -> bool:
         return self._compare(other)
 
     def items(self) -> ItemsView:
+        for field in set(self._fields).intersection(self._raw_data):
+            self._delayed_load(field)
+
         return self.__dict__.items()
 
     def _strip_empties(self) -> None:
@@ -202,8 +228,8 @@ class AvdModel(AvdBase):
         """
         as_dict = {}
         ordered_field_names = list(self._fields.keys())
-        for field in sorted(self.__dict__, key=ordered_field_names.index):
-            value = self.__dict__[field]
+        for field in sorted(map(itemgetter(0), self.items()), key=ordered_field_names.index):
+            value = self._get_defined_attr(field)
 
             # Removing field_ prefix if needed.
             key = self._field_to_key_map.get(field, field)
@@ -247,7 +273,9 @@ class AvdModel(AvdBase):
 
         If the field value is not set, this will not insert a default schema values but will instead return the given 'default' value (or None).
         """
-        return self.__dict__.get(name, default)
+        if (value := self._get_defined_attr(name)) is Undefined:
+            return default
+        return value
 
     if TYPE_CHECKING:
         _update: type[Self]
@@ -448,7 +476,7 @@ class AvdModel(AvdBase):
         if not isinstance(other, type(self)):
             return False
 
-        different_keys = set(self.__dict__).symmetric_difference(other.__dict__)
+        different_keys = set(map(itemgetter(0), self.items())).symmetric_difference(map(itemgetter(0), other.items()))
         if different_keys.difference(ignore_fields):
             return False
 

@@ -65,7 +65,6 @@ ethernet_interfaces:
   peer_interface: Ethernet2 VLAN 100
   peer_type: l2leaf
   eos_cli: comment yo
-  _custom_key: custom_value
 - name: Ethernet1
   description: Comcast_999
   shutdown: false
