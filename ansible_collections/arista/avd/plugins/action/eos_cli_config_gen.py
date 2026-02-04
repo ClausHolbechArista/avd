@@ -23,11 +23,15 @@ from ansible_collections.arista.avd.plugins.plugin_utils.utils import (
 )
 
 if TYPE_CHECKING:
+    from pyavd_utils.passwords import aes_decrypt
+
     from pyavd import get_device_config, get_device_doc
     from pyavd._utils import strip_empties_from_dict, template
     from pyavd.j2filters import add_md_toc
 
 try:
+    from pyavd_utils.passwords import aes_decrypt
+
     from pyavd import get_device_config, get_device_doc
     from pyavd._utils import strip_empties_from_dict, template
     from pyavd.j2filters import add_md_toc
@@ -197,8 +201,9 @@ class ActionModule(ActionBase):
             )
             raise AnsibleActionFail(message=msg)
 
-        with file_path.open(mode="r", encoding="utf-8") as f:
-            return json.load(f)
+        structured_config = file_path.read_bytes()
+        structured_config = aes_decrypt(structured_config, b"avd45678901234567890123456789012")
+        return json.loads(structured_config)
 
 
 def setup_module_logging(hostname: str, result: dict) -> None:

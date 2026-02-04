@@ -25,6 +25,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.utils import (
 if TYPE_CHECKING:
     from ansible.playbook.task import Task
     from ansible.template import Templar
+    from pyavd_utils.passwords import aes_decrypt
 
     from pyavd._eos_designs.eos_designs_facts.get_facts import get_facts
     from pyavd._errors import AristaAvdError
@@ -32,6 +33,8 @@ if TYPE_CHECKING:
     from pyavd.api.schemas import AVDDesign
 
 try:
+    from pyavd_utils.passwords import aes_decrypt
+
     from pyavd._eos_designs.eos_designs_facts.get_facts import get_facts
     from pyavd._errors import AristaAvdError
     from pyavd.api.pool_manager import PoolManager
@@ -135,8 +138,9 @@ class ActionModule(ActionBase):
                 )
                 raise AnsibleActionFail(message=msg)
 
-            with file_path.open(mode="r", encoding="utf-8") as f:
-                host_hostvars = json.load(f)
+            host_hostvars = file_path.read_bytes()
+            host_hostvars = aes_decrypt(host_hostvars, b"avd45678901234567890123456789012")
+            host_hostvars = json.loads(host_hostvars)
 
             # Load host hostvars into the AVDDesign data class.
             all_inputs[host] = AVDDesign._from_dict(host_hostvars)

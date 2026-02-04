@@ -25,6 +25,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.utils import (
 from ansible_collections.arista.avd.plugins.plugin_utils.utils.avd_action_plugin import AvdActionPlugin, AvdLoggingConfig
 
 if TYPE_CHECKING:
+    from pyavd_utils.passwords import aes_decrypt, aes_encrypt
     from pyavd_utils.validation import Configuration, ValidationResult, get_validated_data
 
     from pyavd._schema.models.constants import EOS_CLI_CONFIG_GEN_INPUT_KEYS, EOS_CLI_CONFIG_GEN_ROLE_KEYS
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
     from pyavd._utils.filtered_map_view import FilteredMapView
 
 try:
+    from pyavd_utils.passwords import aes_decrypt, aes_encrypt
     from pyavd_utils.validation import Configuration, ValidationResult, get_validated_data
 
     from pyavd._schema.models.constants import EOS_CLI_CONFIG_GEN_INPUT_KEYS, EOS_CLI_CONFIG_GEN_ROLE_KEYS
@@ -454,8 +456,10 @@ def _template_host_worker(hostname: str, output_path: Path, schema_name: SCHEMA_
         templated_hostvars = dict(hostvars_wrapper)
 
         output_file_path = output_path / f"{hostname}.json"
-        with output_file_path.open(mode="w", encoding="utf-8") as f:
-            json.dump(templated_hostvars, f, skipkeys=True, default=lambda _: "<not serializable>", indent=4)
+
+        json_data = json.dumps(templated_hostvars, skipkeys=True, default=lambda _: "<not serializable>", indent=4).encode("utf-8")
+        json_data = aes_encrypt(json_data, b"avd45678901234567890123456789012")
+        output_file_path.write_bytes(json_data)
 
         return TemplateWorkerSuccess(hostname=hostname, output_file=str(output_file_path))
 
@@ -495,20 +499,22 @@ def _validate_host_worker(
             # YAML input: load and convert to JSON for validation.
             with input_file_path.open(mode="r", encoding="utf-8") as f:
                 data = yaml.load(f, Loader=yaml.CSafeLoader)
-            json_data = json.dumps(data)
+            json_data = json.dumps(data).encode("utf-8")
         else:
             # JSON input: read directly.
-            with input_file_path.open(mode="r", encoding="utf-8") as f:
-                json_data = f.read()
+            input_data = input_file_path.read_bytes()
+            json_data = aes_decrypt(input_data, b"avd45678901234567890123456789012")
 
         # Validation in Rust, releasing the GIL.
-        validated_data_result = get_validated_data(data_as_json=json_data, schema_name=SCHEMA_MAP[schema_name], configuration=configuration)
+        validated_data_result = get_validated_data(data=json_data, schema_name=SCHEMA_MAP[schema_name], configuration=configuration)
         validation_result, validated_data = validated_data_result.validation_result, validated_data_result.validated_data
 
         output_file = None
         if validated_data:
             output_file_path = output_path / f"{hostname}.json"
-            with output_file_path.open(mode="w", encoding="utf-8") as f:
+
+            validated_data = aes_encrypt(validated_data, b"avd45678901234567890123456789012")
+            with output_file_path.open(mode="wb") as f:
                 f.write(validated_data)
             output_file = str(output_file_path)
 
