@@ -74,3 +74,5 @@ network_services_keys:
   - name: tenant_b
   - name: tenant_c
   - name: tenant_d
+  - name: tenant_parent_a
+  - name: tenant_parent_b

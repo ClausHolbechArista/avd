@@ -1,0 +1,14 @@
+---
+tenant_parent_a:
+  - name: Tenant_PARENT_A
+    l2vlans:
+      - id: 3901
+        name: PARENT_A_ONLY
+        tags: [parent-a]
+
+tenant_parent_b:
+  - name: Tenant_PARENT_B
+    l2vlans:
+      - id: 3902
+        name: PARENT_B_ONLY
+        tags: [parent-b]
