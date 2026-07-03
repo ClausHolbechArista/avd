@@ -6,6 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from pyavd._schema.models.avd_base import AvdBase
+from pyavd._schema.models.avd_profile import AvdProfile
 
 from .constants import ACCEPTED_COERCION_MAP
 
@@ -45,7 +46,9 @@ def coerce_type(value: Any, target_type: type[T]) -> T:
             return target_type._load(data=value)
         except TypeError as exception:
             raise_coerce_error(value, target_type, exception)
-
+    elif issubclass(target_type, AvdProfile):
+        # Not sure about this ...
+        return value
     else:
         raise_coerce_error(value, target_type)
 

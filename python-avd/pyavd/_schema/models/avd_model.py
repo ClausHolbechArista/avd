@@ -13,6 +13,7 @@ from pyavd._schema.coerce_type import coerce_type
 from pyavd._utils import Undefined, UndefinedType, merge
 
 from .avd_base import AvdBase
+from .avd_profile import AvdProfile
 from .avd_indexed_list import AvdIndexedList
 
 if TYPE_CHECKING:
@@ -52,19 +53,35 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
     Set holding the skipped keys given in _from_dict.
     These are useful to detect ignored eos_cli_config_gen keys.
     """
-
     @classmethod
     def _load(cls, data: Mapping) -> Self:
         """Returns a new instance loaded with the data from the given dict."""
-        return cls._from_dict(data)
+        return cls._from_dict_internal(data)
+
+    @classmethod
+    def _resolve_profiles(cls, data):
+        for field_key, field_desc in cls._fields.items():
+            field_type = field_desc["type"]
+            if issubclass(field_type, AvdProfile):
+                descriptor = cls.__dict__[field_key]
+                descriptor._populate_profiles(data)
+            elif issubclass(field_type, AvdModel):
+                field_type._resolve_profiles(data)
 
     @classmethod
     def _from_dict(cls: type[T_AvdModel], data: Mapping) -> T_AvdModel:
+        c = cls._from_dict_internal(data)
+        # Doing another pass after we resolved the model ensures that we are aware of all the profile
+        # references
+        c._resolve_profiles(data)
+        return c
+
+    @classmethod
+    def _from_dict_internal(cls: type[T_AvdModel], data: Mapping) -> T_AvdModel:
         """Returns a new instance loaded with the data from the given dict."""
         if not isinstance(data, Mapping):
             msg = f"Expecting 'data' as a 'Mapping' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
-
         cls_args = {}
         custom_data = {}
         skipped_keys = set()
@@ -89,7 +106,6 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
             cls_args["_custom_data"] = custom_data
         if skipped_keys:
             cls_args["_skipped_keys"] = skipped_keys
-
         return cls(**cls_args)
 
     @classmethod
