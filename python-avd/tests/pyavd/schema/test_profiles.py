@@ -7,6 +7,7 @@ from typing import ClassVar
 
 import pytest
 
+from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_model import AvdModel
 from pyavd._schema.models.avd_profile import AvdProfile
 
@@ -30,7 +31,7 @@ def test_avd_model_stuff() -> None:
         some_model: SomeModel
         example_profile = AvdProfile("source", "some_model")
 
-    schema = DemoSchema._from_dict({
+    data = DemoSchema._from_dict({
         "example_profile": "test",
         "some_model": {
             "number": 10,
@@ -42,8 +43,8 @@ def test_avd_model_stuff() -> None:
             },
         ],
     })
-    assert schema.some_model.number == 10
-    assert schema.some_model.string == "some-string"
+    assert data.some_model.number == 10
+    assert data.some_model.string == "some-string"
 
 
 def test_avd_profile_with_deep_source_and_target() -> None:
@@ -128,7 +129,7 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
 
         nested: NestedSchema
 
-    schema = DemoSchema._from_dict({
+    data = DemoSchema._from_dict({
         "nested": {
             "nested_profile": "test",
             "some_model": {
@@ -143,8 +144,53 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
         ],
     })
 
-    assert schema.nested.some_model.number == 10
-    assert schema.nested.some_model.string == "some-string"
+    assert data.nested.some_model.number == 10
+    assert data.nested.some_model.string == "some-string"
+
+
+def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
+    class Device(AvdModel):
+        _fields: ClassVar[dict] = {
+            "name": {"type": str},
+            "underlay_profile": {"type": AvdProfile},
+            "underlay_routing_protocol": {"type": str},
+        }
+
+        name: str
+        underlay_profile = AvdProfile("underlay_profiles", ".")
+        underlay_routing_protocol: str
+
+    class Devices(AvdIndexedList[str, Device]):
+        _item_type = Device
+        _primary_key = "name"
+
+    class DemoSchema(AvdModel):
+        _allow_other_keys = True
+        _fields: ClassVar[dict] = {
+            "underlay_profiles": {"type": list},
+            "devices": {"type": Devices},
+        }
+
+        underlay_profiles: list
+        devices: Devices
+
+    data = DemoSchema._from_dict({
+        "underlay_profiles": [
+            {
+                "name": "foo",
+                "underlay_routing_protocol": "ospf",
+            },
+        ],
+        "devices": [
+            {
+                "name": "mydevice",
+                "underlay_profile": "foo",
+            },
+        ],
+    })
+
+    device_input = data.devices["mydevice"]
+    assert device_input.underlay_routing_protocol == "ospf"
 
 
 def test_avd_profile_raises_when_profile_does_not_exist() -> None:

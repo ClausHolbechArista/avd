@@ -56,7 +56,12 @@ class AvdProfile:
         self._storage: dict[str, ProfileData] = {}
         self._instances = []
         self._source = source.split(".")
-        self._target = target.split(".")
+
+        if target == ".":
+            # apply the profile to this object
+            self._target = []
+        else:
+            self._target = target.split(".")
 
     def _resolve_profile(self, instance: AvdModel, profile_data: ProfileData, target: list[str]) -> None:
         """Apply profile data to the model found by walking the target path."""
@@ -65,7 +70,7 @@ class AvdProfile:
             new_data = dict(profile_data)
             new_data.pop("name", None)
 
-            profile_model = model_cls._from_dict(new_data)
+            profile_model = model_cls._from_dict_internal(new_data)
 
             instance._combine(profile_model)
             return
@@ -100,7 +105,11 @@ class AvdProfile:
             data = data[path_part]
         profiles = cast("Sequence[ProfileData]", data)
         for profile in profiles:
-            self._storage[cast("str", profile["name"])] = profile
+            profile_key = profile.get("name")
+            if profile_key is None:
+                msg = "profile is missing 'name' key"
+                raise KeyError(msg)
+            self._storage[cast("str", profile_key)] = profile
         for instance, profile_name in self._instances:
             if profile_name not in self._storage:
                 msg = f"profile '{profile_name}' is missing"
