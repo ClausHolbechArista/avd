@@ -36,10 +36,10 @@ def test_avd_model_stuff() -> None:
         "some_model": {
             "number": 10,
         },
-        "source": [
+        "source": [ 
             {
                 "string": "some-string",
-                "name": "test",
+                "profile": "test",
             },
         ],
     })
@@ -91,7 +91,7 @@ def test_avd_profile_with_deep_source_and_target() -> None:
             "nested": {
                 "profiles": [
                     {
-                        "name": "test",
+                        "profile": "test",
                         "string": "some-string",
                     },
                 ],
@@ -139,7 +139,7 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
         "source": [
             {
                 "string": "some-string",
-                "name": "test",
+                "profile": "test",
             },
         ],
     })
@@ -177,7 +177,7 @@ def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
     data = DemoSchema._from_dict({
         "underlay_profiles": [
             {
-                "name": "foo",
+                "profile": "foo",
                 "underlay_routing_protocol": "ospf",
             },
         ],
@@ -221,7 +221,7 @@ def test_avd_profile_raises_when_profile_does_not_exist() -> None:
             "source": [
                 {
                     "string": "some-string",
-                    "name": "test",
+                    "profile": "test",
                 },
             ],
         })
@@ -272,7 +272,7 @@ def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_ex
                 "nested": {
                     "profiles": [
                         {
-                            "name": "test",
+                            "profile": "test",
                             "string": "some-string",
                         },
                     ],

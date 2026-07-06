@@ -60,8 +60,6 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
 
     @classmethod
     def _resolve_profiles(cls, data):
-        from .avd_list import AvdList
-
         for field_key, field_desc in cls._fields.items():
             field_type = field_desc["type"]
             if not isinstance(field_type, type):
@@ -72,10 +70,9 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
                 descriptor._populate_profiles(data)
             elif issubclass(field_type, AvdModel):
                 field_type._resolve_profiles(data)
-            elif issubclass(field_type, (AvdIndexedList, AvdList)):
-                item_type = field_type._item_type
-                if isinstance(item_type, type) and issubclass(item_type, AvdModel):
-                    item_type._resolve_profiles(data)
+            elif isinstance(item_type := getattr(field_type, "_item_type", None), type) \
+                and issubclass(item_type, AvdModel):
+                item_type._resolve_profiles(data)
 
     @classmethod
     def _from_dict(cls: type[T_AvdModel], data: Mapping) -> T_AvdModel:

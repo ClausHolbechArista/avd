@@ -17,7 +17,7 @@ class AvdProfile:
     Descriptor field used to apply reusable configuration snippets called profiles.
 
     A profile is loaded from a list of mappings, where each mapping must have a
-    unique ``name`` key. The descriptor stores the profile name assigned during
+    unique ``profile`` key. The descriptor stores the profile name assigned during
     model loading and applies the matching profile after the full input mapping
     has been loaded.
 
@@ -26,7 +26,7 @@ class AvdProfile:
     .. code-block:: yaml
 
         interface_profiles:
-          - name: uplink
+          - profile: uplink
             description: Uplink interface
             shutdown: false
 
@@ -45,7 +45,7 @@ class AvdProfile:
     profile when the profile model is combined into the instance.
     """
 
-    def __init__(self, source: str, target: str) -> None:
+    def __init__(self, catalog: str, target: str = ".") -> None:
         """
         Initialize an AvdProfile descriptor.
 
@@ -55,7 +55,7 @@ class AvdProfile:
         """
         self._storage: dict[str, ProfileData] = {}
         self._instances = []
-        self._source = source.split(".")
+        self._source = catalog.split(".")
 
         if target == ".":
             # apply the profile to this object
@@ -68,7 +68,7 @@ class AvdProfile:
         if not target:
             model_cls = type(instance)
             new_data = dict(profile_data)
-            new_data.pop("name", None)
+            new_data.pop("profile", None)
 
             profile_model = model_cls._from_dict_internal(new_data)
 
@@ -102,12 +102,15 @@ class AvdProfile:
     def _populate_profiles(self, data: Mapping[str, Any]) -> None:
         """Load profile definitions from input data and resolve all pending references."""
         for path_part in self._source:
+            if path_part not in data:
+                # This means that the data needed under the source path is missing, so no profiles provided 
+                return
             data = data[path_part]
         profiles = cast("Sequence[ProfileData]", data)
         for profile in profiles:
-            profile_key = profile.get("name")
+            profile_key = profile.get("profile")
             if profile_key is None:
-                msg = "profile is missing 'name' key"
+                msg = "profile is missing 'profile' key"
                 raise KeyError(msg)
             self._storage[cast("str", profile_key)] = profile
         for instance, profile_name in self._instances:

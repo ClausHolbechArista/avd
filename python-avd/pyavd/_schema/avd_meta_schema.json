@@ -118,6 +118,20 @@
               "description": "Default value",
               "type": "string"
             },
+            "profile_selector": {
+              "description": "Convert string value to lower case before performing validation",
+              "type": "object",
+              "required": ["catalog"],
+              "properties": {
+                "catalog": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string",
+                  "default": "."
+                }
+              }
+            },
             "format": {
               "type": "string",
               "enum": [

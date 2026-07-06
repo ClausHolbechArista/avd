@@ -17,6 +17,7 @@
     | [<samp>&nbsp;&nbsp;-&nbsp;profile</samp>](## "devices.[].profile") | String |  |  |  | Inherit settings from a profile defined under `device_profiles`.<br>Max two levels of profile inheritance: device -> profile -> parent_profile<br>This takes precedence over the global `device_profile` key. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;type</samp>](## "devices.[].type") | String |  |  |  | Set the type of the device as defined under `node_type_keys`.<br>This takes precedence over the global `type` key. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;mlag_group</samp>](## "devices.[].mlag_group") | String |  |  |  | Name of MLAG group. Exactly two devices must share the same mlag_group.<br>The group is used for creating MLAG Pairs, for port-channel descriptions on peers and for MLAG domain-id (unless mlag_domain_id is set). |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;management_profile</samp>](## "devices.[].management_profile") | String |  |  |  | Reference to a defined management profile. It allows to reuse different device configuration snippets for multiple devices |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "devices.[].name") | String | Required, Unique |  |  | The Node Name is used as "hostname". |
 
 === "YAML"
@@ -61,6 +62,9 @@
         # Name of MLAG group. Exactly two devices must share the same mlag_group.
         # The group is used for creating MLAG Pairs, for port-channel descriptions on peers and for MLAG domain-id (unless mlag_domain_id is set).
         mlag_group: <str>
+
+        # Reference to a defined management profile. It allows to reuse different device configuration snippets for multiple devices
+        management_profile: <str>
 
         # The Node Name is used as "hostname".
         name: <str; required; unique>
