@@ -9,7 +9,18 @@ import pytest
 
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_model import AvdModel
-from pyavd._schema.models.avd_profile import AvdProfile
+from pyavd._schema.models.avd_profile_ref import AvdProfileRef
+from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel
+
+
+class ProfileTestRootModel(EosDesignsRootModel):
+    """Minimal EosDesignsRootModel for profile resolver tests."""
+
+    class _DynamicKeys(AvdModel):
+        _dynamic_key_maps: ClassVar[list[dict]] = []
+        _fields: ClassVar[dict] = {}
+
+    _allow_other_keys = True
 
 
 def test_avd_model_stuff() -> None:
@@ -21,30 +32,41 @@ def test_avd_model_stuff() -> None:
         number: int
         string: str
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class ProfiledModel(AvdModel):
         _fields: ClassVar[dict] = {
-            "example_profile": {"type": AvdProfile},
+            "example_profile": {"type": AvdProfileRef, "catalog": "source", "target": "profiled_model/some_model"},
             "some_model": {"type": SomeModel},
         }
 
         some_model: SomeModel
-        example_profile = AvdProfile("source", "some_model")
+        example_profile: AvdProfileRef | None
 
-    data = DemoSchema._from_dict({
-        "example_profile": "test",
-        "some_model": {
-            "number": 10,
-        },
-        "source": [ 
-            {
-                "string": "some-string",
-                "profile": "test",
+    class DemoSchema(ProfileTestRootModel):
+        _fields: ClassVar[dict] = {
+            "profiled_model": {"type": ProfiledModel},
+        }
+
+        profiled_model: ProfiledModel
+
+    data = DemoSchema._from_dict(
+        {
+            "profiled_model": {
+                "example_profile": "test",
+                "some_model": {
+                    "number": 10,
+                },
             },
-        ],
-    })
-    assert data.some_model.number == 10
-    assert data.some_model.string == "some-string"
+            "source": [
+                {
+                    "string": "some-string",
+                    "profile": "test",
+                },
+            ],
+        },
+        load_custom_structured_config=False,
+    )
+    assert data.profiled_model.some_model.number == 10
+    assert data.profiled_model.some_model.string == "some-string"
 
 
 def test_avd_profile_with_deep_source_and_target() -> None:
@@ -68,39 +90,50 @@ def test_avd_profile_with_deep_source_and_target() -> None:
         }
         target_container: TargetContainer
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class ProfiledModel(AvdModel):
         _fields: ClassVar[dict] = {
-            "example_profile": {"type": AvdProfile},
+            "example_profile": {"type": AvdProfileRef, "catalog": "profile_catalog/nested/profiles", "target": "profiled_model/settings/target_container/some_model"},
             "settings": {"type": Settings},
         }
 
         settings: Settings
-        example_profile = AvdProfile("profile_catalog.nested.profiles", "settings.target_container.some_model")
+        example_profile: AvdProfileRef | None
 
-    schema = DemoSchema._from_dict({
-        "example_profile": "test",
-        "settings": {
-            "target_container": {
-                "some_model": {
-                    "number": 10,
+    class DemoSchema(ProfileTestRootModel):
+        _fields: ClassVar[dict] = {
+            "profiled_model": {"type": ProfiledModel},
+        }
+
+        profiled_model: ProfiledModel
+
+    data = DemoSchema._from_dict(
+        {
+            "profiled_model": {
+                "example_profile": "test",
+                "settings": {
+                    "target_container": {
+                        "some_model": {
+                            "number": 10,
+                        },
+                    },
+                },
+            },
+            "profile_catalog": {
+                "nested": {
+                    "profiles": [
+                        {
+                            "profile": "test",
+                            "string": "some-string",
+                        },
+                    ],
                 },
             },
         },
-        "profile_catalog": {
-            "nested": {
-                "profiles": [
-                    {
-                        "profile": "test",
-                        "string": "some-string",
-                    },
-                ],
-            },
-        },
-    })
+        load_custom_structured_config=False,
+    )
 
-    assert schema.settings.target_container.some_model.number == 10
-    assert schema.settings.target_container.some_model.string == "some-string"
+    assert data.profiled_model.settings.target_container.some_model.number == 10
+    assert data.profiled_model.settings.target_container.some_model.string == "some-string"
 
 
 def test_avd_profile_resolves_profiles_on_nested_model() -> None:
@@ -114,35 +147,37 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
 
     class NestedSchema(AvdModel):
         _fields: ClassVar[dict] = {
-            "nested_profile": {"type": AvdProfile},
+            "nested_profile": {"type": AvdProfileRef, "catalog": "source", "target": "nested/some_model"},
             "some_model": {"type": SomeModel},
         }
 
         some_model: SomeModel
-        nested_profile = AvdProfile("source", "some_model")
+        nested_profile: AvdProfileRef | None
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class DemoSchema(ProfileTestRootModel):
         _fields: ClassVar[dict] = {
             "nested": {"type": NestedSchema},
         }
 
         nested: NestedSchema
 
-    data = DemoSchema._from_dict({
-        "nested": {
-            "nested_profile": "test",
-            "some_model": {
-                "number": 10,
+    data = DemoSchema._from_dict(
+        {
+            "nested": {
+                "nested_profile": "test",
+                "some_model": {
+                    "number": 10,
+                },
             },
+            "source": [
+                {
+                    "string": "some-string",
+                    "profile": "test",
+                },
+            ],
         },
-        "source": [
-            {
-                "string": "some-string",
-                "profile": "test",
-            },
-        ],
-    })
+        load_custom_structured_config=False,
+    )
 
     assert data.nested.some_model.number == 10
     assert data.nested.some_model.string == "some-string"
@@ -152,20 +187,19 @@ def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
     class Device(AvdModel):
         _fields: ClassVar[dict] = {
             "name": {"type": str},
-            "underlay_profile": {"type": AvdProfile},
+            "underlay_profile": {"type": AvdProfileRef, "catalog": "underlay_profiles", "target": "devices"},
             "underlay_routing_protocol": {"type": str},
         }
 
         name: str
-        underlay_profile = AvdProfile("underlay_profiles", ".")
+        underlay_profile: AvdProfileRef | None
         underlay_routing_protocol: str
 
     class Devices(AvdIndexedList[str, Device]):
         _item_type = Device
         _primary_key = "name"
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class EosDesigns(ProfileTestRootModel):
         _fields: ClassVar[dict] = {
             "underlay_profiles": {"type": list},
             "devices": {"type": Devices},
@@ -174,20 +208,23 @@ def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
         underlay_profiles: list
         devices: Devices
 
-    data = DemoSchema._from_dict({
-        "underlay_profiles": [
-            {
-                "profile": "foo",
-                "underlay_routing_protocol": "ospf",
-            },
-        ],
-        "devices": [
-            {
-                "name": "mydevice",
-                "underlay_profile": "foo",
-            },
-        ],
-    })
+    data = EosDesigns._from_dict(
+        {
+            "underlay_profiles": [
+                {
+                    "profile": "foo",
+                    "underlay_routing_protocol": "ospf",
+                },
+            ],
+            "devices": [
+                {
+                    "name": "mydevice",
+                    "underlay_profile": "foo",
+                },
+            ],
+        },
+        load_custom_structured_config=False,
+    )
 
     device_input = data.devices["mydevice"]
     assert device_input.underlay_routing_protocol == "ospf"
@@ -202,29 +239,40 @@ def test_avd_profile_raises_when_profile_does_not_exist() -> None:
         number: int
         string: str
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class ProfiledModel(AvdModel):
         _fields: ClassVar[dict] = {
-            "example_profile": {"type": AvdProfile},
+            "example_profile": {"type": AvdProfileRef, "catalog": "source", "target": "some_model"},
             "some_model": {"type": SomeModel},
         }
 
         some_model: SomeModel
-        example_profile = AvdProfile("source", "some_model")
+        example_profile: AvdProfileRef | None
+
+    class DemoSchema(ProfileTestRootModel):
+        _fields: ClassVar[dict] = {
+            "profiled_model": {"type": ProfiledModel},
+        }
+
+        profiled_model: ProfiledModel
 
     with pytest.raises(KeyError, match="profile 'missing' is missing"):
-        DemoSchema._from_dict({
-            "example_profile": "missing",
-            "some_model": {
-                "number": 10,
-            },
-            "source": [
-                {
-                    "string": "some-string",
-                    "profile": "test",
+        DemoSchema._from_dict(
+            {
+                "profiled_model": {
+                    "example_profile": "missing",
+                    "some_model": {
+                        "number": 10,
+                    },
                 },
-            ],
-        })
+                "source": [
+                    {
+                        "string": "some-string",
+                        "profile": "test",
+                    },
+                ],
+            },
+            load_custom_structured_config=False,
+        )
 
 
 def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_exist() -> None:
@@ -248,34 +296,45 @@ def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_ex
         }
         target_container: TargetContainer
 
-    class DemoSchema(AvdModel):
-        _allow_other_keys = True
+    class ProfiledModel(AvdModel):
         _fields: ClassVar[dict] = {
-            "example_profile": {"type": AvdProfile},
+            "example_profile": {"type": AvdProfileRef, "catalog": "profile_catalog/nested/profiles", "target": "settings/target_container/some_model"},
             "settings": {"type": Settings},
         }
 
         settings: Settings
-        example_profile = AvdProfile("profile_catalog.nested.profiles", "settings.target_container.some_model")
+        example_profile: AvdProfileRef | None
+
+    class DemoSchema(ProfileTestRootModel):
+        _fields: ClassVar[dict] = {
+            "profiled_model": {"type": ProfiledModel},
+        }
+
+        profiled_model: ProfiledModel
 
     with pytest.raises(KeyError, match="profile 'missing' is missing"):
-        DemoSchema._from_dict({
-            "example_profile": "missing",
-            "settings": {
-                "target_container": {
-                    "some_model": {
-                        "number": 10,
+        DemoSchema._from_dict(
+            {
+                "profiled_model": {
+                    "example_profile": "missing",
+                    "settings": {
+                        "target_container": {
+                            "some_model": {
+                                "number": 10,
+                            },
+                        },
+                    },
+                },
+                "profile_catalog": {
+                    "nested": {
+                        "profiles": [
+                            {
+                                "profile": "test",
+                                "string": "some-string",
+                            },
+                        ],
                     },
                 },
             },
-            "profile_catalog": {
-                "nested": {
-                    "profiles": [
-                        {
-                            "profile": "test",
-                            "string": "some-string",
-                        },
-                    ],
-                },
-            },
-        })
+            load_custom_structured_config=False,
+        )

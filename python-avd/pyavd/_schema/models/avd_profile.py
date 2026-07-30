@@ -3,23 +3,46 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING, Any, TypeAlias, cast
+from typing import TYPE_CHECKING, Any, TypedDict, cast
+
+from .avd_indexed_list import AvdIndexedList
+from .avd_list import AvdList
+from .avd_model import AvdModel
+from .avd_profile_ref import AvdProfileRef
 
 if TYPE_CHECKING:
-    from .avd_model import AvdModel
+    from collections.abc import Mapping, Sequence
 
-ProfileData: TypeAlias = Mapping[str, Any]
+class ProfileData(TypedDict):
+    """Profile catalog item with a required profile name."""
+
+    profile: str
 
 
-class AvdProfile:
+class AvdProfileResolver:
     """
-    Descriptor field used to apply reusable configuration snippets called profiles.
+    Resolve ``AvdProfileRef`` fields against reusable profile catalogs.
 
-    A profile is loaded from a list of mappings, where each mapping must have a
-    unique ``profile`` key. The descriptor stores the profile name assigned during
-    model loading and applies the matching profile after the full input mapping
-    has been loaded.
+    Profile reference fields are represented as ``AvdProfileRef`` in generated
+    ``_fields`` metadata. The same metadata also carries the profile catalog path
+    and target path:
+
+    .. code-block:: python
+
+        _fields = {
+            "interface_profile": {
+                "type": AvdProfileRef,
+                "catalog": "interface_profiles",
+                "target": "interface",
+            },
+        }
+
+    ``EosDesignsRootModel`` owns the resolver. Before normal model loading, the
+    resolver walks the schema tree and loads every referenced catalog from the
+    root input data. Each catalog item must be a mapping with a unique
+    ``profile`` key. After normal model loading, the resolver walks the instance
+    tree and combines each selected profile model into the model instance that
+    owns the corresponding reference field.
 
     Example:
 
@@ -38,84 +61,86 @@ class AvdProfile:
 
     .. code-block:: python
 
-        interface_profile = AvdProfile("interface_profiles", "interface")
+        _fields = {
+            "interface_profile": {
+                "type": AvdProfileRef,
+                "catalog": "interface_profiles",
+                "target": "interface",
+            },
+            "interface": {"type": Interface},
+        }
 
-    Loading the model applies the ``uplink`` profile to the ``interface`` model.
-    Values already set on the instance take precedence over values from the
-    profile when the profile model is combined into the instance.
+    If ``interface_profile`` is set to ``uplink``, loading the root model applies
+    the ``uplink`` profile to the ``interface`` model. Values already set on the
+    instance take precedence over values from the profile when the profile model
+    is combined into the instance.
     """
 
-    def __init__(self, catalog: str, target: str = ".") -> None:
-        """
-        Initialize an AvdProfile descriptor.
+    def __init__(self) -> None:
+        """Initialize an empty profile storage."""
+        self._storage: dict[tuple[type[AvdModel], str], AvdModel] = {}
 
-        Args:
-            source: Dot-separated path in the input mapping where the profiles are defined.
-            target: Dot-separated path to the model where the selected profile should be applied.
-        """
-        self._storage: dict[str, ProfileData] = {}
-        self._instances = []
-        self._source = catalog.split(".")
 
-        if target == ".":
-            # apply the profile to this object
-            self._target = []
-        else:
-            self._target = target.split(".")
+    def _detect_profile_references(self, cls: type[AvdModel], data: Mapping) -> None:
+        """Load catalogs for all ``AvdProfileRef`` fields declared below ``cls``."""
+        for field_spec in cls._fields.values():
+            t = field_spec["type"]
 
-    def _resolve_profile(self, instance: AvdModel, profile_data: ProfileData, target: list[str]) -> None:
-        """Apply profile data to the model found by walking the target path."""
-        if not target:
-            model_cls = type(instance)
-            new_data = dict(profile_data)
-            new_data.pop("profile", None)
+            if t is AvdProfileRef:
+                self._populate_profiles(cls, data, field_spec["catalog"], field_spec.get("target", "."))
+            elif isinstance(t, type) and issubclass(t, AvdModel):
+                self._detect_profile_references(t, data)
+            elif isinstance(t, type) and issubclass(t, (AvdList, AvdIndexedList)) and issubclass(t._item_type, AvdModel):
+                self._detect_profile_references(t._item_type, data)
 
-            profile_model = model_cls._from_dict_internal(new_data)
+    def _resolve_profiles(self, instance: AvdModel) -> None:
+        """Apply selected profile models for all ``AvdProfileRef`` values below ``instance``."""
+        for field_name, field_spec in instance._fields.items():
+            t = field_spec.get("type")
+            if t is AvdProfileRef:
+                ref = getattr(instance, field_name)
+                if ref is None:
+                    continue
+                try:
+                    profile_model = self._storage[(type(instance), ref)]
+                except KeyError as error:
+                    msg = f"profile '{ref}' is missing"
+                    raise KeyError(msg) from error
+                instance._combine(profile_model)
+            elif isinstance(t, type) and issubclass(t, AvdModel):
+                self._resolve_profiles(getattr(instance, field_name))
+            elif isinstance(t, type) and issubclass(t, (AvdList, AvdIndexedList)) and issubclass(t._item_type, AvdModel):
+                for next_instance in getattr(instance, field_name):
+                    self._resolve_profiles(next_instance)
 
-            instance._combine(profile_model)
-            return
+    def _populate_profiles(self, model: type[AvdModel], data: Mapping[str, Any], catalog: str, target: str) -> None:
+        """Load one profile catalog and store partial profile models for ``model``."""
+        target_path = [] if target == "." else target.split(".")
 
-        next_target = target[0]
-        instance = getattr(instance, next_target)
-        self._resolve_profile(instance=instance, profile_data=profile_data, target=target[1:])
+        def _to_partial_model(profile_data: ProfileData) -> AvdModel:
+            d = dict(profile_data)
+            d.pop("profile", None)
+            for p in reversed(target_path):
+                d = {p: d}
+            return model._from_dict(d)
 
-    def _get_profile_data(self, instance: AvdModel, target: list[str]) -> Any:
-        """Return the model or value found by walking the target path."""
-        if not target:
-            return instance
+        profile_data = data
+        prefix = []
 
-        next_target = target[0]
-        instance = getattr(instance, next_target)
-        return self._get_profile_data(instance, target=target[1:])
+        # Traverse the input data to fetch the list of profiles
+        for p in catalog.split("."):
+            prefix.append(p)
+            if p not in profile_data:
+                msg = f"missing key in input data: {'.'.join(prefix)}"
+                raise KeyError(msg)
 
-    def __set__(self, instance: AvdModel, profile_name: str) -> None:
-        """Store a pending profile reference for the given model instance."""
-        self._instances.append((instance, profile_name))
+            profile_data = profile_data[p]
 
-    def __get__(self, instance: AvdModel | None, owner: type[AvdModel]) -> Any:
-        """Return the descriptor on the class or resolved profile target on an instance."""
-        if instance is None:
-            return self
-
-        return self._get_profile_data(instance, self._target)
-
-    def _populate_profiles(self, data: Mapping[str, Any]) -> None:
-        """Load profile definitions from input data and resolve all pending references."""
-        for path_part in self._source:
-            if path_part not in data:
-                # This means that the data needed under the source path is missing, so no profiles provided 
-                return
-            data = data[path_part]
-        profiles = cast("Sequence[ProfileData]", data)
+        # Read the list of profiles and cast them to the model's instances
+        profiles = cast("Sequence[ProfileData]", profile_data)
         for profile in profiles:
             profile_key = profile.get("profile")
             if profile_key is None:
                 msg = "profile is missing 'profile' key"
                 raise KeyError(msg)
-            self._storage[cast("str", profile_key)] = profile
-        for instance, profile_name in self._instances:
-            if profile_name not in self._storage:
-                msg = f"profile '{profile_name}' is missing"
-                raise KeyError(msg)
-
-            self._resolve_profile(instance, self._storage[profile_name], target=self._target[:])
+            self._storage[(model, profile_key)] = _to_partial_model(profile)

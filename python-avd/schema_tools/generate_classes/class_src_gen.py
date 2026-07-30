@@ -136,7 +136,7 @@ class SrcGenBool(SrcGenBase["AvdSchemaBool"]):
 class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
     """
     Provides the method "generate_class_src" used to build source code for Python classes representing the schema.
-    
+
     Profiles are the special case for string fields. They allow to reference the configuration snippets, which are defined
     based on schema definitions provided in sub-field `profile_selector`. These snippets are resolved before transforming
     into structured config.
@@ -144,7 +144,7 @@ class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
 
     def get_type(self) -> str:
         if self.schema.profile_selector is not None:
-            return "AvdProfile"
+            return "AvdProfileRef"
 
         return super().get_type()
 
@@ -159,7 +159,6 @@ class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
         return _ProfileFieldSrc(
             name=field_src.name,
             key=field_src.key,
-            field_type=field_src.field_type,
             type_hints=type_hints,
             optional=field_src.optional,
             default_value=field_src.default_value,
@@ -567,23 +566,30 @@ class SrcGenRootDict(SrcGenDict):
         return classes, fields
 
 
-@dataclass
+@dataclass(kw_only=True)
 class _ProfileFieldSrc(FieldSrc):
-    """Field source for profile selector descriptors."""
+    """Field source for generated profile reference fields."""
 
+    field_type: str = "AvdProfileRef"
     catalog: str = ""
     target: str = "."
 
-    def __str__(self) -> str:
-        """Render field as __init__ argument without descriptor assignment."""
-        return f"{FieldSrc.field_as_class_attr(self)} | UndefinedType = Undefined"
-
     def field_as_class_attr(self) -> str:
-        """Render field as class attribute with profile descriptor assignment."""
-        return f'{super().field_as_class_attr()} = AvdProfile(catalog="{self.catalog}", target="{self.target}")'
+        return f"{self.name}: {self.field_type} | None"
+
+    def field_as_dict_str(self) -> str:
+        """
+        Return this profile reference field as an entry for ``_fields``.
+
+        The generated metadata stores both the runtime marker type and the
+        profile selector paths consumed by ``AvdProfileResolver``.
+        """
+        dict_fields_src = [f'"type": {self.field_type}', f'"catalog": "{self.catalog}"', f'"target": "{self.target}"']
+
+        return f'"{self.name}": {{{", ".join(dict_fields_src)}}}'
 
     def get_imports(self) -> set:
-        """Return imports needed for the profile descriptor field."""
+        """Return imports needed for the profile reference marker type."""
         imports = super().get_imports()
-        imports.add("from pyavd._schema.models.avd_profile import AvdProfile")
+        imports.add(f"from pyavd._schema.models.avd_profile_ref import {self.field_type}")
         return imports
