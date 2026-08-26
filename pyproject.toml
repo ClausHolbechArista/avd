@@ -69,6 +69,9 @@ schema-tools = [
     "referencing>=0.37.0",
 ]
 
+[tool.uv.sources]
+pyavd-utils = { path = "../pyavd-utils" }
+
 [tool.ruff]
 line-length = 160
 extend-exclude = [
