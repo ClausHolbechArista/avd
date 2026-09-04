@@ -9,8 +9,10 @@ import pytest
 
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_model import AvdModel
+from pyavd._schema.models.avd_profile import AvdProfileResolver
 from pyavd._schema.models.avd_profile_ref import AvdProfileRef
 from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel
+from pyavd.api.schemas import ConsolidatedAVDDesign
 
 
 class ProfileTestRootModel(EosDesignsRootModel):
@@ -21,6 +23,14 @@ class ProfileTestRootModel(EosDesignsRootModel):
         _fields: ClassVar[dict] = {}
 
     _allow_other_keys = True
+
+
+def load_with_profiles(schema_cls: type[ProfileTestRootModel], data: dict, load_custom_structured_config: bool = False) -> ProfileTestRootModel:
+    """Load test schema data and apply profiles with an explicit resolver."""
+    profile_resolver = AvdProfileResolver()
+    profiles = profile_resolver._detect_profile_refs(schema_cls, data, load_custom_structured_config)
+    result = schema_cls._from_dict(data, load_custom_structured_config=load_custom_structured_config)
+    return profile_resolver._apply_profiles(result, profiles)
 
 
 def test_avd_model_stuff() -> None:
@@ -48,7 +58,8 @@ def test_avd_model_stuff() -> None:
 
         profiled_model: ProfiledModel
 
-    data = DemoSchema._from_dict(
+    data = load_with_profiles(
+        DemoSchema,
         {
             "profiled_model": {
                 "example_profile": "test",
@@ -63,10 +74,94 @@ def test_avd_model_stuff() -> None:
                 },
             ],
         },
-        load_custom_structured_config=False,
     )
     assert data.profiled_model.some_model.number == 10
     assert data.profiled_model.some_model.string == "some-string"
+
+
+def test_avd_profile_resolver_applies_device_profiles_to_consolidated_avd_designs() -> None:
+    class ProfiledConsolidatedAVDDesign(ConsolidatedAVDDesign):
+        _fields: ClassVar[dict] = {
+            **ConsolidatedAVDDesign._fields,
+            "consolidated_profile": {"type": AvdProfileRef, "catalog": "consolidated_profiles", "target": "consolidated"},
+        }
+
+        consolidated_profile: AvdProfileRef | None
+
+    inputs = {
+        "fabric_name": "FABRIC",
+        "devices": [
+            {
+                "name": "leaf1",
+                "type": "l2leaf",
+            },
+            {
+                "name": "leaf2",
+                "type": "l2leaf",
+            },
+        ],
+        "dns_settings_profile": None,
+    }
+    profile_catalog = [
+        {
+            "profile": "leaf1_profile",
+            "type": "leaf1_type_from_profile",
+            "group": "LEAF1_GROUP_FROM_PROFILE",
+            "mlag": True,
+            "node_group_length": 11,
+        },
+        {
+            "profile": "leaf2_profile",
+            "type": "leaf2_type_from_profile",
+            "group": "LEAF2_GROUP_FROM_PROFILE",
+            "mlag": False,
+            "node_group_length": 22,
+        },
+    ]
+    dns_settings_profile_catalog = [
+        {
+            "profile": "leaf1_dns_profile",
+            "domain": "leaf1.example.com",
+            "domain_list": ["leaf1.example.com"],
+        },
+        {
+            "profile": "leaf2_dns_profile",
+            "domain": "leaf2.example.com",
+            "domain_list": ["leaf2.example.com"],
+        },
+    ]
+
+    results = {}
+    for device_name, profile_name, dns_settings_profile_name in (
+        ("leaf1", "leaf1_profile", "leaf1_dns_profile"),
+        ("leaf2", "leaf2_profile", "leaf2_dns_profile"),
+    ):
+        inputs["dns_settings_profile"] = dns_settings_profile_name
+        consolidated_avd_design = ConsolidatedAVDDesign._from_avd_design(device_name, inputs)
+        profiled_data = {
+            **consolidated_avd_design._dump(),
+            "consolidated_profile": profile_name,
+            "consolidated_profiles": profile_catalog,
+            "dns_settings_profiles": dns_settings_profile_catalog,
+        }
+
+        profile_resolver = AvdProfileResolver()
+        profiles = profile_resolver._detect_profile_refs(ProfiledConsolidatedAVDDesign, profiled_data)
+        result = ProfiledConsolidatedAVDDesign._from_dict(profiled_data)
+        results[device_name] = profile_resolver._apply_profiles(result, profiles)
+
+    assert results["leaf1"].consolidated.type == "leaf1_type_from_profile"
+    assert results["leaf1"].consolidated.group == "LEAF1_GROUP_FROM_PROFILE"
+    assert results["leaf1"].consolidated.mlag is True
+    assert results["leaf1"].consolidated.node_group_length == 11
+    assert results["leaf2"].consolidated.type == "leaf2_type_from_profile"
+    assert results["leaf2"].consolidated.group == "LEAF2_GROUP_FROM_PROFILE"
+    assert results["leaf2"].consolidated.mlag is False
+    assert results["leaf2"].consolidated.node_group_length == 22
+    assert results["leaf1"].inputs.dns_settings.domain == "leaf1.example.com"
+    assert list(results["leaf1"].inputs.dns_settings.domain_list) == ["leaf1.example.com"]
+    assert results["leaf2"].inputs.dns_settings.domain == "leaf2.example.com"
+    assert list(results["leaf2"].inputs.dns_settings.domain_list) == ["leaf2.example.com"]
 
 
 def test_avd_profile_with_deep_source_and_target() -> None:
@@ -92,7 +187,11 @@ def test_avd_profile_with_deep_source_and_target() -> None:
 
     class ProfiledModel(AvdModel):
         _fields: ClassVar[dict] = {
-            "example_profile": {"type": AvdProfileRef, "catalog": "profile_catalog/nested/profiles", "target": "profiled_model/settings/target_container/some_model"},
+            "example_profile": {
+                "type": AvdProfileRef,
+                "catalog": "profile_catalog/nested/profiles",
+                "target": "profiled_model/settings/target_container/some_model",
+            },
             "settings": {"type": Settings},
         }
 
@@ -106,7 +205,8 @@ def test_avd_profile_with_deep_source_and_target() -> None:
 
         profiled_model: ProfiledModel
 
-    data = DemoSchema._from_dict(
+    data = load_with_profiles(
+        DemoSchema,
         {
             "profiled_model": {
                 "example_profile": "test",
@@ -129,7 +229,6 @@ def test_avd_profile_with_deep_source_and_target() -> None:
                 },
             },
         },
-        load_custom_structured_config=False,
     )
 
     assert data.profiled_model.settings.target_container.some_model.number == 10
@@ -161,7 +260,8 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
 
         nested: NestedSchema
 
-    data = DemoSchema._from_dict(
+    data = load_with_profiles(
+        DemoSchema,
         {
             "nested": {
                 "nested_profile": "test",
@@ -176,7 +276,6 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
                 },
             ],
         },
-        load_custom_structured_config=False,
     )
 
     assert data.nested.some_model.number == 10
@@ -208,7 +307,8 @@ def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
         underlay_profiles: list
         devices: Devices
 
-    data = EosDesigns._from_dict(
+    data = load_with_profiles(
+        EosDesigns,
         {
             "underlay_profiles": [
                 {
@@ -223,7 +323,6 @@ def test_avd_profile_resolves_underlay_profile_on_list_item() -> None:
                 },
             ],
         },
-        load_custom_structured_config=False,
     )
 
     device_input = data.devices["mydevice"]
@@ -256,7 +355,8 @@ def test_avd_profile_raises_when_profile_does_not_exist() -> None:
         profiled_model: ProfiledModel
 
     with pytest.raises(KeyError, match="profile 'missing' is missing"):
-        DemoSchema._from_dict(
+        load_with_profiles(
+            DemoSchema,
             {
                 "profiled_model": {
                     "example_profile": "missing",
@@ -271,7 +371,6 @@ def test_avd_profile_raises_when_profile_does_not_exist() -> None:
                     },
                 ],
             },
-            load_custom_structured_config=False,
         )
 
 
@@ -313,7 +412,8 @@ def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_ex
         profiled_model: ProfiledModel
 
     with pytest.raises(KeyError, match="profile 'missing' is missing"):
-        DemoSchema._from_dict(
+        load_with_profiles(
+            DemoSchema,
             {
                 "profiled_model": {
                     "example_profile": "missing",
@@ -336,5 +436,4 @@ def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_ex
                     },
                 },
             },
-            load_custom_structured_config=False,
         )

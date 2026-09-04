@@ -11,6 +11,7 @@ from pyavd._schema.coerce_type import coerce_type
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_list import AvdList
 from pyavd._schema.models.avd_model import AvdModel
+from pyavd._schema.models.avd_profile_ref import AvdProfileRef
 from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel
 
 if TYPE_CHECKING:
@@ -16471,6 +16472,7 @@ class EosDesigns(EosDesignsRootModel):
             "profile": {"type": str},
             "type": {"type": str},
             "mlag_group": {"type": str},
+            "management_profile": {"type": AvdProfileRef, "catalog": "management_profiles", "target": "."},
             "downlink_pools": {"type": DownlinkPools},
             "id": {"type": int},
             "platform": {"type": str},
@@ -16621,6 +16623,11 @@ class EosDesigns(EosDesignsRootModel):
         The group is used for
         creating MLAG Pairs, for port-channel descriptions on peers and for MLAG domain-id (unless
         mlag_domain_id is set).
+        """
+        management_profile: AvdProfileRef | None
+        """
+        Reference to a defined management profile. It allows to reuse different device configuration
+        snippets for multiple devices
         """
         downlink_pools: DownlinkPools
         """
@@ -17565,6 +17572,7 @@ class EosDesigns(EosDesignsRootModel):
                 profile: str | UndefinedType | None = Undefined,
                 type: str | UndefinedType | None = Undefined,
                 mlag_group: str | UndefinedType | None = Undefined,
+                management_profile: str | UndefinedType | None = Undefined,
                 downlink_pools: DownlinkPools | UndefinedType = Undefined,
                 id: int | UndefinedType | None = Undefined,
                 platform: str | UndefinedType | None = Undefined,
@@ -17716,6 +17724,9 @@ class EosDesigns(EosDesignsRootModel):
                        The group is used for
                        creating MLAG Pairs, for port-channel descriptions on peers and for MLAG domain-id (unless
                        mlag_domain_id is set).
+                    management_profile:
+                       Reference to a defined management profile. It allows to reuse different device configuration
+                       snippets for multiple devices
                     downlink_pools:
                        IPv4 pools used for links to downlink switches. Set this on the parent switch. Cannot be combined
                        with `uplink_ipv4_pool` set on the downlink switch.
@@ -112501,6 +112512,7 @@ class EosDesigns(EosDesignsRootModel):
         "device_profiles": {"type": DeviceProfiles},
         "devices": {"type": Devices},
         "digital_twin": {"type": DigitalTwin},
+        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "dns_settings"},
         "dns_settings": {"type": DnsSettings},
         "dot1x_settings": {"type": Dot1xSettings},
         "enable_trunk_groups": {"type": bool, "default": False},
@@ -114326,6 +114338,8 @@ class EosDesigns(EosDesignsRootModel):
     Subclass of
     AvdModel.
     """
+    dns_settings_profile: AvdProfileRef | None
+    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
     dns_settings: DnsSettings
     """
     DNS settings
@@ -115924,6 +115938,7 @@ class EosDesigns(EosDesignsRootModel):
             device_profiles: DeviceProfiles | UndefinedType = Undefined,
             devices: Devices | UndefinedType = Undefined,
             digital_twin: DigitalTwin | UndefinedType = Undefined,
+            dns_settings_profile: str | UndefinedType | None = Undefined,
             dns_settings: DnsSettings | UndefinedType = Undefined,
             dot1x_settings: Dot1xSettings | UndefinedType = Undefined,
             enable_trunk_groups: bool | UndefinedType = Undefined,
@@ -116570,6 +116585,7 @@ class EosDesigns(EosDesignsRootModel):
 
                    Subclass of
                    AvdModel.
+                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
                 dns_settings:
                    DNS settings
 

@@ -38,11 +38,18 @@ def get_device_structured_config(
     Returns:
         Device structured configuration as an instance of EOSConfig.
     """
+    from collections.abc import Mapping  # noqa: PLC0415
+
     from ._eos_designs.structured_config import get_structured_config  # noqa: PLC0415
+    from ._schema.models.avd_profile import AvdProfileResolver  # noqa: PLC0415
     from .api.schemas import ConsolidatedAVDDesign  # noqa: PLC0415
 
     # Normalize to ConsolidatedAVDDesign
     consolidated_inputs = ConsolidatedAVDDesign._from_avd_design(hostname, inputs)
+    profile_resolver = AvdProfileResolver()
+    profile_data = inputs if isinstance(inputs, Mapping) else consolidated_inputs._dump()
+    profiles = profile_resolver._detect_profile_refs(type(consolidated_inputs), profile_data)
+    consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs, profiles)
 
     return get_structured_config(
         hostname=hostname,

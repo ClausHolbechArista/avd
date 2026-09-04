@@ -212,7 +212,8 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
             # Removing field_ prefix if needed.
             key = self._field_to_key_map.get(field, field)
 
-            if issubclass(self._fields[field]["type"], AvdBase):
+            field_type = self._fields[field]["type"]
+            if isinstance(field_type, type) and issubclass(field_type, AvdBase):
                 value = cast("AvdBase", value)
                 value = None if value._created_from_null else value._dump(include_default_values=include_default_values)
 
@@ -228,7 +229,8 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
 
                 default_value = self._get_field_default_value(field)
 
-                if issubclass(self._fields[field]["type"], AvdBase):
+                field_type = self._fields[field]["type"]
+                if isinstance(field_type, type) and issubclass(field_type, AvdBase):
                     default_value = cast("AvdBase", default_value)
                     default_value = default_value._dump(include_default_values=include_default_values)
 
