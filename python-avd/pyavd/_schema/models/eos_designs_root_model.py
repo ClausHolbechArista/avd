@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from collections import ChainMap
 from collections.abc import Iterator, Mapping
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._schema.store import create_store
@@ -20,13 +20,13 @@ if TYPE_CHECKING:
 
     from pyavd._eos_designs.schema import EosDesigns
 
-    T = TypeVar("T", bound="EosDesignsRootModel")
-
 
 SKIP_KEYS = ["custom_structured_configuration_list_merge", "custom_structured_configuration_prefix"]
 
 
 class EosDesignsRootModel(AvdModel):
+    """Root model responsible for loading dynamic keys and custom structured config."""
+
     @classmethod
     def _from_dict(cls, data: Mapping, load_custom_structured_config: bool = True) -> Self:
         """
@@ -50,11 +50,14 @@ class EosDesignsRootModel(AvdModel):
             msg = f"Expecting 'data' as a 'Mapping' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
 
+        return cls._from_dict_internal(data, load_custom_structured_config=load_custom_structured_config)
+
+    @classmethod
+    def _from_dict_internal(cls, data: Mapping, load_custom_structured_config: bool = True) -> Self:
         root_data = {"_dynamic_keys": cls._get_dynamic_keys(data)}
         if load_custom_structured_config:
             root_data["_custom_structured_configurations"] = cls._CustomStructuredConfigurations(cls._get_csc_items(data))
-
-        return super()._from_dict(ChainMap(root_data, data))
+        return  super()._from_dict(ChainMap(root_data, data))
 
     @classmethod
     def _get_csc_items(cls, data: Mapping) -> Iterator[EosDesigns._CustomStructuredConfigurationsItem]:

@@ -27,7 +27,7 @@ class PrunedAVDDesign(AVDDesign):
 
 class ConsolidatedAVDDesign(AvdModel):
     """Serializable artifact containing pruned inputs and device-local consolidated data."""
-
+    _allow_other_keys = True
     _fields: ClassVar[dict] = {
         "inputs": {"type": PrunedAVDDesign},
         "consolidated": {"type": ConsolidatedData},

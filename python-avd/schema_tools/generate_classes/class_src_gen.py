@@ -3,6 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
+from dataclasses import dataclass
 from functools import cached_property
 from keyword import iskeyword
 from typing import TYPE_CHECKING, Generic, TypeVar, cast
@@ -133,7 +134,38 @@ class SrcGenBool(SrcGenBase["AvdSchemaBool"]):
 
 
 class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
-    """Provides the method "generate_class_src" used to build source code for Python classes representing the schema."""
+    """
+    Provides the method "generate_class_src" used to build source code for Python classes representing the schema.
+
+    Profiles are the special case for string fields. They allow to reference the configuration snippets, which are defined
+    based on schema definitions provided in sub-field `profile_selector`. These snippets are resolved before transforming
+    into structured config.
+    """
+
+    def get_type(self) -> str:
+        if self.schema.profile_selector is not None:
+            return "AvdProfileRef"
+
+        return super().get_type()
+
+    @cached_property
+    def field_src(self) -> FieldSrc | None:
+        """Returns FieldSrc for the given schema to be used for the field definition in the parent object."""
+        field_src = super().field_src
+        if field_src is None or self.schema.profile_selector is None:
+            return field_src
+        type_hints = [FieldTypeHintSrc(field_type="str"), FieldTypeHintSrc(field_type="None")]
+        profile_selector = self.schema.profile_selector
+        return _ProfileFieldSrc(
+            name=field_src.name,
+            key=field_src.key,
+            type_hints=type_hints,
+            optional=field_src.optional,
+            default_value=field_src.default_value,
+            description=field_src.description,
+            catalog=profile_selector.catalog,
+            target=profile_selector.target,
+        )
 
     def get_default(self) -> str | None:
         """Returns the default value from the schema as a source code string."""
@@ -144,9 +176,10 @@ class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
     @cached_property
     def class_src(self) -> LiteralSrc | None:
         """Returns LiteralSrc for the given schema to be used for the type definition in the parent object."""
+        if self.schema.profile_selector:
+            return None
         if self.schema.valid_values is None:
             return None
-
         return LiteralSrc(self.get_class_name(), self.schema.valid_values)
 
 
@@ -531,3 +564,32 @@ class SrcGenRootDict(SrcGenDict):
             )
 
         return classes, fields
+
+
+@dataclass(kw_only=True)
+class _ProfileFieldSrc(FieldSrc):
+    """Field source for generated profile reference fields."""
+
+    field_type: str = "AvdProfileRef"
+    catalog: str = ""
+    target: str = "."
+
+    def field_as_class_attr(self) -> str:
+        return f"{self.name}: {self.field_type} | None"
+
+    def field_as_dict_str(self) -> str:
+        """
+        Return this profile reference field as an entry for ``_fields``.
+
+        The generated metadata stores both the runtime marker type and the
+        profile selector paths consumed by ``AvdProfileResolver``.
+        """
+        dict_fields_src = [f'"type": {self.field_type}', f'"catalog": "{self.catalog}"', f'"target": "{self.target}"']
+
+        return f'"{self.name}": {{{", ".join(dict_fields_src)}}}'
+
+    def get_imports(self) -> set:
+        """Return imports needed for the profile reference marker type."""
+        imports = super().get_imports()
+        imports.add(f"from pyavd._schema.models.avd_profile_ref import {self.field_type}")
+        return imports

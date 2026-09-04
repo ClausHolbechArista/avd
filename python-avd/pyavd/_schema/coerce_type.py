@@ -6,6 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from pyavd._schema.models.avd_base import AvdBase
+from pyavd._schema.models.avd_profile_ref import AvdProfileRef
 
 from .constants import ACCEPTED_COERCION_MAP
 
@@ -23,6 +24,9 @@ def coerce_type(value: Any, target_type: type[T]) -> T:
 
     If coercion cannot be done this will raise a TypeError.
     """
+    if target_type is AvdProfileRef:
+        return cast("T", AvdProfileRef(value))
+
     if value is None:
         if issubclass(target_type, AvdBase):
             # None values are sometimes used to overwrite inherited profiles.
@@ -45,7 +49,6 @@ def coerce_type(value: Any, target_type: type[T]) -> T:
             return target_type._load(data=value)
         except TypeError as exception:
             raise_coerce_error(value, target_type, exception)
-
     else:
         raise_coerce_error(value, target_type)
 
