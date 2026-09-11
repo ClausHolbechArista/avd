@@ -3,28 +3,154 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, TypedDict, cast
-
+from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast, Callable, Generic
+import dataclasses
+import functools
+from pyavd._utils.get import get_v2
 from .avd_indexed_list import AvdIndexedList
 from .avd_list import AvdList
 from .avd_model import AvdModel
+from .type_vars import T_AvdModel
 from .avd_profile_ref import AvdProfileRef
+from collections import namedtuple
 
 if TYPE_CHECKING:
-    from collections.abc import Generator, Mapping, Sequence
+    from collections.abc import Mapping
 
 
-class ProfileData(TypedDict):
-    """Profile catalog item with a required profile name."""
-
-    profile: str
-
+ProfileSpec = namedtuple("ProfileSpec", ("catalog", "target", "target_model", "field_path"))
 
 class ProfileSelector(TypedDict):
     """Profile selector metadata from an ``AvdProfileRef`` field."""
 
     catalog: str
     target: str
+
+
+class ProfileData(AvdModel):
+    """Profile catalog item with selector keys separated from data applied to the target model."""
+    _fields = {
+        "profile": {"type": str},
+        "parent_profile": {"type": str},
+    }
+    profile: str
+    parent_profile: str | None = None
+    raw_data: dict
+    _allow_other_keys = True
+
+    @classmethod
+    def _from_dict(cls: type[T_AvdModel], data: Mapping) -> AvdModel:
+        raw_data = dict(data) # shallow copy
+        raw_data.pop("profile", None)
+        raw_data.pop("parent_profile", None)
+
+        model = super()._from_dict(data)
+        model.raw_data = raw_data
+        return model
+
+
+class ProfileList(AvdIndexedList[str, ProfileData]):
+    _item_type: ClassVar[type[AvdModel]] = ProfileData
+    _primary_key: ClassVar[str] = "profile"
+
+
+
+@dataclasses.dataclass
+class ProfileGraphNode:
+    profile_spec: ProfileSpec
+    profile: ProfileData | None = None
+    parent: ProfileGraphNode | None = None
+    children: list[ProfileGraphNode] = dataclasses.field(default_factory=list)
+
+    @property
+    def id(self) -> str | None:
+        return None if not self.profile else self.profile.profile 
+
+    @functools.cached_property
+    def data(self) -> AvdModel:
+        # from_dict is quite slow so we only cast it to model when the profile is actually referenced
+        if self.profile is None:
+            # this should not happen as this would be caught by ProfileGraph._check_all_profiles_resolved
+            raise ValueError("Referencing unintialized profile")
+        partial_model = _dict_from_path(self.profile.raw_data, self.profile_spec.target)
+        return self.profile_spec.target_model._from_dict(partial_model)
+
+
+class ProfileGraph:
+    """Catalog graph used to resolve selected profiles and their parent profiles once per selector."""
+
+    def __init__(self) -> None:
+        self.nodes: dict[str | None, ProfileGraphNode] = {}
+        # Cache ensures that the profile is loaded only when it's needed, and it's resolved exactly once
+        self._lazy_load_profile: Callable[[str], AvdModel] = \
+            functools.cache(lambda profile_id: self._get_profile(profile_id))
+
+    @classmethod
+    def _from_profile_list(cls, catalog_list: ProfileList, spec: ProfileSpec):
+        graph = ProfileGraph()
+
+        # Initiate the root profile. All profiles that does not have parent_profile specified would
+        # inherit this profile
+        graph.nodes[None] = ProfileGraphNode(spec)
+        for profile_id, profile_data in catalog_list.items():
+            # setdefault allows us ensure that the profile is only initialized once
+            node = graph.nodes.setdefault(profile_id, ProfileGraphNode(spec))
+            parent_node = graph.nodes.setdefault(
+                profile_data.parent_profile, ProfileGraphNode(spec)
+            )
+
+            node.profile = profile_data
+            parent_node.children.append(node)
+            node.parent = parent_node
+
+        graph._check_all_profiles_resolved()
+        graph._check_cycles()
+        return graph
+
+    def _check_all_profiles_resolved(self) -> None:
+        # catch the cases when profile is referenced in parent_profile, but not defined in
+        # catalog_list
+        uninitialized = set()
+        for profile_id, profile_node in self.nodes.items():
+            if not profile_id:
+                # skip root node as this is a syntetic node
+                continue
+            if not profile_node.profile:
+                uninitialized.add(profile_id)
+        if uninitialized:
+            raise Exception(f"Unresolved `parent_profile` references: {uninitialized}")
+
+    def _check_cycles(self) -> None:
+        """
+        Helper function that helps to determine if the parent_profile references does not incur
+        a cyclic profile resolution.
+        """
+        def _check_node(node: ProfileGraphNode, path: list[str]) -> None:
+            if node.id in path:
+                cycle_path = path[path.index(node.id) :] + [cast(str, node.id)]
+                msg = "Cycle detected: " + " -> ".join(cycle_path)
+                raise ValueError(msg)
+
+            if node.id is not None:
+                path = [*path, node.id]
+
+            for child in node.children:
+                _check_node(child, path)
+
+        for node in self.nodes.values():
+            _check_node(node, [])
+
+    def _get_profile(self, profile_id: str) -> AvdModel:
+        node = self.nodes.get(profile_id)
+        if node is None:
+            raise KeyError(f"Profile '{profile_id}' is missing")
+        if node.parent and node.parent.id:
+            sub_model = self.get_profile(node.parent.id)
+            node.data._deepinherit(sub_model)
+        return node.data
+
+    def get_profile(self, profile_id) -> AvdModel:
+        return self._lazy_load_profile(profile_id)
 
 
 class AvdProfileResolver:
@@ -45,12 +171,27 @@ class AvdProfileResolver:
             },
         }
 
-    ``EosDesignsRootModel`` owns the resolver. Before normal model loading, the
-    resolver walks the schema tree and loads every referenced catalog from the
-    root input data. Each catalog item must be a mapping with a unique
-    ``profile`` key. After normal model loading, the resolver walks the instance
-    tree and combines each selected profile model into the model instance that
-    owns the corresponding reference field.
+    The resolver is instantiated explicitly by callers that already have a
+    loaded target model. For ``eos_designs`` this happens after host-specific
+    inputs have been normalized to ``ConsolidatedAVDDesign`` in both pyavd and
+    the Ansible action plugin. The ``raw_data`` passed to the resolver is still
+    used as the source of profile catalogs, since catalogs can live outside the
+    loaded per-device model.
+
+    .. code-block:: python
+
+        consolidated_inputs = ConsolidatedAVDDesign._from_avd_design(hostname, inputs)
+        profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
+        consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs)
+
+    ``_apply_profiles`` walks the loaded instance tree. When it finds a set
+    ``AvdProfileRef``, it lazily loads the referenced catalog, builds or reuses
+    a cached profile graph for that field's selector metadata, resolves any
+    ``parent_profile`` chain, and inherits missing fields from the resulting
+    partial root model into the root instance. The generated ``target`` path is
+    therefore resolved from the root model, not relative to the model containing
+    the profile reference. For conflicting values, the loaded instance wins over
+    the selected profile, and the selected profile wins over its parent profiles.
 
     Example:
 
@@ -78,222 +219,85 @@ class AvdProfileResolver:
             "interface": {"type": Interface},
         }
 
-    If ``interface_profile`` is set to ``uplink``, loading the root model applies
-    the ``uplink`` profile to the ``interface`` model. Values already set on the
-    instance take precedence over values from the profile when the profile model
-    is combined into the instance.
+    If ``interface_profile`` is set to ``uplink``, calling ``_apply_profiles``
+    on the loaded root model applies the ``uplink`` profile to the ``interface``
+    model.
     """
+    def __init__(self, raw_data: Mapping, target_model: type[AvdModel]) -> None:
+        self.raw_data = raw_data
+        self.target_model = target_model
 
-    def __init__(self) -> None:
-        """Initialize an empty profile storage."""
-        self._storage: dict[tuple[type[AvdModel], str], AvdModel] = {}
+        self._lazy_load_profile_graph: Callable[[ProfileSpec], ProfileGraph] = \
+            functools.cache(lambda profile_spec: self._resolve_profiles(profile_spec))
 
-    def _detect_profile_refs(self, cls: type[AvdModel], data: Mapping, load_custom_structured_config: bool = True) -> dict[tuple[str, str, str, str], AvdModel]:
-        """Load and resolve profile catalogs for all ``AvdProfileRef`` fields declared below ``cls``."""
-        profiles: dict[tuple[str, str, str, str], AvdModel] = {}
+    def _resolve_profiles(self, profile_spec: ProfileSpec) -> ProfileGraph:
+        catalog_list = get_v2(self.raw_data, profile_spec.catalog)
+        if catalog_list is None:
+            raise KeyError(f"Profile catalog '{profile_spec.catalog}' does not exist")
+        catalog_list = ProfileList._from_list(catalog_list)
+        profile_graph = ProfileGraph._from_profile_list(catalog_list, profile_spec)
+        return profile_graph
 
-        def _to_model(profile: dict, target: list[str], owner_model: type[AvdModel]) -> AvdModel:
-            # TODO: do we even need to support list targets?
-            if _target_is_list_of_model(cls, target, owner_model):
-                return owner_model._from_dict(profile)
-            if _target_is_path_on_model(owner_model, target):
-                return owner_model._from_dict(_dict_from_path(profile, target))
+    def _get_profile(self, profile_spec: ProfileSpec, profile_name: AvdProfileRef) -> AvdModel:
 
-            root_dict = _dict_from_path(profile, target)
-            if hasattr(cls, "_from_dict_internal"):
-                return cast("Any", cls)._from_dict_internal(root_dict, load_custom_structured_config)
-            return cls._from_dict(root_dict)
+        profiles = self._lazy_load_profile_graph(profile_spec)
+        return profiles.get_profile(profile_name)
 
-        def _resolve_profile_tree(graph: dict[str | None, list[str]], parents: dict[str, str], raw_profiles: dict[str, AvdModel]) -> None:
-            visited = set()
-            q = graph.pop(None)
-            while q:
-                current = q.pop()
-                if current in visited:
-                    # This is a tree-like structure where each node can only have one parent, so visiting a node
-                    # twice means there is a cycle.
-                    cycle_path: list[str] = [current]
-                    parent = current
-                    while (parent := parents[parent]) != current:
-                        cycle_path.append(parent)
-                    cycle_path.append(current)
-                    msg = "Cycle detected: " + " -> ".join(cycle_path)
-                    raise ValueError(msg)
-                if current in parents:
-                    raw_profiles[current]._deepmerge(raw_profiles[parents[current]])
-                q.extend(graph.get(current, []))
-
-        def _resolve_profiles(selector: ProfileSelector, owner_model: type[AvdModel], data: Mapping[str, Any]) -> dict[str, AvdModel]:
-            target = selector["target"].split("/")
-            catalog = selector["catalog"].split("/")
-            profile_mapping = {}
-
-            catalog_list = data
-            for p in catalog:
-                if (catalog_list := catalog_list.get(p)) is None:
-                    return profile_mapping
-
-            profile_graph = {}
-            profile_graph_parents = {}
-            for profile_spec_data in catalog_list:
-                profile_spec = dict(profile_spec_data)
-                profile_id = profile_spec.pop("profile")
-                parent_profile = profile_spec.pop("parent_profile", None)
-                profile_graph.setdefault(parent_profile, []).append(profile_id)
-
-                profile_mapping[profile_id] = _to_model(profile_spec, target, owner_model)
-                if parent_profile:
-                    profile_graph_parents[profile_id] = parent_profile
-
-            _resolve_profile_tree(profile_graph, profile_graph_parents, profile_mapping)
-
-            return profile_mapping
-
-        for field_name, profile_selector, owner_model in _internal_recursion(cls):
-            for name, profile in _resolve_profiles(profile_selector, owner_model, data).items():
-                profiles[(profile_selector["catalog"], profile_selector["target"], field_name, name)] = profile
-
-        return profiles
-
-    def _apply_profiles(self, instance: AvdModel, profiles: dict[tuple[str, str, str, str], AvdModel]) -> AvdModel:
+    def _apply_profiles(self, instance: AvdModel) -> AvdModel:
         """Apply selected profile models for all ``AvdProfileRef`` values below ``instance``."""
         root_instance = instance
 
-        def _apply_matching_profiles(instance: AvdModel) -> None:
-            for field_name, field_spec in instance._fields.items():
-                t = field_spec["type"]
+        def _apply_matching_profiles(instance: AvdModel | None | Any, prefix: str = "") -> None:
+            if isinstance(instance, (AvdList, AvdIndexedList)):
+                for next_instance in instance:
+                    _apply_matching_profiles(next_instance, prefix)
+            elif isinstance(instance, AvdModel):
+                for field_name, field_spec in instance._fields.items():
+                    new_prefix = prefix + "." + field_name
+                    field_type = field_spec["type"]
+                    field_value = instance._get(field_name)
+                    if field_type is AvdProfileRef and field_value is not None:
+                        profile_selector = cast("ProfileSelector", field_spec)
+                        try:
+                            self._check_target_is_valid(self.target_model, profile_selector["target"])
+                        except Exception as e:
+                            raise Exception(f"`{profile_selector['target']}` is not a valid profile target") from e
 
-                field_value = instance._get(field_name)
-                if t is AvdProfileRef:
-                    if field_value is None:
-                        continue
-                    k = (field_spec["catalog"], field_spec["target"], field_name, field_value)
-                    if k not in profiles:
-                        msg = f"profile '{field_value}' is missing"
-                        raise KeyError(msg)
-                    profile = profiles[k]
-                    if isinstance(profile, type(instance)):
-                        instance._deepmerge(profile)
+                        field_spec = ProfileSpec(
+                            profile_selector["catalog"],
+                            profile_selector["target"],
+                            self.target_model,
+                            new_prefix,
+                        )
+                        profile = self._get_profile(field_spec, field_value)
+                        root_instance._deepinherit(profile)
                     else:
-                        root_instance._deepmerge(profile)
-                elif isinstance(field_value, (AvdList, AvdIndexedList)):
-                    for next_instance in field_value:
-                        if isinstance(next_instance, AvdModel):
-                            _apply_matching_profiles(next_instance)
-                elif isinstance(field_value, AvdModel):
-                    _apply_matching_profiles(field_value)
+                        _apply_matching_profiles(field_value, new_prefix)
 
         _apply_matching_profiles(instance)
         return instance
 
-    def _detect_profile_references(self, cls: type[AvdModel], data: Mapping) -> None:
-        """Load catalogs for all ``AvdProfileRef`` fields declared below ``cls``."""
-        for field_spec in cls._fields.values():
-            t = field_spec["type"]
+    def _check_target_is_valid(self, target_cls: type[AvdModel], target: str):
+        target_path = target.split(".")
+        if not target:
+            return
+        if target_path[0] in target_cls._fields:
+            field_type = target_cls._fields[target_path[0]]["type"]
+            if issubclass(field_type, AvdModel) and not issubclass(field_type, (AvdIndexedList, AvdList)):
+                self._check_target_is_valid(field_type, ".".join(target_path[1:]))
+            else:
+                raise Exception(f"`{field_type}` is not supported type for profile target")
+        else:
+            raise KeyError(f"Profile target field is not defined")
 
-            if t is AvdProfileRef:
-                self._populate_profiles(cls, data, field_spec["catalog"], field_spec.get("target", "."))
-            elif isinstance(t, type) and issubclass(t, AvdModel):
-                self._detect_profile_references(t, data)
-            elif isinstance(t, type) and issubclass(t, (AvdList, AvdIndexedList)) and issubclass(t._item_type, AvdModel):
-                self._detect_profile_references(t._item_type, data)
-
-    def _resolve_profiles(self, instance: AvdModel) -> None:
-        """Apply selected profile models for all ``AvdProfileRef`` values below ``instance``."""
-        for field_name, field_spec in instance._fields.items():
-            t = field_spec.get("type")
-            if t is AvdProfileRef:
-                ref = getattr(instance, field_name)
-                if ref is None:
-                    continue
-                try:
-                    profile_model = self._storage[(type(instance), ref)]
-                except KeyError as error:
-                    msg = f"profile '{ref}' is missing"
-                    raise KeyError(msg) from error
-                instance._combine(profile_model)
-            elif isinstance(t, type) and issubclass(t, AvdModel):
-                self._resolve_profiles(getattr(instance, field_name))
-            elif isinstance(t, type) and issubclass(t, (AvdList, AvdIndexedList)) and issubclass(t._item_type, AvdModel):
-                for next_instance in getattr(instance, field_name):
-                    self._resolve_profiles(next_instance)
-
-    def _populate_profiles(self, model: type[AvdModel], data: Mapping[str, Any], catalog: str, target: str) -> None:
-        """Load one profile catalog and store partial profile models for ``model``."""
-        target_path = [] if target == "." else target.split(".")
-
-        def _to_partial_model(profile_data: ProfileData) -> AvdModel:
-            d = dict(profile_data)
-            d.pop("profile", None)
-            for p in reversed(target_path):
-                d = {p: d}
-            return model._from_dict(d)
-
-        profile_data = data
-        prefix = []
-
-        # Traverse the input data to fetch the list of profiles
-        for p in catalog.split("."):
-            prefix.append(p)
-            if p not in profile_data:
-                msg = f"missing key in input data: {'.'.join(prefix)}"
-                raise KeyError(msg)
-
-            profile_data = profile_data[p]
-
-        # Read the list of profiles and cast them to the model's instances
-        profiles = cast("Sequence[ProfileData]", profile_data)
-        for profile in profiles:
-            profile_key = profile.get("profile")
-            if profile_key is None:
-                msg = "profile is missing 'profile' key"
-                raise KeyError(msg)
-            self._storage[(model, profile_key)] = _to_partial_model(profile)
-
-
-def _internal_recursion(model: type[AvdModel]) -> Generator[tuple[str, ProfileSelector, type[AvdModel]]]:
-    for field_name, field_spec in model._fields.items():
-        t = field_spec.get("type")
-        if t is AvdProfileRef:
-            yield field_name, cast("ProfileSelector", field_spec), model
-        elif isinstance(t, type) and issubclass(t, AvdModel):
-            yield from _internal_recursion(t)
-        elif isinstance(t, type) and issubclass(t, (AvdList, AvdIndexedList)) and issubclass(t._item_type, AvdModel):
-            yield from _internal_recursion(t._item_type)
-
-
-def _target_is_list_of_model(root_model: type[AvdModel], target: list[str], model: type[AvdModel]) -> bool:
-    """Return True when the root-relative profile target points at a list containing ``model`` items."""
-    target_type: type | None = root_model
-    for field_name in target:
-        if not isinstance(target_type, type) or not issubclass(target_type, AvdModel):
-            return False
-        field_spec = target_type._fields.get(field_name)
-        if field_spec is None:
-            return False
-        target_type = field_spec["type"]
-
-    return isinstance(target_type, type) and issubclass(target_type, (AvdList, AvdIndexedList)) and target_type._item_type is model
-
-
-def _target_is_path_on_model(model: type[AvdModel], target: list[str]) -> bool:
-    """Return True when the profile target is a path below ``model``."""
-    target_type: type | None = model
-    for field_name in target:
-        if not isinstance(target_type, type) or not issubclass(target_type, AvdModel):
-            return False
-        field_spec = target_type._fields.get(field_name)
-        if field_spec is None:
-            return False
-        target_type = field_spec["type"]
-
-    return True
-
-
-def _dict_from_path(data: dict, path: list[str]) -> dict:
+def _dict_from_path(data: dict, path: str) -> dict:
     """Return ``data`` nested below ``path``."""
+    if path == ".":
+        return data
+
     root_dict = target_dict = {}
-    for p in path:
+    path_ls = path.split(".")
+    for p in path_ls:
         target_dict = target_dict.setdefault(p, {})
     target_dict.update(data)
     return root_dict
