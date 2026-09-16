@@ -3,7 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from collections.abc import MutableMapping
@@ -46,9 +46,14 @@ def get_device_structured_config(
 
     # Normalize to ConsolidatedAVDDesign
     consolidated_inputs = ConsolidatedAVDDesign._from_avd_design(hostname, inputs)
-    profile_data = inputs if isinstance(inputs, Mapping) else consolidated_inputs._dump()
-    profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
-    consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs)
+
+    if isinstance(inputs, dict):
+        # We can't get the profile data from AVDDesign | ConsolidatedAVDDesign inputs as 
+        # the profile mechanism relies on arbitrary keys to extract profile catalogs, which are truncated
+        # from the schema-based objects
+        profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
+        consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs)
+        consolidated_inputs = cast(ConsolidatedAVDDesign, consolidated_inputs)
 
     return get_structured_config(
         hostname=hostname,

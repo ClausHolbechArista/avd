@@ -7,6 +7,7 @@ from typing import ClassVar
 
 import pytest
 
+from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError, AvdSchemaError
 from pyavd._schema.models.avd_model import AvdModel
 from pyavd._schema.models.avd_profile import AvdProfileResolver
 from pyavd._schema.models.avd_profile_ref import AvdProfileRef
@@ -118,7 +119,7 @@ def test_avd_model_stuff() -> None:
 
 def test_avd_profile_resolver_applies_device_profiles_to_consolidated_avd_designs() -> None:
     """Use production schemas to verify profile resolution against consolidated eos_designs inputs."""
-    from pyavd.api.schemas import ConsolidatedAVDDesign, AVDDesign
+    from pyavd.api.schemas import AVDDesign, ConsolidatedAVDDesign
 
     dns_settings_profile_catalog = [
         {
@@ -236,7 +237,7 @@ def test_avd_profile_resolves_profiles_on_nested_model() -> None:
 
 
 def test_avd_profile_raises_when_profile_does_not_exist() -> None:
-    with pytest.raises(KeyError, match="Profile 'missing' is missing"):
+    with pytest.raises(AristaAvdInvalidInputsError, match="Profile 'missing' is missing"):
         load_with_profiles(
             DemoSchema,
             {
@@ -257,7 +258,7 @@ def test_avd_profile_raises_when_profile_does_not_exist() -> None:
 
 
 def test_avd_profile_raises_when_profile_catalog_does_not_exist() -> None:
-    with pytest.raises(KeyError, match="Profile catalog 'source' does not exist"):
+    with pytest.raises(AristaAvdMissingVariableError, match=r"'source' is required but was not found\."):
         load_with_profiles(
             DemoSchema,
             {
@@ -285,7 +286,7 @@ def test_avd_profile_raises_when_profile_target_field_does_not_exist() -> None:
 
         profiled_model: ProfiledModelWithMissingTarget
 
-    with pytest.raises(Exception, match=r"`profiled_model\.missing_model` is not a valid profile target"):
+    with pytest.raises(AvdSchemaError, match=r"`profiled_model\.missing_model` is not a valid profile target"):
         load_with_profiles(
             MissingTargetDemoSchema,
             {
@@ -319,7 +320,7 @@ def test_avd_profile_raises_when_profile_target_is_not_model() -> None:
 
         profiled_model: ProfiledModelWithScalarTarget
 
-    with pytest.raises(Exception, match=r"`profiled_model\.some_model\.string` is not a valid profile target"):
+    with pytest.raises(AvdSchemaError, match=r"`profiled_model\.some_model\.string` is not a valid profile target"):
         load_with_profiles(
             ScalarTargetDemoSchema,
             {
@@ -337,7 +338,7 @@ def test_avd_profile_raises_when_profile_target_is_not_model() -> None:
 
 
 def test_avd_profile_raises_when_parent_profile_does_not_exist() -> None:
-    with pytest.raises(Exception, match=r"Unresolved `parent_profile` references: .*missing_parent"):
+    with pytest.raises(AristaAvdInvalidInputsError, match=r"Unresolved `parent_profile` references: .*missing_parent"):
         load_with_profiles(
             DemoSchema,
             {
@@ -356,7 +357,7 @@ def test_avd_profile_raises_when_parent_profile_does_not_exist() -> None:
 
 
 def test_avd_profile_raises_on_indirect_cyclic_parent_profiles() -> None:
-    with pytest.raises(ValueError, match=r"Cycle detected: .*n2.*n4.*n3.*n2") as exc_info:
+    with pytest.raises(AristaAvdInvalidInputsError, match=r"Cycle detected: .*n2.*n4.*n3.*n2") as exc_info:
         load_with_profiles(
             DemoSchema,
             {
@@ -435,7 +436,7 @@ def test_avd_profile_resolver_parent_chain_precedence() -> None:
 
 
 def test_avd_profile_with_deep_source_and_target_raises_when_profile_does_not_exist() -> None:
-    with pytest.raises(KeyError, match="Profile 'missing' is missing"):
+    with pytest.raises(AristaAvdInvalidInputsError, match="Profile 'missing' is missing"):
         load_with_profiles(
             DeepDemoSchema,
             {

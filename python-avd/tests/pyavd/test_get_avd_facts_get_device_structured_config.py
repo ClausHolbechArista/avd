@@ -40,8 +40,7 @@ def test_get_avd_facts_get_device_structured_config_models() -> None:
 def test_get_device_structured_config_resolves_profiles_on_consolidated_input() -> None:
     inputs = {
         "fabric_name": "FABRIC",
-        "devices": [{"name": "testhost1", "type": "l2leaf"}],
-        "dns_settings_profile": "testhost1_dns_profile",
+        "devices": [{"name": "testhost1", "type": "l2leaf", "dns_settings_profile": "testhost1_dns_profile"}],
         "dns_settings_profiles": [
             {
                 "profile": "testhost1_dns_profile",

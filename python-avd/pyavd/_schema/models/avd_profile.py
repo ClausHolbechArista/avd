@@ -3,16 +3,19 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast, Callable, Generic
+from collections import namedtuple
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypedDict, cast
 import dataclasses
 import functools
+
+from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError, AvdSchemaError
 from pyavd._utils.get import get_v2
+
 from .avd_indexed_list import AvdIndexedList
 from .avd_list import AvdList
 from .avd_model import AvdModel
-from .type_vars import T_AvdModel
 from .avd_profile_ref import AvdProfileRef
-from collections import namedtuple
+from .type_vars import T_AvdModel
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -71,7 +74,8 @@ class ProfileGraphNode:
         # from_dict is quite slow so we only cast it to model when the profile is actually referenced
         if self.profile is None:
             # this should not happen as this would be caught by ProfileGraph._check_all_profiles_resolved
-            raise ValueError("Referencing unintialized profile")
+            msg = "Referencing uninitialized profile"
+            raise AristaAvdError(msg)
         partial_model = _dict_from_path(self.profile.raw_data, self.profile_spec.target)
         return self.profile_spec.target_model._from_dict(partial_model)
 
@@ -118,7 +122,8 @@ class ProfileGraph:
             if not profile_node.profile:
                 uninitialized.add(profile_id)
         if uninitialized:
-            raise Exception(f"Unresolved `parent_profile` references: {uninitialized}")
+            msg = f"Unresolved `parent_profile` references: {uninitialized}"
+            raise AristaAvdInvalidInputsError(msg)
 
     def _check_cycles(self) -> None:
         """
@@ -129,7 +134,7 @@ class ProfileGraph:
             if node.id in path:
                 cycle_path = path[path.index(node.id) :] + [cast(str, node.id)]
                 msg = "Cycle detected: " + " -> ".join(cycle_path)
-                raise ValueError(msg)
+                raise AristaAvdInvalidInputsError(msg)
 
             if node.id is not None:
                 path = [*path, node.id]
@@ -143,7 +148,8 @@ class ProfileGraph:
     def _get_profile(self, profile_id: str) -> AvdModel:
         node = self.nodes.get(profile_id)
         if node is None:
-            raise KeyError(f"Profile '{profile_id}' is missing")
+            msg = f"Profile '{profile_id}' is missing"
+            raise AristaAvdInvalidInputsError(msg)
         if node.parent and node.parent.id:
             sub_model = self.get_profile(node.parent.id)
             node.data._deepinherit(sub_model)
@@ -233,7 +239,7 @@ class AvdProfileResolver:
     def _resolve_profiles(self, profile_spec: ProfileSpec) -> ProfileGraph:
         catalog_list = get_v2(self.raw_data, profile_spec.catalog)
         if catalog_list is None:
-            raise KeyError(f"Profile catalog '{profile_spec.catalog}' does not exist")
+            raise AristaAvdMissingVariableError(profile_spec.catalog)
         catalog_list = ProfileList._from_list(catalog_list)
         profile_graph = ProfileGraph._from_profile_list(catalog_list, profile_spec)
         return profile_graph
@@ -258,10 +264,7 @@ class AvdProfileResolver:
                     field_value = instance._get(field_name)
                     if field_type is AvdProfileRef and field_value is not None:
                         profile_selector = cast("ProfileSelector", field_spec)
-                        try:
-                            self._check_target_is_valid(self.target_model, profile_selector["target"])
-                        except Exception as e:
-                            raise Exception(f"`{profile_selector['target']}` is not a valid profile target") from e
+                        self._check_target_is_valid(self.target_model, profile_selector["target"])
 
                         field_spec = ProfileSpec(
                             profile_selector["catalog"],
@@ -277,18 +280,21 @@ class AvdProfileResolver:
         _apply_matching_profiles(instance)
         return instance
 
-    def _check_target_is_valid(self, target_cls: type[AvdModel], target: str):
+    def _check_target_is_valid(self, target_cls: type[AvdModel], target: str, original_target: str | None = None) -> None:
+        original_target = original_target or target
         target_path = target.split(".")
         if not target:
             return
         if target_path[0] in target_cls._fields:
             field_type = target_cls._fields[target_path[0]]["type"]
             if issubclass(field_type, AvdModel) and not issubclass(field_type, (AvdIndexedList, AvdList)):
-                self._check_target_is_valid(field_type, ".".join(target_path[1:]))
+                self._check_target_is_valid(field_type, ".".join(target_path[1:]), original_target)
             else:
-                raise Exception(f"`{field_type}` is not supported type for profile target")
+                msg = f"`{original_target}` is not a valid profile target: `{field_type}` is not a supported type."
+                raise AvdSchemaError(msg)
         else:
-            raise KeyError(f"Profile target field is not defined")
+            msg = f"`{original_target}` is not a valid profile target: field `{target_path[0]}` is not defined."
+            raise AvdSchemaError(msg)
 
 def _dict_from_path(data: dict, path: str) -> dict:
     """Return ``data`` nested below ``path``."""
