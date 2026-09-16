@@ -15,7 +15,7 @@ from yaml import CSafeDumper, CSafeLoader
 from yaml import dump as yaml_dump
 from yaml import load as yaml_load
 
-from .constants import LICENSE_HEADER, METASCHEMA_DIR, SCHEMA_STORE_ARCHIVE_FILE, SCHEMA_STORE_GZ_FILE, SCHEMAS
+from .constants import LICENSE_HEADER, METASCHEMA_DIR, REPO_ROOT, SCHEMA_STORE_ARCHIVE_FILE, SCHEMA_STORE_GZ_FILE, SCHEMAS
 from .generate_classes.src_generators import FileSrc
 from .generate_classes.utils import generate_class_name
 from .generate_docs.mdtabsgen import get_md_tabs
@@ -34,6 +34,7 @@ FRAGMENTS_PATTERN = "*.yml"
 METASCHEMA_FILE = METASCHEMA_DIR.joinpath("avd_meta_schema.json")
 
 LOGGER = logging.getLogger(__name__)
+SCHEMA_GENERATION_EXPERIMENT_FILE = REPO_ROOT / "python-avd/tests/schema_tools/artifacts/schema_generation_fixture.py.expected"
 
 
 def _get_relative_metaschema_path(schema_file: Path) -> str:
@@ -143,6 +144,21 @@ def build_schema_classes() -> None:
         subprocess.run(["ruff", "format", str(schema_paths.python_class)], check=False)  # noqa: S603, S607
 
 
+def build_schema_generation_experiment() -> None:
+    """Generate the first arena-backed class slice for byte-for-byte comparison."""
+    from pyavd_utils.schema_generation import generate_python_schema_models  # noqa: PLC0415
+
+    generate_python_schema_models(
+        SCHEMA_STORE_GZ_FILE,
+        "eos_cli_config_gen",
+        SCHEMA_GENERATION_EXPERIMENT_FILE,
+        "SchemaGenerationFixture",
+        ["interface_profiles"],
+    )
+    subprocess.run(["ruff", "check", "--fix", str(SCHEMA_GENERATION_EXPERIMENT_FILE)], check=False)  # noqa: S603, S607
+    subprocess.run(["ruff", "format", str(SCHEMA_GENERATION_EXPERIMENT_FILE)], check=False)  # noqa: S603, S607
+
+
 def build_schemas() -> None:
     """Combines the schema fragments, and rebuild the pickled schemas."""
     combine_schemas()
@@ -155,3 +171,4 @@ def build_schemas() -> None:
     validate_schemas(schema_store)
     build_schema_tables(schema_store)
     build_schema_classes()
+    build_schema_generation_experiment()
