@@ -185,7 +185,6 @@ class SrcGenStr(SrcGenBase["AvdSchemaStr"]):
 
 class SrcGenList(SrcGenBase["AvdSchemaList"]):
     """Provides the method "generate_class_src" used to build source code for Python classes representing the schema."""
-
     def get_type(self) -> str:
         if self.schema.field_ref:
             return generate_class_name_from_ref(self.schema.field_ref)

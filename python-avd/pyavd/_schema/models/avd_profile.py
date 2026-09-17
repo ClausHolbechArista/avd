@@ -3,10 +3,9 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from collections import namedtuple
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypedDict, cast
 import dataclasses
 import functools
+from typing import TYPE_CHECKING, Any, ClassVar, NamedTuple, TypedDict, cast
 
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError, AvdSchemaError
 from pyavd._utils.get import get_v2
@@ -15,13 +14,19 @@ from .avd_indexed_list import AvdIndexedList
 from .avd_list import AvdList
 from .avd_model import AvdModel
 from .avd_profile_ref import AvdProfileRef
-from .type_vars import T_AvdModel
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Callable, Mapping
+
+    from .type_vars import T_AvdModel
 
 
-ProfileSpec = namedtuple("ProfileSpec", ("catalog", "target", "target_model", "field_path"))
+class ProfileSpec(NamedTuple):
+    catalog: str
+    target: str
+    target_model: type[AvdModel]
+    field_path: str
+
 
 class ProfileSelector(TypedDict):
     """Profile selector metadata from an ``AvdProfileRef`` field."""
@@ -32,7 +37,7 @@ class ProfileSelector(TypedDict):
 
 class ProfileData(AvdModel):
     """Profile catalog item with selector keys separated from data applied to the target model."""
-    _fields = {
+    _fields: ClassVar[dict] = {
         "profile": {"type": str},
         "parent_profile": {"type": str},
     }
@@ -67,7 +72,7 @@ class ProfileGraphNode:
 
     @property
     def id(self) -> str | None:
-        return None if not self.profile else self.profile.profile 
+        return None if not self.profile else self.profile.profile
 
     @functools.cached_property
     def data(self) -> AvdModel:
@@ -77,7 +82,15 @@ class ProfileGraphNode:
             msg = "Referencing uninitialized profile"
             raise AristaAvdError(msg)
         partial_model = _dict_from_path(self.profile.raw_data, self.profile_spec.target)
-        return self.profile_spec.target_model._from_dict(partial_model)
+        try:
+            return self.profile_spec.target_model._from_dict(partial_model)
+        except (AristaAvdError, KeyError, TypeError, ValueError) as e:
+            original_error = str(e.args[0]) if e.args else str(e)
+            msg = (
+                f"Failed to apply profile '{self.profile.profile}' from catalog '{self.profile_spec.catalog}' "
+                f"to target '{self.profile_spec.target}'. {original_error}"
+            )
+            raise AristaAvdInvalidInputsError(msg) from e
 
 
 class ProfileGraph:
@@ -86,11 +99,10 @@ class ProfileGraph:
     def __init__(self) -> None:
         self.nodes: dict[str | None, ProfileGraphNode] = {}
         # Cache ensures that the profile is loaded only when it's needed, and it's resolved exactly once
-        self._lazy_load_profile: Callable[[str], AvdModel] = \
-            functools.cache(lambda profile_id: self._get_profile(profile_id))
+        self._lazy_load_profile: Callable[[str], AvdModel] = functools.cache(self._get_profile)
 
     @classmethod
-    def _from_profile_list(cls, catalog_list: ProfileList, spec: ProfileSpec):
+    def _from_profile_list(cls, catalog_list: ProfileList, spec: ProfileSpec) -> ProfileGraph:
         graph = ProfileGraph()
 
         # Initiate the root profile. All profiles that does not have parent_profile specified would
@@ -127,12 +139,13 @@ class ProfileGraph:
 
     def _check_cycles(self) -> None:
         """
-        Helper function that helps to determine if the parent_profile references does not incur
+        Helper function that helps to determine if the parent_profile references does not incur.
+
         a cyclic profile resolution.
         """
         def _check_node(node: ProfileGraphNode, path: list[str]) -> None:
             if node.id in path:
-                cycle_path = path[path.index(node.id) :] + [cast(str, node.id)]
+                cycle_path = [*path[path.index(node.id) :], cast("str", node.id)]
                 msg = "Cycle detected: " + " -> ".join(cycle_path)
                 raise AristaAvdInvalidInputsError(msg)
 
@@ -155,7 +168,7 @@ class ProfileGraph:
             node.data._deepinherit(sub_model)
         return node.data
 
-    def get_profile(self, profile_id) -> AvdModel:
+    def get_profile(self, profile_id: str) -> AvdModel:
         return self._lazy_load_profile(profile_id)
 
 
@@ -233,16 +246,14 @@ class AvdProfileResolver:
         self.raw_data = raw_data
         self.target_model = target_model
 
-        self._lazy_load_profile_graph: Callable[[ProfileSpec], ProfileGraph] = \
-            functools.cache(lambda profile_spec: self._resolve_profiles(profile_spec))
+        self._lazy_load_profile_graph: Callable[[ProfileSpec], ProfileGraph] = functools.cache(self._resolve_profiles)
 
     def _resolve_profiles(self, profile_spec: ProfileSpec) -> ProfileGraph:
         catalog_list = get_v2(self.raw_data, profile_spec.catalog)
         if catalog_list is None:
             raise AristaAvdMissingVariableError(profile_spec.catalog)
         catalog_list = ProfileList._from_list(catalog_list)
-        profile_graph = ProfileGraph._from_profile_list(catalog_list, profile_spec)
-        return profile_graph
+        return ProfileGraph._from_profile_list(catalog_list, profile_spec)
 
     def _get_profile(self, profile_spec: ProfileSpec, profile_name: AvdProfileRef) -> AvdModel:
 
@@ -253,7 +264,7 @@ class AvdProfileResolver:
         """Apply selected profile models for all ``AvdProfileRef`` values below ``instance``."""
         root_instance = instance
 
-        def _apply_matching_profiles(instance: AvdModel | None | Any, prefix: str = "") -> None:
+        def _apply_matching_profiles(instance: Any, prefix: str = "") -> None:
             if isinstance(instance, (AvdList, AvdIndexedList)):
                 for next_instance in instance:
                     _apply_matching_profiles(next_instance, prefix)
@@ -266,13 +277,13 @@ class AvdProfileResolver:
                         profile_selector = cast("ProfileSelector", field_spec)
                         self._check_target_is_valid(self.target_model, profile_selector["target"])
 
-                        field_spec = ProfileSpec(
+                        resolved_profile_spec = ProfileSpec(
                             profile_selector["catalog"],
                             profile_selector["target"],
                             self.target_model,
                             new_prefix,
                         )
-                        profile = self._get_profile(field_spec, field_value)
+                        profile = self._get_profile(resolved_profile_spec, field_value)
                         root_instance._deepinherit(profile)
                     else:
                         _apply_matching_profiles(field_value, new_prefix)

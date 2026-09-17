@@ -337,6 +337,32 @@ def test_avd_profile_raises_when_profile_target_is_not_model() -> None:
         )
 
 
+def test_avd_profile_raises_when_profile_data_has_invalid_target_field() -> None:
+    with pytest.raises(
+        AristaAvdInvalidInputsError,
+        match=(
+            r"Failed to apply profile 'test' from catalog 'source' to target 'profiled_model\.some_model'\. "
+            r"Invalid key 'wrong_field'\. Not available on 'SomeModel'\."
+        ),
+    ) as exc_info:
+        load_with_profiles(
+            DemoSchema,
+            {
+                "profiled_model": {
+                    "example_profile": "test",
+                },
+                "source": [
+                    {
+                        "profile": "test",
+                        "wrong_field": "not-valid-for-some-model",
+                    },
+                ],
+            },
+        )
+
+    assert isinstance(exc_info.value.__cause__, KeyError)
+
+
 def test_avd_profile_raises_when_parent_profile_does_not_exist() -> None:
     with pytest.raises(AristaAvdInvalidInputsError, match=r"Unresolved `parent_profile` references: .*missing_parent"):
         load_with_profiles(
