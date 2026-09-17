@@ -80,7 +80,7 @@ class ActionModule(AVDActionPlugin):
         self.templar = get_templar(self, task_vars)
 
         consolidated_inputs, host_hostvars = self.load_validated_inputs(hostname)
-        consolidated_inputs = AvdProfileResolver(host_hostvars, ConsolidatedAVDDesign)._apply_profiles(consolidated_inputs)
+        consolidated_inputs = AvdProfileResolver(host_hostvars, consolidated_inputs)._apply_profiles()
 
         all_facts = self.load_facts(hostname)
 

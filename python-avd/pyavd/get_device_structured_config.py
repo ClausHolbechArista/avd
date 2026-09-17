@@ -51,8 +51,8 @@ def get_device_structured_config(
         # We can't get the profile data from AVDDesign | ConsolidatedAVDDesign inputs as 
         # the profile mechanism relies on arbitrary keys to extract profile catalogs, which are truncated
         # from the schema-based objects
-        profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
-        consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs)
+        profile_resolver = AvdProfileResolver(inputs, consolidated_inputs)
+        consolidated_inputs = profile_resolver._apply_profiles()
         consolidated_inputs = cast(ConsolidatedAVDDesign, consolidated_inputs)
 
     return get_structured_config(

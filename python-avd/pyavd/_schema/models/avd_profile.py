@@ -24,7 +24,6 @@ if TYPE_CHECKING:
 class ProfileSpec(NamedTuple):
     catalog: str
     target: str
-    target_model: type[AvdModel]
     field_path: str
 
 
@@ -62,10 +61,10 @@ class ProfileList(AvdIndexedList[str, ProfileData]):
     _primary_key: ClassVar[str] = "profile"
 
 
-
 @dataclasses.dataclass
 class ProfileGraphNode:
     profile_spec: ProfileSpec
+    target_cls: type[AvdModel]
     profile: ProfileData | None = None
     parent: ProfileGraphNode | None = None
     children: list[ProfileGraphNode] = dataclasses.field(default_factory=list)
@@ -76,14 +75,13 @@ class ProfileGraphNode:
 
     @functools.cached_property
     def data(self) -> AvdModel:
-        # from_dict is quite slow so we only cast it to model when the profile is actually referenced
+        # _from_dict is relatively expensive, so profile data is only cast to the target model when the profile is referenced.
         if self.profile is None:
             # this should not happen as this would be caught by ProfileGraph._check_all_profiles_resolved
             msg = "Referencing uninitialized profile"
             raise AristaAvdError(msg)
-        partial_model = _dict_from_path(self.profile.raw_data, self.profile_spec.target)
         try:
-            return self.profile_spec.target_model._from_dict(partial_model)
+            return self.target_cls._from_dict(self.profile.raw_data)
         except (AristaAvdError, KeyError, TypeError, ValueError) as e:
             original_error = str(e.args[0]) if e.args else str(e)
             msg = (
@@ -96,23 +94,26 @@ class ProfileGraphNode:
 class ProfileGraph:
     """Catalog graph used to resolve selected profiles and their parent profiles once per selector."""
 
-    def __init__(self) -> None:
+    def __init__(self, target_object: AvdModel) -> None:
         self.nodes: dict[str | None, ProfileGraphNode] = {}
         # Cache ensures that the profile is loaded only when it's needed, and it's resolved exactly once
         self._lazy_load_profile: Callable[[str], AvdModel] = functools.cache(self._get_profile)
+        self._target_object = target_object
 
     @classmethod
-    def _from_profile_list(cls, catalog_list: ProfileList, spec: ProfileSpec) -> ProfileGraph:
-        graph = ProfileGraph()
+    def _from_profile_list(cls, catalog_list: ProfileList, spec: ProfileSpec, root_object: AvdModel) -> ProfileGraph:
+        target_object = cls._init_or_get_target_object(root_object, spec.target)
+        graph = ProfileGraph(target_object)
+        target_cls = type(target_object)
 
-        # Initiate the root profile. All profiles that does not have parent_profile specified would
-        # inherit this profile
-        graph.nodes[None] = ProfileGraphNode(spec)
+        # Initialize the synthetic root profile. Profiles without parent_profile inherit from this empty root.
+        graph.nodes[None] = ProfileGraphNode(spec, target_cls)
+
         for profile_id, profile_data in catalog_list.items():
-            # setdefault allows us ensure that the profile is only initialized once
-            node = graph.nodes.setdefault(profile_id, ProfileGraphNode(spec))
+            # setdefault ensures each profile id gets a single graph node, even if it was referenced as a parent first.
+            node = graph.nodes.setdefault(profile_id, ProfileGraphNode(spec, target_cls))
             parent_node = graph.nodes.setdefault(
-                profile_data.parent_profile, ProfileGraphNode(spec)
+                profile_data.parent_profile, ProfileGraphNode(spec, target_cls)
             )
 
             node.profile = profile_data
@@ -124,12 +125,11 @@ class ProfileGraph:
         return graph
 
     def _check_all_profiles_resolved(self) -> None:
-        # catch the cases when profile is referenced in parent_profile, but not defined in
-        # catalog_list
+        # Catch profiles referenced as parent_profile but not defined in the catalog.
         uninitialized = set()
         for profile_id, profile_node in self.nodes.items():
             if not profile_id:
-                # skip root node as this is a syntetic node
+                # Skip the synthetic root node.
                 continue
             if not profile_node.profile:
                 uninitialized.add(profile_id)
@@ -138,11 +138,7 @@ class ProfileGraph:
             raise AristaAvdInvalidInputsError(msg)
 
     def _check_cycles(self) -> None:
-        """
-        Helper function that helps to determine if the parent_profile references does not incur.
-
-        a cyclic profile resolution.
-        """
+        """Detect cycles in parent_profile references."""
         def _check_node(node: ProfileGraphNode, path: list[str]) -> None:
             if node.id in path:
                 cycle_path = [*path[path.index(node.id) :], cast("str", node.id)]
@@ -164,13 +160,47 @@ class ProfileGraph:
             msg = f"Profile '{profile_id}' is missing"
             raise AristaAvdInvalidInputsError(msg)
         if node.parent and node.parent.id:
-            sub_model = self.get_profile(node.parent.id)
+            sub_model = self._lazy_load_profile(node.parent.id)
+            # Current profile values are preferred over parent profile values.
             node.data._deepinherit(sub_model)
         return node.data
 
-    def get_profile(self, profile_id: str) -> AvdModel:
-        return self._lazy_load_profile(profile_id)
+    def _apply_profile(self, profile_name: AvdProfileRef) -> None:
+        profile = self._lazy_load_profile(profile_name)
+        # Existing target object values are preferred over profile values.
+        self._target_object._deepinherit(profile)
 
+    @classmethod
+    def _init_or_get_target_object(cls, root_object: AvdModel, target: str) -> AvdModel:
+        original_target = target
+
+        def _get_or_init_recursively(target_obj: AvdModel, target: str) -> AvdModel:
+            if not target:
+                return target_obj
+
+            target_path = target.split(".")
+            target_cls = type(target_obj)
+
+            field_name = target_path[0]
+
+            if field_name in target_cls._fields:
+                field_type = target_cls._fields[field_name]["type"]
+                if issubclass(field_type, AvdModel) and not issubclass(field_type, (AvdIndexedList, AvdList)):
+                    field_ojb = target_obj._get(field_name, field_type())
+                    setattr(target_obj, field_name, _get_or_init_recursively(field_ojb, ".".join(target_path[1:])))
+                    return target_obj
+
+                msg = f"`{original_target}` is not a valid profile target: `{field_type}` is not a supported type."
+                raise AvdSchemaError(msg)
+
+            msg = f"`{original_target}` is not a valid profile target: field `{field_name}` is not defined."
+            raise AvdSchemaError(msg)
+
+        # Profiles can write into fields that are not yet initialized. Initialize the attribute tree for the target
+        # path while validating that every path component is a supported AvdModel field.
+        _get_or_init_recursively(root_object, target)
+
+        return get_v2(root_object, target)
 
 class AvdProfileResolver:
     """
@@ -191,7 +221,7 @@ class AvdProfileResolver:
         }
 
     The resolver is instantiated explicitly by callers that already have a
-    loaded target model. For ``eos_designs`` this happens after host-specific
+    loaded root model. For ``eos_designs`` this happens after host-specific
     inputs have been normalized to ``ConsolidatedAVDDesign`` in both pyavd and
     the Ansible action plugin. The ``raw_data`` passed to the resolver is still
     used as the source of profile catalogs, since catalogs can live outside the
@@ -200,17 +230,19 @@ class AvdProfileResolver:
     .. code-block:: python
 
         consolidated_inputs = ConsolidatedAVDDesign._from_avd_design(hostname, inputs)
-        profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
-        consolidated_inputs = profile_resolver._apply_profiles(consolidated_inputs)
+        profile_resolver = AvdProfileResolver(inputs, consolidated_inputs)
+        consolidated_inputs = profile_resolver._apply_profiles()
 
-    ``_apply_profiles`` walks the loaded instance tree. When it finds a set
+    ``_apply_profiles`` walks the loaded root model tree. When it finds a set
     ``AvdProfileRef``, it lazily loads the referenced catalog, builds or reuses
-    a cached profile graph for that field's selector metadata, resolves any
+    a cached profile graph for that field's selector metadata, initializes the
+    generated ``target`` path below the root model if needed, resolves any
     ``parent_profile`` chain, and inherits missing fields from the resulting
-    partial root model into the root instance. The generated ``target`` path is
-    therefore resolved from the root model, not relative to the model containing
-    the profile reference. For conflicting values, the loaded instance wins over
-    the selected profile, and the selected profile wins over its parent profiles.
+    profile model into the target object. The generated ``target`` path is
+    resolved from the root model, not relative to the model containing the
+    profile reference. For conflicting values, the loaded target object wins
+    over the selected profile, and the selected profile wins over its parent
+    profiles.
 
     Example:
 
@@ -242,28 +274,25 @@ class AvdProfileResolver:
     on the loaded root model applies the ``uplink`` profile to the ``interface``
     model.
     """
-    def __init__(self, raw_data: Mapping, target_model: type[AvdModel]) -> None:
-        self.raw_data = raw_data
-        self.target_model = target_model
+    def __init__(self, raw_data: Mapping, root_object: AvdModel) -> None:
+        self._raw_data = raw_data
+        self._root_object = root_object
 
         self._lazy_load_profile_graph: Callable[[ProfileSpec], ProfileGraph] = functools.cache(self._resolve_profiles)
 
     def _resolve_profiles(self, profile_spec: ProfileSpec) -> ProfileGraph:
-        catalog_list = get_v2(self.raw_data, profile_spec.catalog)
+        catalog_list = get_v2(self._raw_data, profile_spec.catalog)
         if catalog_list is None:
             raise AristaAvdMissingVariableError(profile_spec.catalog)
         catalog_list = ProfileList._from_list(catalog_list)
-        return ProfileGraph._from_profile_list(catalog_list, profile_spec)
+        return ProfileGraph._from_profile_list(catalog_list, profile_spec, self._root_object)
 
-    def _get_profile(self, profile_spec: ProfileSpec, profile_name: AvdProfileRef) -> AvdModel:
-
+    def _apply_profile(self, profile_spec: ProfileSpec, profile_name: AvdProfileRef) -> None:
         profiles = self._lazy_load_profile_graph(profile_spec)
-        return profiles.get_profile(profile_name)
+        profiles._apply_profile(profile_name)
 
-    def _apply_profiles(self, instance: AvdModel) -> AvdModel:
-        """Apply selected profile models for all ``AvdProfileRef`` values below ``instance``."""
-        root_instance = instance
-
+    def _apply_profiles(self) -> AvdModel:
+        """Apply selected profile models for all ``AvdProfileRef`` values below the root model."""
         def _apply_matching_profiles(instance: Any, prefix: str = "") -> None:
             if isinstance(instance, (AvdList, AvdIndexedList)):
                 for next_instance in instance:
@@ -275,46 +304,15 @@ class AvdProfileResolver:
                     field_value = instance._get(field_name)
                     if field_type is AvdProfileRef and field_value is not None:
                         profile_selector = cast("ProfileSelector", field_spec)
-                        self._check_target_is_valid(self.target_model, profile_selector["target"])
 
                         resolved_profile_spec = ProfileSpec(
                             profile_selector["catalog"],
                             profile_selector["target"],
-                            self.target_model,
                             new_prefix,
                         )
-                        profile = self._get_profile(resolved_profile_spec, field_value)
-                        root_instance._deepinherit(profile)
+                        self._apply_profile(resolved_profile_spec, field_value)
                     else:
                         _apply_matching_profiles(field_value, new_prefix)
 
-        _apply_matching_profiles(instance)
-        return instance
-
-    def _check_target_is_valid(self, target_cls: type[AvdModel], target: str, original_target: str | None = None) -> None:
-        original_target = original_target or target
-        target_path = target.split(".")
-        if not target:
-            return
-        if target_path[0] in target_cls._fields:
-            field_type = target_cls._fields[target_path[0]]["type"]
-            if issubclass(field_type, AvdModel) and not issubclass(field_type, (AvdIndexedList, AvdList)):
-                self._check_target_is_valid(field_type, ".".join(target_path[1:]), original_target)
-            else:
-                msg = f"`{original_target}` is not a valid profile target: `{field_type}` is not a supported type."
-                raise AvdSchemaError(msg)
-        else:
-            msg = f"`{original_target}` is not a valid profile target: field `{target_path[0]}` is not defined."
-            raise AvdSchemaError(msg)
-
-def _dict_from_path(data: dict, path: str) -> dict:
-    """Return ``data`` nested below ``path``."""
-    if path == ".":
-        return data
-
-    root_dict = target_dict = {}
-    path_ls = path.split(".")
-    for p in path_ls:
-        target_dict = target_dict.setdefault(p, {})
-    target_dict.update(data)
-    return root_dict
+        _apply_matching_profiles(self._root_object)
+        return self._root_object

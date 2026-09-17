@@ -90,9 +90,10 @@ class DeepDemoSchema(ProfileTestRootModel):
 
 def load_with_profiles(schema_cls: type[AvdModel], data: dict) -> AvdModel:
     """Load test schema data and apply profiles with an explicit resolver."""
-    profile_resolver = AvdProfileResolver(data, schema_cls)
     result = schema_cls._from_dict(data)
-    return profile_resolver._apply_profiles(result)
+    profile_resolver = AvdProfileResolver(data, result)
+
+    return profile_resolver._apply_profiles()
 
 
 def test_avd_model_stuff() -> None:
@@ -154,10 +155,10 @@ def test_avd_profile_resolver_applies_device_profiles_to_consolidated_avd_design
 
     results = {}
     eos_design = AVDDesign._from_dict(inputs)
-    profile_resolver = AvdProfileResolver(inputs, ConsolidatedAVDDesign)
     for device_name in ["leaf1", "leaf2"]:
         consolidated_avd_design = ConsolidatedAVDDesign._from_avd_design(device_name, eos_design)
-        results[device_name] = profile_resolver._apply_profiles(consolidated_avd_design)
+        profile_resolver = AvdProfileResolver(inputs, consolidated_avd_design)
+        results[device_name] = profile_resolver._apply_profiles()
 
     assert results["leaf1"].inputs.dns_settings.domain == "leaf1.example.com"
     assert list(results["leaf1"].inputs.dns_settings.domain_list) == ["leaf1.example.com"]
