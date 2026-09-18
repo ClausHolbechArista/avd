@@ -118,6 +118,22 @@
               "description": "Default value",
               "type": "string"
             },
+            "profile_selector": {
+              "description": "Transforms the string field into the profile reference, allowing to apply reusable snippets to the object.",
+              "type": "object",
+              "required": ["catalog"],
+              "properties": {
+                "catalog": {
+                  "type": "string",
+                  "description": "Specifies the dot-separated path in the input data where the list of profiles is provided"
+                },
+                "target": {
+                  "type": "string",
+                  "description": "A dot-separated path within the output where the specified profile apply to. This should point out to the object",
+                  "default": "."
+                }
+              }
+            },
             "format": {
               "type": "string",
               "enum": [

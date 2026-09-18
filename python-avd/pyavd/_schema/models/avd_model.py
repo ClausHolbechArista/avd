@@ -52,7 +52,6 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
     Set holding the skipped keys given in _from_dict.
     These are useful to detect ignored eos_cli_config_gen keys.
     """
-
     @classmethod
     def _load(cls, data: Mapping) -> Self:
         """Returns a new instance loaded with the data from the given dict."""
@@ -64,7 +63,6 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
         if not isinstance(data, Mapping):
             msg = f"Expecting 'data' as a 'Mapping' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
-
         cls_args = {}
         custom_data = {}
         skipped_keys = set()
@@ -89,7 +87,6 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
             cls_args["_custom_data"] = custom_data
         if skipped_keys:
             cls_args["_skipped_keys"] = skipped_keys
-
         return cls(**cls_args)
 
     @classmethod
@@ -215,7 +212,8 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
             # Removing field_ prefix if needed.
             key = self._field_to_key_map.get(field, field)
 
-            if issubclass(self._fields[field]["type"], AvdBase):
+            field_type = self._fields[field]["type"]
+            if isinstance(field_type, type) and issubclass(field_type, AvdBase):
                 value = cast("AvdBase", value)
                 value = None if value._created_from_null else value._dump(include_default_values=include_default_values)
 
@@ -231,7 +229,8 @@ class AvdModel(AvdBase):  # noqa: PLW1641 - __hash__ will be set to None.
 
                 default_value = self._get_field_default_value(field)
 
-                if issubclass(self._fields[field]["type"], AvdBase):
+                field_type = self._fields[field]["type"]
+                if isinstance(field_type, type) and issubclass(field_type, AvdBase):
                     default_value = cast("AvdBase", default_value)
                     default_value = default_value._dump(include_default_values=include_default_values)
 

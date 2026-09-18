@@ -3,7 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from collections.abc import MutableMapping
@@ -38,11 +38,22 @@ def get_device_structured_config(
     Returns:
         Device structured configuration as an instance of EOSConfig.
     """
+    from collections.abc import Mapping  # noqa: PLC0415
+
     from ._eos_designs.structured_config import get_structured_config  # noqa: PLC0415
+    from ._schema.models.avd_profile import AvdProfileResolver  # noqa: PLC0415
     from .api.schemas import ConsolidatedAVDDesign  # noqa: PLC0415
 
     # Normalize to ConsolidatedAVDDesign
     consolidated_inputs = ConsolidatedAVDDesign._from_avd_design(hostname, inputs)
+
+    if isinstance(inputs, dict):
+        # We can't get the profile data from AVDDesign | ConsolidatedAVDDesign inputs as 
+        # the profile mechanism relies on arbitrary keys to extract profile catalogs, which are truncated
+        # from the schema-based objects
+        profile_resolver = AvdProfileResolver(inputs, consolidated_inputs)
+        consolidated_inputs = profile_resolver._apply_profiles()
+        consolidated_inputs = cast(ConsolidatedAVDDesign, consolidated_inputs)
 
     return get_structured_config(
         hostname=hostname,

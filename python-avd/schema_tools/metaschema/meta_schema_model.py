@@ -45,7 +45,6 @@ LOGGER = logging.getLogger(__name__)
 KEY_PATTERN = r"^[a-z][a-z0-9_]*$"
 """Common pattern to match legal key strings"""
 
-
 class AvdSchemaBaseModel(BaseModel, ABC):
     """
     Base class for AvdSchema fields.
@@ -342,6 +341,14 @@ class AvdSchemaStr(AvdSchemaBaseModel):
         def __str__(self) -> str:
             return self.value
 
+    class ProfileSelector(BaseModel):
+        """Settings for resolving reusable profiles from a profile catalog."""
+
+        catalog: str
+        """Dot-separated path to the profile catalog."""
+        target: str = "."
+        """Dot-separated path to the model where the selected profile should be applied."""
+
     # AvdSchema field properties
     type: Literal["str"]
     convert_to_lower_case: bool | None = False
@@ -371,6 +378,7 @@ class AvdSchemaStr(AvdSchemaBaseModel):
     If an element of the variable path is a list, every list item will be unpacked.
     Note that this is building the schema from values in the _data_ being validated!
     """
+    profile_selector: ProfileSelector | None = None
 
     # Type of schema docs generators to use for this schema field.
     _table_row_generator = TableRowGenStr

@@ -11,6 +11,7 @@ from pyavd._schema.coerce_type import coerce_type
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_list import AvdList
 from pyavd._schema.models.avd_model import AvdModel
+from pyavd._schema.models.avd_profile_ref import AvdProfileRef
 from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel
 
 if TYPE_CHECKING:
@@ -11083,6 +11084,7 @@ class EosDesigns(EosDesignsRootModel):
             "cv_tags_topology_type": {"type": str},
             "digital_twin": {"type": DigitalTwin},
             "validation_profile": {"type": str},
+            "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
         }
         name: str
         """Profile Name"""
@@ -12030,6 +12032,8 @@ class EosDesigns(EosDesignsRootModel):
         Validation profiles define requirements (e.g., hardware and logging) used by
         the `anta_runner` role during post-deployment validation.
         """
+        dns_settings_profile: AvdProfileRef | None
+        """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
         if TYPE_CHECKING:
 
@@ -12166,6 +12170,7 @@ class EosDesigns(EosDesignsRootModel):
                 cv_tags_topology_type: str | UndefinedType | None = Undefined,
                 digital_twin: DigitalTwin | UndefinedType = Undefined,
                 validation_profile: str | UndefinedType | None = Undefined,
+                dns_settings_profile: str | UndefinedType | None = Undefined,
             ) -> None:
                 """
                 DeviceProfilesItem.
@@ -12837,6 +12842,7 @@ class EosDesigns(EosDesignsRootModel):
                        `validation_profiles`.
                        Validation profiles define requirements (e.g., hardware and logging) used by
                        the `anta_runner` role during post-deployment validation.
+                    dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                 """
 
@@ -16598,6 +16604,7 @@ class EosDesigns(EosDesignsRootModel):
             "cv_tags_topology_type": {"type": str},
             "digital_twin": {"type": DigitalTwin},
             "validation_profile": {"type": str},
+            "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
         }
         name: str
         """The Node Name is used as "hostname"."""
@@ -17555,6 +17562,8 @@ class EosDesigns(EosDesignsRootModel):
         Validation profiles define requirements (e.g., hardware and logging) used by
         the `anta_runner` role during post-deployment validation.
         """
+        dns_settings_profile: AvdProfileRef | None
+        """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
         if TYPE_CHECKING:
 
@@ -17692,6 +17701,7 @@ class EosDesigns(EosDesignsRootModel):
                 cv_tags_topology_type: str | UndefinedType | None = Undefined,
                 digital_twin: DigitalTwin | UndefinedType = Undefined,
                 validation_profile: str | UndefinedType | None = Undefined,
+                dns_settings_profile: str | UndefinedType | None = Undefined,
             ) -> None:
                 """
                 DevicesItem.
@@ -18371,6 +18381,7 @@ class EosDesigns(EosDesignsRootModel):
                        `validation_profiles`.
                        Validation profiles define requirements (e.g., hardware and logging) used by
                        the `anta_runner` role during post-deployment validation.
+                    dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                 """
 
@@ -57571,6 +57582,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     id: int | None
                     """Unique identifier used for IP addressing and other algorithms."""
@@ -58497,6 +58509,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -58630,6 +58644,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             Defaults.
@@ -59287,6 +59302,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
@@ -63073,6 +63089,7 @@ class EosDesigns(EosDesignsRootModel):
                             "cv_tags_topology_type": {"type": str},
                             "digital_twin": {"type": DigitalTwin},
                             "validation_profile": {"type": str},
+                            "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                         }
                         name: str
                         """The Node Name is used as "hostname"."""
@@ -64009,6 +64026,8 @@ class EosDesigns(EosDesignsRootModel):
                         Validation profiles define requirements (e.g., hardware and logging) used by
                         the `anta_runner` role during post-deployment validation.
                         """
+                        dns_settings_profile: AvdProfileRef | None
+                        """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                         if TYPE_CHECKING:
 
@@ -64144,6 +64163,7 @@ class EosDesigns(EosDesignsRootModel):
                                 cv_tags_topology_type: str | UndefinedType | None = Undefined,
                                 digital_twin: DigitalTwin | UndefinedType = Undefined,
                                 validation_profile: str | UndefinedType | None = Undefined,
+                                dns_settings_profile: str | UndefinedType | None = Undefined,
                             ) -> None:
                                 """
                                 NodesItem.
@@ -64808,6 +64828,7 @@ class EosDesigns(EosDesignsRootModel):
                                        `validation_profiles`.
                                        Validation profiles define requirements (e.g., hardware and logging) used by
                                        the `anta_runner` role during post-deployment validation.
+                                    dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                                 """
 
@@ -68510,6 +68531,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     group: str
                     """
@@ -69449,6 +69471,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -69584,6 +69608,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             NodeGroupsItem.
@@ -70250,6 +70275,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
@@ -74027,6 +74053,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     name: str
                     """The Node Name is used as "hostname"."""
@@ -74963,6 +74990,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -75098,6 +75127,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             NodesItem.
@@ -75762,6 +75792,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
@@ -94088,6 +94119,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     id: int | None
                     """Unique identifier used for IP addressing and other algorithms."""
@@ -95014,6 +95046,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -95147,6 +95181,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             Defaults.
@@ -95804,6 +95839,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
@@ -99590,6 +99626,7 @@ class EosDesigns(EosDesignsRootModel):
                             "cv_tags_topology_type": {"type": str},
                             "digital_twin": {"type": DigitalTwin},
                             "validation_profile": {"type": str},
+                            "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                         }
                         name: str
                         """The Node Name is used as "hostname"."""
@@ -100526,6 +100563,8 @@ class EosDesigns(EosDesignsRootModel):
                         Validation profiles define requirements (e.g., hardware and logging) used by
                         the `anta_runner` role during post-deployment validation.
                         """
+                        dns_settings_profile: AvdProfileRef | None
+                        """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                         if TYPE_CHECKING:
 
@@ -100661,6 +100700,7 @@ class EosDesigns(EosDesignsRootModel):
                                 cv_tags_topology_type: str | UndefinedType | None = Undefined,
                                 digital_twin: DigitalTwin | UndefinedType = Undefined,
                                 validation_profile: str | UndefinedType | None = Undefined,
+                                dns_settings_profile: str | UndefinedType | None = Undefined,
                             ) -> None:
                                 """
                                 NodesItem.
@@ -101325,6 +101365,7 @@ class EosDesigns(EosDesignsRootModel):
                                        `validation_profiles`.
                                        Validation profiles define requirements (e.g., hardware and logging) used by
                                        the `anta_runner` role during post-deployment validation.
+                                    dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                                 """
 
@@ -105027,6 +105068,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     group: str
                     """
@@ -105966,6 +106008,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -106101,6 +106145,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             NodeGroupsItem.
@@ -106767,6 +106812,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
@@ -110544,6 +110590,7 @@ class EosDesigns(EosDesignsRootModel):
                         "cv_tags_topology_type": {"type": str},
                         "digital_twin": {"type": DigitalTwin},
                         "validation_profile": {"type": str},
+                        "dns_settings_profile": {"type": AvdProfileRef, "catalog": "dns_settings_profiles", "target": "inputs.dns_settings"},
                     }
                     name: str
                     """The Node Name is used as "hostname"."""
@@ -111480,6 +111527,8 @@ class EosDesigns(EosDesignsRootModel):
                     Validation profiles define requirements (e.g., hardware and logging) used by
                     the `anta_runner` role during post-deployment validation.
                     """
+                    dns_settings_profile: AvdProfileRef | None
+                    """Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices."""
 
                     if TYPE_CHECKING:
 
@@ -111615,6 +111664,7 @@ class EosDesigns(EosDesignsRootModel):
                             cv_tags_topology_type: str | UndefinedType | None = Undefined,
                             digital_twin: DigitalTwin | UndefinedType = Undefined,
                             validation_profile: str | UndefinedType | None = Undefined,
+                            dns_settings_profile: str | UndefinedType | None = Undefined,
                         ) -> None:
                             """
                             NodesItem.
@@ -112279,6 +112329,7 @@ class EosDesigns(EosDesignsRootModel):
                                    `validation_profiles`.
                                    Validation profiles define requirements (e.g., hardware and logging) used by
                                    the `anta_runner` role during post-deployment validation.
+                                dns_settings_profile: Reference to a defined DNS settings profile. It allows reusing DNS settings across multiple devices.
 
                             """
 
