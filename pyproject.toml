@@ -64,6 +64,7 @@ schema-tools = [
     "pyavd-utils-gen==0.0.12",
     "deepmerge>=1.1.0",
     "jsonschema-rs>=0.46.0",
+    "pyavd-utils-gen==0.0.11",
     "pydantic>=2.11.10",
     "pyyaml>=6.0.0",
     "referencing>=0.37.0",
