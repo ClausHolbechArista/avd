@@ -28,7 +28,7 @@ dependencies = [
     # we patch the connection code in grpclib to get proxy support, so we need to carefully monitor and test new versions
     "grpclib>=0.4.8",
     "jinja2>=3.0",
-    "pyavd-utils==0.0.10",
+    "pyavd-utils==0.0.11",
     "python-socks[asyncio]>=2.7.2",
     "pyyaml>=6.0.0",
     "requests>=2.27.0",
@@ -52,12 +52,14 @@ requires = [
     "deepmerge>=1.1.0",
     "jinja2>=3.0",
     "jsonschema-rs>=0.24",
-    "pyavd-utils==0.0.10",
+    "pyavd-utils==0.0.11",
+    "pyavd-utils-gen==0.0.11",
     "pydantic>=2.3.0",
     "pyyaml>=6.0.0",
     "referencing>=0.35.0",
     "ruff==0.16.8",
     "setuptools>=77.0",
+    "setuptools-rust>=1.12.0",
 ]
 build-backend = "custom_build_backend"
 backend-path = ["scripts"]
@@ -73,6 +75,7 @@ include-package-data = true
     "eos_designs.schema.pickle",
     "schemas.json.gz",
     "schemas.rkyv",
+    "*.pyi",
 ]
 
 [tool.setuptools.packages.find]
@@ -80,6 +83,12 @@ include = ["pyavd*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "pyavd.__version__"}
+
+[[tool.setuptools-rust.ext-modules]]
+target = "pyavd._rust"
+path = "rust/Cargo.toml"
+binding = "PyO3"
+args = ["--locked"]
 
 [dependency-groups]
 # helping pdm generate the flat list of requirements in pre-commit

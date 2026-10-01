@@ -15,7 +15,15 @@ from yaml import CSafeDumper, CSafeLoader
 from yaml import dump as yaml_dump
 from yaml import load as yaml_load
 
-from .constants import LICENSE_HEADER, METASCHEMA_DIR, SCHEMA_STORE_ARCHIVE_FILE, SCHEMA_STORE_GZ_FILE, SCHEMAS
+from .constants import (
+    LICENSE_HEADER,
+    METASCHEMA_DIR,
+    SCHEMA_STORE_ARCHIVE_FILE,
+    SCHEMA_STORE_GZ_FILE,
+    SCHEMAS,
+    VALIDATED_DATA_PYI_FILE,
+    VALIDATED_DATA_RUST_MODELS_FILE,
+)
 from .generate_docs.mdtabsgen import get_md_tabs
 from .metaschema.meta_schema_model import AristaAvdSchema
 from .store import create_store
@@ -122,7 +130,7 @@ def build_schema_tables(schema_store: dict) -> None:
 
 def build_schema_classes() -> None:
     """Build Python Classes from schema."""
-    from pyavd_utils.schema_generation import generate_python_schema_models_from_paths  # noqa: PLC0415
+    from pyavd_utils_gen.schema_generation import generate_python_schema_models_from_paths  # noqa: PLC0415
 
     LOGGER.info("Rebuilding schema Python Classes...")
     # Loading the individual raw schemas preserves references which are deliberately resolved into reusable generated classes.
@@ -143,13 +151,30 @@ def build_schema_classes() -> None:
         subprocess.run(["ruff", "format", str(schema_paths.python_class)], check=False)  # noqa: S603, S607
 
 
+def build_validated_data_models() -> None:
+    """Generate AVD-owned Rust views and matching Python declarations."""
+    from pyavd_utils_gen.validated_data_generation import generate_validated_data_models  # noqa: PLC0415
+
+    LOGGER.info("Generating validated-data Rust views and Python declarations")
+    VALIDATED_DATA_RUST_MODELS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    generate_validated_data_models(
+        SCHEMA_STORE_GZ_FILE,
+        "eos_designs",
+        VALIDATED_DATA_RUST_MODELS_FILE,
+        VALIDATED_DATA_PYI_FILE,
+        "EosDesigns",
+        root_keys=["devices"],
+    )
+
+
 def build_schemas() -> None:
     """Combines the schema fragments, and rebuild the pickled schemas."""
     combine_schemas()
-    from pyavd_utils.schema_store import compile_schema_archive  # noqa: PLC0415
+    from pyavd_utils_gen.schema_store import compile_schema_archive  # noqa: PLC0415
 
     LOGGER.info("Compiling archived schema store")
     compile_schema_archive(SCHEMA_STORE_GZ_FILE, SCHEMA_STORE_ARCHIVE_FILE)
+    build_validated_data_models()
     LOGGER.info("Rebuilding pickled schemas")
     schema_store = create_store(force_rebuild=True)
     validate_schemas(schema_store)
