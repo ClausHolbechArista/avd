@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 
 from pyavd._rust import archive_avd_design
+from pyavd._utils.undefined import Undefined
+from pyavd._validated_data import AVDDesign, open_avd_design
 
 
 def _schema_archive() -> Path:
@@ -57,3 +59,53 @@ def test_archive_avd_design_does_not_publish_invalid_json(tmp_path: Path) -> Non
     assert not destination.exists()
     input_diagnostics = json.loads(result.input_diagnostics_json)
     assert input_diagnostics
+
+
+def test_open_avd_design_exposes_typed_immutable_views(tmp_path: Path) -> None:
+    """Keep lazy typed child views usable independently of their parent views."""
+    destination = tmp_path / "host.rkyv"
+    result = archive_avd_design(
+        json.dumps(
+            {
+                "fabric_name": "TEST",
+                "devices": [
+                    {
+                        "name": "leaf1",
+                        "id": 42,
+                        "vtep": True,
+                        "serial_number": None,
+                        "uplink_interfaces": ["Ethernet1", "Ethernet2"],
+                    }
+                ],
+            }
+        ),
+        destination,
+        _schema_archive(),
+    )
+    assert result.destination == destination
+
+    root = open_avd_design(destination, _schema_archive())
+    assert isinstance(root, AVDDesign)
+    devices = root.devices
+    assert devices is not Undefined
+    assert devices is not None
+    assert len(devices) == 1
+    assert "leaf1" in devices
+    assert list(devices.keys()) == ["leaf1"]
+    assert [item.name for item in devices.values()] == ["leaf1"]
+    assert [(key, item.name) for key, item in devices.items()] == [("leaf1", "leaf1")]
+    assert devices.get("missing") is Undefined
+
+    device = devices["leaf1"]
+    assert device.name == "leaf1"
+    assert device.id == 42
+    assert device.vtep is True
+    assert device.serial_number is None
+    assert device.platform is Undefined
+
+    uplink_interfaces = device.uplink_interfaces
+    assert uplink_interfaces is not Undefined
+    assert uplink_interfaces is not None
+    assert uplink_interfaces[-1] == "Ethernet2"
+    del root, devices, device
+    assert list(uplink_interfaces) == ["Ethernet1", "Ethernet2"]
