@@ -24,5 +24,5 @@ class PublicationResult:
     def infos_json(self) -> str:
         """JSON-encoded coercion and informational diagnostics."""
 
-def archive_eos_designs(input_json: str, destination: Path, schema_archive: Path) -> PublicationResult:
-    """Validate one host's AVD design inputs and publish an archive when valid."""
+def archive_avd_design(input_json: str, destination: Path, schema_archive: Path) -> PublicationResult:
+    """Validate one host's AVD Design inputs and publish an archive when valid."""

@@ -14,7 +14,7 @@ use validation::archive::validate_json_to_archive;
 #[allow(dead_code, non_snake_case, reason = "generated API exceeds the current call graph and preserves schema key spelling")]
 #[rustfmt::skip]
 mod generated {
-    pub mod eos_designs;
+    pub mod avd_design;
 }
 
 /// Result of validating and conditionally publishing one host archive.
@@ -33,9 +33,9 @@ struct PublicationResult {
     infos_json: String,
 }
 
-/// Validate and coerce one host's AVD design inputs and publish an rkyv archive when valid.
+/// Validate and coerce one host's AVD Design inputs and publish an rkyv archive when valid.
 #[pyfunction]
-fn archive_eos_designs(
+fn archive_avd_design(
     input_json: &str,
     destination: PathBuf,
     schema_archive: PathBuf,
@@ -44,10 +44,10 @@ fn archive_eos_designs(
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
     let publication = validate_json_to_archive(
         &schemas,
-        "eos_designs",
+        "avd_design",
         input_json,
         &destination,
-        generated::eos_designs::REGISTRY,
+        generated::avd_design::REGISTRY,
     )
     .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
     let published_destination = publication.published.then_some(destination);
@@ -70,5 +70,5 @@ mod _rust {
     #[pymodule_export]
     use super::PublicationResult;
     #[pymodule_export]
-    use super::archive_eos_designs;
+    use super::archive_avd_design;
 }
