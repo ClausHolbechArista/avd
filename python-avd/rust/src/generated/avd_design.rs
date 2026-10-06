@@ -13735,10 +13735,10 @@ mod __pyavd_generated_registry {
 }
 pub use __pyavd_generated_registry::REGISTRY;
 
-pub mod eos_designs {
+pub mod avd_design {
     #[derive(Clone, Copy, Debug)]
-    pub struct EosDesigns<'a>(::validation::archive::DictView<'a>);
-    impl<'a> EosDesigns<'a> {
+    pub struct AvdDesign<'a>(::validation::archive::DictView<'a>);
+    impl<'a> AvdDesign<'a> {
         pub fn from_value(value: ::validation::archive::ValueView<'a>) -> ::core::option::Option<Self> { value.as_dict().map(Self) }
         pub fn devices(self) -> ::core::option::Option<Devices<'a>> { self.0.field(20321).and_then(Devices::from_value) }
     }

@@ -16,13 +16,13 @@ from yaml import dump as yaml_dump
 from yaml import load as yaml_load
 
 from .constants import (
+    AVD_DESIGN_RUST_MODELS_FILE,
     LICENSE_HEADER,
     METASCHEMA_DIR,
     SCHEMA_STORE_ARCHIVE_FILE,
     SCHEMA_STORE_GZ_FILE,
     SCHEMAS,
     VALIDATED_DATA_PYI_FILE,
-    VALIDATED_DATA_RUST_MODELS_FILE,
 )
 from .store import create_store
 from .validate_schema_fragments import validate_schema_fragments
@@ -121,13 +121,14 @@ def build_validated_data_models() -> None:
     from pyavd_utils_gen.validated_data_generation import generate_validated_data_models  # noqa: PLC0415
 
     LOGGER.info("Generating validated-data Rust views and Python declarations")
-    VALIDATED_DATA_RUST_MODELS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    AVD_DESIGN_RUST_MODELS_FILE.parent.mkdir(parents=True, exist_ok=True)
     generate_validated_data_models(
         SCHEMA_STORE_GZ_FILE,
         "eos_designs",
-        VALIDATED_DATA_RUST_MODELS_FILE,
+        AVD_DESIGN_RUST_MODELS_FILE,
         VALIDATED_DATA_PYI_FILE,
-        "EosDesigns",
+        "AvdDesign",
+        "AVDDesign",
         root_keys=["devices"],
     )
 
