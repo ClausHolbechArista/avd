@@ -7,9 +7,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from pyavd import _validated_data
 from pyavd._rust import archive_avd_design
 from pyavd._utils.undefined import Undefined
-from pyavd._validated_data import AVDDesign, open_avd_design
 
 
 def _schema_archive() -> Path:
@@ -84,8 +84,8 @@ def test_open_avd_design_exposes_typed_immutable_views(tmp_path: Path) -> None:
     )
     assert result.destination == destination
 
-    root = open_avd_design(destination, _schema_archive())
-    assert isinstance(root, AVDDesign)
+    root = _validated_data.open_avd_design(destination, _schema_archive())
+    assert isinstance(root, _validated_data.AVDDesign)
     devices = root.devices
     assert devices is not Undefined
     assert devices is not None
