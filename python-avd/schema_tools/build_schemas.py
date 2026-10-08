@@ -166,7 +166,7 @@ def build_validated_data_models() -> None:
         VALIDATED_DATA_PYI_FILE,
         "AvdDesign",
         "AVDDesign",
-        root_keys=["devices"],
+        reused_schemas={"eos_cli_config_gen": ("EosCliConfigGen", "EosCliConfigGen")},
     )
     for generated_file in (VALIDATED_DATA_PY_FILE, VALIDATED_DATA_PYI_FILE):
         LOGGER.info("Running 'ruff' for generated validated-data file: %s", generated_file)

@@ -120,6 +120,14 @@ extend_skip_glob = [
 # Should not be needed, but the ruff vscode extension does not seem to respect the ruff behavior of ignoring files without tool.ruff
 extend = "../pyproject.toml"
 
+[tool.ruff.lint.extend-per-file-ignores]
+"pyavd/_validated_data.py" = [
+  "E501", # Generated schema-path identifiers can exceed the configured line length.
+]
+"pyavd/_validated_data.pyi" = [
+  "E501", # Generated schema-path identifiers can exceed the configured line length.
+]
+
 [tool.pyright]
 # Pyright stops at the first parent pyproject.toml it finds so as documented adding base config
 extends = "../pyproject.toml"
