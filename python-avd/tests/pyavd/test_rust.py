@@ -86,6 +86,7 @@ def test_open_avd_design_exposes_typed_immutable_views(tmp_path: Path) -> None:
 
     root = _validated_data.open_avd_design(destination, _schema_archive())
     assert isinstance(root, _validated_data.AVDDesign)
+    assert root.fabric_name == "TEST"
     devices = root.devices
     assert devices is not Undefined
     assert devices is not None
