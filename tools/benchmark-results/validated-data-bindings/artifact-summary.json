@@ -1,0 +1,68 @@
+{
+  "toolchain": {
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)"
+  },
+  "build": {
+    "profile": "release (--release)",
+    "crate_type": "cdylib",
+    "python_abi_feature": "pyo3 abi3-py310",
+    "strip_copy_only": "strip --strip-unneeded",
+    "cargo_build_command": "cargo build --offline --release --manifest-path python-avd/rust/Cargo.toml --config /tmp/validated-data-local-cargo.toml --target-dir /home/holbech/repos/avd/target"
+  },
+  "extensions": {
+    "baseline": {
+      "release_unstripped_bytes": 8445704,
+      "release_stripped_copy_bytes": 6330080
+    },
+    "native": {
+      "release_unstripped_bytes": 9060272,
+      "release_stripped_copy_bytes": 6923328
+    }
+  },
+  "zip_approximation": {
+    "excluded": "unchanged .pyi omitted",
+    "python_wrapper": {
+      "entries": [
+        "stripped baseline .so",
+        "saved baseline _validated_data.py"
+      ],
+      "level": 6,
+      "method": "ZIP_DEFLATED",
+      "members": [
+        {
+          "name": "pyavd/_rust.abi3.so",
+          "uncompressed_bytes": 6330080,
+          "compressed_bytes": 1517475
+        },
+        {
+          "name": "pyavd/_validated_data.py",
+          "uncompressed_bytes": 1116212,
+          "compressed_bytes": 67357
+        }
+      ],
+      "archive_bytes": 1585092
+    },
+    "native_catalog": {
+      "entries": [
+        "stripped native .so"
+      ],
+      "level": 6,
+      "method": "ZIP_DEFLATED",
+      "members": [
+        {
+          "name": "pyavd/_rust.abi3.so",
+          "uncompressed_bytes": 6923328,
+          "compressed_bytes": 1611386
+        }
+      ],
+      "archive_bytes": 1611522
+    }
+  },
+  "pinned_benchmark": {
+    "cpu": 8,
+    "iterations": 200000,
+    "baseline_report": "baseline-pinned.json",
+    "native_report": "native-pinned.json"
+  }
+}

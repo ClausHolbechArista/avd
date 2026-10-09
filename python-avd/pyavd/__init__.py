@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from ._lazy_import import LazyImports, install_lazy_imports
 
 if TYPE_CHECKING:
+    from . import _validated_data as _validated_data
     from .api.eos_cli_config_gen import ConfigRenderConfiguration as ConfigRenderConfiguration
     from .api.eos_cli_config_gen import DocRenderConfiguration as DocRenderConfiguration
     from .api.eos_cli_config_gen import RenderConfiguration as RenderConfiguration
@@ -29,6 +30,7 @@ __license__ = "Apache 2.0"
 __version__ = "6.5.0.dev0"
 
 _LAZY_IMPORTS: LazyImports = {
+    "_validated_data": ("pyavd._rust", "_validated_data"),
     "ConfigRenderConfiguration": ("pyavd.api.eos_cli_config_gen", "ConfigRenderConfiguration"),
     "DocRenderConfiguration": ("pyavd.api.eos_cli_config_gen", "DocRenderConfiguration"),
     "RenderConfiguration": ("pyavd.api.eos_cli_config_gen", "RenderConfiguration"),
@@ -43,3 +45,5 @@ _LAZY_IMPORTS: LazyImports = {
 }
 
 install_lazy_imports(_LAZY_IMPORTS, globals())
+# Private data models are available explicitly, not through wildcard imports.
+__all__ = [name for name in _LAZY_IMPORTS if not name.startswith("_")]
