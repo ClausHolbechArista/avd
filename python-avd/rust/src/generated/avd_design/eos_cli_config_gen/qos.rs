@@ -2,111 +2,76 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Map {
-        model cos("cos", 0) -> map::Cos<'a>;
-        model dscp("dscp", 1) -> map::Dscp<'a>;
-        model exp("exp", 2) -> map::Exp<'a>;
-        model traffic_class("traffic_class", 3) -> map::TrafficClass<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Map<'a, Mode> {
+    pub cos: ::validated_data::Field<map::Cos<'a, Mode>>,
+    pub dscp: ::validated_data::Field<map::Dscp<'a, Mode>>,
+    pub exp: ::validated_data::Field<map::Exp<'a, Mode>>,
+    pub traffic_class: ::validated_data::Field<map::TrafficClass<'a, Mode>>,
 }
 
 pub mod map {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Cos {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Cos<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dscp {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Dscp<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Exp {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Exp<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TrafficClass {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct TrafficClass<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RandomDetect {
-        model ecn("ecn", 0) -> random_detect::Ecn<'a>;
-    }
+#[::validated_data::data_view]
+pub struct RandomDetect<'a, Mode> {
+    pub ecn: ::validated_data::Field<random_detect::Ecn<'a, Mode>>,
 }
 
 pub mod random_detect {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ecn {
-            model allow_non_ect("allow_non_ect", 0) -> ecn::AllowNonEct<'a>;
-            model global_buffer("global_buffer", 1) -> ecn::GlobalBuffer<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Ecn<'a, Mode> {
+        pub allow_non_ect: ::validated_data::Field<ecn::AllowNonEct<'a, Mode>>,
+        pub global_buffer: ::validated_data::Field<ecn::GlobalBuffer<'a, Mode>>,
     }
 
     pub mod ecn {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct AllowNonEct {
-                scalar enabled("enabled", 0) -> bool;
-                scalar chip_based("chip_based", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct AllowNonEct<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub chip_based: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct GlobalBuffer {
-                scalar units("units", 0) -> &'a str;
-                scalar min("min", 1) -> i64;
-                scalar max("max", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct GlobalBuffer<'a, Mode> {
+            pub units: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub min: ::validated_data::RequiredValue<i64, Mode>,
+            pub max: ::validated_data::RequiredValue<i64, Mode>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct TxQueue {
-        scalar shape_rate_percent_adaptive("shape_rate_percent_adaptive", 0) -> bool;
-        model queues("queues", 1) -> tx_queue::Queues<'a>;
-    }
+#[::validated_data::data_view]
+pub struct TxQueue<'a, Mode> {
+    pub shape_rate_percent_adaptive: ::validated_data::Field<bool>,
+    pub queues: ::validated_data::Field<tx_queue::Queues<'a, Mode>>,
 }
 
 pub mod tx_queue {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Queues {
-            model item (0) -> queues::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(id))]
+    pub struct Queues<'a, Mode> (::validated_data::Field<queues::Item<'a, Mode>>);
 
     pub mod queues {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar id("id", 0) -> i64;
-                scalar scheduler_profile_responsive("scheduler_profile_responsive", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub id: ::validated_data::Field<i64>,
+            pub scheduler_profile_responsive: ::validated_data::Field<bool>,
         }
     }
 }

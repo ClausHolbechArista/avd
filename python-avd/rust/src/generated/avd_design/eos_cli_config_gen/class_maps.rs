@@ -2,72 +2,52 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Pbr {
-        model item (0) -> pbr::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Pbr<'a, Mode> (::validated_data::Field<pbr::Item<'a, Mode>>);
 
 pub mod pbr {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model ip("ip", 1) -> item::Ip<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub ip: ::validated_data::Field<item::Ip<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ip {
-                scalar access_group("access_group", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Ip<'a, Mode> {
+            pub access_group: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Qos {
-        model item (0) -> qos::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Qos<'a, Mode> (::validated_data::Field<qos::Item<'a, Mode>>);
 
 pub mod qos {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar vlan("vlan", 1) -> &'a str;
-            scalar cos("cos", 2) -> &'a str;
-            model ip("ip", 3) -> item::Ip<'a>;
-            model ipv6("ipv6", 4) -> item::Ipv6<'a>;
-            scalar dscp("dscp", 5) -> &'a str;
-            scalar ecn("ecn", 6) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub vlan: ::validated_data::Field<&'a str>,
+        pub cos: ::validated_data::Field<&'a str>,
+        pub ip: ::validated_data::Field<item::Ip<'a, Mode>>,
+        pub ipv6: ::validated_data::Field<item::Ipv6<'a, Mode>>,
+        pub dscp: ::validated_data::Field<&'a str>,
+        pub ecn: ::validated_data::Field<&'a str>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ip {
-                scalar access_group("access_group", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Ip<'a, Mode> {
+            pub access_group: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ipv6 {
-                scalar access_group("access_group", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Ipv6<'a, Mode> {
+            pub access_group: ::validated_data::Field<&'a str>,
         }
     }
 }

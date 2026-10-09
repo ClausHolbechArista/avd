@@ -2,92 +2,67 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct LocalInterface {
-        scalar name("name", 0) -> &'a str;
-        scalar vrf("vrf", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct LocalInterface<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub vrf: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Servers {
-        model item (0) -> servers::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar burst("burst", 1) -> bool;
-            scalar iburst("iburst", 2) -> bool;
-            scalar key("key", 3) -> i64;
-            scalar local_interface("local_interface", 4) -> &'a str;
-            scalar source_address("source_address", 5) -> &'a str;
-            scalar maxpoll("maxpoll", 6) -> i64;
-            scalar minpoll("minpoll", 7) -> i64;
-            scalar preferred("preferred", 8) -> bool;
-            scalar version("version", 9) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub burst: ::validated_data::Field<bool>,
+        pub iburst: ::validated_data::Field<bool>,
+        pub key: ::validated_data::Field<i64>,
+        pub local_interface: ::validated_data::Field<&'a str>,
+        pub source_address: ::validated_data::Field<&'a str>,
+        pub maxpoll: ::validated_data::Field<i64>,
+        pub minpoll: ::validated_data::Field<i64>,
+        pub preferred: ::validated_data::Field<bool>,
+        pub version: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AuthenticationKeys {
-        model item (0) -> authentication_keys::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(id))]
+pub struct AuthenticationKeys<'a, Mode> (::validated_data::Field<authentication_keys::Item<'a, Mode>>);
 
 pub mod authentication_keys {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar id("id", 0) -> i64;
-            scalar hash_algorithm("hash_algorithm", 1) -> &'a str;
-            scalar key("key", 2) -> &'a str;
-            scalar key_type("key_type", 3) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub id: ::validated_data::Field<i64>,
+        pub hash_algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub key: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub key_type: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Serve {
-        scalar serve_all("serve_all", 0) -> bool;
-        scalar access_group("access_group", 1) -> &'a str;
-        scalar ipv6_access_group("ipv6_access_group", 2) -> &'a str;
-        model vrfs("vrfs", 3) -> serve::Vrfs<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Serve<'a, Mode> {
+    pub serve_all: ::validated_data::Field<bool>,
+    pub access_group: ::validated_data::Field<&'a str>,
+    pub ipv6_access_group: ::validated_data::Field<&'a str>,
+    pub vrfs: ::validated_data::Field<serve::Vrfs<'a, Mode>>,
 }
 
 pub mod serve {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Vrfs {
-            model item (0) -> vrfs::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar serve_all("serve_all", 1) -> bool;
-                scalar access_group("access_group", 2) -> &'a str;
-                scalar ipv6_access_group("ipv6_access_group", 3) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub serve_all: ::validated_data::Field<bool>,
+            pub access_group: ::validated_data::Field<&'a str>,
+            pub ipv6_access_group: ::validated_data::Field<&'a str>,
         }
     }
 }

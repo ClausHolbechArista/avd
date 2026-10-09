@@ -2,41 +2,28 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct InterfaceTags {
-        model item (0) -> interface_tags::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct InterfaceTags<'a, Mode> (::validated_data::Field<interface_tags::Item<'a, Mode>>);
 
 pub mod interface_tags {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar data_path("data_path", 1) -> &'a str;
-            scalar value("value", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub data_path: ::validated_data::Field<&'a str>,
+        pub value: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DeviceTags {
-        model item (0) -> device_tags::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct DeviceTags<'a, Mode> (::validated_data::Field<device_tags::Item<'a, Mode>>);
 
 pub mod device_tags {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar data_path("data_path", 1) -> &'a str;
-            scalar value("value", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub data_path: ::validated_data::Field<&'a str>,
+        pub value: ::validated_data::Field<&'a str>,
     }
 }

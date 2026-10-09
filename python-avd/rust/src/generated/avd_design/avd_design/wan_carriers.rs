@@ -2,12 +2,10 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar description("description", 1) -> &'a str;
-        scalar path_group("path_group", 2) -> &'a str;
-        scalar trusted("trusted", 3) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub description: ::validated_data::Field<&'a str>,
+    pub path_group: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub trusted: ::validated_data::Field<bool>,
 }

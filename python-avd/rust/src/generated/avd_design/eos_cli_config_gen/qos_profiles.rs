@@ -2,308 +2,241 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar trust("trust", 1) -> &'a str;
-        scalar cos("cos", 2) -> i64;
-        scalar dscp("dscp", 3) -> i64;
-        model shape("shape", 4) -> item::Shape<'a>;
-        model service_policy("service_policy", 5) -> item::ServicePolicy<'a>;
-        model tx_queues("tx_queues", 6) -> item::TxQueues<'a>;
-        model uc_tx_queues("uc_tx_queues", 7) -> item::UcTxQueues<'a>;
-        model mc_tx_queues("mc_tx_queues", 8) -> item::McTxQueues<'a>;
-        model priority_flow_control("priority_flow_control", 9) -> item::PriorityFlowControl<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub trust: ::validated_data::Field<&'a str>,
+    pub cos: ::validated_data::Field<i64>,
+    pub dscp: ::validated_data::Field<i64>,
+    pub shape: ::validated_data::Field<item::Shape<'a, Mode>>,
+    pub service_policy: ::validated_data::Field<item::ServicePolicy<'a, Mode>>,
+    pub tx_queues: ::validated_data::Field<item::TxQueues<'a, Mode>>,
+    pub uc_tx_queues: ::validated_data::Field<item::UcTxQueues<'a, Mode>>,
+    pub mc_tx_queues: ::validated_data::Field<item::McTxQueues<'a, Mode>>,
+    pub priority_flow_control: ::validated_data::Field<item::PriorityFlowControl<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Shape {
-            scalar rate("rate", 0) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Shape<'a, Mode> {
+        pub rate: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ServicePolicy {
-            model field_type("type", 0) -> service_policy::FieldType<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct ServicePolicy<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::Field<service_policy::FieldType<'a, Mode>>,
     }
 
     pub mod service_policy {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct FieldType {
-                scalar qos_input("qos_input", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct FieldType<'a, Mode> {
+            pub qos_input: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TxQueues {
-            model item (0) -> tx_queues::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(id))]
+    pub struct TxQueues<'a, Mode> (::validated_data::Field<tx_queues::Item<'a, Mode>>);
 
     pub mod tx_queues {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar id("id", 0) -> i64;
-                scalar bandwidth_percent("bandwidth_percent", 1) -> i64;
-                scalar bandwidth_guaranteed_percent("bandwidth_guaranteed_percent", 2) -> i64;
-                scalar priority("priority", 3) -> &'a str;
-                model shape("shape", 4) -> item::Shape<'a>;
-                scalar comment("comment", 5) -> &'a str;
-                model random_detect("random_detect", 6) -> item::RandomDetect<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub id: ::validated_data::Field<i64>,
+            pub bandwidth_percent: ::validated_data::Field<i64>,
+            pub bandwidth_guaranteed_percent: ::validated_data::Field<i64>,
+            pub priority: ::validated_data::Field<&'a str>,
+            pub shape: ::validated_data::Field<item::Shape<'a, Mode>>,
+            pub comment: ::validated_data::Field<&'a str>,
+            pub random_detect: ::validated_data::Field<item::RandomDetect<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Shape {
-                    scalar rate("rate", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Shape<'a, Mode> {
+                pub rate: ::validated_data::Field<&'a str>,
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct RandomDetect {
-                    model ecn("ecn", 0) -> random_detect::Ecn<'a>;
-                    model drop("drop", 1) -> random_detect::Drop<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct RandomDetect<'a, Mode> {
+                pub ecn: ::validated_data::Field<random_detect::Ecn<'a, Mode>>,
+                pub drop: ::validated_data::Field<random_detect::Drop<'a, Mode>>,
             }
 
             pub mod random_detect {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Ecn {
-                        scalar count("count", 0) -> bool;
-                        model threshold("threshold", 1) -> ecn::Threshold<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Ecn<'a, Mode> {
+                    pub count: ::validated_data::Field<bool>,
+                    pub threshold: ::validated_data::Field<ecn::Threshold<'a, Mode>>,
                 }
 
                 pub mod ecn {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Threshold {
-                            scalar units("units", 0) -> &'a str;
-                            scalar min("min", 1) -> i64;
-                            scalar max("max", 2) -> i64;
-                            scalar max_probability("max_probability", 3) -> i64;
-                            scalar weight("weight", 4) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Threshold<'a, Mode> {
+                        pub units: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub min: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max_probability: ::validated_data::Field<i64>,
+                        pub weight: ::validated_data::Field<i64>,
                     }
                 }
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Drop {
-                        model threshold("threshold", 0) -> drop::Threshold<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Drop<'a, Mode> {
+                    pub threshold: ::validated_data::Field<drop::Threshold<'a, Mode>>,
                 }
 
                 pub mod drop {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Threshold {
-                            scalar units("units", 0) -> &'a str;
-                            scalar drop_precedence("drop_precedence", 1) -> i64;
-                            scalar min("min", 2) -> i64;
-                            scalar max("max", 3) -> i64;
-                            scalar drop_probability("drop_probability", 4) -> i64;
-                            scalar weight("weight", 5) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Threshold<'a, Mode> {
+                        pub units: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub drop_precedence: ::validated_data::Field<i64>,
+                        pub min: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max: ::validated_data::RequiredValue<i64, Mode>,
+                        pub drop_probability: ::validated_data::RequiredValue<i64, Mode>,
+                        pub weight: ::validated_data::Field<i64>,
                     }
                 }
             }
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct UcTxQueues {
-            model item (0) -> uc_tx_queues::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(id))]
+    pub struct UcTxQueues<'a, Mode> (::validated_data::Field<uc_tx_queues::Item<'a, Mode>>);
 
     pub mod uc_tx_queues {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar id("id", 0) -> i64;
-                scalar bandwidth_percent("bandwidth_percent", 1) -> i64;
-                scalar bandwidth_guaranteed_percent("bandwidth_guaranteed_percent", 2) -> i64;
-                scalar priority("priority", 3) -> &'a str;
-                model shape("shape", 4) -> item::Shape<'a>;
-                scalar comment("comment", 5) -> &'a str;
-                model random_detect("random_detect", 6) -> item::RandomDetect<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub id: ::validated_data::Field<i64>,
+            pub bandwidth_percent: ::validated_data::Field<i64>,
+            pub bandwidth_guaranteed_percent: ::validated_data::Field<i64>,
+            pub priority: ::validated_data::Field<&'a str>,
+            pub shape: ::validated_data::Field<item::Shape<'a, Mode>>,
+            pub comment: ::validated_data::Field<&'a str>,
+            pub random_detect: ::validated_data::Field<item::RandomDetect<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Shape {
-                    scalar rate("rate", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Shape<'a, Mode> {
+                pub rate: ::validated_data::Field<&'a str>,
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct RandomDetect {
-                    model ecn("ecn", 0) -> random_detect::Ecn<'a>;
-                    model drop("drop", 1) -> random_detect::Drop<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct RandomDetect<'a, Mode> {
+                pub ecn: ::validated_data::Field<random_detect::Ecn<'a, Mode>>,
+                pub drop: ::validated_data::Field<random_detect::Drop<'a, Mode>>,
             }
 
             pub mod random_detect {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Ecn {
-                        scalar count("count", 0) -> bool;
-                        model threshold("threshold", 1) -> ecn::Threshold<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Ecn<'a, Mode> {
+                    pub count: ::validated_data::Field<bool>,
+                    pub threshold: ::validated_data::Field<ecn::Threshold<'a, Mode>>,
                 }
 
                 pub mod ecn {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Threshold {
-                            scalar units("units", 0) -> &'a str;
-                            scalar min("min", 1) -> i64;
-                            scalar max("max", 2) -> i64;
-                            scalar max_probability("max_probability", 3) -> i64;
-                            scalar weight("weight", 4) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Threshold<'a, Mode> {
+                        pub units: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub min: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max_probability: ::validated_data::Field<i64>,
+                        pub weight: ::validated_data::Field<i64>,
                     }
                 }
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Drop {
-                        model threshold("threshold", 0) -> drop::Threshold<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Drop<'a, Mode> {
+                    pub threshold: ::validated_data::Field<drop::Threshold<'a, Mode>>,
                 }
 
                 pub mod drop {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Threshold {
-                            scalar units("units", 0) -> &'a str;
-                            scalar drop_precedence("drop_precedence", 1) -> i64;
-                            scalar min("min", 2) -> i64;
-                            scalar max("max", 3) -> i64;
-                            scalar drop_probability("drop_probability", 4) -> i64;
-                            scalar weight("weight", 5) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Threshold<'a, Mode> {
+                        pub units: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub drop_precedence: ::validated_data::Field<i64>,
+                        pub min: ::validated_data::RequiredValue<i64, Mode>,
+                        pub max: ::validated_data::RequiredValue<i64, Mode>,
+                        pub drop_probability: ::validated_data::RequiredValue<i64, Mode>,
+                        pub weight: ::validated_data::Field<i64>,
                     }
                 }
             }
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct McTxQueues {
-            model item (0) -> mc_tx_queues::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(id))]
+    pub struct McTxQueues<'a, Mode> (::validated_data::Field<mc_tx_queues::Item<'a, Mode>>);
 
     pub mod mc_tx_queues {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar id("id", 0) -> i64;
-                scalar bandwidth_percent("bandwidth_percent", 1) -> i64;
-                scalar bandwidth_guaranteed_percent("bandwidth_guaranteed_percent", 2) -> i64;
-                scalar priority("priority", 3) -> &'a str;
-                model shape("shape", 4) -> item::Shape<'a>;
-                scalar comment("comment", 5) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub id: ::validated_data::Field<i64>,
+            pub bandwidth_percent: ::validated_data::Field<i64>,
+            pub bandwidth_guaranteed_percent: ::validated_data::Field<i64>,
+            pub priority: ::validated_data::Field<&'a str>,
+            pub shape: ::validated_data::Field<item::Shape<'a, Mode>>,
+            pub comment: ::validated_data::Field<&'a str>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Shape {
-                    scalar rate("rate", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Shape<'a, Mode> {
+                pub rate: ::validated_data::Field<&'a str>,
             }
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PriorityFlowControl {
-            scalar enabled("enabled", 0) -> bool;
-            model watchdog("watchdog", 1) -> priority_flow_control::Watchdog<'a>;
-            model priorities("priorities", 2) -> priority_flow_control::Priorities<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct PriorityFlowControl<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub watchdog: ::validated_data::Field<priority_flow_control::Watchdog<'a, Mode>>,
+        pub priorities: ::validated_data::Field<priority_flow_control::Priorities<'a, Mode>>,
     }
 
     pub mod priority_flow_control {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Watchdog {
-                scalar enabled("enabled", 0) -> bool;
-                scalar action("action", 1) -> &'a str;
-                model timer("timer", 2) -> watchdog::Timer<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Watchdog<'a, Mode> {
+            pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+            pub action: ::validated_data::Field<&'a str>,
+            pub timer: ::validated_data::Field<watchdog::Timer<'a, Mode>>,
         }
 
         pub mod watchdog {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Timer {
-                    scalar timeout("timeout", 0) -> &'a str;
-                    scalar polling_interval("polling_interval", 1) -> &'a str;
-                    scalar recovery_time("recovery_time", 2) -> &'a str;
-                    scalar forced("forced", 3) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Timer<'a, Mode> {
+                pub timeout: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub polling_interval: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub recovery_time: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub forced: ::validated_data::Field<bool>,
             }
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Priorities {
-                model item (0) -> priorities::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(priority))]
+        pub struct Priorities<'a, Mode> (::validated_data::Field<priorities::Item<'a, Mode>>);
 
         pub mod priorities {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar priority("priority", 0) -> i64;
-                    scalar no_drop("no_drop", 1) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub priority: ::validated_data::Field<i64>,
+                pub no_drop: ::validated_data::RequiredValue<bool, Mode>,
             }
         }
     }

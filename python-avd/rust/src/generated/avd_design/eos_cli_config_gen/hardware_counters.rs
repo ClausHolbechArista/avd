@@ -2,26 +2,20 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Features {
-        model item (0) -> features::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Features<'a, Mode> (::validated_data::Field<features::Item<'a, Mode>>);
 
 pub mod features {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar direction("direction", 1) -> &'a str;
-            scalar enabled("enabled", 2) -> bool;
-            scalar address_type("address_type", 3) -> &'a str;
-            scalar layer3("layer3", 4) -> bool;
-            scalar vrf("vrf", 5) -> &'a str;
-            scalar prefix("prefix", 6) -> &'a str;
-            scalar units_packets("units_packets", 7) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub direction: ::validated_data::Field<&'a str>,
+        pub enabled: ::validated_data::Field<bool>,
+        pub address_type: ::validated_data::Field<&'a str>,
+        pub layer3: ::validated_data::Field<bool>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub prefix: ::validated_data::Field<&'a str>,
+        pub units_packets: ::validated_data::Field<bool>,
     }
 }

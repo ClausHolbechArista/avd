@@ -2,42 +2,32 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct NotificationHostFlap {
-        scalar logging("logging", 0) -> bool;
-        model detection("detection", 1) -> notification_host_flap::Detection<'a>;
-    }
+#[::validated_data::data_view]
+pub struct NotificationHostFlap<'a, Mode> {
+    pub logging: ::validated_data::Field<bool>,
+    pub detection: ::validated_data::Field<notification_host_flap::Detection<'a, Mode>>,
 }
 
 pub mod notification_host_flap {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Detection {
-            scalar window("window", 0) -> i64;
-            scalar moves("moves", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Detection<'a, Mode> {
+        pub window: ::validated_data::Field<i64>,
+        pub moves: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct StaticEntries {
-        model item (0) -> static_entries::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct StaticEntries<'a, Mode> (::validated_data::Field<static_entries::Item<'a, Mode>>);
 
 pub mod static_entries {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar mac_address("mac_address", 0) -> &'a str;
-            scalar vlan("vlan", 1) -> i64;
-            scalar drop("drop", 2) -> bool;
-            scalar interface("interface", 3) -> &'a str;
-            scalar eligibility_forwarding("eligibility_forwarding", 4) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub mac_address: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub vlan: ::validated_data::RequiredValue<i64, Mode>,
+        pub drop: ::validated_data::Field<bool>,
+        pub interface: ::validated_data::Field<&'a str>,
+        pub eligibility_forwarding: ::validated_data::Field<bool>,
     }
 }

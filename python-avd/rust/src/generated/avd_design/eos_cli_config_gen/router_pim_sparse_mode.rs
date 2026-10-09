@@ -2,211 +2,146 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ipv4 {
-        scalar bfd("bfd", 0) -> bool;
-        scalar make_before_break("make_before_break", 1) -> bool;
-        scalar message_hello_address_secondary_ipv6("message_hello_address_secondary_ipv6", 2) -> bool;
-        scalar ssm_range("ssm_range", 3) -> &'a str;
-        scalar register_local_interface("register_local_interface", 4) -> &'a str;
-        model rp_addresses("rp_addresses", 5) -> ipv4::RpAddresses<'a>;
-        model anycast_rps("anycast_rps", 6) -> ipv4::AnycastRps<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Ipv4<'a, Mode> {
+    pub bfd: ::validated_data::Field<bool>,
+    pub make_before_break: ::validated_data::Field<bool>,
+    pub message_hello_address_secondary_ipv6: ::validated_data::Field<bool>,
+    pub ssm_range: ::validated_data::Field<&'a str>,
+    pub register_local_interface: ::validated_data::Field<&'a str>,
+    pub rp_addresses: ::validated_data::Field<ipv4::RpAddresses<'a, Mode>>,
+    pub anycast_rps: ::validated_data::Field<ipv4::AnycastRps<'a, Mode>>,
 }
 
 pub mod ipv4 {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct RpAddresses {
-            model item (0) -> rp_addresses::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list, primary_key(address))]
+    pub struct RpAddresses<'a, Mode> (::validated_data::Field<rp_addresses::Item<'a, Mode>>);
 
     pub mod rp_addresses {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar address("address", 0) -> &'a str;
-                model groups("groups", 1) -> item::Groups<'a>;
-                model access_lists("access_lists", 2) -> item::AccessLists<'a>;
-                scalar priority("priority", 3) -> i64;
-                scalar hashmask("hashmask", 4) -> i64;
-                scalar field_override("override", 5) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub address: ::validated_data::Field<&'a str>,
+            pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
+            pub access_lists: ::validated_data::Field<item::AccessLists<'a, Mode>>,
+            pub priority: ::validated_data::Field<i64>,
+            pub hashmask: ::validated_data::Field<i64>,
+            #[data_view(rename = "override")]
+            pub field_override: ::validated_data::Field<bool>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Groups {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct AccessLists {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct AccessLists<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AnycastRps {
-            model item (0) -> anycast_rps::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(address))]
+    pub struct AnycastRps<'a, Mode> (::validated_data::Field<anycast_rps::Item<'a, Mode>>);
 
     pub mod anycast_rps {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar address("address", 0) -> &'a str;
-                model other_anycast_rp_addresses("other_anycast_rp_addresses", 1) -> item::OtherAnycastRpAddresses<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub address: ::validated_data::Field<&'a str>,
+            pub other_anycast_rp_addresses: ::validated_data::Field<item::OtherAnycastRpAddresses<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct OtherAnycastRpAddresses {
-                    model item (0) -> other_anycast_rp_addresses::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(address))]
+            pub struct OtherAnycastRpAddresses<'a, Mode> (::validated_data::Field<other_anycast_rp_addresses::Item<'a, Mode>>);
 
             pub mod other_anycast_rp_addresses {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar address("address", 0) -> &'a str;
-                        scalar register_count("register_count", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub address: ::validated_data::Field<&'a str>,
+                    pub register_count: ::validated_data::Field<&'a str>,
                 }
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model ipv4("ipv4", 1) -> item::Ipv4<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub ipv4: ::validated_data::Field<item::Ipv4<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ipv4 {
-                scalar bfd("bfd", 0) -> bool;
-                scalar make_before_break("make_before_break", 1) -> bool;
-                scalar register_local_interface("register_local_interface", 2) -> &'a str;
-                model rp_addresses("rp_addresses", 3) -> ipv4::RpAddresses<'a>;
-                model anycast_rps("anycast_rps", 4) -> ipv4::AnycastRps<'a>;
-                scalar ssm_range("ssm_range", 5) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Ipv4<'a, Mode> {
+            pub bfd: ::validated_data::Field<bool>,
+            pub make_before_break: ::validated_data::Field<bool>,
+            pub register_local_interface: ::validated_data::Field<&'a str>,
+            pub rp_addresses: ::validated_data::Field<ipv4::RpAddresses<'a, Mode>>,
+            pub anycast_rps: ::validated_data::Field<ipv4::AnycastRps<'a, Mode>>,
+            pub ssm_range: ::validated_data::Field<&'a str>,
         }
 
         pub mod ipv4 {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct RpAddresses {
-                    model item (0) -> rp_addresses::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct RpAddresses<'a, Mode> (::validated_data::Field<rp_addresses::Item<'a, Mode>>);
 
             pub mod rp_addresses {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar address("address", 0) -> &'a str;
-                        model groups("groups", 1) -> item::Groups<'a>;
-                        model access_lists("access_lists", 2) -> item::AccessLists<'a>;
-                        scalar priority("priority", 3) -> i64;
-                        scalar hashmask("hashmask", 4) -> i64;
-                        scalar field_override("override", 5) -> bool;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub address: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
+                    pub access_lists: ::validated_data::Field<item::AccessLists<'a, Mode>>,
+                    pub priority: ::validated_data::Field<i64>,
+                    pub hashmask: ::validated_data::Field<i64>,
+                    #[data_view(rename = "override")]
+                    pub field_override: ::validated_data::Field<bool>,
                 }
 
                 pub mod item {
 
-                    ::validation::define_archive_list_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Groups {
-                            scalar item (0) -> &'a str;
-                        }
-                    }
+                    #[::validated_data::data_view(list)]
+                    pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
 
-                    ::validation::define_archive_list_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct AccessLists {
-                            scalar item (0) -> &'a str;
-                        }
-                    }
+                    #[::validated_data::data_view(list)]
+                    pub struct AccessLists<'a, Mode> (::validated_data::Field<&'a str>);
                 }
             }
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct AnycastRps {
-                    model item (0) -> anycast_rps::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(address))]
+            pub struct AnycastRps<'a, Mode> (::validated_data::Field<anycast_rps::Item<'a, Mode>>);
 
             pub mod anycast_rps {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar address("address", 0) -> &'a str;
-                        model other_anycast_rp_addresses("other_anycast_rp_addresses", 1) -> item::OtherAnycastRpAddresses<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub address: ::validated_data::Field<&'a str>,
+                    pub other_anycast_rp_addresses: ::validated_data::Field<item::OtherAnycastRpAddresses<'a, Mode>>,
                 }
 
                 pub mod item {
 
-                    ::validation::define_archive_indexed_list_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct OtherAnycastRpAddresses {
-                            model item (0) -> other_anycast_rp_addresses::Item<'a>;
-                            primary_key_fields: [0];
-                        }
-                    }
+                    #[::validated_data::data_view(indexed_list, primary_key(address))]
+                    pub struct OtherAnycastRpAddresses<'a, Mode> (::validated_data::Field<other_anycast_rp_addresses::Item<'a, Mode>>);
 
                     pub mod other_anycast_rp_addresses {
 
-                        ::validation::define_archive_dict_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct Item {
-                                scalar address("address", 0) -> &'a str;
-                                scalar register_count("register_count", 1) -> &'a str;
-                            }
+                        #[::validated_data::data_view]
+                        pub struct Item<'a, Mode> {
+                            pub address: ::validated_data::Field<&'a str>,
+                            pub register_count: ::validated_data::Field<&'a str>,
                         }
                     }
                 }

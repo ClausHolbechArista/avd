@@ -2,174 +2,132 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Authentication {
-        model radius_groups("radius_groups", 0) -> authentication::RadiusGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Authentication<'a, Mode> {
+    pub radius_groups: ::validated_data::Field<authentication::RadiusGroups<'a, Mode>>,
 }
 
 pub mod authentication {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct RadiusGroups {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct RadiusGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Accounting {
-        scalar enabled("enabled", 0) -> bool;
-        scalar mode("mode", 1) -> &'a str;
-        model radius_groups("radius_groups", 2) -> accounting::RadiusGroups<'a>;
-        scalar multicast("multicast", 3) -> bool;
-        scalar syslog("syslog", 4) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Accounting<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub mode: ::validated_data::Field<&'a str>,
+    pub radius_groups: ::validated_data::Field<accounting::RadiusGroups<'a, Mode>>,
+    pub multicast: ::validated_data::Field<bool>,
+    pub syslog: ::validated_data::Field<bool>,
 }
 
 pub mod accounting {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct RadiusGroups {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct RadiusGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DynamicAuthorization {
-        scalar enabled("enabled", 0) -> bool;
-        model additional_groups("additional_groups", 1) -> dynamic_authorization::AdditionalGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct DynamicAuthorization<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub additional_groups: ::validated_data::Field<dynamic_authorization::AdditionalGroups<'a, Mode>>,
 }
 
 pub mod dynamic_authorization {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AdditionalGroups {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct AdditionalGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MacBasedAuthentication {
-        model username_format("username_format", 0) -> mac_based_authentication::UsernameFormat<'a>;
-        scalar delay("delay", 1) -> i64;
-        scalar hold_period("hold_period", 2) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct MacBasedAuthentication<'a, Mode> {
+    pub username_format: ::validated_data::Field<mac_based_authentication::UsernameFormat<'a, Mode>>,
+    pub delay: ::validated_data::Field<i64>,
+    pub hold_period: ::validated_data::Field<i64>,
 }
 
 pub mod mac_based_authentication {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct UsernameFormat {
-            scalar delimiter("delimiter", 0) -> &'a str;
-            scalar letter_case("letter_case", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct UsernameFormat<'a, Mode> {
+        pub delimiter: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub letter_case: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RadiusAvPairs {
-        scalar service_type("service_type", 0) -> bool;
-        scalar framed_mtu("framed_mtu", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct RadiusAvPairs<'a, Mode> {
+    pub service_type: ::validated_data::Field<bool>,
+    pub framed_mtu: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DeviceProfiling {
-        scalar enabled("enabled", 0) -> bool;
-        model dhcp("dhcp", 1) -> device_profiling::Dhcp<'a>;
-        model lldp("lldp", 2) -> device_profiling::Lldp<'a>;
-    }
+#[::validated_data::data_view]
+pub struct DeviceProfiling<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub dhcp: ::validated_data::Field<device_profiling::Dhcp<'a, Mode>>,
+    pub lldp: ::validated_data::Field<device_profiling::Lldp<'a, Mode>>,
 }
 
 pub mod device_profiling {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dhcp {
-            scalar enabled("enabled", 0) -> bool;
-            model hostname("hostname", 1) -> dhcp::Hostname<'a>;
-            model parameter_request_list("parameter_request_list", 2) -> dhcp::ParameterRequestList<'a>;
-            model vendor_class_id("vendor_class_id", 3) -> dhcp::VendorClassId<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Dhcp<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub hostname: ::validated_data::Field<dhcp::Hostname<'a, Mode>>,
+        pub parameter_request_list: ::validated_data::Field<dhcp::ParameterRequestList<'a, Mode>>,
+        pub vendor_class_id: ::validated_data::Field<dhcp::VendorClassId<'a, Mode>>,
     }
 
     pub mod dhcp {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Hostname {
-                scalar enabled("enabled", 0) -> bool;
-                scalar auth_only("auth_only", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Hostname<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub auth_only: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct ParameterRequestList {
-                scalar enabled("enabled", 0) -> bool;
-                scalar auth_only("auth_only", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct ParameterRequestList<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub auth_only: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct VendorClassId {
-                scalar enabled("enabled", 0) -> bool;
-                scalar auth_only("auth_only", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct VendorClassId<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub auth_only: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Lldp {
-            scalar enabled("enabled", 0) -> bool;
-            model system_name("system_name", 1) -> lldp::SystemName<'a>;
-            model system_description("system_description", 2) -> lldp::SystemDescription<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Lldp<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub system_name: ::validated_data::Field<lldp::SystemName<'a, Mode>>,
+        pub system_description: ::validated_data::Field<lldp::SystemDescription<'a, Mode>>,
     }
 
     pub mod lldp {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SystemName {
-                scalar enabled("enabled", 0) -> bool;
-                scalar auth_only("auth_only", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct SystemName<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub auth_only: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SystemDescription {
-                scalar enabled("enabled", 0) -> bool;
-                scalar auth_only("auth_only", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct SystemDescription<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub auth_only: ::validated_data::Field<bool>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct WebAuthentication {
-        scalar enabled("enabled", 0) -> bool;
-        scalar ipv4_acl("ipv4_acl", 1) -> &'a str;
-        scalar url("url", 2) -> &'a str;
-        scalar ssl_profile("ssl_profile", 3) -> &'a str;
-        scalar start_limit_infinite("start_limit_infinite", 4) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct WebAuthentication<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub ipv4_acl: ::validated_data::Field<&'a str>,
+    pub url: ::validated_data::Field<&'a str>,
+    pub ssl_profile: ::validated_data::Field<&'a str>,
+    pub start_limit_infinite: ::validated_data::Field<bool>,
 }

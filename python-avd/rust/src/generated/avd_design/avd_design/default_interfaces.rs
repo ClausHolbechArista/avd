@@ -2,53 +2,31 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        model types("types", 0) -> item::Types<'a>;
-        model platforms("platforms", 1) -> item::Platforms<'a>;
-        model uplink_interfaces("uplink_interfaces", 2) -> item::UplinkInterfaces<'a>;
-        model mlag_interfaces("mlag_interfaces", 3) -> item::MlagInterfaces<'a>;
-        scalar mlag_interfaces_speed("mlag_interfaces_speed", 4) -> &'a str;
-        model downlink_interfaces("downlink_interfaces", 5) -> item::DownlinkInterfaces<'a>;
-        scalar uplink_interface_speed("uplink_interface_speed", 6) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub types: ::validated_data::RequiredValue<item::Types<'a, Mode>, Mode>,
+    pub platforms: ::validated_data::RequiredValue<item::Platforms<'a, Mode>, Mode>,
+    pub uplink_interfaces: ::validated_data::Field<item::UplinkInterfaces<'a, Mode>>,
+    pub mlag_interfaces: ::validated_data::Field<item::MlagInterfaces<'a, Mode>>,
+    pub mlag_interfaces_speed: ::validated_data::Field<&'a str>,
+    pub downlink_interfaces: ::validated_data::Field<item::DownlinkInterfaces<'a, Mode>>,
+    pub uplink_interface_speed: ::validated_data::Field<&'a str>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Types {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Types<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Platforms {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Platforms<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct UplinkInterfaces {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct UplinkInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MlagInterfaces {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct MlagInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct DownlinkInterfaces {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct DownlinkInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 }

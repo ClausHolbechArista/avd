@@ -2,78 +2,59 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar id("id", 0) -> i64;
-        scalar name("name", 1) -> &'a str;
-        scalar state("state", 2) -> &'a str;
-        model address_locking("address_locking", 3) -> item::AddressLocking<'a>;
-        model trunk_groups("trunk_groups", 4) -> item::TrunkGroups<'a>;
-        model e_tree("e_tree", 5) -> item::ETree<'a>;
-        model private_vlan("private_vlan", 6) -> item::PrivateVlan<'a>;
-        model metadata("metadata", 7) -> item::Metadata<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub id: ::validated_data::Field<i64>,
+    pub name: ::validated_data::Field<&'a str>,
+    pub state: ::validated_data::Field<&'a str>,
+    pub address_locking: ::validated_data::Field<item::AddressLocking<'a, Mode>>,
+    pub trunk_groups: ::validated_data::Field<item::TrunkGroups<'a, Mode>>,
+    pub e_tree: ::validated_data::Field<item::ETree<'a, Mode>>,
+    pub private_vlan: ::validated_data::Field<item::PrivateVlan<'a, Mode>>,
+    pub metadata: ::validated_data::Field<item::Metadata<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AddressLocking {
-            model address_family("address_family", 0) -> address_locking::AddressFamily<'a>;
-            scalar ipv4_enforcement_disabled("ipv4_enforcement_disabled", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct AddressLocking<'a, Mode> {
+        pub address_family: ::validated_data::Field<address_locking::AddressFamily<'a, Mode>>,
+        pub ipv4_enforcement_disabled: ::validated_data::Field<bool>,
     }
 
     pub mod address_locking {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct AddressFamily {
-                scalar ipv4("ipv4", 0) -> bool;
-                scalar ipv6("ipv6", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct AddressFamily<'a, Mode> {
+            pub ipv4: ::validated_data::Field<bool>,
+            pub ipv6: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TrunkGroups {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view(list)]
+    pub struct TrunkGroups<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view]
+    pub struct ETree<'a, Mode> {
+        pub leaf_role: ::validated_data::Field<bool>,
+        pub remote_leaf_host_drop: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ETree {
-            scalar leaf_role("leaf_role", 0) -> bool;
-            scalar remote_leaf_host_drop("remote_leaf_host_drop", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct PrivateVlan<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::Field<&'a str>,
+        pub primary_vlan: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PrivateVlan {
-            scalar field_type("type", 0) -> &'a str;
-            scalar primary_vlan("primary_vlan", 1) -> i64;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Metadata {
-            model tenants("tenants", 0) -> metadata::Tenants<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Metadata<'a, Mode> {
+        pub tenants: ::validated_data::Field<metadata::Tenants<'a, Mode>>,
     }
 
     pub mod metadata {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Tenants {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Tenants<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }

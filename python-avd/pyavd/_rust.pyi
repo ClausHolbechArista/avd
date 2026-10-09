@@ -8,6 +8,15 @@ from typing import Any
 
 class _ValueHandle: ...
 
+class OpaqueData:
+    """Immutable relaxed-validation payload without Python field accessors."""
+
+    def __init__(self, handle: _ValueHandle) -> None: ...
+    def __bool__(self) -> bool:
+        """Return whether the payload contains entries without materializing it."""
+    def to_json(self) -> str:
+        """Explicitly materialize JSON for facts serialization or a legacy merger."""
+
 class _DictView:
     def __init__(self, handle: _ValueHandle) -> None: ...
     def _get_field(self, slot: int) -> Any: ...

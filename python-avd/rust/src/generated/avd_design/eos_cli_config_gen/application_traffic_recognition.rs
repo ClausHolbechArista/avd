@@ -2,280 +2,184 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Categories {
-        model item (0) -> categories::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Categories<'a, Mode> (::validated_data::Field<categories::Item<'a, Mode>>);
 
 pub mod categories {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model applications("applications", 1) -> item::Applications<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub applications: ::validated_data::Field<item::Applications<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Applications {
-                model item (0) -> applications::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Applications<'a, Mode> (::validated_data::Field<applications::Item<'a, Mode>>);
 
         pub mod applications {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar service("service", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub service: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct FieldSets {
-        model l4_ports("l4_ports", 0) -> field_sets::L4Ports<'a>;
-        model ipv4_prefixes("ipv4_prefixes", 1) -> field_sets::Ipv4Prefixes<'a>;
-    }
+#[::validated_data::data_view]
+pub struct FieldSets<'a, Mode> {
+    pub l4_ports: ::validated_data::Field<field_sets::L4Ports<'a, Mode>>,
+    pub ipv4_prefixes: ::validated_data::Field<field_sets::Ipv4Prefixes<'a, Mode>>,
 }
 
 pub mod field_sets {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct L4Ports {
-            model item (0) -> l4_ports::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct L4Ports<'a, Mode> (::validated_data::Field<l4_ports::Item<'a, Mode>>);
 
     pub mod l4_ports {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model port_values("port_values", 1) -> item::PortValues<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub port_values: ::validated_data::Field<item::PortValues<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct PortValues {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct PortValues<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv4Prefixes {
-            model item (0) -> ipv4_prefixes::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Ipv4Prefixes<'a, Mode> (::validated_data::Field<ipv4_prefixes::Item<'a, Mode>>);
 
     pub mod ipv4_prefixes {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model prefix_values("prefix_values", 1) -> item::PrefixValues<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub prefix_values: ::validated_data::Field<item::PrefixValues<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct PrefixValues {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct PrefixValues<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Applications {
-        model ipv4_applications("ipv4_applications", 0) -> applications::Ipv4Applications<'a>;
-        model l4_applications("l4_applications", 1) -> applications::L4Applications<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Applications<'a, Mode> {
+    pub ipv4_applications: ::validated_data::Field<applications::Ipv4Applications<'a, Mode>>,
+    pub l4_applications: ::validated_data::Field<applications::L4Applications<'a, Mode>>,
 }
 
 pub mod applications {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv4Applications {
-            model item (0) -> ipv4_applications::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Ipv4Applications<'a, Mode> (::validated_data::Field<ipv4_applications::Item<'a, Mode>>);
 
     pub mod ipv4_applications {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar src_prefix_set_name("src_prefix_set_name", 1) -> &'a str;
-                scalar dest_prefix_set_name("dest_prefix_set_name", 2) -> &'a str;
-                model dscp_ranges("dscp_ranges", 3) -> item::DscpRanges<'a>;
-                model protocols("protocols", 4) -> item::Protocols<'a>;
-                model protocol_ranges("protocol_ranges", 5) -> item::ProtocolRanges<'a>;
-                scalar udp_src_port_set_name("udp_src_port_set_name", 6) -> &'a str;
-                scalar tcp_src_port_set_name("tcp_src_port_set_name", 7) -> &'a str;
-                scalar udp_dest_port_set_name("udp_dest_port_set_name", 8) -> &'a str;
-                scalar tcp_dest_port_set_name("tcp_dest_port_set_name", 9) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub src_prefix_set_name: ::validated_data::Field<&'a str>,
+            pub dest_prefix_set_name: ::validated_data::Field<&'a str>,
+            pub dscp_ranges: ::validated_data::Field<item::DscpRanges<'a, Mode>>,
+            pub protocols: ::validated_data::Field<item::Protocols<'a, Mode>>,
+            pub protocol_ranges: ::validated_data::Field<item::ProtocolRanges<'a, Mode>>,
+            pub udp_src_port_set_name: ::validated_data::Field<&'a str>,
+            pub tcp_src_port_set_name: ::validated_data::Field<&'a str>,
+            pub udp_dest_port_set_name: ::validated_data::Field<&'a str>,
+            pub tcp_dest_port_set_name: ::validated_data::Field<&'a str>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct DscpRanges {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct DscpRanges<'a, Mode> (::validated_data::Field<&'a str>);
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Protocols {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Protocols<'a, Mode> (::validated_data::Field<&'a str>);
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct ProtocolRanges {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct ProtocolRanges<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct L4Applications {
-            model item (0) -> l4_applications::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct L4Applications<'a, Mode> (::validated_data::Field<l4_applications::Item<'a, Mode>>);
 
     pub mod l4_applications {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model protocols("protocols", 1) -> item::Protocols<'a>;
-                model protocol_ranges("protocol_ranges", 2) -> item::ProtocolRanges<'a>;
-                scalar udp_src_port_set_name("udp_src_port_set_name", 3) -> &'a str;
-                scalar tcp_src_port_set_name("tcp_src_port_set_name", 4) -> &'a str;
-                scalar udp_dest_port_set_name("udp_dest_port_set_name", 5) -> &'a str;
-                scalar tcp_dest_port_set_name("tcp_dest_port_set_name", 6) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub protocols: ::validated_data::Field<item::Protocols<'a, Mode>>,
+            pub protocol_ranges: ::validated_data::Field<item::ProtocolRanges<'a, Mode>>,
+            pub udp_src_port_set_name: ::validated_data::Field<&'a str>,
+            pub tcp_src_port_set_name: ::validated_data::Field<&'a str>,
+            pub udp_dest_port_set_name: ::validated_data::Field<&'a str>,
+            pub tcp_dest_port_set_name: ::validated_data::Field<&'a str>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Protocols {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Protocols<'a, Mode> (::validated_data::Field<&'a str>);
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct ProtocolRanges {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct ProtocolRanges<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ApplicationProfiles {
-        model item (0) -> application_profiles::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct ApplicationProfiles<'a, Mode> (::validated_data::Field<application_profiles::Item<'a, Mode>>);
 
 pub mod application_profiles {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model applications("applications", 1) -> item::Applications<'a>;
-            model application_transports("application_transports", 2) -> item::ApplicationTransports<'a>;
-            model categories("categories", 3) -> item::Categories<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub applications: ::validated_data::Field<item::Applications<'a, Mode>>,
+        pub application_transports: ::validated_data::Field<item::ApplicationTransports<'a, Mode>>,
+        pub categories: ::validated_data::Field<item::Categories<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Applications {
-                model item (0) -> applications::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Applications<'a, Mode> (::validated_data::Field<applications::Item<'a, Mode>>);
 
         pub mod applications {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar service("service", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub service: ::validated_data::Field<&'a str>,
             }
         }
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct ApplicationTransports {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct ApplicationTransports<'a, Mode> (::validated_data::Field<&'a str>);
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Categories {
-                model item (0) -> categories::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Categories<'a, Mode> (::validated_data::Field<categories::Item<'a, Mode>>);
 
         pub mod categories {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar service("service", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub service: ::validated_data::Field<&'a str>,
             }
         }
     }

@@ -2,70 +2,54 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DefaultThresholds {
-        scalar high("high", 0) -> i64;
-        scalar low("low", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct DefaultThresholds<'a, Mode> {
+    pub high: ::validated_data::RequiredValue<i64, Mode>,
+    pub low: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Cpu {
-        model thresholds("thresholds", 0) -> cpu::Thresholds<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Cpu<'a, Mode> {
+    pub thresholds: ::validated_data::Field<cpu::Thresholds<'a, Mode>>,
 }
 
 pub mod cpu {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Thresholds {
-            scalar high("high", 0) -> i64;
-            scalar low("low", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Thresholds<'a, Mode> {
+        pub high: ::validated_data::RequiredValue<i64, Mode>,
+        pub low: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Mirror {
-        scalar enabled("enabled", 0) -> bool;
-        model destination("destination", 1) -> mirror::Destination<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Mirror<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub destination: ::validated_data::Field<mirror::Destination<'a, Mode>>,
 }
 
 pub mod mirror {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Destination {
-            scalar cpu("cpu", 0) -> bool;
-            model ethernet_interfaces("ethernet_interfaces", 1) -> destination::EthernetInterfaces<'a>;
-            model tunnel_mode_gre("tunnel_mode_gre", 2) -> destination::TunnelModeGre<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Destination<'a, Mode> {
+        pub cpu: ::validated_data::Field<bool>,
+        pub ethernet_interfaces: ::validated_data::Field<destination::EthernetInterfaces<'a, Mode>>,
+        pub tunnel_mode_gre: ::validated_data::Field<destination::TunnelModeGre<'a, Mode>>,
     }
 
     pub mod destination {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct EthernetInterfaces {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct EthernetInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct TunnelModeGre {
-                scalar source("source", 0) -> &'a str;
-                scalar destination("destination", 1) -> &'a str;
-                scalar dscp("dscp", 2) -> i64;
-                scalar ttl("ttl", 3) -> i64;
-                scalar protocol("protocol", 4) -> &'a str;
-                scalar vrf("vrf", 5) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct TunnelModeGre<'a, Mode> {
+            pub source: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub destination: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub dscp: ::validated_data::Field<i64>,
+            pub ttl: ::validated_data::Field<i64>,
+            pub protocol: ::validated_data::Field<&'a str>,
+            pub vrf: ::validated_data::Field<&'a str>,
         }
     }
 }

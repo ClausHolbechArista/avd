@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Range {
-        scalar beginning("beginning", 0) -> i64;
-        scalar ending("ending", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Range<'a, Mode> {
+    pub beginning: ::validated_data::RequiredValue<i64, Mode>,
+    pub ending: ::validated_data::RequiredValue<i64, Mode>,
 }

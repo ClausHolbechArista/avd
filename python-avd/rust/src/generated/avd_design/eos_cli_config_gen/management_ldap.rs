@@ -2,113 +2,85 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ServerDefaults {
-        scalar base_dn("base_dn", 0) -> &'a str;
-        scalar rdn_attribute_user("rdn_attribute_user", 1) -> &'a str;
-        scalar ssl_profile("ssl_profile", 2) -> &'a str;
-        scalar authorization_group_policy("authorization_group_policy", 3) -> &'a str;
-        scalar timeout("timeout", 4) -> i64;
-        model search("search", 5) -> server_defaults::Search<'a>;
-    }
+#[::validated_data::data_view]
+pub struct ServerDefaults<'a, Mode> {
+    pub base_dn: ::validated_data::Field<&'a str>,
+    pub rdn_attribute_user: ::validated_data::Field<&'a str>,
+    pub ssl_profile: ::validated_data::Field<&'a str>,
+    pub authorization_group_policy: ::validated_data::Field<&'a str>,
+    pub timeout: ::validated_data::Field<i64>,
+    pub search: ::validated_data::Field<server_defaults::Search<'a, Mode>>,
 }
 
 pub mod server_defaults {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Search {
-            scalar username("username", 0) -> &'a str;
-            scalar password("password", 1) -> &'a str;
-            scalar password_type("password_type", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Search<'a, Mode> {
+        pub username: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub password: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub password_type: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ServerHosts {
-        model item (0) -> server_hosts::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct ServerHosts<'a, Mode> (::validated_data::Field<server_hosts::Item<'a, Mode>>);
 
 pub mod server_hosts {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar host("host", 0) -> &'a str;
-            scalar port("port", 1) -> i64;
-            scalar vrf("vrf", 2) -> &'a str;
-            scalar base_dn("base_dn", 3) -> &'a str;
-            scalar rdn_attribute_user("rdn_attribute_user", 4) -> &'a str;
-            scalar ssl_profile("ssl_profile", 5) -> &'a str;
-            scalar authorization_group_policy("authorization_group_policy", 6) -> &'a str;
-            scalar timeout("timeout", 7) -> i64;
-            model search("search", 8) -> item::Search<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub host: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub port: ::validated_data::Field<i64>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub base_dn: ::validated_data::Field<&'a str>,
+        pub rdn_attribute_user: ::validated_data::Field<&'a str>,
+        pub ssl_profile: ::validated_data::Field<&'a str>,
+        pub authorization_group_policy: ::validated_data::Field<&'a str>,
+        pub timeout: ::validated_data::Field<i64>,
+        pub search: ::validated_data::Field<item::Search<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Search {
-                scalar username("username", 0) -> &'a str;
-                scalar password("password", 1) -> &'a str;
-                scalar password_type("password_type", 2) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Search<'a, Mode> {
+            pub username: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub password: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub password_type: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct GroupPolicies {
-        model item (0) -> group_policies::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(policy))]
+pub struct GroupPolicies<'a, Mode> (::validated_data::Field<group_policies::Item<'a, Mode>>);
 
 pub mod group_policies {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar policy("policy", 0) -> &'a str;
-            model search_filter("search_filter", 1) -> item::SearchFilter<'a>;
-            model groups("groups", 2) -> item::Groups<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub policy: ::validated_data::Field<&'a str>,
+        pub search_filter: ::validated_data::Field<item::SearchFilter<'a, Mode>>,
+        pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SearchFilter {
-                scalar objectclass("objectclass", 0) -> &'a str;
-                scalar attribute("attribute", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct SearchFilter<'a, Mode> {
+            pub objectclass: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub attribute: ::validated_data::RequiredValue<&'a str, Mode>,
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Groups {
-                model item (0) -> groups::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Groups<'a, Mode> (::validated_data::Field<groups::Item<'a, Mode>>);
 
         pub mod groups {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar role("role", 1) -> &'a str;
-                    scalar privilege("privilege", 2) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub role: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub privilege: ::validated_data::Field<i64>,
             }
         }
     }

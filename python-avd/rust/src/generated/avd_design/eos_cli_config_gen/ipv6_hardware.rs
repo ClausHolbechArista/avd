@@ -2,29 +2,23 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Fib {
-        model optimize("optimize", 0) -> fib::Optimize<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Fib<'a, Mode> {
+    pub optimize: ::validated_data::Field<fib::Optimize<'a, Mode>>,
 }
 
 pub mod fib {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Optimize {
-            model prefixes("prefixes", 0) -> optimize::Prefixes<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Optimize<'a, Mode> {
+        pub prefixes: ::validated_data::Field<optimize::Prefixes<'a, Mode>>,
     }
 
     pub mod optimize {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Prefixes {
-                scalar profile("profile", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Prefixes<'a, Mode> {
+            pub profile: ::validated_data::Field<&'a str>,
         }
     }
 }

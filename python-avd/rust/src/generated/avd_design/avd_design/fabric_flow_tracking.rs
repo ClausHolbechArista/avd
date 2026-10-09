@@ -2,82 +2,62 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Uplinks {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Uplinks<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Downlinks {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Downlinks<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Endpoints {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Endpoints<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct L3Edge {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct L3Edge<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct CoreInterfaces {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct CoreInterfaces<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MlagInterfaces {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct MlagInterfaces<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct L3Interfaces {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct L3Interfaces<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct L3PortChannels {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct L3PortChannels<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DpsInterfaces {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct DpsInterfaces<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DirectWanHaLinks {
-        scalar enabled("enabled", 0) -> bool;
-        scalar name("name", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct DirectWanHaLinks<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub name: ::validated_data::Field<&'a str>,
 }

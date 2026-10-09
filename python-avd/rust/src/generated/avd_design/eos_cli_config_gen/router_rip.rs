@@ -2,33 +2,22 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [1];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(vrf))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar enabled("enabled", 0) -> bool;
-            scalar vrf("vrf", 1) -> &'a str;
-            scalar metric_default("metric_default", 2) -> i64;
-            model networks("networks", 3) -> item::Networks<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub metric_default: ::validated_data::Field<i64>,
+        pub networks: ::validated_data::Field<item::Networks<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Networks {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Networks<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }

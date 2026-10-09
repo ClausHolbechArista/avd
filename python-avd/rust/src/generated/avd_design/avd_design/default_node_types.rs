@@ -2,20 +2,14 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar node_type("node_type", 0) -> &'a str;
-        model match_hostnames("match_hostnames", 1) -> item::MatchHostnames<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub node_type: ::validated_data::Field<&'a str>,
+    pub match_hostnames: ::validated_data::RequiredValue<item::MatchHostnames<'a, Mode>, Mode>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MatchHostnames {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct MatchHostnames<'a, Mode> (::validated_data::RequiredValue<&'a str, Mode>);
 }

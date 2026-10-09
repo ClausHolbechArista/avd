@@ -2,101 +2,83 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar profile("profile", 0) -> &'a str;
-        scalar parent_profile("parent_profile", 1) -> &'a str;
-        model address_locking("address_locking", 2) -> super::super::eos_cli_config_gen::vlans::item::address_locking::AddressFamily<'a>;
-        scalar vni_override("vni_override", 3) -> i64;
-        scalar rt_override("rt_override", 4) -> &'a str;
-        scalar rd_override("rd_override", 5) -> &'a str;
-        scalar vxlan("vxlan", 6) -> bool;
-        scalar spanning_tree_priority("spanning_tree_priority", 7) -> i64;
-        scalar evpn_vlan_bundle("evpn_vlan_bundle", 8) -> &'a str;
-        model trunk_groups("trunk_groups", 9) -> item::TrunkGroups<'a>;
-        scalar evpn_l2_multi_domain("evpn_l2_multi_domain", 10) -> bool;
-        model evpn_l2_multicast("evpn_l2_multicast", 11) -> item::EvpnL2Multicast<'a>;
-        model vxlan_flood_multicast("vxlan_flood_multicast", 12) -> item::VxlanFloodMulticast<'a>;
-        model igmp_snooping("igmp_snooping", 13) -> item::IgmpSnooping<'a>;
-        scalar igmp_snooping_enabled("igmp_snooping_enabled", 14) -> bool;
-        model igmp_snooping_querier("igmp_snooping_querier", 15) -> item::IgmpSnoopingQuerier<'a>;
-        model bgp("bgp", 16) -> item::Bgp<'a>;
-        model private_vlan("private_vlan", 17) -> item::PrivateVlan<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub profile: ::validated_data::Field<&'a str>,
+    pub parent_profile: ::validated_data::Field<&'a str>,
+    pub address_locking: ::validated_data::Field<super::super::eos_cli_config_gen::vlans::item::address_locking::AddressFamily<'a, Mode>>,
+    pub vni_override: ::validated_data::Field<i64>,
+    pub rt_override: ::validated_data::Field<&'a str>,
+    pub rd_override: ::validated_data::Field<&'a str>,
+    pub vxlan: ::validated_data::Field<bool>,
+    pub spanning_tree_priority: ::validated_data::Field<i64>,
+    pub evpn_vlan_bundle: ::validated_data::Field<&'a str>,
+    pub trunk_groups: ::validated_data::Field<item::TrunkGroups<'a, Mode>>,
+    pub evpn_l2_multi_domain: ::validated_data::Field<bool>,
+    pub evpn_l2_multicast: ::validated_data::Field<item::EvpnL2Multicast<'a, Mode>>,
+    pub vxlan_flood_multicast: ::validated_data::Field<item::VxlanFloodMulticast<'a, Mode>>,
+    pub igmp_snooping: ::validated_data::Field<item::IgmpSnooping<'a, Mode>>,
+    pub igmp_snooping_enabled: ::validated_data::Field<bool>,
+    pub igmp_snooping_querier: ::validated_data::Field<item::IgmpSnoopingQuerier<'a, Mode>>,
+    pub bgp: ::validated_data::Field<item::Bgp<'a, Mode>>,
+    pub private_vlan: ::validated_data::Field<item::PrivateVlan<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TrunkGroups {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view(list)]
+    pub struct TrunkGroups<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view]
+    pub struct EvpnL2Multicast<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct EvpnL2Multicast {
-            scalar enabled("enabled", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct VxlanFloodMulticast<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub underlay_multicast_group: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct VxlanFloodMulticast {
-            scalar enabled("enabled", 0) -> bool;
-            scalar underlay_multicast_group("underlay_multicast_group", 1) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct IgmpSnooping {
-            scalar enabled("enabled", 0) -> bool;
-            model querier("querier", 1) -> igmp_snooping::Querier<'a>;
-            scalar fast_leave("fast_leave", 2) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct IgmpSnooping<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub querier: ::validated_data::Field<igmp_snooping::Querier<'a, Mode>>,
+        pub fast_leave: ::validated_data::Field<bool>,
     }
 
     pub mod igmp_snooping {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Querier {
-                scalar enabled("enabled", 0) -> bool;
-                scalar source_address("source_address", 1) -> &'a str;
-                scalar version("version", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Querier<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub source_address: ::validated_data::Field<&'a str>,
+            pub version: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct IgmpSnoopingQuerier {
-            scalar enabled("enabled", 0) -> bool;
-            scalar source_address("source_address", 1) -> &'a str;
-            scalar version("version", 2) -> i64;
-            scalar fast_leave("fast_leave", 3) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct IgmpSnoopingQuerier<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub source_address: ::validated_data::Field<&'a str>,
+        pub version: ::validated_data::Field<i64>,
+        pub fast_leave: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Bgp {
-            model structured_config("structured_config", 0) -> super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a>;
-            scalar raw_eos_cli("raw_eos_cli", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Bgp<'a, Mode> {
+        #[data_view(relaxed)]
+        pub structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub raw_eos_cli: ::validated_data::Field<&'a str>,
     }
 
     pub mod bgp {
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PrivateVlan {
-            scalar field_type("type", 0) -> &'a str;
-            scalar primary_vlan("primary_vlan", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct PrivateVlan<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub primary_vlan: ::validated_data::RequiredValue<i64, Mode>,
     }
 }

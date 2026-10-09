@@ -2,450 +2,358 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        model switches("switches", 0) -> item::Switches<'a>;
-        model platforms("platforms", 1) -> item::Platforms<'a>;
-        model switch_ports("switch_ports", 2) -> item::SwitchPorts<'a>;
-        scalar description("description", 3) -> &'a str;
-        scalar endpoint("endpoint", 4) -> &'a str;
-        scalar speed("speed", 5) -> &'a str;
-        scalar profile("profile", 6) -> &'a str;
-        scalar enabled("enabled", 7) -> bool;
-        scalar mode("mode", 8) -> &'a str;
-        scalar mtu("mtu", 9) -> i64;
-        scalar l2_mtu("l2_mtu", 10) -> i64;
-        scalar l2_mru("l2_mru", 11) -> i64;
-        scalar native_vlan("native_vlan", 12) -> i64;
-        scalar native_vlan_tag("native_vlan_tag", 13) -> bool;
-        scalar phone_vlan("phone_vlan", 14) -> i64;
-        scalar phone_trunk_mode("phone_trunk_mode", 15) -> &'a str;
-        model trunk_groups("trunk_groups", 16) -> item::TrunkGroups<'a>;
-        scalar vlans("vlans", 17) -> &'a str;
-        scalar mac_acl_in("mac_acl_in", 18) -> &'a str;
-        scalar mac_acl_out("mac_acl_out", 19) -> &'a str;
-        scalar spanning_tree_portfast("spanning_tree_portfast", 20) -> &'a str;
-        scalar spanning_tree_bpdufilter("spanning_tree_bpdufilter", 21) -> &'a str;
-        scalar spanning_tree_bpduguard("spanning_tree_bpduguard", 22) -> &'a str;
-        scalar spanning_tree_link_type("spanning_tree_link_type", 23) -> &'a str;
-        model flowcontrol("flowcontrol", 24) -> super::super::eos_cli_config_gen::ethernet_interfaces::item::Flowcontrol<'a>;
-        scalar qos_profile("qos_profile", 25) -> &'a str;
-        model ptp("ptp", 26) -> item::Ptp<'a>;
-        scalar sflow("sflow", 27) -> bool;
-        model flow_tracking("flow_tracking", 28) -> item::FlowTracking<'a>;
-        model link_tracking("link_tracking", 29) -> item::LinkTracking<'a>;
-        model dot1x("dot1x", 30) -> item::Dot1x<'a>;
-        model address_locking("address_locking", 31) -> item::AddressLocking<'a>;
-        model poe("poe", 32) -> super::super::eos_cli_config_gen::ethernet_interfaces::item::Poe<'a>;
-        model storm_control("storm_control", 33) -> item::StormControl<'a>;
-        model monitor_sessions("monitor_sessions", 34) -> item::MonitorSessions<'a>;
-        model ethernet_segment("ethernet_segment", 35) -> item::EthernetSegment<'a>;
-        model port_channel("port_channel", 36) -> item::PortChannel<'a>;
-        scalar validate_state("validate_state", 37) -> bool;
-        scalar validate_lldp("validate_lldp", 38) -> bool;
-        model campus_link_type("campus_link_type", 39) -> item::CampusLinkType<'a>;
-        scalar raw_eos_cli("raw_eos_cli", 40) -> &'a str;
-        model structured_config("structured_config", 41) -> super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub switches: ::validated_data::Field<item::Switches<'a, Mode>>,
+    pub platforms: ::validated_data::Field<item::Platforms<'a, Mode>>,
+    pub switch_ports: ::validated_data::Field<item::SwitchPorts<'a, Mode>>,
+    pub description: ::validated_data::Field<&'a str>,
+    pub endpoint: ::validated_data::Field<&'a str>,
+    pub speed: ::validated_data::Field<&'a str>,
+    pub profile: ::validated_data::Field<&'a str>,
+    pub enabled: ::validated_data::Field<bool>,
+    pub mode: ::validated_data::Field<&'a str>,
+    pub mtu: ::validated_data::Field<i64>,
+    pub l2_mtu: ::validated_data::Field<i64>,
+    pub l2_mru: ::validated_data::Field<i64>,
+    pub native_vlan: ::validated_data::Field<i64>,
+    pub native_vlan_tag: ::validated_data::Field<bool>,
+    pub phone_vlan: ::validated_data::Field<i64>,
+    pub phone_trunk_mode: ::validated_data::Field<&'a str>,
+    pub trunk_groups: ::validated_data::Field<item::TrunkGroups<'a, Mode>>,
+    pub vlans: ::validated_data::Field<&'a str>,
+    pub mac_acl_in: ::validated_data::Field<&'a str>,
+    pub mac_acl_out: ::validated_data::Field<&'a str>,
+    pub spanning_tree_portfast: ::validated_data::Field<&'a str>,
+    pub spanning_tree_bpdufilter: ::validated_data::Field<&'a str>,
+    pub spanning_tree_bpduguard: ::validated_data::Field<&'a str>,
+    pub spanning_tree_link_type: ::validated_data::Field<&'a str>,
+    pub flowcontrol: ::validated_data::Field<super::super::eos_cli_config_gen::ethernet_interfaces::item::Flowcontrol<'a, Mode>>,
+    pub qos_profile: ::validated_data::Field<&'a str>,
+    pub ptp: ::validated_data::Field<item::Ptp<'a, Mode>>,
+    pub sflow: ::validated_data::Field<bool>,
+    pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
+    pub link_tracking: ::validated_data::Field<item::LinkTracking<'a, Mode>>,
+    pub dot1x: ::validated_data::Field<item::Dot1x<'a, Mode>>,
+    pub address_locking: ::validated_data::Field<item::AddressLocking<'a, Mode>>,
+    pub poe: ::validated_data::Field<super::super::eos_cli_config_gen::ethernet_interfaces::item::Poe<'a, Mode>>,
+    pub storm_control: ::validated_data::Field<item::StormControl<'a, Mode>>,
+    pub monitor_sessions: ::validated_data::Field<item::MonitorSessions<'a, Mode>>,
+    pub ethernet_segment: ::validated_data::Field<item::EthernetSegment<'a, Mode>>,
+    pub port_channel: ::validated_data::Field<item::PortChannel<'a, Mode>>,
+    pub validate_state: ::validated_data::Field<bool>,
+    pub validate_lldp: ::validated_data::Field<bool>,
+    pub campus_link_type: ::validated_data::Field<item::CampusLinkType<'a, Mode>>,
+    pub raw_eos_cli: ::validated_data::Field<&'a str>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Switches {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view(list)]
+    pub struct Switches<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view(list)]
+    pub struct Platforms<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view(list)]
+    pub struct SwitchPorts<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view(list)]
+    pub struct TrunkGroups<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view]
+    pub struct Ptp<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub endpoint_role: ::validated_data::Field<&'a str>,
+        pub profile: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Platforms {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct FlowTracking<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub name: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SwitchPorts {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct LinkTracking<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub name: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TrunkGroups {
-            scalar item (0) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ptp {
-            scalar enabled("enabled", 0) -> bool;
-            scalar endpoint_role("endpoint_role", 1) -> &'a str;
-            scalar profile("profile", 2) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FlowTracking {
-            scalar enabled("enabled", 0) -> bool;
-            scalar name("name", 1) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LinkTracking {
-            scalar enabled("enabled", 0) -> bool;
-            scalar name("name", 1) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1x {
-            model authentication_failure("authentication_failure", 0) -> dot1x::AuthenticationFailure<'a>;
-            scalar port_control("port_control", 1) -> &'a str;
-            scalar port_control_force_authorized_phone("port_control_force_authorized_phone", 2) -> bool;
-            scalar reauthentication("reauthentication", 3) -> bool;
-            model pae("pae", 4) -> dot1x::Pae<'a>;
-            model host_mode("host_mode", 5) -> dot1x::HostMode<'a>;
-            model mac_based_authentication("mac_based_authentication", 6) -> dot1x::MacBasedAuthentication<'a>;
-            scalar mac_based_access_list("mac_based_access_list", 7) -> bool;
-            model timeout("timeout", 8) -> dot1x::Timeout<'a>;
-            scalar reauthorization_request_limit("reauthorization_request_limit", 9) -> i64;
-            model unauthorized("unauthorized", 10) -> dot1x::Unauthorized<'a>;
-            model eapol("eapol", 11) -> dot1x::Eapol<'a>;
-            model aaa("aaa", 12) -> dot1x::Aaa<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Dot1x<'a, Mode> {
+        pub authentication_failure: ::validated_data::Field<dot1x::AuthenticationFailure<'a, Mode>>,
+        pub port_control: ::validated_data::Field<&'a str>,
+        pub port_control_force_authorized_phone: ::validated_data::Field<bool>,
+        pub reauthentication: ::validated_data::Field<bool>,
+        pub pae: ::validated_data::Field<dot1x::Pae<'a, Mode>>,
+        pub host_mode: ::validated_data::Field<dot1x::HostMode<'a, Mode>>,
+        pub mac_based_authentication: ::validated_data::Field<dot1x::MacBasedAuthentication<'a, Mode>>,
+        pub mac_based_access_list: ::validated_data::Field<bool>,
+        pub timeout: ::validated_data::Field<dot1x::Timeout<'a, Mode>>,
+        pub reauthorization_request_limit: ::validated_data::Field<i64>,
+        pub unauthorized: ::validated_data::Field<dot1x::Unauthorized<'a, Mode>>,
+        pub eapol: ::validated_data::Field<dot1x::Eapol<'a, Mode>>,
+        pub aaa: ::validated_data::Field<dot1x::Aaa<'a, Mode>>,
     }
 
     pub mod dot1x {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct AuthenticationFailure {
-                scalar allow_access_list("allow_access_list", 0) -> &'a str;
-                scalar action("action", 1) -> &'a str;
-                scalar allow_vlan("allow_vlan", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct AuthenticationFailure<'a, Mode> {
+            pub allow_access_list: ::validated_data::Field<&'a str>,
+            pub action: ::validated_data::Field<&'a str>,
+            pub allow_vlan: ::validated_data::Field<i64>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Pae {
-                scalar mode("mode", 0) -> &'a str;
-                scalar supplicant_profile("supplicant_profile", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Pae<'a, Mode> {
+            pub mode: ::validated_data::Field<&'a str>,
+            pub supplicant_profile: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct HostMode {
-                scalar mode("mode", 0) -> &'a str;
-                scalar multi_host_authenticated("multi_host_authenticated", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct HostMode<'a, Mode> {
+            pub mode: ::validated_data::Field<&'a str>,
+            pub multi_host_authenticated: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct MacBasedAuthentication {
-                scalar enabled("enabled", 0) -> bool;
-                scalar always("always", 1) -> bool;
-                scalar host_mode_common("host_mode_common", 2) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct MacBasedAuthentication<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub always: ::validated_data::Field<bool>,
+            pub host_mode_common: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Timeout {
-                scalar idle_host("idle_host", 0) -> i64;
-                scalar quiet_period("quiet_period", 1) -> i64;
-                scalar reauth_period("reauth_period", 2) -> &'a str;
-                scalar reauth_timeout_ignore("reauth_timeout_ignore", 3) -> bool;
-                scalar tx_period("tx_period", 4) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Timeout<'a, Mode> {
+            pub idle_host: ::validated_data::Field<i64>,
+            pub quiet_period: ::validated_data::Field<i64>,
+            pub reauth_period: ::validated_data::Field<&'a str>,
+            pub reauth_timeout_ignore: ::validated_data::Field<bool>,
+            pub tx_period: ::validated_data::Field<i64>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Unauthorized {
-                scalar access_vlan_membership_egress("access_vlan_membership_egress", 0) -> bool;
-                scalar native_vlan_membership_egress("native_vlan_membership_egress", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Unauthorized<'a, Mode> {
+            pub access_vlan_membership_egress: ::validated_data::Field<bool>,
+            pub native_vlan_membership_egress: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Eapol {
-                scalar disabled("disabled", 0) -> bool;
-                model authentication_failure_fallback_mba("authentication_failure_fallback_mba", 1) -> eapol::AuthenticationFailureFallbackMba<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Eapol<'a, Mode> {
+            pub disabled: ::validated_data::Field<bool>,
+            pub authentication_failure_fallback_mba: ::validated_data::Field<eapol::AuthenticationFailureFallbackMba<'a, Mode>>,
         }
 
         pub mod eapol {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct AuthenticationFailureFallbackMba {
-                    scalar enabled("enabled", 0) -> bool;
-                    scalar timeout("timeout", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct AuthenticationFailureFallbackMba<'a, Mode> {
+                pub enabled: ::validated_data::Field<bool>,
+                pub timeout: ::validated_data::Field<i64>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Aaa {
-                model unresponsive("unresponsive", 0) -> aaa::Unresponsive<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Aaa<'a, Mode> {
+            pub unresponsive: ::validated_data::Field<aaa::Unresponsive<'a, Mode>>,
         }
 
         pub mod aaa {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Unresponsive {
-                    scalar eap_response("eap_response", 0) -> &'a str;
-                    model action("action", 1) -> unresponsive::Action<'a>;
-                    model phone_action("phone_action", 2) -> super::super::super::super::super::eos_cli_config_gen::dot1x::aaa::unresponsive::PhoneAction<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Unresponsive<'a, Mode> {
+                pub eap_response: ::validated_data::Field<&'a str>,
+                pub action: ::validated_data::Field<unresponsive::Action<'a, Mode>>,
+                pub phone_action: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::dot1x::aaa::unresponsive::PhoneAction<'a, Mode>>,
             }
 
             pub mod unresponsive {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Action {
-                        scalar traffic_allow_access_list("traffic_allow_access_list", 0) -> &'a str;
-                        scalar apply_alternate("apply_alternate", 1) -> bool;
-                        scalar traffic_allow_vlan("traffic_allow_vlan", 2) -> i64;
-                        scalar apply_cached_results("apply_cached_results", 3) -> bool;
-                        model cached_results_timeout("cached_results_timeout", 4) -> action::CachedResultsTimeout<'a>;
-                        scalar traffic_allow("traffic_allow", 5) -> bool;
-                    }
+                #[::validated_data::data_view]
+                pub struct Action<'a, Mode> {
+                    pub traffic_allow_access_list: ::validated_data::Field<&'a str>,
+                    pub apply_alternate: ::validated_data::Field<bool>,
+                    pub traffic_allow_vlan: ::validated_data::Field<i64>,
+                    pub apply_cached_results: ::validated_data::Field<bool>,
+                    pub cached_results_timeout: ::validated_data::Field<action::CachedResultsTimeout<'a, Mode>>,
+                    pub traffic_allow: ::validated_data::Field<bool>,
                 }
 
                 pub mod action {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct CachedResultsTimeout {
-                            scalar time_duration("time_duration", 0) -> i64;
-                            scalar time_duration_unit("time_duration_unit", 1) -> &'a str;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct CachedResultsTimeout<'a, Mode> {
+                        pub time_duration: ::validated_data::RequiredValue<i64, Mode>,
+                        pub time_duration_unit: ::validated_data::RequiredValue<&'a str, Mode>,
                     }
                 }
             }
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AddressLocking {
-            scalar ipv4("ipv4", 0) -> bool;
-            scalar ipv6("ipv6", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct AddressLocking<'a, Mode> {
+        pub ipv4: ::validated_data::Field<bool>,
+        pub ipv6: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct StormControl {
-            model all("all", 0) -> storm_control::All<'a>;
-            model broadcast("broadcast", 1) -> storm_control::Broadcast<'a>;
-            model multicast("multicast", 2) -> storm_control::Multicast<'a>;
-            model unknown_unicast("unknown_unicast", 3) -> storm_control::UnknownUnicast<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct StormControl<'a, Mode> {
+        pub all: ::validated_data::Field<storm_control::All<'a, Mode>>,
+        pub broadcast: ::validated_data::Field<storm_control::Broadcast<'a, Mode>>,
+        pub multicast: ::validated_data::Field<storm_control::Multicast<'a, Mode>>,
+        pub unknown_unicast: ::validated_data::Field<storm_control::UnknownUnicast<'a, Mode>>,
     }
 
     pub mod storm_control {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct All {
-                scalar level("level", 0) -> &'a str;
-                scalar unit("unit", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct All<'a, Mode> {
+            pub level: ::validated_data::Field<&'a str>,
+            pub unit: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Broadcast {
-                scalar level("level", 0) -> &'a str;
-                scalar unit("unit", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Broadcast<'a, Mode> {
+            pub level: ::validated_data::Field<&'a str>,
+            pub unit: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Multicast {
-                scalar level("level", 0) -> &'a str;
-                scalar unit("unit", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Multicast<'a, Mode> {
+            pub level: ::validated_data::Field<&'a str>,
+            pub unit: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct UnknownUnicast {
-                scalar level("level", 0) -> &'a str;
-                scalar unit("unit", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct UnknownUnicast<'a, Mode> {
+            pub level: ::validated_data::Field<&'a str>,
+            pub unit: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MonitorSessions {
-            model item (0) -> monitor_sessions::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct MonitorSessions<'a, Mode> (::validated_data::Field<monitor_sessions::Item<'a, Mode>>);
 
     pub mod monitor_sessions {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar role("role", 1) -> &'a str;
-                model source_settings("source_settings", 2) -> item::SourceSettings<'a>;
-                model session_settings("session_settings", 3) -> item::SessionSettings<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub role: ::validated_data::Field<&'a str>,
+            pub source_settings: ::validated_data::Field<item::SourceSettings<'a, Mode>>,
+            pub session_settings: ::validated_data::Field<item::SessionSettings<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct SourceSettings {
-                    scalar direction("direction", 0) -> &'a str;
-                    model access_group("access_group", 1) -> source_settings::AccessGroup<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct SourceSettings<'a, Mode> {
+                pub direction: ::validated_data::Field<&'a str>,
+                pub access_group: ::validated_data::Field<source_settings::AccessGroup<'a, Mode>>,
             }
 
             pub mod source_settings {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct AccessGroup {
-                        scalar field_type("type", 0) -> &'a str;
-                        scalar name("name", 1) -> &'a str;
-                        scalar priority("priority", 2) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct AccessGroup<'a, Mode> {
+                    #[data_view(rename = "type")]
+                    pub field_type: ::validated_data::Field<&'a str>,
+                    pub name: ::validated_data::Field<&'a str>,
+                    pub priority: ::validated_data::Field<i64>,
                 }
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct SessionSettings {
-                    scalar encapsulation_gre_metadata_tx("encapsulation_gre_metadata_tx", 0) -> bool;
-                    scalar header_remove_size("header_remove_size", 1) -> i64;
-                    model access_group("access_group", 2) -> session_settings::AccessGroup<'a>;
-                    scalar rate_limit_per_ingress_chip("rate_limit_per_ingress_chip", 3) -> &'a str;
-                    scalar rate_limit_per_egress_chip("rate_limit_per_egress_chip", 4) -> &'a str;
-                    scalar sample("sample", 5) -> i64;
-                    model truncate("truncate", 6) -> session_settings::Truncate<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct SessionSettings<'a, Mode> {
+                pub encapsulation_gre_metadata_tx: ::validated_data::Field<bool>,
+                pub header_remove_size: ::validated_data::Field<i64>,
+                pub access_group: ::validated_data::Field<session_settings::AccessGroup<'a, Mode>>,
+                pub rate_limit_per_ingress_chip: ::validated_data::Field<&'a str>,
+                pub rate_limit_per_egress_chip: ::validated_data::Field<&'a str>,
+                pub sample: ::validated_data::Field<i64>,
+                pub truncate: ::validated_data::Field<session_settings::Truncate<'a, Mode>>,
             }
 
             pub mod session_settings {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct AccessGroup {
-                        scalar field_type("type", 0) -> &'a str;
-                        scalar name("name", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct AccessGroup<'a, Mode> {
+                    #[data_view(rename = "type")]
+                    pub field_type: ::validated_data::Field<&'a str>,
+                    pub name: ::validated_data::Field<&'a str>,
                 }
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Truncate {
-                        scalar enabled("enabled", 0) -> bool;
-                        scalar size("size", 1) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Truncate<'a, Mode> {
+                    pub enabled: ::validated_data::Field<bool>,
+                    pub size: ::validated_data::Field<i64>,
                 }
             }
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct EthernetSegment {
-            scalar short_esi("short_esi", 0) -> &'a str;
-            scalar redundancy("redundancy", 1) -> &'a str;
-            scalar designated_forwarder_algorithm("designated_forwarder_algorithm", 2) -> &'a str;
-            model designated_forwarder_preferences("designated_forwarder_preferences", 3) -> ethernet_segment::DesignatedForwarderPreferences<'a>;
-            scalar dont_preempt("dont_preempt", 4) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct EthernetSegment<'a, Mode> {
+        pub short_esi: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub redundancy: ::validated_data::Field<&'a str>,
+        pub designated_forwarder_algorithm: ::validated_data::Field<&'a str>,
+        pub designated_forwarder_preferences: ::validated_data::Field<ethernet_segment::DesignatedForwarderPreferences<'a, Mode>>,
+        pub dont_preempt: ::validated_data::Field<bool>,
     }
 
     pub mod ethernet_segment {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct DesignatedForwarderPreferences {
-                scalar item (0) -> i64;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct DesignatedForwarderPreferences<'a, Mode> (::validated_data::Field<i64>);
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PortChannel {
-            scalar mode("mode", 0) -> &'a str;
-            scalar channel_id("channel_id", 1) -> i64;
-            scalar description("description", 2) -> &'a str;
-            scalar endpoint_port_channel("endpoint_port_channel", 3) -> &'a str;
-            scalar enabled("enabled", 4) -> bool;
-            scalar ptp_mpass("ptp_mpass", 5) -> bool;
-            model lacp_fallback("lacp_fallback", 6) -> port_channel::LacpFallback<'a>;
-            model lacp_timer("lacp_timer", 7) -> port_channel::LacpTimer<'a>;
-            scalar raw_eos_cli("raw_eos_cli", 8) -> &'a str;
-            model structured_config("structured_config", 9) -> super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct PortChannel<'a, Mode> {
+        pub mode: ::validated_data::Field<&'a str>,
+        pub channel_id: ::validated_data::Field<i64>,
+        pub description: ::validated_data::Field<&'a str>,
+        pub endpoint_port_channel: ::validated_data::Field<&'a str>,
+        pub enabled: ::validated_data::Field<bool>,
+        pub ptp_mpass: ::validated_data::Field<bool>,
+        pub lacp_fallback: ::validated_data::Field<port_channel::LacpFallback<'a, Mode>>,
+        pub lacp_timer: ::validated_data::Field<port_channel::LacpTimer<'a, Mode>>,
+        pub raw_eos_cli: ::validated_data::Field<&'a str>,
+        #[data_view(relaxed)]
+        pub structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     }
 
     pub mod port_channel {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct LacpFallback {
-                scalar mode("mode", 0) -> &'a str;
-                model individual("individual", 1) -> lacp_fallback::Individual<'a>;
-                scalar timeout("timeout", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct LacpFallback<'a, Mode> {
+            pub mode: ::validated_data::Field<&'a str>,
+            pub individual: ::validated_data::Field<lacp_fallback::Individual<'a, Mode>>,
+            pub timeout: ::validated_data::Field<i64>,
         }
 
         pub mod lacp_fallback {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Individual {
-                    scalar profile("profile", 0) -> &'a str;
-                    scalar vlans("vlans", 1) -> &'a str;
-                    scalar native_vlan("native_vlan", 2) -> i64;
-                    scalar mode("mode", 3) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Individual<'a, Mode> {
+                pub profile: ::validated_data::Field<&'a str>,
+                pub vlans: ::validated_data::Field<&'a str>,
+                pub native_vlan: ::validated_data::Field<i64>,
+                pub mode: ::validated_data::Field<&'a str>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct LacpTimer {
-                scalar mode("mode", 0) -> &'a str;
-                scalar multiplier("multiplier", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct LacpTimer<'a, Mode> {
+            pub mode: ::validated_data::Field<&'a str>,
+            pub multiplier: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct CampusLinkType {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct CampusLinkType<'a, Mode> (::validated_data::Field<&'a str>);
 }

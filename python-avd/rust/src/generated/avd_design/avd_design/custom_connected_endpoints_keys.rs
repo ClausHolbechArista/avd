@@ -2,11 +2,10 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar key("key", 0) -> &'a str;
-        scalar field_type("type", 1) -> &'a str;
-        scalar description("description", 2) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub key: ::validated_data::Field<&'a str>,
+    #[data_view(rename = "type")]
+    pub field_type: ::validated_data::Field<&'a str>,
+    pub description: ::validated_data::Field<&'a str>,
 }

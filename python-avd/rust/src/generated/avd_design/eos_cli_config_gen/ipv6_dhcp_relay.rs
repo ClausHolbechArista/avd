@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Option {
-        scalar link_layer_address("link_layer_address", 0) -> bool;
-        scalar remote_id_format("remote_id_format", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Option<'a, Mode> {
+    pub link_layer_address: ::validated_data::Field<bool>,
+    pub remote_id_format: ::validated_data::Field<&'a str>,
 }

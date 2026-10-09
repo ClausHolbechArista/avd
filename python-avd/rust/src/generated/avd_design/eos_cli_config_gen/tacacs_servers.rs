@@ -2,24 +2,18 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Hosts {
-        model item (0) -> hosts::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
 pub mod hosts {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar host("host", 0) -> &'a str;
-            scalar vrf("vrf", 1) -> &'a str;
-            scalar key("key", 2) -> &'a str;
-            scalar key_type("key_type", 3) -> &'a str;
-            scalar single_connection("single_connection", 4) -> bool;
-            scalar timeout("timeout", 5) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub host: ::validated_data::Field<&'a str>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub key: ::validated_data::Field<&'a str>,
+        pub key_type: ::validated_data::Field<&'a str>,
+        pub single_connection: ::validated_data::Field<bool>,
+        pub timeout: ::validated_data::Field<i64>,
     }
 }

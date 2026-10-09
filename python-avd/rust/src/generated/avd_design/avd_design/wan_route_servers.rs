@@ -2,53 +2,37 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar hostname("hostname", 0) -> &'a str;
-        scalar vtep_ip("vtep_ip", 1) -> &'a str;
-        model path_groups("path_groups", 2) -> item::PathGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub hostname: ::validated_data::Field<&'a str>,
+    pub vtep_ip: ::validated_data::Field<&'a str>,
+    pub path_groups: ::validated_data::Field<item::PathGroups<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PathGroups {
-            model item (0) -> path_groups::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct PathGroups<'a, Mode> (::validated_data::Field<path_groups::Item<'a, Mode>>);
 
     pub mod path_groups {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model interfaces("interfaces", 1) -> item::Interfaces<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub interfaces: ::validated_data::RequiredValue<item::Interfaces<'a, Mode>, Mode>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Interfaces {
-                    model item (0) -> interfaces::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(name))]
+            pub struct Interfaces<'a, Mode> (::validated_data::Field<interfaces::Item<'a, Mode>>);
 
             pub mod interfaces {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar name("name", 0) -> &'a str;
-                        scalar public_ip("public_ip", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub name: ::validated_data::Field<&'a str>,
+                    pub public_ip: ::validated_data::Field<&'a str>,
                 }
             }
         }

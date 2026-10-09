@@ -2,100 +2,64 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct PrefixIpv4 {
-        model item (0) -> prefix_ipv4::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct PrefixIpv4<'a, Mode> (::validated_data::Field<prefix_ipv4::Item<'a, Mode>>);
 
 pub mod prefix_ipv4 {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model prefixes("prefixes", 1) -> item::Prefixes<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub prefixes: ::validated_data::RequiredValue<item::Prefixes<'a, Mode>, Mode>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Prefixes {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Prefixes<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct PrefixIpv6 {
-        model item (0) -> prefix_ipv6::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct PrefixIpv6<'a, Mode> (::validated_data::Field<prefix_ipv6::Item<'a, Mode>>);
 
 pub mod prefix_ipv6 {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model prefixes("prefixes", 1) -> item::Prefixes<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub prefixes: ::validated_data::RequiredValue<item::Prefixes<'a, Mode>, Mode>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Prefixes {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Prefixes<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct String {
-        model item (0) -> string::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct String<'a, Mode> (::validated_data::Field<string::Item<'a, Mode>>);
 
 pub mod string {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model sequence_numbers("sequence_numbers", 1) -> item::SequenceNumbers<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub sequence_numbers: ::validated_data::RequiredValue<item::SequenceNumbers<'a, Mode>, Mode>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SequenceNumbers {
-                model item (0) -> sequence_numbers::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(sequence))]
+        pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
         pub mod sequence_numbers {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar sequence("sequence", 0) -> i64;
-                    scalar match_regex("match_regex", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub sequence: ::validated_data::Field<i64>,
+                pub match_regex: ::validated_data::RequiredValue<&'a str, Mode>,
             }
         }
     }

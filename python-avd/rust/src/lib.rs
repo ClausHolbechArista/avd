@@ -16,11 +16,11 @@ use pyo3::types::PyBool;
 use pyo3::types::PyInt;
 use pyo3::types::PyString;
 use pyo3::types::PyTuple;
-use validation::archive::DataStore;
-use validation::archive::DictHandle;
-use validation::archive::ListHandle;
-use validation::archive::PrimaryKeyValue;
-use validation::archive::ValueHandle;
+use validated_data::DataStore;
+use validated_data::DictHandle;
+use validated_data::ListHandle;
+use validated_data::PrimaryKeyValue;
+use validated_data::ValueHandle;
 use validation::archive::validate_json_to_archive;
 
 #[allow(dead_code, non_snake_case, reason = "generated API exceeds the current call graph and preserves schema key spelling")]
@@ -54,6 +54,35 @@ struct PublicationResult {
 )]
 #[derive(Clone, Debug)]
 struct PyValueHandle(ValueHandle);
+
+/// Immutable custom-config payload, opaque to Python field access.
+///
+/// Retains the archive owner. JSON materialization is explicit for legacy merger and facts
+/// serialization boundaries; Rust consumers continue to use typed relaxed views.
+#[pyclass(
+    name = "OpaqueData",
+    module = "pyavd._rust",
+    frozen,
+    skip_from_py_object
+)]
+#[derive(Clone, Debug)]
+struct PyOpaqueData(ValueHandle);
+
+#[pymethods]
+impl PyOpaqueData {
+    #[new]
+    fn new(handle: PyRef<'_, PyValueHandle>) -> Self {
+        Self(handle.0.clone())
+    }
+
+    fn __bool__(&self) -> bool {
+        !self.0.is_empty()
+    }
+
+    fn to_json(&self) -> String {
+        self.0.to_json()
+    }
+}
 
 /// Generic immutable dictionary view used as the base of generated Python model classes.
 #[pyclass(
@@ -237,10 +266,12 @@ fn open_avd_design_handle(archive: PathBuf, schema_archive: PathBuf) -> PyResult
         DataStore::from_file(
             &archive,
             schemas.archive_hash(),
-            generated::avd_design::REGISTRY.hash,
+            generated::avd_design::REGISTRY,
         )
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?,
     );
+    data.root_as::<generated::avd_design::avd_design::AvdDesign<'_>>()
+        .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
     Ok(PyValueHandle(data.root_handle()))
 }
 
@@ -257,6 +288,8 @@ mod _rust {
     use super::PyDictView;
     #[pymodule_export]
     use super::PyListView;
+    #[pymodule_export]
+    use super::PyOpaqueData;
     #[pymodule_export]
     use super::PyValueHandle;
     #[pymodule_export]

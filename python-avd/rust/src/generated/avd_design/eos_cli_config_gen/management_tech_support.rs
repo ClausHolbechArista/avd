@@ -2,48 +2,35 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct PolicyShowTechSupport {
-        model exclude_commands("exclude_commands", 0) -> policy_show_tech_support::ExcludeCommands<'a>;
-        model include_commands("include_commands", 1) -> policy_show_tech_support::IncludeCommands<'a>;
-    }
+#[::validated_data::data_view]
+pub struct PolicyShowTechSupport<'a, Mode> {
+    pub exclude_commands: ::validated_data::Field<policy_show_tech_support::ExcludeCommands<'a, Mode>>,
+    pub include_commands: ::validated_data::Field<policy_show_tech_support::IncludeCommands<'a, Mode>>,
 }
 
 pub mod policy_show_tech_support {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ExcludeCommands {
-            model item (0) -> exclude_commands::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct ExcludeCommands<'a, Mode> (::validated_data::Field<exclude_commands::Item<'a, Mode>>);
 
     pub mod exclude_commands {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar command("command", 0) -> &'a str;
-                scalar field_type("type", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub command: ::validated_data::Field<&'a str>,
+            #[data_view(rename = "type")]
+            pub field_type: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct IncludeCommands {
-            model item (0) -> include_commands::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct IncludeCommands<'a, Mode> (::validated_data::Field<include_commands::Item<'a, Mode>>);
 
     pub mod include_commands {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar command("command", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub command: ::validated_data::Field<&'a str>,
         }
     }
 }

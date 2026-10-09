@@ -2,48 +2,32 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AccessList {
-        scalar mechanism("mechanism", 0) -> &'a str;
-        scalar update_default_result_permit("update_default_result_permit", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct AccessList<'a, Mode> {
+    pub mechanism: ::validated_data::Field<&'a str>,
+    pub update_default_result_permit: ::validated_data::Field<bool>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SpeedGroups {
-        model item (0) -> speed_groups::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(speed_group))]
+pub struct SpeedGroups<'a, Mode> (::validated_data::Field<speed_groups::Item<'a, Mode>>);
 
 pub mod speed_groups {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar speed_group("speed_group", 0) -> &'a str;
-            scalar serdes("serdes", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub speed_group: ::validated_data::Field<&'a str>,
+        pub serdes: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct PortGroups {
-        model item (0) -> port_groups::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(port_group))]
+pub struct PortGroups<'a, Mode> (::validated_data::Field<port_groups::Item<'a, Mode>>);
 
 pub mod port_groups {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar port_group("port_group", 0) -> &'a str;
-            scalar select("select", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub port_group: ::validated_data::Field<&'a str>,
+        pub select: ::validated_data::Field<&'a str>,
     }
 }

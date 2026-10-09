@@ -2,23 +2,17 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct LoadBalanceTridentUdf {
-        model item (0) -> load_balance_trident_udf::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct LoadBalanceTridentUdf<'a, Mode> (::validated_data::Field<load_balance_trident_udf::Item<'a, Mode>>);
 
 pub mod load_balance_trident_udf {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar eth_type("eth_type", 0) -> &'a str;
-            scalar ip_protocol("ip_protocol", 1) -> &'a str;
-            scalar header("header", 2) -> &'a str;
-            scalar offset("offset", 3) -> i64;
-            scalar mask("mask", 4) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub eth_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub ip_protocol: ::validated_data::Field<&'a str>,
+        pub header: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub offset: ::validated_data::RequiredValue<i64, Mode>,
+        pub mask: ::validated_data::Field<&'a str>,
     }
 }

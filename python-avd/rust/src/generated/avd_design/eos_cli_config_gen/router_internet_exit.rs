@@ -2,82 +2,54 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Policies {
-        model item (0) -> policies::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Policies<'a, Mode> (::validated_data::Field<policies::Item<'a, Mode>>);
 
 pub mod policies {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model exit_groups("exit_groups", 1) -> item::ExitGroups<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub exit_groups: ::validated_data::Field<item::ExitGroups<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct ExitGroups {
-                model item (0) -> exit_groups::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct ExitGroups<'a, Mode> (::validated_data::Field<exit_groups::Item<'a, Mode>>);
 
         pub mod exit_groups {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ExitGroups {
-        model item (0) -> exit_groups::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct ExitGroups<'a, Mode> (::validated_data::Field<exit_groups::Item<'a, Mode>>);
 
 pub mod exit_groups {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar fib_default("fib_default", 1) -> bool;
-            model local_connections("local_connections", 2) -> item::LocalConnections<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub fib_default: ::validated_data::Field<bool>,
+        pub local_connections: ::validated_data::Field<item::LocalConnections<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct LocalConnections {
-                model item (0) -> local_connections::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct LocalConnections<'a, Mode> (::validated_data::Field<local_connections::Item<'a, Mode>>);
 
         pub mod local_connections {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
             }
         }
     }

@@ -2,48 +2,38 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Fib {
-        model optimize("optimize", 0) -> fib::Optimize<'a>;
-        model load_balance_distribution("load_balance_distribution", 1) -> fib::LoadBalanceDistribution<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Fib<'a, Mode> {
+    pub optimize: ::validated_data::Field<fib::Optimize<'a, Mode>>,
+    pub load_balance_distribution: ::validated_data::Field<fib::LoadBalanceDistribution<'a, Mode>>,
 }
 
 pub mod fib {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Optimize {
-            model prefixes("prefixes", 0) -> optimize::Prefixes<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Optimize<'a, Mode> {
+        pub prefixes: ::validated_data::Field<optimize::Prefixes<'a, Mode>>,
     }
 
     pub mod optimize {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Prefixes {
-                scalar profile("profile", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Prefixes<'a, Mode> {
+            pub profile: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LoadBalanceDistribution {
-            model dynamic("dynamic", 0) -> load_balance_distribution::Dynamic<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct LoadBalanceDistribution<'a, Mode> {
+        pub dynamic: ::validated_data::Field<load_balance_distribution::Dynamic<'a, Mode>>,
     }
 
     pub mod load_balance_distribution {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Dynamic {
-                scalar enabled("enabled", 0) -> bool;
-                scalar flow_set_size("flow_set_size", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Dynamic<'a, Mode> {
+            pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+            pub flow_set_size: ::validated_data::Field<i64>,
         }
     }
 }

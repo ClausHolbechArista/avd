@@ -2,11 +2,9 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar ip_address("ip_address", 1) -> &'a str;
-        scalar ipv6_address("ipv6_address", 2) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub ip_address: ::validated_data::Field<&'a str>,
+    pub ipv6_address: ::validated_data::Field<&'a str>,
 }

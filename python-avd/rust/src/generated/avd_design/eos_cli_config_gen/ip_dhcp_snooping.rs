@@ -2,11 +2,9 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct InformationOption {
-        scalar enabled("enabled", 0) -> bool;
-        scalar circuit_id_type("circuit_id_type", 1) -> &'a str;
-        scalar circuit_id_format("circuit_id_format", 2) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct InformationOption<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub circuit_id_type: ::validated_data::Field<&'a str>,
+    pub circuit_id_format: ::validated_data::Field<&'a str>,
 }

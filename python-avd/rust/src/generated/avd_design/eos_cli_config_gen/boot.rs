@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Secret {
-        scalar hash_algorithm("hash_algorithm", 0) -> &'a str;
-        scalar key("key", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Secret<'a, Mode> {
+    pub hash_algorithm: ::validated_data::Field<&'a str>,
+    pub key: ::validated_data::Field<&'a str>,
 }

@@ -2,116 +2,81 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct InterfaceSets {
-        model item (0) -> interface_sets::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct InterfaceSets<'a, Mode> (::validated_data::Field<interface_sets::Item<'a, Mode>>);
 
 pub mod interface_sets {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar interfaces("interfaces", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub interfaces: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Hosts {
-        model item (0) -> hosts::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
 pub mod hosts {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar description("description", 1) -> &'a str;
-            scalar single_line_description("single_line_description", 2) -> &'a str;
-            scalar ip("ip", 3) -> &'a str;
-            scalar icmp_echo_size("icmp_echo_size", 4) -> i64;
-            scalar local_interfaces("local_interfaces", 5) -> &'a str;
-            scalar address_only("address_only", 6) -> bool;
-            scalar url("url", 7) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub description: ::validated_data::Field<&'a str>,
+        pub single_line_description: ::validated_data::Field<&'a str>,
+        pub ip: ::validated_data::Field<&'a str>,
+        pub icmp_echo_size: ::validated_data::Field<i64>,
+        pub local_interfaces: ::validated_data::Field<&'a str>,
+        pub address_only: ::validated_data::Field<bool>,
+        pub url: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar description("description", 1) -> &'a str;
-            scalar single_line_description("single_line_description", 2) -> &'a str;
-            model interface_sets("interface_sets", 3) -> item::InterfaceSets<'a>;
-            scalar local_interfaces("local_interfaces", 4) -> &'a str;
-            scalar address_only("address_only", 5) -> bool;
-            model hosts("hosts", 6) -> item::Hosts<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub description: ::validated_data::Field<&'a str>,
+        pub single_line_description: ::validated_data::Field<&'a str>,
+        pub interface_sets: ::validated_data::Field<item::InterfaceSets<'a, Mode>>,
+        pub local_interfaces: ::validated_data::Field<&'a str>,
+        pub address_only: ::validated_data::Field<bool>,
+        pub hosts: ::validated_data::Field<item::Hosts<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct InterfaceSets {
-                model item (0) -> interface_sets::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct InterfaceSets<'a, Mode> (::validated_data::Field<interface_sets::Item<'a, Mode>>);
 
         pub mod interface_sets {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar interfaces("interfaces", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub interfaces: ::validated_data::Field<&'a str>,
             }
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Hosts {
-                model item (0) -> hosts::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
         pub mod hosts {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar description("description", 1) -> &'a str;
-                    scalar single_line_description("single_line_description", 2) -> &'a str;
-                    scalar ip("ip", 3) -> &'a str;
-                    scalar icmp_echo_size("icmp_echo_size", 4) -> i64;
-                    scalar local_interfaces("local_interfaces", 5) -> &'a str;
-                    scalar address_only("address_only", 6) -> bool;
-                    scalar url("url", 7) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub description: ::validated_data::Field<&'a str>,
+                pub single_line_description: ::validated_data::Field<&'a str>,
+                pub ip: ::validated_data::Field<&'a str>,
+                pub icmp_echo_size: ::validated_data::Field<i64>,
+                pub local_interfaces: ::validated_data::Field<&'a str>,
+                pub address_only: ::validated_data::Field<bool>,
+                pub url: ::validated_data::Field<&'a str>,
             }
         }
     }
