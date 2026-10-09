@@ -1,0 +1,46 @@
+{
+  "implementation": "python",
+  "workers": 4,
+  "retained_handles": [
+    "20000",
+    "20000",
+    "20000",
+    "20000"
+  ],
+  "processes": [
+    {
+      "pid": 58,
+      "rss_kb": 32788,
+      "pss_kb": 21436,
+      "private_clean_kb": 12,
+      "private_dirty_kb": 18904
+    },
+    {
+      "pid": 59,
+      "rss_kb": 32708,
+      "pss_kb": 21394,
+      "private_clean_kb": 4,
+      "private_dirty_kb": 18908
+    },
+    {
+      "pid": 60,
+      "rss_kb": 32868,
+      "pss_kb": 21429,
+      "private_clean_kb": 4,
+      "private_dirty_kb": 18904
+    },
+    {
+      "pid": 61,
+      "rss_kb": 32964,
+      "pss_kb": 21455,
+      "private_clean_kb": 4,
+      "private_dirty_kb": 18904
+    }
+  ],
+  "aggregate_kb": {
+    "rss_kb": 131328,
+    "pss_kb": 85714,
+    "private_clean_kb": 24,
+    "private_dirty_kb": 75620
+  }
+}

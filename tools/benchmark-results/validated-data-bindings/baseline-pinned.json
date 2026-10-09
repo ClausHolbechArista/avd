@@ -1,0 +1,559 @@
+{
+  "label": "baseline-pinned",
+  "implementation": "python",
+  "module": "pyavd._validated_data",
+  "generated_python_loaded": true,
+  "python": "3.13.12 (main, Mar  3 2026, 15:01:51) [Clang 21.1.4 ]",
+  "platform": "Linux-6.17.0-1032-oem-x86_64-with-glibc2.43",
+  "cpu_count": 16,
+  "cpu_affinity": [
+    8
+  ],
+  "iterations": 200000,
+  "archive_bytes": 39912,
+  "cases": {
+    "scalar": {
+      "samples_ns": [
+        12163157,
+        12349924,
+        11772286,
+        12276433,
+        12355575,
+        11935609,
+        12546219
+      ],
+      "median_ns": 12276433,
+      "checksum": 200000
+    },
+    "presence_null_bool": {
+      "samples_ns": [
+        116239605,
+        116564585,
+        116451522,
+        116706579,
+        116129733,
+        116901420,
+        116202466
+      ],
+      "median_ns": 116451522,
+      "checksum": 200000
+    },
+    "nested_lookup": {
+      "samples_ns": [
+        108489639,
+        108237576,
+        108299167,
+        107986516,
+        108764816,
+        107038982,
+        107141208
+      ],
+      "median_ns": 108237576,
+      "checksum": 200000
+    },
+    "list_navigation": {
+      "samples_ns": [
+        66371204,
+        66363674,
+        66970889,
+        66751479,
+        66812693,
+        66170495,
+        66386344
+      ],
+      "median_ns": 66386344,
+      "checksum": 1800000
+    },
+    "indexed_lookup": {
+      "samples_ns": [
+        65760185,
+        66534054,
+        65894141,
+        65806990,
+        65804333,
+        65918532,
+        66147895
+      ],
+      "median_ns": 65894141,
+      "checksum": 200000
+    },
+    "read_workload": {
+      "samples_ns": [
+        14158908,
+        14014389,
+        13931927,
+        13909867,
+        14045728,
+        13945557,
+        14079167
+      ],
+      "median_ns": 14014389,
+      "checksum": 459200
+    },
+    "open": {
+      "samples_ns": [
+        1440444,
+        1418828,
+        1403322,
+        1404687,
+        1395915,
+        1404450,
+        1394437
+      ],
+      "median_ns": 1404450,
+      "checksum": 64
+    }
+  },
+  "fresh_processes": [
+    {
+      "import_ns": 20406739,
+      "open_ns": 1556041,
+      "before": {
+        "Rss": 17976,
+        "Pss": 11569,
+        "Private_Clean": 164,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34352,
+        "Pss": 25861,
+        "Private_Clean": 152,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35052,
+        "Pss": 26285,
+        "Private_Clean": 152,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36248,
+        "Pss": 27481,
+        "Private_Clean": 152,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19147454,
+      "open_ns": 1547552,
+      "before": {
+        "Rss": 17956,
+        "Pss": 11496,
+        "Private_Clean": 88,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34396,
+        "Pss": 25789,
+        "Private_Clean": 76,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 35096,
+        "Pss": 26213,
+        "Private_Clean": 76,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36292,
+        "Pss": 27409,
+        "Private_Clean": 76,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 20157106,
+      "open_ns": 1571190,
+      "before": {
+        "Rss": 17964,
+        "Pss": 11519,
+        "Private_Clean": 120,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34444,
+        "Pss": 25867,
+        "Private_Clean": 172,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 35144,
+        "Pss": 26291,
+        "Private_Clean": 172,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36340,
+        "Pss": 27487,
+        "Private_Clean": 172,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 19701913,
+      "open_ns": 1530984,
+      "before": {
+        "Rss": 17968,
+        "Pss": 11524,
+        "Private_Clean": 120,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34408,
+        "Pss": 25816,
+        "Private_Clean": 108,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35108,
+        "Pss": 26240,
+        "Private_Clean": 108,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36304,
+        "Pss": 27436,
+        "Private_Clean": 108,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19776300,
+      "open_ns": 1538462,
+      "before": {
+        "Rss": 18116,
+        "Pss": 11570,
+        "Private_Clean": 148,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34556,
+        "Pss": 25863,
+        "Private_Clean": 136,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35256,
+        "Pss": 26287,
+        "Private_Clean": 136,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36452,
+        "Pss": 27483,
+        "Private_Clean": 136,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19768589,
+      "open_ns": 1586991,
+      "before": {
+        "Rss": 18016,
+        "Pss": 11482,
+        "Private_Clean": 80,
+        "Private_Dirty": 7548
+      },
+      "imported": {
+        "Rss": 34520,
+        "Pss": 25840,
+        "Private_Clean": 132,
+        "Private_Dirty": 20040
+      },
+      "opened": {
+        "Rss": 35220,
+        "Pss": 26264,
+        "Private_Clean": 132,
+        "Private_Dirty": 20188
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36416,
+        "Pss": 27460,
+        "Private_Clean": 132,
+        "Private_Dirty": 21384
+      }
+    },
+    {
+      "import_ns": 19645641,
+      "open_ns": 1514877,
+      "before": {
+        "Rss": 18088,
+        "Pss": 11557,
+        "Private_Clean": 148,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34528,
+        "Pss": 25851,
+        "Private_Clean": 136,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 35228,
+        "Pss": 26275,
+        "Private_Clean": 136,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36424,
+        "Pss": 27471,
+        "Private_Clean": 136,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 19772084,
+      "open_ns": 1557543,
+      "before": {
+        "Rss": 18028,
+        "Pss": 11584,
+        "Private_Clean": 184,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34468,
+        "Pss": 25876,
+        "Private_Clean": 172,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 35168,
+        "Pss": 26300,
+        "Private_Clean": 172,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36364,
+        "Pss": 27496,
+        "Private_Clean": 172,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 19811546,
+      "open_ns": 1550075,
+      "before": {
+        "Rss": 17964,
+        "Pss": 11492,
+        "Private_Clean": 80,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34400,
+        "Pss": 25785,
+        "Private_Clean": 68,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35100,
+        "Pss": 26209,
+        "Private_Clean": 68,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36296,
+        "Pss": 27405,
+        "Private_Clean": 68,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19303554,
+      "open_ns": 1526044,
+      "before": {
+        "Rss": 17900,
+        "Pss": 11516,
+        "Private_Clean": 116,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34340,
+        "Pss": 25808,
+        "Private_Clean": 104,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35040,
+        "Pss": 26232,
+        "Private_Clean": 104,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36236,
+        "Pss": 27428,
+        "Private_Clean": 104,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19292510,
+      "open_ns": 1522367,
+      "before": {
+        "Rss": 17956,
+        "Pss": 11496,
+        "Private_Clean": 88,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34396,
+        "Pss": 25789,
+        "Private_Clean": 76,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 35096,
+        "Pss": 26213,
+        "Private_Clean": 76,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36292,
+        "Pss": 27409,
+        "Private_Clean": 76,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 19376703,
+      "open_ns": 1537691,
+      "before": {
+        "Rss": 17968,
+        "Pss": 11526,
+        "Private_Clean": 124,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34404,
+        "Pss": 25818,
+        "Private_Clean": 112,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35104,
+        "Pss": 26242,
+        "Private_Clean": 112,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36300,
+        "Pss": 27438,
+        "Private_Clean": 112,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19602406,
+      "open_ns": 1520742,
+      "before": {
+        "Rss": 17908,
+        "Pss": 11501,
+        "Private_Clean": 100,
+        "Private_Dirty": 7556
+      },
+      "imported": {
+        "Rss": 34284,
+        "Pss": 25793,
+        "Private_Clean": 88,
+        "Private_Dirty": 20048
+      },
+      "opened": {
+        "Rss": 34984,
+        "Pss": 26217,
+        "Private_Clean": 88,
+        "Private_Dirty": 20196
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36180,
+        "Pss": 27413,
+        "Private_Clean": 88,
+        "Private_Dirty": 21392
+      }
+    },
+    {
+      "import_ns": 19922772,
+      "open_ns": 1559250,
+      "before": {
+        "Rss": 18028,
+        "Pss": 11494,
+        "Private_Clean": 80,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34468,
+        "Pss": 25788,
+        "Private_Clean": 68,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35168,
+        "Pss": 26212,
+        "Private_Clean": 68,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36364,
+        "Pss": 27408,
+        "Private_Clean": 68,
+        "Private_Dirty": 21396
+      }
+    },
+    {
+      "import_ns": 19174331,
+      "open_ns": 1523396,
+      "before": {
+        "Rss": 18028,
+        "Pss": 11564,
+        "Private_Clean": 156,
+        "Private_Dirty": 7560
+      },
+      "imported": {
+        "Rss": 34404,
+        "Pss": 25855,
+        "Private_Clean": 144,
+        "Private_Dirty": 20052
+      },
+      "opened": {
+        "Rss": 35104,
+        "Pss": 26279,
+        "Private_Clean": 144,
+        "Private_Dirty": 20200
+      },
+      "devices": 64,
+      "retained_views": 20000,
+      "retained": {
+        "Rss": 36300,
+        "Pss": 27475,
+        "Private_Clean": 144,
+        "Private_Dirty": 21396
+      }
+    }
+  ]
+}

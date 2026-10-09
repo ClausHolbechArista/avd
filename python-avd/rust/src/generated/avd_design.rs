@@ -8,3 +8,5 @@ pub const REGISTRY: ::validated_data::ModelRegistry = ::validated_data::ModelReg
     root_model: <avd_design::AvdDesign<'static> as ::validated_data::ArchiveModel>::DESCRIPTOR,
     hash: REGISTRY_HASH,
 };
+
+pub mod native;

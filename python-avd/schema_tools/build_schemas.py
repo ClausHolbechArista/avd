@@ -22,7 +22,6 @@ from .constants import (
     SCHEMA_STORE_ARCHIVE_FILE,
     SCHEMA_STORE_GZ_FILE,
     SCHEMAS,
-    VALIDATED_DATA_PY_FILE,
     VALIDATED_DATA_PYI_FILE,
 )
 from .generate_docs.mdtabsgen import get_md_tabs
@@ -162,13 +161,12 @@ def build_validated_data_models() -> None:
         SCHEMA_STORE_GZ_FILE,
         "eos_designs",
         AVD_DESIGN_RUST_MODELS_FILE,
-        VALIDATED_DATA_PY_FILE,
         VALIDATED_DATA_PYI_FILE,
         "AvdDesign",
         "AVDDesign",
         reused_schemas={"eos_cli_config_gen": ("EosCliConfigGen", "EosCliConfigGen")},
     )
-    for generated_file in (VALIDATED_DATA_PY_FILE, VALIDATED_DATA_PYI_FILE):
+    for generated_file in (VALIDATED_DATA_PYI_FILE,):
         LOGGER.info("Running 'ruff' for generated validated-data file: %s", generated_file)
         subprocess.run(["ruff", "format", str(generated_file)], check=True)  # noqa: S603, S607
         subprocess.run(["ruff", "check", "--fix", str(generated_file)], check=True)  # noqa: S603, S607

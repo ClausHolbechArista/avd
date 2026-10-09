@@ -15,7 +15,7 @@ class _LazyImportModule(ModuleType):
     def __getattribute__(self, name: str) -> Any:
         namespace = ModuleType.__getattribute__(self, "__dict__")
         lazy_imports: LazyImports = namespace["_lazy_imports"]
-        if name in lazy_imports and (name not in namespace or isinstance(namespace[name], ModuleType)):
+        if name in lazy_imports and (name not in namespace or (isinstance(namespace[name], ModuleType) and namespace[name].__name__ == lazy_imports[name][0])):
             return get_lazy_attr(name, lazy_imports, namespace)
 
         return ModuleType.__getattribute__(self, name)
@@ -75,11 +75,12 @@ def install_lazy_imports(lazy_imports: LazyImports, namespace: dict[str, Any], a
     submodule object to ``pyavd.j2filters.add_md_toc``. The custom module type
     detects that module object and restores the documented lazy export instead.
     Resolved values are cached in the package namespace until importlib replaces
-    one with another same-named submodule object.
+    one with its defining submodule object. A deliberately re-exported module is
+    cached like any other value, provided it is not the defining module itself.
 
     ``additional_exports`` are existing package attributes that should be
     included in ``__all__`` but are not lazy. Lazy mappings are expected to
-    resolve to functions, classes, or other non-module attributes.
+    resolve to functions, classes, or module attributes distinct from their defining module.
 
     Exceptions raised while importing the target module are preserved. A missing
     target attribute is raised as ``ImportError`` with the original
