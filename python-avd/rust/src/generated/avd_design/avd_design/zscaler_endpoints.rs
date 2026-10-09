@@ -2,49 +2,41 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Primary {
-        scalar ip_address("ip_address", 0) -> &'a str;
-        scalar datacenter("datacenter", 1) -> &'a str;
-        scalar city("city", 2) -> &'a str;
-        scalar country("country", 3) -> &'a str;
-        scalar region("region", 4) -> &'a str;
-        scalar latitude("latitude", 5) -> &'a str;
-        scalar longitude("longitude", 6) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Primary<'a, Mode> {
+    pub ip_address: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub datacenter: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub city: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub country: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub region: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub latitude: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub longitude: ::validated_data::RequiredValue<&'a str, Mode>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Secondary {
-        scalar ip_address("ip_address", 0) -> &'a str;
-        scalar datacenter("datacenter", 1) -> &'a str;
-        scalar city("city", 2) -> &'a str;
-        scalar country("country", 3) -> &'a str;
-        scalar region("region", 4) -> &'a str;
-        scalar latitude("latitude", 5) -> &'a str;
-        scalar longitude("longitude", 6) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Secondary<'a, Mode> {
+    pub ip_address: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub datacenter: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub city: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub country: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub region: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub latitude: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub longitude: ::validated_data::RequiredValue<&'a str, Mode>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Tertiary {
-        scalar ip_address("ip_address", 0) -> &'a str;
-        scalar datacenter("datacenter", 1) -> &'a str;
-        scalar city("city", 2) -> &'a str;
-        scalar country("country", 3) -> &'a str;
-        scalar region("region", 4) -> &'a str;
-        scalar latitude("latitude", 5) -> &'a str;
-        scalar longitude("longitude", 6) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Tertiary<'a, Mode> {
+    pub ip_address: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub datacenter: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub city: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub country: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub region: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub latitude: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub longitude: ::validated_data::RequiredValue<&'a str, Mode>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DeviceLocation {
-        scalar city("city", 0) -> &'a str;
-        scalar country("country", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct DeviceLocation<'a, Mode> {
+    pub city: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub country: ::validated_data::RequiredValue<&'a str, Mode>,
 }

@@ -2,53 +2,41 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar id("id", 1) -> i64;
-        scalar description("description", 2) -> &'a str;
-        model ipsec("ipsec", 3) -> item::Ipsec<'a>;
-        model import_path_groups("import_path_groups", 4) -> item::ImportPathGroups<'a>;
-        scalar default_preference("default_preference", 5) -> &'a str;
-        scalar excluded_from_default_policy("excluded_from_default_policy", 6) -> bool;
-        model dps_keepalive("dps_keepalive", 7) -> item::DpsKeepalive<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub id: ::validated_data::RequiredValue<i64, Mode>,
+    pub description: ::validated_data::Field<&'a str>,
+    pub ipsec: ::validated_data::Field<item::Ipsec<'a, Mode>>,
+    pub import_path_groups: ::validated_data::Field<item::ImportPathGroups<'a, Mode>>,
+    pub default_preference: ::validated_data::Field<&'a str>,
+    pub excluded_from_default_policy: ::validated_data::Field<bool>,
+    pub dps_keepalive: ::validated_data::Field<item::DpsKeepalive<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipsec {
-            scalar dynamic_peers("dynamic_peers", 0) -> bool;
-            scalar static_peers("static_peers", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Ipsec<'a, Mode> {
+        pub dynamic_peers: ::validated_data::Field<bool>,
+        pub static_peers: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ImportPathGroups {
-            model item (0) -> import_path_groups::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct ImportPathGroups<'a, Mode> (::validated_data::Field<import_path_groups::Item<'a, Mode>>);
 
     pub mod import_path_groups {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar remote("remote", 0) -> &'a str;
-                scalar local("local", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub remote: ::validated_data::Field<&'a str>,
+            pub local: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct DpsKeepalive {
-            scalar interval("interval", 0) -> &'a str;
-            scalar failure_threshold("failure_threshold", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct DpsKeepalive<'a, Mode> {
+        pub interval: ::validated_data::Field<&'a str>,
+        pub failure_threshold: ::validated_data::Field<i64>,
     }
 }

@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct NodeId {
-        scalar algorithm("algorithm", 0) -> &'a str;
-        scalar pools_file("pools_file", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct NodeId<'a, Mode> {
+    pub algorithm: ::validated_data::Field<&'a str>,
+    pub pools_file: ::validated_data::Field<&'a str>,
 }

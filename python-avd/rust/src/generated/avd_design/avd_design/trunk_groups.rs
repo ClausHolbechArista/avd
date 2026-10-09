@@ -2,23 +2,17 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Mlag {
-        scalar name("name", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Mlag<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MlagL3 {
-        scalar name("name", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct MlagL3<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Uplink {
-        scalar name("name", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Uplink<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
 }

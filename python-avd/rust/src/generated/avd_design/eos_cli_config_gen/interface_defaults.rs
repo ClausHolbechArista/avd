@@ -2,9 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ethernet {
-        scalar shutdown("shutdown", 0) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Ethernet<'a, Mode> {
+    pub shutdown: ::validated_data::Field<bool>,
 }

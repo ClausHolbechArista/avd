@@ -2,170 +2,124 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Buffered {
-        scalar size("size", 0) -> i64;
-        scalar level("level", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Buffered<'a, Mode> {
+    pub size: ::validated_data::Field<i64>,
+    pub level: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Synchronous {
-        scalar level("level", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Synchronous<'a, Mode> {
+    pub level: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Format {
-        scalar timestamp("timestamp", 0) -> &'a str;
-        scalar hostname("hostname", 1) -> &'a str;
-        scalar sequence_numbers("sequence_numbers", 2) -> bool;
-        scalar rfc5424("rfc5424", 3) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Format<'a, Mode> {
+    pub timestamp: ::validated_data::Field<&'a str>,
+    pub hostname: ::validated_data::Field<&'a str>,
+    pub sequence_numbers: ::validated_data::Field<bool>,
+    pub rfc5424: ::validated_data::Field<bool>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar source_interface("source_interface", 1) -> &'a str;
-            scalar local_interface("local_interface", 2) -> &'a str;
-            model hosts("hosts", 3) -> item::Hosts<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub source_interface: ::validated_data::Field<&'a str>,
+        pub local_interface: ::validated_data::Field<&'a str>,
+        pub hosts: ::validated_data::Field<item::Hosts<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Hosts {
-                model item (0) -> hosts::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
         pub mod hosts {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar protocol("protocol", 1) -> &'a str;
-                    model ports("ports", 2) -> item::Ports<'a>;
-                    scalar ssl_profile("ssl_profile", 3) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub protocol: ::validated_data::Field<&'a str>,
+                pub ports: ::validated_data::Field<item::Ports<'a, Mode>>,
+                pub ssl_profile: ::validated_data::Field<&'a str>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Ports {
-                        scalar item (0) -> i64;
-                    }
-                }
+                #[::validated_data::data_view(list)]
+                pub struct Ports<'a, Mode> (::validated_data::Field<i64>);
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Policy {
-        model field_match("match", 0) -> policy::FieldMatch<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Policy<'a, Mode> {
+    #[data_view(rename = "match")]
+    pub field_match: ::validated_data::Field<policy::FieldMatch<'a, Mode>>,
 }
 
 pub mod policy {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FieldMatch {
-            model match_lists("match_lists", 0) -> field_match::MatchLists<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct FieldMatch<'a, Mode> {
+        pub match_lists: ::validated_data::Field<field_match::MatchLists<'a, Mode>>,
     }
 
     pub mod field_match {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct MatchLists {
-                model item (0) -> match_lists::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct MatchLists<'a, Mode> (::validated_data::Field<match_lists::Item<'a, Mode>>);
 
         pub mod match_lists {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar action("action", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub action: ::validated_data::RequiredValue<&'a str, Mode>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Event {
-        scalar congestion_drops_interval("congestion_drops_interval", 0) -> i64;
-        scalar global_link_status("global_link_status", 1) -> bool;
-        model storm_control("storm_control", 2) -> event::StormControl<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Event<'a, Mode> {
+    pub congestion_drops_interval: ::validated_data::Field<i64>,
+    pub global_link_status: ::validated_data::Field<bool>,
+    pub storm_control: ::validated_data::Field<event::StormControl<'a, Mode>>,
 }
 
 pub mod event {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct StormControl {
-            model discards("discards", 0) -> storm_control::Discards<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct StormControl<'a, Mode> {
+        pub discards: ::validated_data::Field<storm_control::Discards<'a, Mode>>,
     }
 
     pub mod storm_control {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Discards {
-                scalar field_global("global", 0) -> bool;
-                scalar interval("interval", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Discards<'a, Mode> {
+            #[data_view(rename = "global")]
+            pub field_global: ::validated_data::Field<bool>,
+            pub interval: ::validated_data::Field<i64>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Level {
-        model item (0) -> level::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(facility))]
+pub struct Level<'a, Mode> (::validated_data::Field<level::Item<'a, Mode>>);
 
 pub mod level {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar facility("facility", 0) -> &'a str;
-            scalar severity("severity", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub facility: ::validated_data::Field<&'a str>,
+        pub severity: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }

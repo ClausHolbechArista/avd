@@ -2,26 +2,16 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Servers {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Servers<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ClientRequests {
-        model flooding_suppression_vlans("flooding_suppression_vlans", 0) -> client_requests::FloodingSuppressionVlans<'a>;
-    }
+#[::validated_data::data_view]
+pub struct ClientRequests<'a, Mode> {
+    pub flooding_suppression_vlans: ::validated_data::Field<client_requests::FloodingSuppressionVlans<'a, Mode>>,
 }
 
 pub mod client_requests {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FloodingSuppressionVlans {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct FloodingSuppressionVlans<'a, Mode> (::validated_data::Field<&'a str>);
 }

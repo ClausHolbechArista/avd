@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MacAddress {
-        scalar aging("aging", 0) -> bool;
-        scalar moveable("moveable", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct MacAddress<'a, Mode> {
+    pub aging: ::validated_data::Field<bool>,
+    pub moveable: ::validated_data::Field<bool>,
 }

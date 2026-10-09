@@ -2,52 +2,42 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Multihop {
-        scalar interval("interval", 0) -> i64;
-        scalar min_rx("min_rx", 1) -> i64;
-        scalar multiplier("multiplier", 2) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Multihop<'a, Mode> {
+    pub interval: ::validated_data::Field<i64>,
+    pub min_rx: ::validated_data::Field<i64>,
+    pub multiplier: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Sbfd {
-        model local_interface("local_interface", 0) -> sbfd::LocalInterface<'a>;
-        scalar initiator_interval("initiator_interval", 1) -> i64;
-        scalar initiator_multiplier("initiator_multiplier", 2) -> i64;
-        scalar initiator_measurement_round_trip("initiator_measurement_round_trip", 3) -> bool;
-        model reflector("reflector", 4) -> sbfd::Reflector<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Sbfd<'a, Mode> {
+    pub local_interface: ::validated_data::Field<sbfd::LocalInterface<'a, Mode>>,
+    pub initiator_interval: ::validated_data::Field<i64>,
+    pub initiator_multiplier: ::validated_data::Field<i64>,
+    pub initiator_measurement_round_trip: ::validated_data::Field<bool>,
+    pub reflector: ::validated_data::Field<sbfd::Reflector<'a, Mode>>,
 }
 
 pub mod sbfd {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LocalInterface {
-            scalar name("name", 0) -> &'a str;
-            model protocols("protocols", 1) -> local_interface::Protocols<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct LocalInterface<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub protocols: ::validated_data::Field<local_interface::Protocols<'a, Mode>>,
     }
 
     pub mod local_interface {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Protocols {
-                scalar ipv4("ipv4", 0) -> bool;
-                scalar ipv6("ipv6", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Protocols<'a, Mode> {
+            pub ipv4: ::validated_data::Field<bool>,
+            pub ipv6: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Reflector {
-            scalar min_rx("min_rx", 0) -> i64;
-            scalar local_discriminator("local_discriminator", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Reflector<'a, Mode> {
+        pub min_rx: ::validated_data::Field<i64>,
+        pub local_discriminator: ::validated_data::Field<&'a str>,
     }
 }

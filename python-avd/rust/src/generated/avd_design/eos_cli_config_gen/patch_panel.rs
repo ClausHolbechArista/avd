@@ -2,90 +2,67 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Connector {
-        model interface("interface", 0) -> connector::Interface<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Connector<'a, Mode> {
+    pub interface: ::validated_data::Field<connector::Interface<'a, Mode>>,
 }
 
 pub mod connector {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Interface {
-            model patch("patch", 0) -> interface::Patch<'a>;
-            model recovery("recovery", 1) -> interface::Recovery<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Interface<'a, Mode> {
+        pub patch: ::validated_data::Field<interface::Patch<'a, Mode>>,
+        pub recovery: ::validated_data::Field<interface::Recovery<'a, Mode>>,
     }
 
     pub mod interface {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Patch {
-                scalar bgp_vpws_remote_failure_errdisable("bgp_vpws_remote_failure_errdisable", 0) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Patch<'a, Mode> {
+            pub bgp_vpws_remote_failure_errdisable: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Recovery {
-                model review_delay("review_delay", 0) -> recovery::ReviewDelay<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Recovery<'a, Mode> {
+            pub review_delay: ::validated_data::Field<recovery::ReviewDelay<'a, Mode>>,
         }
 
         pub mod recovery {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct ReviewDelay {
-                    scalar min("min", 0) -> i64;
-                    scalar max("max", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct ReviewDelay<'a, Mode> {
+                pub min: ::validated_data::RequiredValue<i64, Mode>,
+                pub max: ::validated_data::RequiredValue<i64, Mode>,
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Patches {
-        model item (0) -> patches::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Patches<'a, Mode> (::validated_data::Field<patches::Item<'a, Mode>>);
 
 pub mod patches {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar enabled("enabled", 1) -> bool;
-            model connectors("connectors", 2) -> item::Connectors<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub enabled: ::validated_data::Field<bool>,
+        pub connectors: ::validated_data::Field<item::Connectors<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Connectors {
-                model item (0) -> connectors::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(id))]
+        pub struct Connectors<'a, Mode> (::validated_data::Field<connectors::Item<'a, Mode>>);
 
         pub mod connectors {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar id("id", 0) -> &'a str;
-                    scalar field_type("type", 1) -> &'a str;
-                    scalar endpoint("endpoint", 2) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub id: ::validated_data::Field<&'a str>,
+                #[data_view(rename = "type")]
+                pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub endpoint: ::validated_data::RequiredValue<&'a str, Mode>,
             }
         }
     }

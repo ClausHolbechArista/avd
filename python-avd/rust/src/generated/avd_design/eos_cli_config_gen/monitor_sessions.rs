@@ -2,76 +2,59 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        model sources("sources", 1) -> item::Sources<'a>;
-        model destinations("destinations", 2) -> item::Destinations<'a>;
-        scalar encapsulation_gre_metadata_tx("encapsulation_gre_metadata_tx", 3) -> bool;
-        scalar header_remove_size("header_remove_size", 4) -> i64;
-        model access_group("access_group", 5) -> item::AccessGroup<'a>;
-        scalar rate_limit_per_ingress_chip("rate_limit_per_ingress_chip", 6) -> &'a str;
-        scalar rate_limit_per_egress_chip("rate_limit_per_egress_chip", 7) -> &'a str;
-        scalar sample("sample", 8) -> i64;
-        model truncate("truncate", 9) -> item::Truncate<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub sources: ::validated_data::Field<item::Sources<'a, Mode>>,
+    pub destinations: ::validated_data::Field<item::Destinations<'a, Mode>>,
+    pub encapsulation_gre_metadata_tx: ::validated_data::Field<bool>,
+    pub header_remove_size: ::validated_data::Field<i64>,
+    pub access_group: ::validated_data::Field<item::AccessGroup<'a, Mode>>,
+    pub rate_limit_per_ingress_chip: ::validated_data::Field<&'a str>,
+    pub rate_limit_per_egress_chip: ::validated_data::Field<&'a str>,
+    pub sample: ::validated_data::Field<i64>,
+    pub truncate: ::validated_data::Field<item::Truncate<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Sources {
-            model item (0) -> sources::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Sources<'a, Mode> (::validated_data::Field<sources::Item<'a, Mode>>);
 
     pub mod sources {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar direction("direction", 1) -> &'a str;
-                model access_group("access_group", 2) -> item::AccessGroup<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub direction: ::validated_data::Field<&'a str>,
+            pub access_group: ::validated_data::Field<item::AccessGroup<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct AccessGroup {
-                    scalar field_type("type", 0) -> &'a str;
-                    scalar name("name", 1) -> &'a str;
-                    scalar priority("priority", 2) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct AccessGroup<'a, Mode> {
+                #[data_view(rename = "type")]
+                pub field_type: ::validated_data::Field<&'a str>,
+                pub name: ::validated_data::Field<&'a str>,
+                pub priority: ::validated_data::Field<i64>,
             }
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Destinations {
-            scalar item (0) -> &'a str;
-        }
+    #[::validated_data::data_view(list)]
+    pub struct Destinations<'a, Mode> (::validated_data::Field<&'a str>);
+
+    #[::validated_data::data_view]
+    pub struct AccessGroup<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::Field<&'a str>,
+        pub name: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AccessGroup {
-            scalar field_type("type", 0) -> &'a str;
-            scalar name("name", 1) -> &'a str;
-        }
-    }
-
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Truncate {
-            scalar enabled("enabled", 0) -> bool;
-            scalar size("size", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Truncate<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub size: ::validated_data::Field<i64>,
     }
 }

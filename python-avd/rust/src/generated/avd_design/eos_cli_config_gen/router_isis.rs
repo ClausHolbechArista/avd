@@ -2,427 +2,331 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Timers {
-        model local_convergence("local_convergence", 0) -> timers::LocalConvergence<'a>;
-        model lsp("lsp", 1) -> timers::Lsp<'a>;
-        model csnp("csnp", 2) -> timers::Csnp<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Timers<'a, Mode> {
+    pub local_convergence: ::validated_data::Field<timers::LocalConvergence<'a, Mode>>,
+    pub lsp: ::validated_data::Field<timers::Lsp<'a, Mode>>,
+    pub csnp: ::validated_data::Field<timers::Csnp<'a, Mode>>,
 }
 
 pub mod timers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LocalConvergence {
-            scalar protected_prefixes("protected_prefixes", 0) -> bool;
-            scalar delay("delay", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct LocalConvergence<'a, Mode> {
+        pub protected_prefixes: ::validated_data::Field<bool>,
+        pub delay: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Lsp {
-            model generation("generation", 0) -> lsp::Generation<'a>;
-            scalar out_delay("out_delay", 1) -> i64;
-            scalar refresh_interval("refresh_interval", 2) -> i64;
-            scalar min_remaining_lifetime("min_remaining_lifetime", 3) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Lsp<'a, Mode> {
+        pub generation: ::validated_data::Field<lsp::Generation<'a, Mode>>,
+        pub out_delay: ::validated_data::Field<i64>,
+        pub refresh_interval: ::validated_data::Field<i64>,
+        pub min_remaining_lifetime: ::validated_data::Field<i64>,
     }
 
     pub mod lsp {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Generation {
-                scalar interval("interval", 0) -> i64;
-                scalar initial_wait_time("initial_wait_time", 1) -> i64;
-                scalar wait_time("wait_time", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Generation<'a, Mode> {
+            pub interval: ::validated_data::RequiredValue<i64, Mode>,
+            pub initial_wait_time: ::validated_data::Field<i64>,
+            pub wait_time: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Csnp {
-            model generation("generation", 0) -> csnp::Generation<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Csnp<'a, Mode> {
+        pub generation: ::validated_data::Field<csnp::Generation<'a, Mode>>,
     }
 
     pub mod csnp {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Generation {
-                scalar interval("interval", 0) -> i64;
-                scalar p2p_disabled("p2p_disabled", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Generation<'a, Mode> {
+            pub interval: ::validated_data::Field<i64>,
+            pub p2p_disabled: ::validated_data::Field<bool>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SetOverloadBit {
-        scalar enabled("enabled", 0) -> bool;
-        model on_startup("on_startup", 1) -> set_overload_bit::OnStartup<'a>;
-    }
+#[::validated_data::data_view]
+pub struct SetOverloadBit<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub on_startup: ::validated_data::Field<set_overload_bit::OnStartup<'a, Mode>>,
 }
 
 pub mod set_overload_bit {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct OnStartup {
-            scalar delay("delay", 0) -> i64;
-            model wait_for_bgp("wait_for_bgp", 1) -> on_startup::WaitForBgp<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct OnStartup<'a, Mode> {
+        pub delay: ::validated_data::Field<i64>,
+        pub wait_for_bgp: ::validated_data::Field<on_startup::WaitForBgp<'a, Mode>>,
     }
 
     pub mod on_startup {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct WaitForBgp {
-                scalar enabled("enabled", 0) -> bool;
-                scalar timeout("timeout", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct WaitForBgp<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub timeout: ::validated_data::Field<i64>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Authentication {
-        model both("both", 0) -> authentication::Both<'a>;
-        model level_1("level_1", 1) -> authentication::Level1<'a>;
-        model level_2("level_2", 2) -> authentication::Level2<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Authentication<'a, Mode> {
+    pub both: ::validated_data::Field<authentication::Both<'a, Mode>>,
+    pub level_1: ::validated_data::Field<authentication::Level1<'a, Mode>>,
+    pub level_2: ::validated_data::Field<authentication::Level2<'a, Mode>>,
 }
 
 pub mod authentication {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Both {
-            scalar key_type("key_type", 0) -> &'a str;
-            scalar key("key", 1) -> &'a str;
-            model key_ids("key_ids", 2) -> both::KeyIds<'a>;
-            scalar mode("mode", 3) -> &'a str;
-            model sha("sha", 4) -> both::Sha<'a>;
-            model shared_secret("shared_secret", 5) -> both::SharedSecret<'a>;
-            scalar rx_disabled("rx_disabled", 6) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Both<'a, Mode> {
+        pub key_type: ::validated_data::Field<&'a str>,
+        pub key: ::validated_data::Field<&'a str>,
+        pub key_ids: ::validated_data::Field<both::KeyIds<'a, Mode>>,
+        pub mode: ::validated_data::Field<&'a str>,
+        pub sha: ::validated_data::Field<both::Sha<'a, Mode>>,
+        pub shared_secret: ::validated_data::Field<both::SharedSecret<'a, Mode>>,
+        pub rx_disabled: ::validated_data::Field<bool>,
     }
 
     pub mod both {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct KeyIds {
-                model item (0) -> key_ids::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(id))]
+        pub struct KeyIds<'a, Mode> (::validated_data::Field<key_ids::Item<'a, Mode>>);
 
         pub mod key_ids {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar id("id", 0) -> i64;
-                    scalar algorithm("algorithm", 1) -> &'a str;
-                    scalar key_type("key_type", 2) -> &'a str;
-                    scalar key("key", 3) -> &'a str;
-                    scalar rfc_5310("rfc_5310", 4) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub id: ::validated_data::RequiredValue<i64, Mode>,
+                pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub rfc_5310: ::validated_data::Field<bool>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Sha {
-                scalar key_id("key_id", 0) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Sha<'a, Mode> {
+            pub key_id: ::validated_data::RequiredValue<i64, Mode>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SharedSecret {
-                scalar profile("profile", 0) -> &'a str;
-                scalar algorithm("algorithm", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct SharedSecret<'a, Mode> {
+            pub profile: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Level1 {
-            scalar key_type("key_type", 0) -> &'a str;
-            scalar key("key", 1) -> &'a str;
-            model key_ids("key_ids", 2) -> level_1::KeyIds<'a>;
-            scalar mode("mode", 3) -> &'a str;
-            model sha("sha", 4) -> level_1::Sha<'a>;
-            model shared_secret("shared_secret", 5) -> level_1::SharedSecret<'a>;
-            scalar rx_disabled("rx_disabled", 6) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Level1<'a, Mode> {
+        pub key_type: ::validated_data::Field<&'a str>,
+        pub key: ::validated_data::Field<&'a str>,
+        pub key_ids: ::validated_data::Field<level_1::KeyIds<'a, Mode>>,
+        pub mode: ::validated_data::Field<&'a str>,
+        pub sha: ::validated_data::Field<level_1::Sha<'a, Mode>>,
+        pub shared_secret: ::validated_data::Field<level_1::SharedSecret<'a, Mode>>,
+        pub rx_disabled: ::validated_data::Field<bool>,
     }
 
     pub mod level_1 {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct KeyIds {
-                model item (0) -> key_ids::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(id))]
+        pub struct KeyIds<'a, Mode> (::validated_data::Field<key_ids::Item<'a, Mode>>);
 
         pub mod key_ids {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar id("id", 0) -> i64;
-                    scalar algorithm("algorithm", 1) -> &'a str;
-                    scalar key_type("key_type", 2) -> &'a str;
-                    scalar key("key", 3) -> &'a str;
-                    scalar rfc_5310("rfc_5310", 4) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub id: ::validated_data::RequiredValue<i64, Mode>,
+                pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub rfc_5310: ::validated_data::Field<bool>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Sha {
-                scalar key_id("key_id", 0) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Sha<'a, Mode> {
+            pub key_id: ::validated_data::RequiredValue<i64, Mode>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SharedSecret {
-                scalar profile("profile", 0) -> &'a str;
-                scalar algorithm("algorithm", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct SharedSecret<'a, Mode> {
+            pub profile: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Level2 {
-            scalar key_type("key_type", 0) -> &'a str;
-            scalar key("key", 1) -> &'a str;
-            model key_ids("key_ids", 2) -> level_2::KeyIds<'a>;
-            scalar mode("mode", 3) -> &'a str;
-            model sha("sha", 4) -> level_2::Sha<'a>;
-            model shared_secret("shared_secret", 5) -> level_2::SharedSecret<'a>;
-            scalar rx_disabled("rx_disabled", 6) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Level2<'a, Mode> {
+        pub key_type: ::validated_data::Field<&'a str>,
+        pub key: ::validated_data::Field<&'a str>,
+        pub key_ids: ::validated_data::Field<level_2::KeyIds<'a, Mode>>,
+        pub mode: ::validated_data::Field<&'a str>,
+        pub sha: ::validated_data::Field<level_2::Sha<'a, Mode>>,
+        pub shared_secret: ::validated_data::Field<level_2::SharedSecret<'a, Mode>>,
+        pub rx_disabled: ::validated_data::Field<bool>,
     }
 
     pub mod level_2 {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct KeyIds {
-                model item (0) -> key_ids::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(id))]
+        pub struct KeyIds<'a, Mode> (::validated_data::Field<key_ids::Item<'a, Mode>>);
 
         pub mod key_ids {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar id("id", 0) -> i64;
-                    scalar algorithm("algorithm", 1) -> &'a str;
-                    scalar key_type("key_type", 2) -> &'a str;
-                    scalar key("key", 3) -> &'a str;
-                    scalar rfc_5310("rfc_5310", 4) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub id: ::validated_data::RequiredValue<i64, Mode>,
+                pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub key: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub rfc_5310: ::validated_data::Field<bool>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Sha {
-                scalar key_id("key_id", 0) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Sha<'a, Mode> {
+            pub key_id: ::validated_data::RequiredValue<i64, Mode>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SharedSecret {
-                scalar profile("profile", 0) -> &'a str;
-                scalar algorithm("algorithm", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct SharedSecret<'a, Mode> {
+            pub profile: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Advertise {
-        scalar passive_only("passive_only", 0) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Advertise<'a, Mode> {
+    pub passive_only: ::validated_data::Field<bool>,
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RedistributeRoutes {
-        model item (0) -> redistribute_routes::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct RedistributeRoutes<'a, Mode> (::validated_data::Field<redistribute_routes::Item<'a, Mode>>);
 
 pub mod redistribute_routes {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar source_protocol("source_protocol", 0) -> &'a str;
-            scalar route_map("route_map", 1) -> &'a str;
-            scalar include_leaked("include_leaked", 2) -> bool;
-            scalar ospf_route_type("ospf_route_type", 3) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub source_protocol: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub route_map: ::validated_data::Field<&'a str>,
+        pub include_leaked: ::validated_data::Field<bool>,
+        pub ospf_route_type: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AddressFamilyIpv4 {
-        scalar enabled("enabled", 0) -> bool;
-        scalar maximum_paths("maximum_paths", 1) -> i64;
-        scalar bfd_all_interfaces("bfd_all_interfaces", 2) -> bool;
-        model fast_reroute_ti_lfa("fast_reroute_ti_lfa", 3) -> address_family_ipv4::FastRerouteTiLfa<'a>;
-        model tunnel_source_labeled_unicast("tunnel_source_labeled_unicast", 4) -> address_family_ipv4::TunnelSourceLabeledUnicast<'a>;
-    }
+#[::validated_data::data_view]
+pub struct AddressFamilyIpv4<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub maximum_paths: ::validated_data::Field<i64>,
+    pub bfd_all_interfaces: ::validated_data::Field<bool>,
+    pub fast_reroute_ti_lfa: ::validated_data::Field<address_family_ipv4::FastRerouteTiLfa<'a, Mode>>,
+    pub tunnel_source_labeled_unicast: ::validated_data::Field<address_family_ipv4::TunnelSourceLabeledUnicast<'a, Mode>>,
 }
 
 pub mod address_family_ipv4 {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FastRerouteTiLfa {
-            scalar mode("mode", 0) -> &'a str;
-            scalar level("level", 1) -> &'a str;
-            model srlg("srlg", 2) -> fast_reroute_ti_lfa::Srlg<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct FastRerouteTiLfa<'a, Mode> {
+        pub mode: ::validated_data::Field<&'a str>,
+        pub level: ::validated_data::Field<&'a str>,
+        pub srlg: ::validated_data::Field<fast_reroute_ti_lfa::Srlg<'a, Mode>>,
     }
 
     pub mod fast_reroute_ti_lfa {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Srlg {
-                scalar enable("enable", 0) -> bool;
-                scalar strict("strict", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Srlg<'a, Mode> {
+            pub enable: ::validated_data::Field<bool>,
+            pub strict: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TunnelSourceLabeledUnicast {
-            scalar enabled("enabled", 0) -> bool;
-            scalar rcf("rcf", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct TunnelSourceLabeledUnicast<'a, Mode> {
+        pub enabled: ::validated_data::Field<bool>,
+        pub rcf: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AddressFamilyIpv6 {
-        scalar enabled("enabled", 0) -> bool;
-        scalar maximum_paths("maximum_paths", 1) -> i64;
-        scalar bfd_all_interfaces("bfd_all_interfaces", 2) -> bool;
-        scalar multi_topology("multi_topology", 3) -> bool;
-        model fast_reroute_ti_lfa("fast_reroute_ti_lfa", 4) -> address_family_ipv6::FastRerouteTiLfa<'a>;
-    }
+#[::validated_data::data_view]
+pub struct AddressFamilyIpv6<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub maximum_paths: ::validated_data::Field<i64>,
+    pub bfd_all_interfaces: ::validated_data::Field<bool>,
+    pub multi_topology: ::validated_data::Field<bool>,
+    pub fast_reroute_ti_lfa: ::validated_data::Field<address_family_ipv6::FastRerouteTiLfa<'a, Mode>>,
 }
 
 pub mod address_family_ipv6 {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FastRerouteTiLfa {
-            scalar mode("mode", 0) -> &'a str;
-            scalar level("level", 1) -> &'a str;
-            model srlg("srlg", 2) -> fast_reroute_ti_lfa::Srlg<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct FastRerouteTiLfa<'a, Mode> {
+        pub mode: ::validated_data::Field<&'a str>,
+        pub level: ::validated_data::Field<&'a str>,
+        pub srlg: ::validated_data::Field<fast_reroute_ti_lfa::Srlg<'a, Mode>>,
     }
 
     pub mod fast_reroute_ti_lfa {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Srlg {
-                scalar enable("enable", 0) -> bool;
-                scalar strict("strict", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Srlg<'a, Mode> {
+            pub enable: ::validated_data::Field<bool>,
+            pub strict: ::validated_data::Field<bool>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SegmentRoutingMpls {
-        scalar enabled("enabled", 0) -> bool;
-        scalar router_id("router_id", 1) -> &'a str;
-        model prefix_segments("prefix_segments", 2) -> segment_routing_mpls::PrefixSegments<'a>;
-    }
+#[::validated_data::data_view]
+pub struct SegmentRoutingMpls<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub router_id: ::validated_data::Field<&'a str>,
+    pub prefix_segments: ::validated_data::Field<segment_routing_mpls::PrefixSegments<'a, Mode>>,
 }
 
 pub mod segment_routing_mpls {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PrefixSegments {
-            model item (0) -> prefix_segments::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(prefix))]
+    pub struct PrefixSegments<'a, Mode> (::validated_data::Field<prefix_segments::Item<'a, Mode>>);
 
     pub mod prefix_segments {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar prefix("prefix", 0) -> &'a str;
-                scalar index("index", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub prefix: ::validated_data::Field<&'a str>,
+            pub index: ::validated_data::Field<i64>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SpfInterval {
-        scalar interval("interval", 0) -> i64;
-        scalar interval_unit("interval_unit", 1) -> &'a str;
-        scalar wait_interval("wait_interval", 2) -> i64;
-        scalar hold_interval("hold_interval", 3) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct SpfInterval<'a, Mode> {
+    pub interval: ::validated_data::Field<i64>,
+    pub interval_unit: ::validated_data::Field<&'a str>,
+    pub wait_interval: ::validated_data::Field<i64>,
+    pub hold_interval: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct GracefulRestart {
-        scalar enabled("enabled", 0) -> bool;
-        scalar restart_hold_time("restart_hold_time", 1) -> i64;
-        model t2("t2", 2) -> graceful_restart::T2<'a>;
-    }
+#[::validated_data::data_view]
+pub struct GracefulRestart<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub restart_hold_time: ::validated_data::Field<i64>,
+    pub t2: ::validated_data::Field<graceful_restart::T2<'a, Mode>>,
 }
 
 pub mod graceful_restart {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct T2 {
-            scalar level_1_wait_time("level_1_wait_time", 0) -> i64;
-            scalar level_2_wait_time("level_2_wait_time", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct T2<'a, Mode> {
+        pub level_1_wait_time: ::validated_data::Field<i64>,
+        pub level_2_wait_time: ::validated_data::Field<i64>,
     }
 }

@@ -2,207 +2,146 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct GroupLimits {
-        model item (0) -> group_limits::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(source_prefix))]
+pub struct GroupLimits<'a, Mode> (::validated_data::Field<group_limits::Item<'a, Mode>>);
 
 pub mod group_limits {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar source_prefix("source_prefix", 0) -> &'a str;
-            scalar limit("limit", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub source_prefix: ::validated_data::Field<&'a str>,
+        pub limit: ::validated_data::RequiredValue<i64, Mode>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Peers {
-        model item (0) -> peers::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(ipv4_address))]
+pub struct Peers<'a, Mode> (::validated_data::Field<peers::Item<'a, Mode>>);
 
 pub mod peers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar ipv4_address("ipv4_address", 0) -> &'a str;
-            model default_peer("default_peer", 1) -> item::DefaultPeer<'a>;
-            scalar local_interface("local_interface", 2) -> &'a str;
-            scalar description("description", 3) -> &'a str;
-            scalar disabled("disabled", 4) -> bool;
-            scalar sa_limit("sa_limit", 5) -> i64;
-            model mesh_groups("mesh_groups", 6) -> item::MeshGroups<'a>;
-            model keepalive("keepalive", 7) -> item::Keepalive<'a>;
-            model sa_filter("sa_filter", 8) -> item::SaFilter<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub ipv4_address: ::validated_data::Field<&'a str>,
+        pub default_peer: ::validated_data::Field<item::DefaultPeer<'a, Mode>>,
+        pub local_interface: ::validated_data::Field<&'a str>,
+        pub description: ::validated_data::Field<&'a str>,
+        pub disabled: ::validated_data::Field<bool>,
+        pub sa_limit: ::validated_data::Field<i64>,
+        pub mesh_groups: ::validated_data::Field<item::MeshGroups<'a, Mode>>,
+        pub keepalive: ::validated_data::Field<item::Keepalive<'a, Mode>>,
+        pub sa_filter: ::validated_data::Field<item::SaFilter<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct DefaultPeer {
-                scalar enabled("enabled", 0) -> bool;
-                scalar prefix_list("prefix_list", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct DefaultPeer<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub prefix_list: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct MeshGroups {
-                model item (0) -> mesh_groups::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct MeshGroups<'a, Mode> (::validated_data::Field<mesh_groups::Item<'a, Mode>>);
 
         pub mod mesh_groups {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Keepalive {
-                scalar keepalive_timer("keepalive_timer", 0) -> i64;
-                scalar hold_timer("hold_timer", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Keepalive<'a, Mode> {
+            pub keepalive_timer: ::validated_data::RequiredValue<i64, Mode>,
+            pub hold_timer: ::validated_data::RequiredValue<i64, Mode>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SaFilter {
-                scalar in_list("in_list", 0) -> &'a str;
-                scalar out_list("out_list", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct SaFilter<'a, Mode> {
+            pub in_list: ::validated_data::Field<&'a str>,
+            pub out_list: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar originator_id_local_interface("originator_id_local_interface", 1) -> &'a str;
-            scalar rejected_limit("rejected_limit", 2) -> i64;
-            scalar forward_register_packets("forward_register_packets", 3) -> bool;
-            scalar connection_retry_interval("connection_retry_interval", 4) -> i64;
-            model group_limits("group_limits", 5) -> item::GroupLimits<'a>;
-            model peers("peers", 6) -> item::Peers<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub originator_id_local_interface: ::validated_data::Field<&'a str>,
+        pub rejected_limit: ::validated_data::Field<i64>,
+        pub forward_register_packets: ::validated_data::Field<bool>,
+        pub connection_retry_interval: ::validated_data::Field<i64>,
+        pub group_limits: ::validated_data::Field<item::GroupLimits<'a, Mode>>,
+        pub peers: ::validated_data::Field<item::Peers<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct GroupLimits {
-                model item (0) -> group_limits::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(source_prefix))]
+        pub struct GroupLimits<'a, Mode> (::validated_data::Field<group_limits::Item<'a, Mode>>);
 
         pub mod group_limits {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar source_prefix("source_prefix", 0) -> &'a str;
-                    scalar limit("limit", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub source_prefix: ::validated_data::Field<&'a str>,
+                pub limit: ::validated_data::RequiredValue<i64, Mode>,
             }
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Peers {
-                model item (0) -> peers::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(ipv4_address))]
+        pub struct Peers<'a, Mode> (::validated_data::Field<peers::Item<'a, Mode>>);
 
         pub mod peers {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar ipv4_address("ipv4_address", 0) -> &'a str;
-                    model default_peer("default_peer", 1) -> item::DefaultPeer<'a>;
-                    scalar local_interface("local_interface", 2) -> &'a str;
-                    scalar description("description", 3) -> &'a str;
-                    scalar disabled("disabled", 4) -> bool;
-                    scalar sa_limit("sa_limit", 5) -> i64;
-                    model mesh_groups("mesh_groups", 6) -> item::MeshGroups<'a>;
-                    model keepalive("keepalive", 7) -> item::Keepalive<'a>;
-                    model sa_filter("sa_filter", 8) -> item::SaFilter<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub ipv4_address: ::validated_data::Field<&'a str>,
+                pub default_peer: ::validated_data::Field<item::DefaultPeer<'a, Mode>>,
+                pub local_interface: ::validated_data::Field<&'a str>,
+                pub description: ::validated_data::Field<&'a str>,
+                pub disabled: ::validated_data::Field<bool>,
+                pub sa_limit: ::validated_data::Field<i64>,
+                pub mesh_groups: ::validated_data::Field<item::MeshGroups<'a, Mode>>,
+                pub keepalive: ::validated_data::Field<item::Keepalive<'a, Mode>>,
+                pub sa_filter: ::validated_data::Field<item::SaFilter<'a, Mode>>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct DefaultPeer {
-                        scalar enabled("enabled", 0) -> bool;
-                        scalar prefix_list("prefix_list", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct DefaultPeer<'a, Mode> {
+                    pub enabled: ::validated_data::Field<bool>,
+                    pub prefix_list: ::validated_data::Field<&'a str>,
                 }
 
-                ::validation::define_archive_indexed_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct MeshGroups {
-                        model item (0) -> mesh_groups::Item<'a>;
-                        primary_key_fields: [0];
-                    }
-                }
+                #[::validated_data::data_view(indexed_list, primary_key(name))]
+                pub struct MeshGroups<'a, Mode> (::validated_data::Field<mesh_groups::Item<'a, Mode>>);
 
                 pub mod mesh_groups {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar name("name", 0) -> &'a str;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub name: ::validated_data::Field<&'a str>,
                     }
                 }
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Keepalive {
-                        scalar keepalive_timer("keepalive_timer", 0) -> i64;
-                        scalar hold_timer("hold_timer", 1) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Keepalive<'a, Mode> {
+                    pub keepalive_timer: ::validated_data::RequiredValue<i64, Mode>,
+                    pub hold_timer: ::validated_data::RequiredValue<i64, Mode>,
                 }
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct SaFilter {
-                        scalar in_list("in_list", 0) -> &'a str;
-                        scalar out_list("out_list", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct SaFilter<'a, Mode> {
+                    pub in_list: ::validated_data::Field<&'a str>,
+                    pub out_list: ::validated_data::Field<&'a str>,
                 }
             }
         }

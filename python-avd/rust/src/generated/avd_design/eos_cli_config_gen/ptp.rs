@@ -2,105 +2,83 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Source {
-        scalar ip("ip", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Source<'a, Mode> {
+    pub ip: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MessageType {
-        model general("general", 0) -> message_type::General<'a>;
-        model event("event", 1) -> message_type::Event<'a>;
-    }
+#[::validated_data::data_view]
+pub struct MessageType<'a, Mode> {
+    pub general: ::validated_data::Field<message_type::General<'a, Mode>>,
+    pub event: ::validated_data::Field<message_type::Event<'a, Mode>>,
 }
 
 pub mod message_type {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct General {
-            scalar dscp("dscp", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct General<'a, Mode> {
+        pub dscp: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Event {
-            scalar dscp("dscp", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Event<'a, Mode> {
+        pub dscp: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Monitor {
-        scalar enabled("enabled", 0) -> bool;
-        model threshold("threshold", 1) -> monitor::Threshold<'a>;
-        model missing_message("missing_message", 2) -> monitor::MissingMessage<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Monitor<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub threshold: ::validated_data::Field<monitor::Threshold<'a, Mode>>,
+    pub missing_message: ::validated_data::Field<monitor::MissingMessage<'a, Mode>>,
 }
 
 pub mod monitor {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Threshold {
-            scalar offset_from_master("offset_from_master", 0) -> i64;
-            scalar mean_path_delay("mean_path_delay", 1) -> i64;
-            model drop("drop", 2) -> threshold::Drop<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Threshold<'a, Mode> {
+        pub offset_from_master: ::validated_data::Field<i64>,
+        pub mean_path_delay: ::validated_data::Field<i64>,
+        pub drop: ::validated_data::Field<threshold::Drop<'a, Mode>>,
     }
 
     pub mod threshold {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Drop {
-                scalar offset_from_master("offset_from_master", 0) -> i64;
-                scalar mean_path_delay("mean_path_delay", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Drop<'a, Mode> {
+            pub offset_from_master: ::validated_data::Field<i64>,
+            pub mean_path_delay: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MissingMessage {
-            model intervals("intervals", 0) -> missing_message::Intervals<'a>;
-            model sequence_ids("sequence_ids", 1) -> missing_message::SequenceIds<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct MissingMessage<'a, Mode> {
+        pub intervals: ::validated_data::Field<missing_message::Intervals<'a, Mode>>,
+        pub sequence_ids: ::validated_data::Field<missing_message::SequenceIds<'a, Mode>>,
     }
 
     pub mod missing_message {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Intervals {
-                scalar announce("announce", 0) -> i64;
-                scalar follow_up("follow_up", 1) -> i64;
-                scalar sync("sync", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Intervals<'a, Mode> {
+            pub announce: ::validated_data::Field<i64>,
+            pub follow_up: ::validated_data::Field<i64>,
+            pub sync: ::validated_data::Field<i64>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct SequenceIds {
-                scalar enabled("enabled", 0) -> bool;
-                scalar announce("announce", 1) -> i64;
-                scalar delay_resp("delay_resp", 2) -> i64;
-                scalar follow_up("follow_up", 3) -> i64;
-                scalar sync("sync", 4) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct SequenceIds<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub announce: ::validated_data::Field<i64>,
+            pub delay_resp: ::validated_data::Field<i64>,
+            pub follow_up: ::validated_data::Field<i64>,
+            pub sync: ::validated_data::Field<i64>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct FreeRunning {
-        scalar enabled("enabled", 0) -> bool;
-        scalar source_clock_hardware("source_clock_hardware", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct FreeRunning<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub source_clock_hardware: ::validated_data::Field<bool>,
 }

@@ -2,62 +2,44 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Policy {
-        scalar local_default_role("local_default_role", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Policy<'a, Mode> {
+    pub local_default_role: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Exec {
-        scalar default("default", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Exec<'a, Mode> {
+    pub default: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Dynamic {
-        model dot1x_additional_groups("dot1x_additional_groups", 0) -> dynamic::Dot1xAdditionalGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Dynamic<'a, Mode> {
+    pub dot1x_additional_groups: ::validated_data::Field<dynamic::Dot1xAdditionalGroups<'a, Mode>>,
 }
 
 pub mod dynamic {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1xAdditionalGroups {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Dot1xAdditionalGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Commands {
-        scalar all_default("all_default", 0) -> &'a str;
-        model privilege("privilege", 1) -> commands::Privilege<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Commands<'a, Mode> {
+    pub all_default: ::validated_data::Field<&'a str>,
+    pub privilege: ::validated_data::Field<commands::Privilege<'a, Mode>>,
 }
 
 pub mod commands {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Privilege {
-            model item (0) -> privilege::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Privilege<'a, Mode> (::validated_data::Field<privilege::Item<'a, Mode>>);
 
     pub mod privilege {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar level("level", 0) -> &'a str;
-                scalar default("default", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub level: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub default: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 }

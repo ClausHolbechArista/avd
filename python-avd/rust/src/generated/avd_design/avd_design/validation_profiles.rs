@@ -2,48 +2,38 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar parent_profile("parent_profile", 1) -> &'a str;
-        model hardware("hardware", 2) -> item::Hardware<'a>;
-        model logging("logging", 3) -> item::Logging<'a>;
-        scalar exclude_as_extra_fabric_validation_target("exclude_as_extra_fabric_validation_target", 4) -> bool;
-        model interfaces("interfaces", 5) -> super::super::eos_cli_config_gen::metadata::Interfaces<'a>;
-        model bgp("bgp", 6) -> super::super::eos_cli_config_gen::metadata::Bgp<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub parent_profile: ::validated_data::Field<&'a str>,
+    pub hardware: ::validated_data::Field<item::Hardware<'a, Mode>>,
+    pub logging: ::validated_data::Field<item::Logging<'a, Mode>>,
+    pub exclude_as_extra_fabric_validation_target: ::validated_data::Field<bool>,
+    pub interfaces: ::validated_data::Field<super::super::eos_cli_config_gen::metadata::Interfaces<'a, Mode>>,
+    pub bgp: ::validated_data::Field<super::super::eos_cli_config_gen::metadata::Bgp<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Hardware {
-            scalar min_power_supplies("min_power_supplies", 0) -> i64;
-            scalar min_fans("min_fans", 1) -> i64;
-            scalar min_supervisors("min_supervisors", 2) -> i64;
-            scalar min_line_cards("min_line_cards", 3) -> i64;
-            scalar min_fabric_cards("min_fabric_cards", 4) -> i64;
-            model transceiver_manufacturers("transceiver_manufacturers", 5) -> hardware::TransceiverManufacturers<'a>;
-            scalar ignore_no_transceivers("ignore_no_transceivers", 6) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Hardware<'a, Mode> {
+        pub min_power_supplies: ::validated_data::Field<i64>,
+        pub min_fans: ::validated_data::Field<i64>,
+        pub min_supervisors: ::validated_data::Field<i64>,
+        pub min_line_cards: ::validated_data::Field<i64>,
+        pub min_fabric_cards: ::validated_data::Field<i64>,
+        pub transceiver_manufacturers: ::validated_data::Field<hardware::TransceiverManufacturers<'a, Mode>>,
+        pub ignore_no_transceivers: ::validated_data::Field<bool>,
     }
 
     pub mod hardware {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct TransceiverManufacturers {
-                scalar item (0) -> &'a str;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct TransceiverManufacturers<'a, Mode> (::validated_data::Field<&'a str>);
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Logging {
-            scalar validate_no_errors_period("validate_no_errors_period", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Logging<'a, Mode> {
+        pub validate_no_errors_period: ::validated_data::Field<i64>,
     }
 }

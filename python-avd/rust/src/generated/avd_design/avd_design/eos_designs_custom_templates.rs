@@ -2,21 +2,17 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar template("template", 0) -> &'a str;
-        model options("options", 1) -> item::Options<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub template: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub options: ::validated_data::Field<item::Options<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Options {
-            scalar list_merge("list_merge", 0) -> &'a str;
-            scalar strip_empty_keys("strip_empty_keys", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Options<'a, Mode> {
+        pub list_merge: ::validated_data::Field<&'a str>,
+        pub strip_empty_keys: ::validated_data::Field<bool>,
     }
 }

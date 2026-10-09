@@ -2,60 +2,45 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct TwampLight {
-        model reflector_defaults("reflector_defaults", 0) -> twamp_light::ReflectorDefaults<'a>;
-        model sender_defaults("sender_defaults", 1) -> twamp_light::SenderDefaults<'a>;
-        model sender_profiles("sender_profiles", 2) -> twamp_light::SenderProfiles<'a>;
-    }
+#[::validated_data::data_view]
+pub struct TwampLight<'a, Mode> {
+    pub reflector_defaults: ::validated_data::Field<twamp_light::ReflectorDefaults<'a, Mode>>,
+    pub sender_defaults: ::validated_data::Field<twamp_light::SenderDefaults<'a, Mode>>,
+    pub sender_profiles: ::validated_data::Field<twamp_light::SenderProfiles<'a, Mode>>,
 }
 
 pub mod twamp_light {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ReflectorDefaults {
-            scalar listen_port("listen_port", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct ReflectorDefaults<'a, Mode> {
+        pub listen_port: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SenderDefaults {
-            scalar destination_port("destination_port", 0) -> i64;
-            scalar source_port("source_port", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct SenderDefaults<'a, Mode> {
+        pub destination_port: ::validated_data::Field<i64>,
+        pub source_port: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SenderProfiles {
-            model item (0) -> sender_profiles::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct SenderProfiles<'a, Mode> (::validated_data::Field<sender_profiles::Item<'a, Mode>>);
 
     pub mod sender_profiles {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar measurement_interval("measurement_interval", 1) -> i64;
-                scalar measurement_samples("measurement_samples", 2) -> i64;
-                model significance("significance", 3) -> item::Significance<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub measurement_interval: ::validated_data::Field<i64>,
+            pub measurement_samples: ::validated_data::Field<i64>,
+            pub significance: ::validated_data::Field<item::Significance<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Significance {
-                    scalar value("value", 0) -> i64;
-                    scalar offset("offset", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Significance<'a, Mode> {
+                pub value: ::validated_data::RequiredValue<i64, Mode>,
+                pub offset: ::validated_data::RequiredValue<i64, Mode>,
             }
         }
     }

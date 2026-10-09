@@ -2,15 +2,13 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar url("url", 1) -> &'a str;
-        scalar username("username", 2) -> &'a str;
-        scalar password("password", 3) -> &'a str;
-        scalar autovlan_disable("autovlan_disable", 4) -> bool;
-        scalar vrf("vrf", 5) -> &'a str;
-        scalar source_interface("source_interface", 6) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub url: ::validated_data::Field<&'a str>,
+    pub username: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub autovlan_disable: ::validated_data::Field<bool>,
+    pub vrf: ::validated_data::Field<&'a str>,
+    pub source_interface: ::validated_data::Field<&'a str>,
 }

@@ -2,38 +2,29 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar description("description", 1) -> &'a str;
-        scalar id("id", 2) -> i64;
-        model sites("sites", 3) -> item::Sites<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub description: ::validated_data::Field<&'a str>,
+    pub id: ::validated_data::RequiredValue<i64, Mode>,
+    pub sites: ::validated_data::Field<item::Sites<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Sites {
-            model item (0) -> sites::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Sites<'a, Mode> (::validated_data::Field<sites::Item<'a, Mode>>);
 
     pub mod sites {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar description("description", 1) -> &'a str;
-                scalar id("id", 2) -> i64;
-                scalar location("location", 3) -> &'a str;
-                scalar site_contact("site_contact", 4) -> &'a str;
-                scalar site_after_hours_contact("site_after_hours_contact", 5) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub description: ::validated_data::Field<&'a str>,
+            pub id: ::validated_data::RequiredValue<i64, Mode>,
+            pub location: ::validated_data::Field<&'a str>,
+            pub site_contact: ::validated_data::Field<&'a str>,
+            pub site_after_hours_contact: ::validated_data::Field<&'a str>,
         }
     }
 }

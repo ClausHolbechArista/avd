@@ -2,69 +2,57 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        model actions("actions", 1) -> item::Actions<'a>;
-        scalar delay("delay", 2) -> i64;
-        scalar trigger("trigger", 3) -> &'a str;
-        model trigger_on_counters("trigger_on_counters", 4) -> item::TriggerOnCounters<'a>;
-        model trigger_on_logging("trigger_on_logging", 5) -> item::TriggerOnLogging<'a>;
-        model trigger_on_intf("trigger_on_intf", 6) -> item::TriggerOnIntf<'a>;
-        model trigger_on_maintenance("trigger_on_maintenance", 7) -> item::TriggerOnMaintenance<'a>;
-        scalar asynchronous("asynchronous", 8) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub actions: ::validated_data::Field<item::Actions<'a, Mode>>,
+    pub delay: ::validated_data::Field<i64>,
+    pub trigger: ::validated_data::Field<&'a str>,
+    pub trigger_on_counters: ::validated_data::Field<item::TriggerOnCounters<'a, Mode>>,
+    pub trigger_on_logging: ::validated_data::Field<item::TriggerOnLogging<'a, Mode>>,
+    pub trigger_on_intf: ::validated_data::Field<item::TriggerOnIntf<'a, Mode>>,
+    pub trigger_on_maintenance: ::validated_data::Field<item::TriggerOnMaintenance<'a, Mode>>,
+    pub asynchronous: ::validated_data::Field<bool>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Actions {
-            scalar bash_command("bash_command", 0) -> &'a str;
-            scalar log("log", 1) -> bool;
-            scalar increment_device_health_metric("increment_device_health_metric", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Actions<'a, Mode> {
+        pub bash_command: ::validated_data::Field<&'a str>,
+        pub log: ::validated_data::Field<bool>,
+        pub increment_device_health_metric: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TriggerOnCounters {
-            scalar condition("condition", 0) -> &'a str;
-            scalar granularity_per_source("granularity_per_source", 1) -> bool;
-            scalar poll_interval("poll_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct TriggerOnCounters<'a, Mode> {
+        pub condition: ::validated_data::Field<&'a str>,
+        pub granularity_per_source: ::validated_data::Field<bool>,
+        pub poll_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TriggerOnLogging {
-            scalar poll_interval("poll_interval", 0) -> i64;
-            scalar regex("regex", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct TriggerOnLogging<'a, Mode> {
+        pub poll_interval: ::validated_data::Field<i64>,
+        pub regex: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TriggerOnIntf {
-            scalar interface("interface", 0) -> &'a str;
-            scalar ip("ip", 1) -> bool;
-            scalar ipv6("ipv6", 2) -> bool;
-            scalar operstatus("operstatus", 3) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct TriggerOnIntf<'a, Mode> {
+        pub interface: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub ip: ::validated_data::Field<bool>,
+        pub ipv6: ::validated_data::Field<bool>,
+        pub operstatus: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TriggerOnMaintenance {
-            scalar operation("operation", 0) -> &'a str;
-            scalar bgp_peer("bgp_peer", 1) -> &'a str;
-            scalar action("action", 2) -> &'a str;
-            scalar stage("stage", 3) -> &'a str;
-            scalar vrf("vrf", 4) -> &'a str;
-            scalar interface("interface", 5) -> &'a str;
-            scalar unit("unit", 6) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct TriggerOnMaintenance<'a, Mode> {
+        pub operation: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub bgp_peer: ::validated_data::Field<&'a str>,
+        pub action: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub stage: ::validated_data::Field<&'a str>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub interface: ::validated_data::Field<&'a str>,
+        pub unit: ::validated_data::Field<&'a str>,
     }
 }

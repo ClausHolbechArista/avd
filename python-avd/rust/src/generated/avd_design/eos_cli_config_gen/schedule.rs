@@ -2,49 +2,38 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Config {
-        scalar max_concurrent_jobs("max_concurrent_jobs", 0) -> i64;
-        scalar prepend_hostname_logfile("prepend_hostname_logfile", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Config<'a, Mode> {
+    pub max_concurrent_jobs: ::validated_data::Field<i64>,
+    pub prepend_hostname_logfile: ::validated_data::Field<bool>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Jobs {
-        model item (0) -> jobs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Jobs<'a, Mode> (::validated_data::Field<jobs::Item<'a, Mode>>);
 
 pub mod jobs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar interval("interval", 1) -> i64;
-            model at("at", 2) -> item::At<'a>;
-            scalar timeout("timeout", 3) -> i64;
-            scalar max_log_files("max_log_files", 4) -> i64;
-            scalar logging_verbose("logging_verbose", 5) -> bool;
-            scalar loglocation("loglocation", 6) -> &'a str;
-            scalar max_total_size("max_total_size", 7) -> &'a str;
-            scalar compression("compression", 8) -> &'a str;
-            scalar command("command", 9) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub interval: ::validated_data::Field<i64>,
+        pub at: ::validated_data::Field<item::At<'a, Mode>>,
+        pub timeout: ::validated_data::Field<i64>,
+        pub max_log_files: ::validated_data::RequiredValue<i64, Mode>,
+        pub logging_verbose: ::validated_data::Field<bool>,
+        pub loglocation: ::validated_data::Field<&'a str>,
+        pub max_total_size: ::validated_data::Field<&'a str>,
+        pub compression: ::validated_data::Field<&'a str>,
+        pub command: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct At {
-                scalar time("time", 0) -> &'a str;
-                scalar date("date", 1) -> &'a str;
-                scalar once("once", 2) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct At<'a, Mode> {
+            pub time: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub date: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub once: ::validated_data::Field<bool>,
         }
     }
 }

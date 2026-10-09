@@ -2,188 +2,140 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Trident {
-        scalar forwarding_table_partition("forwarding_table_partition", 0) -> &'a str;
-        model l3("l3", 1) -> trident::L3<'a>;
-        model mmu("mmu", 2) -> trident::Mmu<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Trident<'a, Mode> {
+    pub forwarding_table_partition: ::validated_data::Field<&'a str>,
+    pub l3: ::validated_data::Field<trident::L3<'a, Mode>>,
+    pub mmu: ::validated_data::Field<trident::Mmu<'a, Mode>>,
 }
 
 pub mod trident {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct L3 {
-            scalar routing_mac_address_per_vlan("routing_mac_address_per_vlan", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct L3<'a, Mode> {
+        pub routing_mac_address_per_vlan: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Mmu {
-            scalar active_profile("active_profile", 0) -> &'a str;
-            model headroom_pool("headroom_pool", 1) -> mmu::HeadroomPool<'a>;
-            model queue_profiles("queue_profiles", 2) -> mmu::QueueProfiles<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Mmu<'a, Mode> {
+        pub active_profile: ::validated_data::Field<&'a str>,
+        pub headroom_pool: ::validated_data::Field<mmu::HeadroomPool<'a, Mode>>,
+        pub queue_profiles: ::validated_data::Field<mmu::QueueProfiles<'a, Mode>>,
     }
 
     pub mod mmu {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct HeadroomPool {
-                scalar unit("unit", 0) -> &'a str;
-                scalar limit("limit", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct HeadroomPool<'a, Mode> {
+            pub unit: ::validated_data::Field<&'a str>,
+            pub limit: ::validated_data::Field<i64>,
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct QueueProfiles {
-                model item (0) -> queue_profiles::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct QueueProfiles<'a, Mode> (::validated_data::Field<queue_profiles::Item<'a, Mode>>);
 
         pub mod queue_profiles {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    model ingress("ingress", 1) -> item::Ingress<'a>;
-                    model multicast_queues("multicast_queues", 2) -> item::MulticastQueues<'a>;
-                    model unicast_queues("unicast_queues", 3) -> item::UnicastQueues<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub ingress: ::validated_data::Field<item::Ingress<'a, Mode>>,
+                pub multicast_queues: ::validated_data::Field<item::MulticastQueues<'a, Mode>>,
+                pub unicast_queues: ::validated_data::Field<item::UnicastQueues<'a, Mode>>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Ingress {
-                        model priority_groups("priority_groups", 0) -> ingress::PriorityGroups<'a>;
-                        scalar threshold("threshold", 1) -> &'a str;
-                        model reserved("reserved", 2) -> ingress::Reserved<'a>;
-                        model headroom("headroom", 3) -> ingress::Headroom<'a>;
-                        scalar resume("resume", 4) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Ingress<'a, Mode> {
+                    pub priority_groups: ::validated_data::Field<ingress::PriorityGroups<'a, Mode>>,
+                    pub threshold: ::validated_data::Field<&'a str>,
+                    pub reserved: ::validated_data::Field<ingress::Reserved<'a, Mode>>,
+                    pub headroom: ::validated_data::Field<ingress::Headroom<'a, Mode>>,
+                    pub resume: ::validated_data::Field<i64>,
                 }
 
                 pub mod ingress {
 
-                    ::validation::define_archive_indexed_list_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct PriorityGroups {
-                            model item (0) -> priority_groups::Item<'a>;
-                            primary_key_fields: [0];
-                        }
-                    }
+                    #[::validated_data::data_view(indexed_list, primary_key(id))]
+                    pub struct PriorityGroups<'a, Mode> (::validated_data::Field<priority_groups::Item<'a, Mode>>);
 
                     pub mod priority_groups {
 
-                        ::validation::define_archive_dict_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct Item {
-                                scalar id("id", 0) -> i64;
-                                scalar threshold("threshold", 1) -> &'a str;
-                                model reserved("reserved", 2) -> item::Reserved<'a>;
-                            }
+                        #[::validated_data::data_view]
+                        pub struct Item<'a, Mode> {
+                            pub id: ::validated_data::Field<i64>,
+                            pub threshold: ::validated_data::Field<&'a str>,
+                            pub reserved: ::validated_data::Field<item::Reserved<'a, Mode>>,
                         }
 
                         pub mod item {
 
-                            ::validation::define_archive_dict_view! {
-                                #[derive(Clone, Copy, Debug)]
-                                pub struct Reserved {
-                                    scalar unit("unit", 0) -> &'a str;
-                                    scalar memory("memory", 1) -> i64;
-                                }
+                            #[::validated_data::data_view]
+                            pub struct Reserved<'a, Mode> {
+                                pub unit: ::validated_data::Field<&'a str>,
+                                pub memory: ::validated_data::Field<i64>,
                             }
                         }
                     }
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Reserved {
-                            scalar unit("unit", 0) -> &'a str;
-                            scalar memory("memory", 1) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Reserved<'a, Mode> {
+                        pub unit: ::validated_data::Field<&'a str>,
+                        pub memory: ::validated_data::Field<i64>,
                     }
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Headroom {
-                            scalar unit("unit", 0) -> &'a str;
-                            scalar memory("memory", 1) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Headroom<'a, Mode> {
+                        pub unit: ::validated_data::Field<&'a str>,
+                        pub memory: ::validated_data::Field<i64>,
                     }
                 }
 
-                ::validation::define_archive_indexed_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct MulticastQueues {
-                        model item (0) -> multicast_queues::Item<'a>;
-                        primary_key_fields: [0];
-                    }
-                }
+                #[::validated_data::data_view(indexed_list, primary_key(id))]
+                pub struct MulticastQueues<'a, Mode> (::validated_data::Field<multicast_queues::Item<'a, Mode>>);
 
                 pub mod multicast_queues {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar id("id", 0) -> i64;
-                            scalar unit("unit", 1) -> &'a str;
-                            scalar reserved("reserved", 2) -> i64;
-                            scalar threshold("threshold", 3) -> &'a str;
-                            model drop("drop", 4) -> item::Drop<'a>;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub id: ::validated_data::RequiredValue<i64, Mode>,
+                        pub unit: ::validated_data::Field<&'a str>,
+                        pub reserved: ::validated_data::Field<i64>,
+                        pub threshold: ::validated_data::Field<&'a str>,
+                        pub drop: ::validated_data::Field<item::Drop<'a, Mode>>,
                     }
 
                     pub mod item {
 
-                        ::validation::define_archive_dict_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct Drop {
-                                scalar precedence("precedence", 0) -> i64;
-                                scalar threshold("threshold", 1) -> &'a str;
-                            }
+                        #[::validated_data::data_view]
+                        pub struct Drop<'a, Mode> {
+                            pub precedence: ::validated_data::RequiredValue<i64, Mode>,
+                            pub threshold: ::validated_data::RequiredValue<&'a str, Mode>,
                         }
                     }
                 }
 
-                ::validation::define_archive_indexed_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct UnicastQueues {
-                        model item (0) -> unicast_queues::Item<'a>;
-                        primary_key_fields: [0];
-                    }
-                }
+                #[::validated_data::data_view(indexed_list, primary_key(id))]
+                pub struct UnicastQueues<'a, Mode> (::validated_data::Field<unicast_queues::Item<'a, Mode>>);
 
                 pub mod unicast_queues {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar id("id", 0) -> i64;
-                            scalar unit("unit", 1) -> &'a str;
-                            scalar reserved("reserved", 2) -> i64;
-                            scalar threshold("threshold", 3) -> &'a str;
-                            model drop("drop", 4) -> item::Drop<'a>;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub id: ::validated_data::RequiredValue<i64, Mode>,
+                        pub unit: ::validated_data::Field<&'a str>,
+                        pub reserved: ::validated_data::Field<i64>,
+                        pub threshold: ::validated_data::Field<&'a str>,
+                        pub drop: ::validated_data::Field<item::Drop<'a, Mode>>,
                     }
 
                     pub mod item {
 
-                        ::validation::define_archive_dict_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct Drop {
-                                scalar precedence("precedence", 0) -> i64;
-                                scalar threshold("threshold", 1) -> &'a str;
-                            }
+                        #[::validated_data::data_view]
+                        pub struct Drop<'a, Mode> {
+                            pub precedence: ::validated_data::RequiredValue<i64, Mode>,
+                            pub threshold: ::validated_data::RequiredValue<&'a str, Mode>,
                         }
                     }
                 }
@@ -192,120 +144,88 @@ pub mod trident {
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Sand {
-        model qos_maps("qos_maps", 0) -> sand::QosMaps<'a>;
-        model lag("lag", 1) -> sand::Lag<'a>;
-        scalar forwarding_mode("forwarding_mode", 2) -> &'a str;
-        model multicast_replication("multicast_replication", 3) -> sand::MulticastReplication<'a>;
-        scalar mdb_profile("mdb_profile", 4) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Sand<'a, Mode> {
+    pub qos_maps: ::validated_data::Field<sand::QosMaps<'a, Mode>>,
+    pub lag: ::validated_data::Field<sand::Lag<'a, Mode>>,
+    pub forwarding_mode: ::validated_data::Field<&'a str>,
+    pub multicast_replication: ::validated_data::Field<sand::MulticastReplication<'a, Mode>>,
+    pub mdb_profile: ::validated_data::Field<&'a str>,
 }
 
 pub mod sand {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct QosMaps {
-            model item (0) -> qos_maps::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct QosMaps<'a, Mode> (::validated_data::Field<qos_maps::Item<'a, Mode>>);
 
     pub mod qos_maps {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar traffic_class("traffic_class", 0) -> i64;
-                scalar to_network_qos("to_network_qos", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub traffic_class: ::validated_data::Field<i64>,
+            pub to_network_qos: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Lag {
-            scalar hardware_only("hardware_only", 0) -> bool;
-            scalar mode("mode", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Lag<'a, Mode> {
+        pub hardware_only: ::validated_data::Field<bool>,
+        pub mode: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MulticastReplication {
-            scalar default("default", 0) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct MulticastReplication<'a, Mode> {
+        pub default: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Sfe {
-        scalar data_plane_cpu_allocation_max("data_plane_cpu_allocation_max", 0) -> i64;
-        model interface("interface", 1) -> sfe::Interface<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Sfe<'a, Mode> {
+    pub data_plane_cpu_allocation_max: ::validated_data::Field<i64>,
+    pub interface: ::validated_data::Field<sfe::Interface<'a, Mode>>,
 }
 
 pub mod sfe {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Interface {
-            model profiles("profiles", 0) -> interface::Profiles<'a>;
-            scalar interface_profile("interface_profile", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Interface<'a, Mode> {
+        pub profiles: ::validated_data::Field<interface::Profiles<'a, Mode>>,
+        pub interface_profile: ::validated_data::Field<&'a str>,
     }
 
     pub mod interface {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Profiles {
-                model item (0) -> profiles::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
 
         pub mod profiles {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    model interfaces("interfaces", 1) -> item::Interfaces<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub interfaces: ::validated_data::Field<item::Interfaces<'a, Mode>>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_indexed_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Interfaces {
-                        model item (0) -> interfaces::Item<'a>;
-                        primary_key_fields: [0];
-                    }
-                }
+                #[::validated_data::data_view(indexed_list, primary_key(name))]
+                pub struct Interfaces<'a, Mode> (::validated_data::Field<interfaces::Item<'a, Mode>>);
 
                 pub mod interfaces {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar name("name", 0) -> &'a str;
-                            model rx_queue("rx_queue", 1) -> item::RxQueue<'a>;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub name: ::validated_data::Field<&'a str>,
+                        pub rx_queue: ::validated_data::Field<item::RxQueue<'a, Mode>>,
                     }
 
                     pub mod item {
 
-                        ::validation::define_archive_dict_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct RxQueue {
-                                scalar count("count", 0) -> i64;
-                                scalar worker("worker", 1) -> &'a str;
-                                scalar mode("mode", 2) -> &'a str;
-                            }
+                        #[::validated_data::data_view]
+                        pub struct RxQueue<'a, Mode> {
+                            pub count: ::validated_data::Field<i64>,
+                            pub worker: ::validated_data::Field<&'a str>,
+                            pub mode: ::validated_data::Field<&'a str>,
                         }
                     }
                 }
@@ -314,27 +234,21 @@ pub mod sfe {
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Fap {
-        model buffering_egress("buffering_egress", 0) -> fap::BufferingEgress<'a>;
-        model voq("voq", 1) -> fap::Voq<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Fap<'a, Mode> {
+    pub buffering_egress: ::validated_data::Field<fap::BufferingEgress<'a, Mode>>,
+    pub voq: ::validated_data::Field<fap::Voq<'a, Mode>>,
 }
 
 pub mod fap {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct BufferingEgress {
-            scalar profile("profile", 0) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct BufferingEgress<'a, Mode> {
+        pub profile: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Voq {
-            scalar credit_rates_unified("credit_rates_unified", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Voq<'a, Mode> {
+        pub credit_rates_unified: ::validated_data::Field<bool>,
     }
 }
