@@ -35,7 +35,7 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 [[package]]
 name = "avdschema"
 version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=3f20dff#3f20dffd8a239579c94e78bff43773de46c4b46d"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
 dependencies = [
  "blake3",
  "derive_more",
@@ -1110,7 +1110,7 @@ dependencies = [
 [[package]]
 name = "validation"
 version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=3f20dff#3f20dffd8a239579c94e78bff43773de46c4b46d"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
 dependencies = [
  "avdschema",
  "derive_more",
@@ -1239,7 +1239,7 @@ dependencies = [
 [[package]]
 name = "yaml-parser"
 version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=3f20dff#3f20dffd8a239579c94e78bff43773de46c4b46d"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
 dependencies = [
  "avdschema",
  "derive_more",

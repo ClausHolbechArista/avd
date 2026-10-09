@@ -10,8 +10,8 @@ name = "_rust"
 crate-type = ["cdylib"]
 
 [dependencies]
-avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "3f20dff", default-features = false, features = ["mmap"] }
+avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "d67e138", default-features = false, features = ["mmap"] }
 pyo3 = { version = "0.29.0", features = ["abi3-py310"] }
 serde = "1.0.229"
 serde_json = "1.0.150"
-validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "3f20dff", default-features = false, features = ["archive", "regex-perf"] }
+validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "d67e138", default-features = false, features = ["archive", "regex-perf"] }
