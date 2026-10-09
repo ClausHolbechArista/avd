@@ -2,37 +2,29 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar counters_per_entry("counters_per_entry", 1) -> bool;
-        model entries("entries", 2) -> item::Entries<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub counters_per_entry: ::validated_data::Field<bool>,
+    pub entries: ::validated_data::Field<item::Entries<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Entries {
-            model item (0) -> entries::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar sequence("sequence", 0) -> i64;
-                scalar action("action", 1) -> &'a str;
-                scalar remark("remark", 2) -> &'a str;
-                scalar source("source", 3) -> &'a str;
-                scalar source_wildcard("source_wildcard", 4) -> &'a str;
-                scalar destination("destination", 5) -> &'a str;
-                scalar destination_wildcard("destination_wildcard", 6) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub sequence: ::validated_data::Field<i64>,
+            pub action: ::validated_data::Field<&'a str>,
+            pub remark: ::validated_data::Field<&'a str>,
+            pub source: ::validated_data::Field<&'a str>,
+            pub source_wildcard: ::validated_data::Field<&'a str>,
+            pub destination: ::validated_data::Field<&'a str>,
+            pub destination_wildcard: ::validated_data::Field<&'a str>,
         }
     }
 }

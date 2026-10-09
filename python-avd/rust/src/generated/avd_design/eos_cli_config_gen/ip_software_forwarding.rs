@@ -2,10 +2,8 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Mtu {
-        scalar size("size", 0) -> i64;
-        scalar exceed_action_drop("exceed_action_drop", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Mtu<'a, Mode> {
+    pub size: ::validated_data::Field<i64>,
+    pub exceed_action_drop: ::validated_data::Field<bool>,
 }

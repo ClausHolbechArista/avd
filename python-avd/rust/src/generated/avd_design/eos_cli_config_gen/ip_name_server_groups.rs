@@ -2,83 +2,57 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        model vrfs("vrfs", 1) -> item::Vrfs<'a>;
-        model name_servers("name_servers", 2) -> item::NameServers<'a>;
-        scalar dns_domain("dns_domain", 3) -> &'a str;
-        model ip_domain_lists("ip_domain_lists", 4) -> item::IpDomainLists<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub vrfs: ::validated_data::Field<item::Vrfs<'a, Mode>>,
+    pub name_servers: ::validated_data::Field<item::NameServers<'a, Mode>>,
+    pub dns_domain: ::validated_data::Field<&'a str>,
+    pub ip_domain_lists: ::validated_data::Field<item::IpDomainLists<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Vrfs {
-            model item (0) -> vrfs::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model name_servers("name_servers", 1) -> item::NameServers<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub name_servers: ::validated_data::RequiredValue<item::NameServers<'a, Mode>, Mode>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct NameServers {
-                    model item (0) -> name_servers::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(ip_address))]
+            pub struct NameServers<'a, Mode> (::validated_data::Field<name_servers::Item<'a, Mode>>);
 
             pub mod name_servers {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar ip_address("ip_address", 0) -> &'a str;
-                        scalar priority("priority", 1) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub ip_address: ::validated_data::Field<&'a str>,
+                    pub priority: ::validated_data::Field<i64>,
                 }
             }
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct NameServers {
-            model item (0) -> name_servers::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list, primary_key(ip_address))]
+    pub struct NameServers<'a, Mode> (::validated_data::Field<name_servers::Item<'a, Mode>>);
 
     pub mod name_servers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar ip_address("ip_address", 0) -> &'a str;
-                scalar vrf("vrf", 1) -> &'a str;
-                scalar priority("priority", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub ip_address: ::validated_data::Field<&'a str>,
+            pub vrf: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub priority: ::validated_data::Field<i64>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct IpDomainLists {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct IpDomainLists<'a, Mode> (::validated_data::Field<&'a str>);
 }

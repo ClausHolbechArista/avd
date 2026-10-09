@@ -2,239 +2,181 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Exec {
-        model console("console", 0) -> exec::Console<'a>;
-        model default("default", 1) -> exec::Default<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Exec<'a, Mode> {
+    pub console: ::validated_data::Field<exec::Console<'a, Mode>>,
+    pub default: ::validated_data::Field<exec::Default<'a, Mode>>,
 }
 
 pub mod exec {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Console {
-            scalar field_type("type", 0) -> &'a str;
-            model methods("methods", 1) -> console::Methods<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Console<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub methods: ::validated_data::Field<console::Methods<'a, Mode>>,
     }
 
     pub mod console {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Methods {
-                model item (0) -> methods::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar method("method", 0) -> &'a str;
-                    scalar group("group", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Default {
-            scalar field_type("type", 0) -> &'a str;
-            model methods("methods", 1) -> default::Methods<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Default<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub methods: ::validated_data::Field<default::Methods<'a, Mode>>,
     }
 
     pub mod default {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Methods {
-                model item (0) -> methods::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar method("method", 0) -> &'a str;
-                    scalar group("group", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct System {
-        model default("default", 0) -> system::Default<'a>;
-    }
+#[::validated_data::data_view]
+pub struct System<'a, Mode> {
+    pub default: ::validated_data::Field<system::Default<'a, Mode>>,
 }
 
 pub mod system {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Default {
-            scalar field_type("type", 0) -> &'a str;
-            model methods("methods", 1) -> default::Methods<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Default<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub methods: ::validated_data::Field<default::Methods<'a, Mode>>,
     }
 
     pub mod default {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Methods {
-                model item (0) -> methods::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar method("method", 0) -> &'a str;
-                    scalar group("group", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Dot1x {
-        model default("default", 0) -> dot1x::Default<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Dot1x<'a, Mode> {
+    pub default: ::validated_data::Field<dot1x::Default<'a, Mode>>,
 }
 
 pub mod dot1x {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Default {
-            scalar field_type("type", 0) -> &'a str;
-            model methods("methods", 1) -> default::Methods<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Default<'a, Mode> {
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub methods: ::validated_data::Field<default::Methods<'a, Mode>>,
     }
 
     pub mod default {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Methods {
-                model item (0) -> methods::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar multicast("multicast", 0) -> bool;
-                    scalar method("method", 1) -> &'a str;
-                    scalar group("group", 2) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub multicast: ::validated_data::Field<bool>,
+                pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Commands {
-        model console("console", 0) -> commands::Console<'a>;
-        model default("default", 1) -> commands::Default<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Commands<'a, Mode> {
+    pub console: ::validated_data::Field<commands::Console<'a, Mode>>,
+    pub default: ::validated_data::Field<commands::Default<'a, Mode>>,
 }
 
 pub mod commands {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Console {
-            model item (0) -> console::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Console<'a, Mode> (::validated_data::Field<console::Item<'a, Mode>>);
 
     pub mod console {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar commands("commands", 0) -> &'a str;
-                scalar field_type("type", 1) -> &'a str;
-                model methods("methods", 2) -> item::Methods<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub commands: ::validated_data::Field<&'a str>,
+            #[data_view(rename = "type")]
+            pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub methods: ::validated_data::Field<item::Methods<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Methods {
-                    model item (0) -> methods::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
             pub mod methods {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar method("method", 0) -> &'a str;
-                        scalar group("group", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub group: ::validated_data::Field<&'a str>,
                 }
             }
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Default {
-            model item (0) -> default::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Default<'a, Mode> (::validated_data::Field<default::Item<'a, Mode>>);
 
     pub mod default {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar commands("commands", 0) -> &'a str;
-                scalar field_type("type", 1) -> &'a str;
-                model methods("methods", 2) -> item::Methods<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub commands: ::validated_data::Field<&'a str>,
+            #[data_view(rename = "type")]
+            pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub methods: ::validated_data::Field<item::Methods<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Methods {
-                    model item (0) -> methods::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
             pub mod methods {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar method("method", 0) -> &'a str;
-                        scalar group("group", 1) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub group: ::validated_data::Field<&'a str>,
                 }
             }
         }

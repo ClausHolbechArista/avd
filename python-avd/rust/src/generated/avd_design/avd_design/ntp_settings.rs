@@ -2,49 +2,35 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Servers {
-        model item (0) -> servers::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar burst("burst", 1) -> bool;
-            scalar iburst("iburst", 2) -> bool;
-            scalar key("key", 3) -> i64;
-            scalar maxpoll("maxpoll", 4) -> i64;
-            scalar minpoll("minpoll", 5) -> i64;
-            scalar version("version", 6) -> i64;
-            scalar source_address("source_address", 7) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub burst: ::validated_data::Field<bool>,
+        pub iburst: ::validated_data::Field<bool>,
+        pub key: ::validated_data::Field<i64>,
+        pub maxpoll: ::validated_data::Field<i64>,
+        pub minpoll: ::validated_data::Field<i64>,
+        pub version: ::validated_data::Field<i64>,
+        pub source_address: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AuthenticationKeys {
-        model item (0) -> authentication_keys::Item<'a>;
-        primary_key_fields: [3];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(id))]
+pub struct AuthenticationKeys<'a, Mode> (::validated_data::Field<authentication_keys::Item<'a, Mode>>);
 
 pub mod authentication_keys {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar key("key", 0) -> &'a str;
-            scalar cleartext_key("cleartext_key", 1) -> &'a str;
-            scalar key_type("key_type", 2) -> &'a str;
-            scalar id("id", 3) -> i64;
-            scalar hash_algorithm("hash_algorithm", 4) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub key: ::validated_data::Field<&'a str>,
+        pub cleartext_key: ::validated_data::Field<&'a str>,
+        pub key_type: ::validated_data::Field<&'a str>,
+        pub id: ::validated_data::Field<i64>,
+        pub hash_algorithm: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }

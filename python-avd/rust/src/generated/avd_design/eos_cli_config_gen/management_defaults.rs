@@ -2,9 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Secret {
-        scalar hash("hash", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Secret<'a, Mode> {
+    pub hash: ::validated_data::Field<&'a str>,
 }

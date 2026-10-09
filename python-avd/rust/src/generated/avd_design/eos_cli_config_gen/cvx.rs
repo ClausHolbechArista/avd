@@ -2,118 +2,89 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct PeerHosts {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct PeerHosts<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Services {
-        model mcs("mcs", 0) -> services::Mcs<'a>;
-        model vxlan("vxlan", 1) -> services::Vxlan<'a>;
-        model openstack("openstack", 2) -> services::Openstack<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Services<'a, Mode> {
+    pub mcs: ::validated_data::Field<services::Mcs<'a, Mode>>,
+    pub vxlan: ::validated_data::Field<services::Vxlan<'a, Mode>>,
+    pub openstack: ::validated_data::Field<services::Openstack<'a, Mode>>,
 }
 
 pub mod services {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Mcs {
-            model redis("redis", 0) -> mcs::Redis<'a>;
-            scalar shutdown("shutdown", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Mcs<'a, Mode> {
+        pub redis: ::validated_data::Field<mcs::Redis<'a, Mode>>,
+        pub shutdown: ::validated_data::Field<bool>,
     }
 
     pub mod mcs {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Redis {
-                scalar password("password", 0) -> &'a str;
-                scalar password_type("password_type", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Redis<'a, Mode> {
+            pub password: ::validated_data::Field<&'a str>,
+            pub password_type: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Vxlan {
-            scalar shutdown("shutdown", 0) -> bool;
-            scalar vtep_mac_learning("vtep_mac_learning", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Vxlan<'a, Mode> {
+        pub shutdown: ::validated_data::Field<bool>,
+        pub vtep_mac_learning: ::validated_data::Field<&'a str>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Openstack {
-            model authentication("authentication", 0) -> openstack::Authentication<'a>;
-            scalar grace_period("grace_period", 1) -> i64;
-            scalar ip_access_group_name("ip_access_group_name", 2) -> &'a str;
-            scalar ipv6_access_group_name("ipv6_access_group_name", 3) -> &'a str;
-            model name_resolution("name_resolution", 4) -> openstack::NameResolution<'a>;
-            model network_type_driver("network_type_driver", 5) -> openstack::NetworkTypeDriver<'a>;
-            model regions("regions", 6) -> openstack::Regions<'a>;
-            scalar shutdown("shutdown", 7) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Openstack<'a, Mode> {
+        pub authentication: ::validated_data::Field<openstack::Authentication<'a, Mode>>,
+        pub grace_period: ::validated_data::Field<i64>,
+        pub ip_access_group_name: ::validated_data::Field<&'a str>,
+        pub ipv6_access_group_name: ::validated_data::Field<&'a str>,
+        pub name_resolution: ::validated_data::Field<openstack::NameResolution<'a, Mode>>,
+        pub network_type_driver: ::validated_data::Field<openstack::NetworkTypeDriver<'a, Mode>>,
+        pub regions: ::validated_data::Field<openstack::Regions<'a, Mode>>,
+        pub shutdown: ::validated_data::Field<bool>,
     }
 
     pub mod openstack {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Authentication {
-                scalar role("role", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Authentication<'a, Mode> {
+            pub role: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct NameResolution {
-                scalar force("force", 0) -> bool;
-                scalar interval("interval", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct NameResolution<'a, Mode> {
+            pub force: ::validated_data::Field<bool>,
+            pub interval: ::validated_data::Field<i64>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct NetworkTypeDriver {
-                scalar vlan("vlan", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct NetworkTypeDriver<'a, Mode> {
+            pub vlan: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Regions {
-                model item (0) -> regions::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Regions<'a, Mode> (::validated_data::Field<regions::Item<'a, Mode>>);
 
         pub mod regions {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar username("username", 1) -> &'a str;
-                    scalar password("password", 2) -> &'a str;
-                    scalar password_type("password_type", 3) -> &'a str;
-                    scalar tenant("tenant", 4) -> &'a str;
-                    model keystone("keystone", 5) -> item::Keystone<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub username: ::validated_data::Field<&'a str>,
+                pub password: ::validated_data::Field<&'a str>,
+                pub password_type: ::validated_data::Field<&'a str>,
+                pub tenant: ::validated_data::Field<&'a str>,
+                pub keystone: ::validated_data::Field<item::Keystone<'a, Mode>>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Keystone {
-                        scalar auth_url("auth_url", 0) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Keystone<'a, Mode> {
+                    pub auth_url: ::validated_data::Field<&'a str>,
                 }
             }
         }

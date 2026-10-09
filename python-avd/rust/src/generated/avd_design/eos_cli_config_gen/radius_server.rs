@@ -2,106 +2,79 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Attribute32IncludeInAccessReq {
-        scalar hostname("hostname", 0) -> bool;
-        scalar format("format", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Attribute32IncludeInAccessReq<'a, Mode> {
+    pub hostname: ::validated_data::Field<bool>,
+    pub format: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DynamicAuthorization {
-        scalar port("port", 0) -> i64;
-        scalar tls_ssl_profile("tls_ssl_profile", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct DynamicAuthorization<'a, Mode> {
+    pub port: ::validated_data::Field<i64>,
+    pub tls_ssl_profile: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Servers {
-        model item (0) -> servers::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar host("host", 0) -> &'a str;
-            model tls("tls", 1) -> item::Tls<'a>;
-            scalar timeout("timeout", 2) -> i64;
-            scalar retransmit("retransmit", 3) -> i64;
-            scalar key("key", 4) -> &'a str;
-            scalar key_type("key_type", 5) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub host: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
+        pub timeout: ::validated_data::Field<i64>,
+        pub retransmit: ::validated_data::Field<i64>,
+        pub key: ::validated_data::Field<&'a str>,
+        pub key_type: ::validated_data::Field<&'a str>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Tls {
-                scalar enabled("enabled", 0) -> bool;
-                scalar ssl_profile("ssl_profile", 1) -> &'a str;
-                scalar port("port", 2) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Tls<'a, Mode> {
+            pub enabled: ::validated_data::Field<bool>,
+            pub ssl_profile: ::validated_data::Field<&'a str>,
+            pub port: ::validated_data::Field<i64>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model servers("servers", 1) -> item::Servers<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub servers: ::validated_data::RequiredValue<item::Servers<'a, Mode>, Mode>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Servers {
-                model item (0) -> servers::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
         pub mod servers {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar host("host", 0) -> &'a str;
-                    model tls("tls", 1) -> item::Tls<'a>;
-                    scalar timeout("timeout", 2) -> i64;
-                    scalar retransmit("retransmit", 3) -> i64;
-                    scalar key("key", 4) -> &'a str;
-                    scalar key_type("key_type", 5) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub host: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
+                pub timeout: ::validated_data::Field<i64>,
+                pub retransmit: ::validated_data::Field<i64>,
+                pub key: ::validated_data::Field<&'a str>,
+                pub key_type: ::validated_data::Field<&'a str>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Tls {
-                        scalar enabled("enabled", 0) -> bool;
-                        scalar ssl_profile("ssl_profile", 1) -> &'a str;
-                        scalar port("port", 2) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Tls<'a, Mode> {
+                    pub enabled: ::validated_data::Field<bool>,
+                    pub ssl_profile: ::validated_data::Field<&'a str>,
+                    pub port: ::validated_data::Field<i64>,
                 }
             }
         }

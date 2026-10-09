@@ -2,18 +2,14 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct HttpClient {
-        scalar mgmt_interface("mgmt_interface", 0) -> bool;
-        scalar inband_mgmt_interface("inband_mgmt_interface", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct HttpClient<'a, Mode> {
+    pub mgmt_interface: ::validated_data::Field<bool>,
+    pub inband_mgmt_interface: ::validated_data::Field<bool>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SshClient {
-        scalar mgmt_interface("mgmt_interface", 0) -> bool;
-        scalar inband_mgmt_interface("inband_mgmt_interface", 1) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct SshClient<'a, Mode> {
+    pub mgmt_interface: ::validated_data::Field<bool>,
+    pub inband_mgmt_interface: ::validated_data::Field<bool>,
 }

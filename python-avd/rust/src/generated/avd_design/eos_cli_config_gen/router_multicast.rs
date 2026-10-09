@@ -2,70 +2,52 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ipv4 {
-        scalar activity_polling_interval("activity_polling_interval", 0) -> i64;
-        model counters("counters", 1) -> ipv4::Counters<'a>;
-        scalar routing("routing", 2) -> bool;
-        scalar multipath("multipath", 3) -> &'a str;
-        scalar software_forwarding("software_forwarding", 4) -> &'a str;
-        model rpf("rpf", 5) -> ipv4::Rpf<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Ipv4<'a, Mode> {
+    pub activity_polling_interval: ::validated_data::Field<i64>,
+    pub counters: ::validated_data::Field<ipv4::Counters<'a, Mode>>,
+    pub routing: ::validated_data::Field<bool>,
+    pub multipath: ::validated_data::Field<&'a str>,
+    pub software_forwarding: ::validated_data::Field<&'a str>,
+    pub rpf: ::validated_data::Field<ipv4::Rpf<'a, Mode>>,
 }
 
 pub mod ipv4 {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Counters {
-            scalar rate_period_decay("rate_period_decay", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Counters<'a, Mode> {
+        pub rate_period_decay: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Rpf {
-            model routes("routes", 0) -> rpf::Routes<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Rpf<'a, Mode> {
+        pub routes: ::validated_data::Field<rpf::Routes<'a, Mode>>,
     }
 
     pub mod rpf {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Routes {
-                model item (0) -> routes::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Routes<'a, Mode> (::validated_data::Field<routes::Item<'a, Mode>>);
 
         pub mod routes {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar source_prefix("source_prefix", 0) -> &'a str;
-                    model destinations("destinations", 1) -> item::Destinations<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub source_prefix: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub destinations: ::validated_data::RequiredValue<item::Destinations<'a, Mode>, Mode>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Destinations {
-                        model item (0) -> destinations::Item<'a>;
-                    }
-                }
+                #[::validated_data::data_view(list)]
+                pub struct Destinations<'a, Mode> (::validated_data::Field<destinations::Item<'a, Mode>>);
 
                 pub mod destinations {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar nexthop("nexthop", 0) -> &'a str;
-                            scalar distance("distance", 1) -> i64;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub nexthop: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub distance: ::validated_data::Field<i64>,
                     }
                 }
             }
@@ -73,40 +55,29 @@ pub mod ipv4 {
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ipv6 {
-        scalar activity_polling_interval("activity_polling_interval", 0) -> i64;
-        scalar routing("routing", 1) -> bool;
-        scalar software_forwarding("software_forwarding", 2) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Ipv6<'a, Mode> {
+    pub activity_polling_interval: ::validated_data::Field<i64>,
+    pub routing: ::validated_data::Field<bool>,
+    pub software_forwarding: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model ipv4("ipv4", 1) -> item::Ipv4<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub ipv4: ::validated_data::Field<item::Ipv4<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ipv4 {
-                scalar routing("routing", 0) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Ipv4<'a, Mode> {
+            pub routing: ::validated_data::Field<bool>,
         }
     }
 }

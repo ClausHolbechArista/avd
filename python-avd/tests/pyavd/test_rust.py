@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 from pyavd import _validated_data
-from pyavd._rust import archive_avd_design
+from pyavd._rust import OpaqueData, archive_avd_design
 from pyavd._utils.undefined import Undefined
 
 
@@ -110,3 +110,91 @@ def test_open_avd_design_exposes_typed_immutable_views(tmp_path: Path) -> None:
     assert uplink_interfaces[-1] == "Ethernet2"
     del root, devices, device
     assert list(uplink_interfaces) == ["Ethernet1", "Ethernet2"]
+
+
+def test_relaxed_payload_is_opaque_and_retains_its_archive(tmp_path: Path) -> None:
+    """Allow partial custom config without exposing strict descendant guarantees to Python."""
+    destination = tmp_path / "host.rkyv"
+    payload = {"ethernet_interfaces": [{"name": "Ethernet1", "description": None}]}
+    result = archive_avd_design(
+        json.dumps({"fabric_name": "TEST", "devices": [{"name": "leaf1", "structured_config": payload}]}),
+        destination,
+        _schema_archive(),
+    )
+    assert result.destination == destination
+    root = _validated_data.open_avd_design(destination, _schema_archive())
+    config = root.devices["leaf1"].structured_config
+    assert isinstance(config, OpaqueData)
+    assert bool(config)
+    assert not hasattr(config, "ethernet_interfaces")
+    del root
+    assert json.loads(config.to_json()) == payload
+
+
+def test_archive_rejects_null_required_fields(tmp_path: Path) -> None:
+    """Reject explicit null before publishing data promising non-null required fields."""
+    destination = tmp_path / "host.rkyv"
+    result = archive_avd_design(
+        json.dumps({"fabric_name": None, "devices": []}),
+        destination,
+        _schema_archive(),
+    )
+    assert result.destination is None
+    assert not destination.exists()
+    assert json.loads(result.errors_json)
+
+
+def test_duplicate_primary_keys_keep_positional_items_and_guaranteed_keys(tmp_path: Path) -> None:
+    """Keep both hybrid-list entries while exposing their structurally required key fields."""
+    destination = tmp_path / "host.rkyv"
+    result = archive_avd_design(
+        json.dumps(
+            {
+                "fabric_name": "TEST",
+                "devices": [],
+                "network_services": [
+                    {
+                        "name": "TENANT",
+                        "l2vlans": [{"id": 10, "name": "first"}, {"id": 10, "name": "second"}],
+                    }
+                ],
+            }
+        ),
+        destination,
+        _schema_archive(),
+    )
+    assert result.destination == destination
+    root = _validated_data.open_avd_design(destination, _schema_archive())
+    vlans = root.network_services["TENANT"].l2vlans
+    assert len(vlans) == 2
+    assert [(vlan.id, vlan.name) for vlan in vlans] == [(10, "first"), (10, "second")]
+    assert vlans[0].id == 10
+    assert vlans[-1].name == "second"
+    assert not hasattr(vlans, "keys")
+    assert not hasattr(vlans, "get")
+    del root
+    assert [vlan.id for vlan in vlans[:]] == [10, 10]
+
+
+def test_hybrid_primary_key_presence_is_enforced_inside_relaxed_payload(tmp_path: Path) -> None:
+    """A duplicate-key list still requires its structural key under relaxed custom config."""
+    for item in [{"vrf": "default"}, {"ip_address": None, "vrf": "default"}]:
+        destination = tmp_path / "host.rkyv"
+        result = archive_avd_design(
+            json.dumps(
+                {
+                    "fabric_name": "TEST",
+                    "devices": [
+                        {
+                            "name": "leaf1",
+                            "structured_config": {"ip_name_server_groups": [{"name": "DNS", "name_servers": [item]}]},
+                        }
+                    ],
+                }
+            ),
+            destination,
+            _schema_archive(),
+        )
+        assert result.destination is None
+        assert not destination.exists()
+        assert json.loads(result.errors_json)

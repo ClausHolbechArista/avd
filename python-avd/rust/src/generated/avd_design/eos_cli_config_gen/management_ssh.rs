@@ -2,97 +2,62 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Authentication {
-        scalar empty_passwords("empty_passwords", 0) -> &'a str;
-        model protocols("protocols", 1) -> authentication::Protocols<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Authentication<'a, Mode> {
+    pub empty_passwords: ::validated_data::Field<&'a str>,
+    pub protocols: ::validated_data::Field<authentication::Protocols<'a, Mode>>,
 }
 
 pub mod authentication {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Protocols {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Protocols<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Cipher {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Cipher<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct KeyExchange {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct KeyExchange<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Mac {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Mac<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Hostkey {
-        model server("server", 0) -> hostkey::Server<'a>;
-        scalar server_cert("server_cert", 1) -> &'a str;
-        scalar client_strict_checking("client_strict_checking", 2) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Hostkey<'a, Mode> {
+    pub server: ::validated_data::Field<hostkey::Server<'a, Mode>>,
+    pub server_cert: ::validated_data::Field<&'a str>,
+    pub client_strict_checking: ::validated_data::Field<bool>,
 }
 
 pub mod hostkey {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Server {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Server<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Connection {
-        scalar limit("limit", 0) -> i64;
-        scalar per_host("per_host", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Connection<'a, Mode> {
+    pub limit: ::validated_data::Field<i64>,
+    pub per_host: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar enable("enable", 1) -> bool;
-            scalar ip_access_group_in("ip_access_group_in", 2) -> &'a str;
-            scalar ipv6_access_group_in("ipv6_access_group_in", 3) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub enable: ::validated_data::Field<bool>,
+        pub ip_access_group_in: ::validated_data::Field<&'a str>,
+        pub ipv6_access_group_in: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ClientAlive {
-        scalar count_max("count_max", 0) -> i64;
-        scalar interval("interval", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct ClientAlive<'a, Mode> {
+    pub count_max: ::validated_data::Field<i64>,
+    pub interval: ::validated_data::Field<i64>,
 }

@@ -2,34 +2,25 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        model sequence_numbers("sequence_numbers", 1) -> item::SequenceNumbers<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub sequence_numbers: ::validated_data::Field<item::SequenceNumbers<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SequenceNumbers {
-            model item (0) -> sequence_numbers::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(sequence))]
+    pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar sequence("sequence", 0) -> i64;
-                scalar action("action", 1) -> &'a str;
-                scalar mode("mode", 2) -> &'a str;
-                scalar command("command", 3) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub sequence: ::validated_data::Field<i64>,
+            pub action: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub mode: ::validated_data::Field<&'a str>,
+            pub command: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 }

@@ -2,43 +2,34 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar field_type("type", 1) -> &'a str;
-        model servers("servers", 2) -> item::Servers<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    #[data_view(rename = "type")]
+    pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub servers: ::validated_data::Field<item::Servers<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Servers {
-            model item (0) -> servers::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar server("server", 0) -> &'a str;
-                scalar vrf("vrf", 1) -> &'a str;
-                model tls("tls", 2) -> item::Tls<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub server: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Tls {
-                    scalar enabled("enabled", 0) -> bool;
-                    scalar port("port", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Tls<'a, Mode> {
+                pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+                pub port: ::validated_data::Field<i64>,
             }
         }
     }

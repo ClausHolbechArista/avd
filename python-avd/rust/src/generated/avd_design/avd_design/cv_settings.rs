@@ -2,119 +2,84 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Cvaas {
-        scalar enabled("enabled", 0) -> bool;
-        model clusters("clusters", 1) -> cvaas::Clusters<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Cvaas<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub clusters: ::validated_data::Field<cvaas::Clusters<'a, Mode>>,
 }
 
 pub mod cvaas {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Clusters {
-            model item (0) -> clusters::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Clusters<'a, Mode> (::validated_data::Field<clusters::Item<'a, Mode>>);
 
     pub mod clusters {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar region("region", 1) -> &'a str;
-                scalar vrf("vrf", 2) -> &'a str;
-                scalar token_file("token_file", 3) -> &'a str;
-                scalar source_interface("source_interface", 4) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub region: ::validated_data::Field<&'a str>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub token_file: ::validated_data::Field<&'a str>,
+            pub source_interface: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct OnpremClusters {
-        model item (0) -> onprem_clusters::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct OnpremClusters<'a, Mode> (::validated_data::Field<onprem_clusters::Item<'a, Mode>>);
 
 pub mod onprem_clusters {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model servers("servers", 1) -> item::Servers<'a>;
-            scalar vrf("vrf", 2) -> &'a str;
-            scalar token_file("token_file", 3) -> &'a str;
-            scalar source_interface("source_interface", 4) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub servers: ::validated_data::RequiredValue<item::Servers<'a, Mode>, Mode>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub token_file: ::validated_data::Field<&'a str>,
+        pub source_interface: ::validated_data::Field<&'a str>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Servers {
-                model item (0) -> servers::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
         pub mod servers {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar port("port", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                pub port: ::validated_data::Field<i64>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Terminattr {
-        scalar ingestexclude("ingestexclude", 0) -> &'a str;
-        scalar smashexcludes("smashexcludes", 1) -> &'a str;
-        scalar disable_aaa("disable_aaa", 2) -> bool;
-        model cvtargetconfigs("cvtargetconfigs", 3) -> terminattr::Cvtargetconfigs<'a>;
-        scalar flowdns("flowdns", 4) -> bool;
-        model custom_cv_options("custom_cv_options", 5) -> terminattr::CustomCvOptions<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Terminattr<'a, Mode> {
+    pub ingestexclude: ::validated_data::Field<&'a str>,
+    pub smashexcludes: ::validated_data::Field<&'a str>,
+    pub disable_aaa: ::validated_data::Field<bool>,
+    pub cvtargetconfigs: ::validated_data::Field<terminattr::Cvtargetconfigs<'a, Mode>>,
+    pub flowdns: ::validated_data::Field<bool>,
+    pub custom_cv_options: ::validated_data::Field<terminattr::CustomCvOptions<'a, Mode>>,
 }
 
 pub mod terminattr {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Cvtargetconfigs {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Cvtargetconfigs<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct CustomCvOptions {
-            model item (0) -> custom_cv_options::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct CustomCvOptions<'a, Mode> (::validated_data::Field<custom_cv_options::Item<'a, Mode>>);
 
     pub mod custom_cv_options {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar flag("flag", 0) -> &'a str;
-                scalar value("value", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub flag: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub value: ::validated_data::Field<&'a str>,
         }
     }
 }

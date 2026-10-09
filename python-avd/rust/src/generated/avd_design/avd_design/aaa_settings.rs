@@ -2,219 +2,162 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct EnablePassword {
-        scalar password("password", 0) -> &'a str;
-        scalar cleartext_password("cleartext_password", 1) -> &'a str;
-        scalar password_type("password_type", 2) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct EnablePassword<'a, Mode> {
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub password_type: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Tacacs {
-        model servers("servers", 0) -> tacacs::Servers<'a>;
-        model vrfs("vrfs", 1) -> tacacs::Vrfs<'a>;
-        model policy("policy", 2) -> tacacs::Policy<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Tacacs<'a, Mode> {
+    pub servers: ::validated_data::Field<tacacs::Servers<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<tacacs::Vrfs<'a, Mode>>,
+    pub policy: ::validated_data::Field<tacacs::Policy<'a, Mode>>,
 }
 
 pub mod tacacs {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Servers {
-            model item (0) -> servers::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar host("host", 0) -> &'a str;
-                model groups("groups", 1) -> item::Groups<'a>;
-                scalar vrf("vrf", 2) -> &'a str;
-                scalar timeout("timeout", 3) -> i64;
-                scalar key("key", 4) -> &'a str;
-                scalar cleartext_key("cleartext_key", 5) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub host: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub timeout: ::validated_data::Field<i64>,
+            pub key: ::validated_data::Field<&'a str>,
+            pub cleartext_key: ::validated_data::Field<&'a str>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Groups {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Vrfs {
-            model item (0) -> vrfs::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar source_interface("source_interface", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub source_interface: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Policy {
-            scalar ignore_unknown_mandatory_attribute("ignore_unknown_mandatory_attribute", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Policy<'a, Mode> {
+        pub ignore_unknown_mandatory_attribute: ::validated_data::Field<bool>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Radius {
-        model servers("servers", 0) -> radius::Servers<'a>;
-        model vrfs("vrfs", 1) -> radius::Vrfs<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Radius<'a, Mode> {
+    pub servers: ::validated_data::Field<radius::Servers<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<radius::Vrfs<'a, Mode>>,
 }
 
 pub mod radius {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Servers {
-            model item (0) -> servers::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar host("host", 0) -> &'a str;
-                model groups("groups", 1) -> item::Groups<'a>;
-                scalar vrf("vrf", 2) -> &'a str;
-                scalar timeout("timeout", 3) -> i64;
-                scalar retransmit("retransmit", 4) -> i64;
-                scalar key("key", 5) -> &'a str;
-                scalar cleartext_key("cleartext_key", 6) -> &'a str;
-                model tls("tls", 7) -> super::super::super::super::eos_cli_config_gen::radius_server::servers::item::Tls<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub host: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub timeout: ::validated_data::Field<i64>,
+            pub retransmit: ::validated_data::Field<i64>,
+            pub key: ::validated_data::Field<&'a str>,
+            pub cleartext_key: ::validated_data::Field<&'a str>,
+            pub tls: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::radius_server::servers::item::Tls<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Groups {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Vrfs {
-            model item (0) -> vrfs::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar source_interface("source_interface", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub source_interface: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Authentication {
-        model login("login", 0) -> super::super::eos_cli_config_gen::aaa_authentication::Login<'a>;
-        model enable("enable", 1) -> super::super::eos_cli_config_gen::aaa_authentication::Enable<'a>;
-        model policies("policies", 2) -> super::super::eos_cli_config_gen::aaa_authentication::Policies<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Authentication<'a, Mode> {
+    pub login: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authentication::Login<'a, Mode>>,
+    pub enable: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authentication::Enable<'a, Mode>>,
+    pub policies: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authentication::Policies<'a, Mode>>,
 }
 
 pub mod authentication {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Authorization {
-        model policy("policy", 0) -> super::super::eos_cli_config_gen::aaa_authorization::Policy<'a>;
-        model exec("exec", 1) -> super::super::eos_cli_config_gen::aaa_authorization::Exec<'a>;
-        scalar config_commands("config_commands", 2) -> bool;
-        scalar serial_console("serial_console", 3) -> bool;
-        model commands("commands", 4) -> super::super::eos_cli_config_gen::aaa_authorization::Commands<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Authorization<'a, Mode> {
+    pub policy: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authorization::Policy<'a, Mode>>,
+    pub exec: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authorization::Exec<'a, Mode>>,
+    pub config_commands: ::validated_data::Field<bool>,
+    pub serial_console: ::validated_data::Field<bool>,
+    pub commands: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authorization::Commands<'a, Mode>>,
 }
 
 pub mod authorization {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Accounting {
-        model exec("exec", 0) -> super::super::eos_cli_config_gen::aaa_accounting::Exec<'a>;
-        model system("system", 1) -> super::super::eos_cli_config_gen::aaa_accounting::System<'a>;
-        model commands("commands", 2) -> super::super::eos_cli_config_gen::aaa_accounting::Commands<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Accounting<'a, Mode> {
+    pub exec: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_accounting::Exec<'a, Mode>>,
+    pub system: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_accounting::System<'a, Mode>>,
+    pub commands: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_accounting::Commands<'a, Mode>>,
 }
 
 pub mod accounting {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RootLogin {
-        scalar enabled("enabled", 0) -> bool;
-        scalar sha512_password("sha512_password", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct RootLogin<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub sha512_password: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct LocalUsers {
-        model item (0) -> local_users::Item<'a>;
-        primary_key_fields: [3];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct LocalUsers<'a, Mode> (::validated_data::Field<local_users::Item<'a, Mode>>);
 
 pub mod local_users {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar sha512_password("sha512_password", 0) -> &'a str;
-            scalar cleartext_password("cleartext_password", 1) -> &'a str;
-            scalar password_type("password_type", 2) -> &'a str;
-            scalar name("name", 3) -> &'a str;
-            scalar disabled("disabled", 4) -> bool;
-            scalar privilege("privilege", 5) -> i64;
-            scalar role("role", 6) -> &'a str;
-            scalar no_password("no_password", 7) -> bool;
-            scalar ssh_key("ssh_key", 8) -> &'a str;
-            scalar secondary_ssh_key("secondary_ssh_key", 9) -> &'a str;
-            scalar shell("shell", 10) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub sha512_password: ::validated_data::Field<&'a str>,
+        pub cleartext_password: ::validated_data::Field<&'a str>,
+        pub password_type: ::validated_data::Field<&'a str>,
+        pub name: ::validated_data::Field<&'a str>,
+        pub disabled: ::validated_data::Field<bool>,
+        pub privilege: ::validated_data::Field<i64>,
+        pub role: ::validated_data::Field<&'a str>,
+        pub no_password: ::validated_data::Field<bool>,
+        pub ssh_key: ::validated_data::Field<&'a str>,
+        pub secondary_ssh_key: ::validated_data::Field<&'a str>,
+        pub shell: ::validated_data::Field<&'a str>,
     }
 }

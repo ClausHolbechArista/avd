@@ -2,175 +2,157 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ipv4UnderlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        scalar maximum_routes("maximum_routes", 4) -> i64;
-        model structured_config("structured_config", 5) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Ipv4UnderlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    pub maximum_routes: ::validated_data::Field<i64>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod ipv4_underlay_peers {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MlagIpv4VrfsPeer {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        scalar maximum_routes("maximum_routes", 4) -> i64;
-        model structured_config("structured_config", 5) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct MlagIpv4VrfsPeer<'a, Mode> {
+    pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    pub maximum_routes: ::validated_data::Field<i64>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod mlag_ipv4_vrfs_peer {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MlagIpv4UnderlayPeer {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        scalar maximum_routes("maximum_routes", 4) -> i64;
-        model structured_config("structured_config", 5) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct MlagIpv4UnderlayPeer<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    pub maximum_routes: ::validated_data::Field<i64>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod mlag_ipv4_underlay_peer {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct EvpnOverlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model structured_config("structured_config", 4) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct EvpnOverlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod evpn_overlay_peers {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct EvpnOverlayCore {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model structured_config("structured_config", 4) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct EvpnOverlayCore<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod evpn_overlay_core {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MplsOverlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model structured_config("structured_config", 4) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct MplsOverlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod mpls_overlay_peers {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RrOverlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model structured_config("structured_config", 4) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct RrOverlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod rr_overlay_peers {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct IpvpnGatewayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model structured_config("structured_config", 4) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct IpvpnGatewayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod ipvpn_gateway_peers {
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct WanOverlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model bfd_timers("bfd_timers", 4) -> wan_overlay_peers::BfdTimers<'a>;
-        model listen_range_prefixes("listen_range_prefixes", 5) -> wan_overlay_peers::ListenRangePrefixes<'a>;
-        scalar ttl_maximum_hops("ttl_maximum_hops", 6) -> i64;
-        model structured_config("structured_config", 7) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct WanOverlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    pub bfd_timers: ::validated_data::Field<wan_overlay_peers::BfdTimers<'a, Mode>>,
+    pub listen_range_prefixes: ::validated_data::Field<wan_overlay_peers::ListenRangePrefixes<'a, Mode>>,
+    pub ttl_maximum_hops: ::validated_data::Field<i64>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod wan_overlay_peers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct BfdTimers {
-            scalar interval("interval", 0) -> i64;
-            scalar min_rx("min_rx", 1) -> i64;
-            scalar multiplier("multiplier", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct BfdTimers<'a, Mode> {
+        pub interval: ::validated_data::RequiredValue<i64, Mode>,
+        pub min_rx: ::validated_data::RequiredValue<i64, Mode>,
+        pub multiplier: ::validated_data::RequiredValue<i64, Mode>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ListenRangePrefixes {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct ListenRangePrefixes<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct WanRrOverlayPeers {
-        scalar name("name", 0) -> &'a str;
-        scalar password("password", 1) -> &'a str;
-        scalar cleartext_password("cleartext_password", 2) -> &'a str;
-        scalar bfd("bfd", 3) -> bool;
-        model bfd_timers("bfd_timers", 4) -> wan_rr_overlay_peers::BfdTimers<'a>;
-        scalar ttl_maximum_hops("ttl_maximum_hops", 5) -> i64;
-        model structured_config("structured_config", 6) -> super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a>;
-    }
+#[::validated_data::data_view]
+pub struct WanRrOverlayPeers<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub password: ::validated_data::Field<&'a str>,
+    pub cleartext_password: ::validated_data::Field<&'a str>,
+    pub bfd: ::validated_data::Field<bool>,
+    pub bfd_timers: ::validated_data::Field<wan_rr_overlay_peers::BfdTimers<'a, Mode>>,
+    pub ttl_maximum_hops: ::validated_data::Field<i64>,
+    #[data_view(relaxed)]
+    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::router_bgp::peer_groups::Item<'a, ::validated_data::RelaxedValidated>>,
 }
 
 pub mod wan_rr_overlay_peers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct BfdTimers {
-            scalar interval("interval", 0) -> i64;
-            scalar min_rx("min_rx", 1) -> i64;
-            scalar multiplier("multiplier", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct BfdTimers<'a, Mode> {
+        pub interval: ::validated_data::RequiredValue<i64, Mode>,
+        pub min_rx: ::validated_data::RequiredValue<i64, Mode>,
+        pub multiplier: ::validated_data::RequiredValue<i64, Mode>,
     }
 }

@@ -2,170 +2,123 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar enable("enable", 1) -> bool;
-            scalar source_interface("source_interface", 2) -> &'a str;
-            scalar ipv4_acl("ipv4_acl", 3) -> &'a str;
-            scalar ipv6_acl("ipv6_acl", 4) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub enable: ::validated_data::Field<bool>,
+        pub source_interface: ::validated_data::Field<&'a str>,
+        pub ipv4_acl: ::validated_data::Field<&'a str>,
+        pub ipv6_acl: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Users {
-        model item (0) -> users::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Users<'a, Mode> (::validated_data::Field<users::Item<'a, Mode>>);
 
 pub mod users {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar group("group", 1) -> &'a str;
-            scalar version("version", 2) -> &'a str;
-            scalar auth("auth", 3) -> &'a str;
-            scalar auth_passphrase("auth_passphrase", 4) -> &'a str;
-            scalar field_priv("priv", 5) -> &'a str;
-            scalar priv_passphrase("priv_passphrase", 6) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub group: ::validated_data::Field<&'a str>,
+        pub version: ::validated_data::Field<&'a str>,
+        pub auth: ::validated_data::Field<&'a str>,
+        pub auth_passphrase: ::validated_data::Field<&'a str>,
+        #[data_view(rename = "priv")]
+        pub field_priv: ::validated_data::Field<&'a str>,
+        pub priv_passphrase: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Hosts {
-        model item (0) -> hosts::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
 pub mod hosts {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar host("host", 0) -> &'a str;
-            scalar vrf("vrf", 1) -> &'a str;
-            scalar version("version", 2) -> &'a str;
-            scalar community("community", 3) -> &'a str;
-            model users("users", 4) -> item::Users<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub host: ::validated_data::Field<&'a str>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub version: ::validated_data::Field<&'a str>,
+        pub community: ::validated_data::Field<&'a str>,
+        pub users: ::validated_data::Field<item::Users<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Users {
-                model item (0) -> users::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Users<'a, Mode> (::validated_data::Field<users::Item<'a, Mode>>);
 
         pub mod users {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar username("username", 0) -> &'a str;
-                    scalar authentication_level("authentication_level", 1) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub username: ::validated_data::Field<&'a str>,
+                pub authentication_level: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Communities {
-        model item (0) -> communities::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Communities<'a, Mode> (::validated_data::Field<communities::Item<'a, Mode>>);
 
 pub mod communities {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar access("access", 1) -> &'a str;
-            model access_list_ipv4("access_list_ipv4", 2) -> item::AccessListIpv4<'a>;
-            scalar ipv4_standard_acl("ipv4_standard_acl", 3) -> &'a str;
-            model access_list_ipv6("access_list_ipv6", 4) -> item::AccessListIpv6<'a>;
-            scalar view("view", 5) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub access: ::validated_data::Field<&'a str>,
+        pub access_list_ipv4: ::validated_data::Field<item::AccessListIpv4<'a, Mode>>,
+        pub ipv4_standard_acl: ::validated_data::Field<&'a str>,
+        pub access_list_ipv6: ::validated_data::Field<item::AccessListIpv6<'a, Mode>>,
+        pub view: ::validated_data::Field<&'a str>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct AccessListIpv4 {
-                scalar name("name", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct AccessListIpv4<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct AccessListIpv6 {
-                scalar name("name", 0) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct AccessListIpv6<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Views {
-        model item (0) -> views::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Views<'a, Mode> (::validated_data::Field<views::Item<'a, Mode>>);
 
 pub mod views {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar mib_family_name("mib_family_name", 1) -> &'a str;
-            scalar included("included", 2) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub mib_family_name: ::validated_data::Field<&'a str>,
+        pub included: ::validated_data::Field<bool>,
     }
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Groups {
-        model item (0) -> groups::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Groups<'a, Mode> (::validated_data::Field<groups::Item<'a, Mode>>);
 
 pub mod groups {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar version("version", 1) -> &'a str;
-            scalar authentication("authentication", 2) -> &'a str;
-            scalar read("read", 3) -> &'a str;
-            scalar write("write", 4) -> &'a str;
-            scalar notify("notify", 5) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub version: ::validated_data::Field<&'a str>,
+        pub authentication: ::validated_data::Field<&'a str>,
+        pub read: ::validated_data::Field<&'a str>,
+        pub write: ::validated_data::Field<&'a str>,
+        pub notify: ::validated_data::Field<&'a str>,
     }
 }

@@ -2,30 +2,21 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct EnableVrfs {
-        model item (0) -> enable_vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct EnableVrfs<'a, Mode> (::validated_data::Field<enable_vrfs::Item<'a, Mode>>);
 
 pub mod enable_vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar access_group("access_group", 1) -> &'a str;
-            scalar ipv6_access_group("ipv6_access_group", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub access_group: ::validated_data::Field<&'a str>,
+        pub ipv6_access_group: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ProtocolHttpsCertificate {
-        scalar certificate("certificate", 0) -> &'a str;
-        scalar private_key("private_key", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct ProtocolHttpsCertificate<'a, Mode> {
+    pub certificate: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub private_key: ::validated_data::RequiredValue<&'a str, Mode>,
 }

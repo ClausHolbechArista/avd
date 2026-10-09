@@ -2,71 +2,55 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar description("description", 1) -> &'a str;
-        scalar shutdown("shutdown", 2) -> bool;
-        scalar vrf("vrf", 3) -> &'a str;
-        scalar ip_address("ip_address", 4) -> &'a str;
-        model ip_address_secondaries("ip_address_secondaries", 5) -> item::IpAddressSecondaries<'a>;
-        scalar ipv6_enable("ipv6_enable", 6) -> bool;
-        scalar ipv6_address("ipv6_address", 7) -> &'a str;
-        model ipv6_addresses("ipv6_addresses", 8) -> item::Ipv6Addresses<'a>;
-        scalar ipv6_address_auto_config("ipv6_address_auto_config", 9) -> bool;
-        scalar ip_proxy_arp("ip_proxy_arp", 10) -> bool;
-        scalar ospf_area("ospf_area", 11) -> &'a str;
-        model mpls("mpls", 12) -> item::Mpls<'a>;
-        scalar isis_enable("isis_enable", 13) -> &'a str;
-        scalar isis_bfd("isis_bfd", 14) -> bool;
-        scalar isis_passive("isis_passive", 15) -> bool;
-        scalar isis_metric("isis_metric", 16) -> i64;
-        scalar isis_network_point_to_point("isis_network_point_to_point", 17) -> bool;
-        model node_segment("node_segment", 18) -> item::NodeSegment<'a>;
-        scalar hardware_forwarding_id("hardware_forwarding_id", 19) -> bool;
-        scalar eos_cli("eos_cli", 20) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub description: ::validated_data::Field<&'a str>,
+    pub shutdown: ::validated_data::Field<bool>,
+    pub vrf: ::validated_data::Field<&'a str>,
+    pub ip_address: ::validated_data::Field<&'a str>,
+    pub ip_address_secondaries: ::validated_data::Field<item::IpAddressSecondaries<'a, Mode>>,
+    pub ipv6_enable: ::validated_data::Field<bool>,
+    pub ipv6_address: ::validated_data::Field<&'a str>,
+    pub ipv6_addresses: ::validated_data::Field<item::Ipv6Addresses<'a, Mode>>,
+    pub ipv6_address_auto_config: ::validated_data::Field<bool>,
+    pub ip_proxy_arp: ::validated_data::Field<bool>,
+    pub ospf_area: ::validated_data::Field<&'a str>,
+    pub mpls: ::validated_data::Field<item::Mpls<'a, Mode>>,
+    pub isis_enable: ::validated_data::Field<&'a str>,
+    pub isis_bfd: ::validated_data::Field<bool>,
+    pub isis_passive: ::validated_data::Field<bool>,
+    pub isis_metric: ::validated_data::Field<i64>,
+    pub isis_network_point_to_point: ::validated_data::Field<bool>,
+    pub node_segment: ::validated_data::Field<item::NodeSegment<'a, Mode>>,
+    pub hardware_forwarding_id: ::validated_data::Field<bool>,
+    pub eos_cli: ::validated_data::Field<&'a str>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct IpAddressSecondaries {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct IpAddressSecondaries<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv6Addresses {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Ipv6Addresses<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Mpls {
-            model ldp("ldp", 0) -> mpls::Ldp<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Mpls<'a, Mode> {
+        pub ldp: ::validated_data::Field<mpls::Ldp<'a, Mode>>,
     }
 
     pub mod mpls {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ldp {
-                scalar interface("interface", 0) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Ldp<'a, Mode> {
+            pub interface: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct NodeSegment {
-            scalar ipv4_index("ipv4_index", 0) -> i64;
-            scalar ipv6_index("ipv6_index", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct NodeSegment<'a, Mode> {
+        pub ipv4_index: ::validated_data::Field<i64>,
+        pub ipv6_index: ::validated_data::Field<i64>,
     }
 }

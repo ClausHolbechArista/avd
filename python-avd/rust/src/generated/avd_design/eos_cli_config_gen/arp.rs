@@ -2,36 +2,26 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Persistent {
-        scalar enabled("enabled", 0) -> bool;
-        scalar refresh_delay("refresh_delay", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Persistent<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub refresh_delay: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Aging {
-        scalar timeout_default("timeout_default", 0) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Aging<'a, Mode> {
+    pub timeout_default: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct StaticEntries {
-        model item (0) -> static_entries::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct StaticEntries<'a, Mode> (::validated_data::Field<static_entries::Item<'a, Mode>>);
 
 pub mod static_entries {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar ipv4_address("ipv4_address", 0) -> &'a str;
-            scalar vrf("vrf", 1) -> &'a str;
-            scalar mac_address("mac_address", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub ipv4_address: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub mac_address: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }

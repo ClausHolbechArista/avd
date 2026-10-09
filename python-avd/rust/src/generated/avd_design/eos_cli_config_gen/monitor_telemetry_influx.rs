@@ -2,65 +2,44 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Destinations {
-        model item (0) -> destinations::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Destinations<'a, Mode> (::validated_data::Field<destinations::Item<'a, Mode>>);
 
 pub mod destinations {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar database("database", 1) -> &'a str;
-            scalar data_retention_policy("data_retention_policy", 2) -> &'a str;
-            scalar url("url", 3) -> &'a str;
-            scalar username("username", 4) -> &'a str;
-            scalar password("password", 5) -> &'a str;
-            scalar password_type("password_type", 6) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub database: ::validated_data::Field<&'a str>,
+        pub data_retention_policy: ::validated_data::Field<&'a str>,
+        pub url: ::validated_data::Field<&'a str>,
+        pub username: ::validated_data::Field<&'a str>,
+        pub password: ::validated_data::Field<&'a str>,
+        pub password_type: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SourceSockets {
-        model item (0) -> source_sockets::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct SourceSockets<'a, Mode> (::validated_data::Field<source_sockets::Item<'a, Mode>>);
 
 pub mod source_sockets {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar connection_limit("connection_limit", 1) -> i64;
-            scalar url("url", 2) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub connection_limit: ::validated_data::Field<i64>,
+        pub url: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Tags {
-        model item (0) -> tags::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Tags<'a, Mode> (::validated_data::Field<tags::Item<'a, Mode>>);
 
 pub mod tags {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar value("value", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub value: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }

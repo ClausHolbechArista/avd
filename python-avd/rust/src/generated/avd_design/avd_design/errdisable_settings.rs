@@ -2,327 +2,259 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Causes {
-        model acl("acl", 0) -> causes::Acl<'a>;
-        model arp_inspection("arp_inspection", 1) -> causes::ArpInspection<'a>;
-        model bpduguard("bpduguard", 2) -> causes::Bpduguard<'a>;
-        model dot1x("dot1x", 3) -> causes::Dot1x<'a>;
-        model dot1x_coa("dot1x_coa", 4) -> causes::Dot1xCoa<'a>;
-        model dot1x_phone_classification("dot1x_phone_classification", 5) -> causes::Dot1xPhoneClassification<'a>;
-        model dot1x_session_replace("dot1x_session_replace", 6) -> causes::Dot1xSessionReplace<'a>;
-        model error_correction_encoding("error_correction_encoding", 7) -> causes::ErrorCorrectionEncoding<'a>;
-        model fabric_capacity_low("fabric_capacity_low", 8) -> causes::FabricCapacityLow<'a>;
-        model hardware_speed_group("hardware_speed_group", 9) -> causes::HardwareSpeedGroup<'a>;
-        model hitless_reload_down("hitless_reload_down", 10) -> causes::HitlessReloadDown<'a>;
-        model interface_speed("interface_speed", 11) -> causes::InterfaceSpeed<'a>;
-        model internal_error("internal_error", 12) -> causes::InternalError<'a>;
-        model lacp_rate_limit("lacp_rate_limit", 13) -> causes::LacpRateLimit<'a>;
-        model link_change("link_change", 14) -> causes::LinkChange<'a>;
-        model link_flap("link_flap", 15) -> causes::LinkFlap<'a>;
-        model no_internal_vlan("no_internal_vlan", 16) -> causes::NoInternalVlan<'a>;
-        model port_breakout("port_breakout", 17) -> causes::PortBreakout<'a>;
-        model portchannelguard("portchannelguard", 18) -> causes::Portchannelguard<'a>;
-        model portsec("portsec", 19) -> causes::Portsec<'a>;
-        model speed_misconfigured("speed_misconfigured", 20) -> causes::SpeedMisconfigured<'a>;
-        model storm_control("storm_control", 21) -> causes::StormControl<'a>;
-        model stuck_queue("stuck_queue", 22) -> causes::StuckQueue<'a>;
-        model switchcard_unreachable("switchcard_unreachable", 23) -> causes::SwitchcardUnreachable<'a>;
-        model tap_port_init("tap_port_init", 24) -> causes::TapPortInit<'a>;
-        model tapagg("tapagg", 25) -> causes::Tapagg<'a>;
-        model tpid("tpid", 26) -> causes::Tpid<'a>;
-        model transceiver_adapter("transceiver_adapter", 27) -> causes::TransceiverAdapter<'a>;
-        model uplink_failure_detection("uplink_failure_detection", 28) -> causes::UplinkFailureDetection<'a>;
-        model xcvr_misconfigured("xcvr_misconfigured", 29) -> causes::XcvrMisconfigured<'a>;
-        model xcvr_overheat("xcvr_overheat", 30) -> causes::XcvrOverheat<'a>;
-        model xcvr_power_unsupported("xcvr_power_unsupported", 31) -> causes::XcvrPowerUnsupported<'a>;
-        model xcvr_unsupported("xcvr_unsupported", 32) -> causes::XcvrUnsupported<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Causes<'a, Mode> {
+    pub acl: ::validated_data::Field<causes::Acl<'a, Mode>>,
+    pub arp_inspection: ::validated_data::Field<causes::ArpInspection<'a, Mode>>,
+    pub bpduguard: ::validated_data::Field<causes::Bpduguard<'a, Mode>>,
+    pub dot1x: ::validated_data::Field<causes::Dot1x<'a, Mode>>,
+    pub dot1x_coa: ::validated_data::Field<causes::Dot1xCoa<'a, Mode>>,
+    pub dot1x_phone_classification: ::validated_data::Field<causes::Dot1xPhoneClassification<'a, Mode>>,
+    pub dot1x_session_replace: ::validated_data::Field<causes::Dot1xSessionReplace<'a, Mode>>,
+    pub error_correction_encoding: ::validated_data::Field<causes::ErrorCorrectionEncoding<'a, Mode>>,
+    pub fabric_capacity_low: ::validated_data::Field<causes::FabricCapacityLow<'a, Mode>>,
+    pub hardware_speed_group: ::validated_data::Field<causes::HardwareSpeedGroup<'a, Mode>>,
+    pub hitless_reload_down: ::validated_data::Field<causes::HitlessReloadDown<'a, Mode>>,
+    pub interface_speed: ::validated_data::Field<causes::InterfaceSpeed<'a, Mode>>,
+    pub internal_error: ::validated_data::Field<causes::InternalError<'a, Mode>>,
+    pub lacp_rate_limit: ::validated_data::Field<causes::LacpRateLimit<'a, Mode>>,
+    pub link_change: ::validated_data::Field<causes::LinkChange<'a, Mode>>,
+    pub link_flap: ::validated_data::Field<causes::LinkFlap<'a, Mode>>,
+    pub no_internal_vlan: ::validated_data::Field<causes::NoInternalVlan<'a, Mode>>,
+    pub port_breakout: ::validated_data::Field<causes::PortBreakout<'a, Mode>>,
+    pub portchannelguard: ::validated_data::Field<causes::Portchannelguard<'a, Mode>>,
+    pub portsec: ::validated_data::Field<causes::Portsec<'a, Mode>>,
+    pub speed_misconfigured: ::validated_data::Field<causes::SpeedMisconfigured<'a, Mode>>,
+    pub storm_control: ::validated_data::Field<causes::StormControl<'a, Mode>>,
+    pub stuck_queue: ::validated_data::Field<causes::StuckQueue<'a, Mode>>,
+    pub switchcard_unreachable: ::validated_data::Field<causes::SwitchcardUnreachable<'a, Mode>>,
+    pub tap_port_init: ::validated_data::Field<causes::TapPortInit<'a, Mode>>,
+    pub tapagg: ::validated_data::Field<causes::Tapagg<'a, Mode>>,
+    pub tpid: ::validated_data::Field<causes::Tpid<'a, Mode>>,
+    pub transceiver_adapter: ::validated_data::Field<causes::TransceiverAdapter<'a, Mode>>,
+    pub uplink_failure_detection: ::validated_data::Field<causes::UplinkFailureDetection<'a, Mode>>,
+    pub xcvr_misconfigured: ::validated_data::Field<causes::XcvrMisconfigured<'a, Mode>>,
+    pub xcvr_overheat: ::validated_data::Field<causes::XcvrOverheat<'a, Mode>>,
+    pub xcvr_power_unsupported: ::validated_data::Field<causes::XcvrPowerUnsupported<'a, Mode>>,
+    pub xcvr_unsupported: ::validated_data::Field<causes::XcvrUnsupported<'a, Mode>>,
 }
 
 pub mod causes {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Acl {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Acl<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ArpInspection {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct ArpInspection<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Bpduguard {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Bpduguard<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1x {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Dot1x<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1xCoa {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Dot1xCoa<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1xPhoneClassification {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Dot1xPhoneClassification<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Dot1xSessionReplace {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Dot1xSessionReplace<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct ErrorCorrectionEncoding {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct ErrorCorrectionEncoding<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct FabricCapacityLow {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct FabricCapacityLow<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct HardwareSpeedGroup {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct HardwareSpeedGroup<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct HitlessReloadDown {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct HitlessReloadDown<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct InterfaceSpeed {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct InterfaceSpeed<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct InternalError {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct InternalError<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LacpRateLimit {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct LacpRateLimit<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LinkChange {
-            scalar detection("detection", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct LinkChange<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LinkFlap {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct LinkFlap<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct NoInternalVlan {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct NoInternalVlan<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PortBreakout {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct PortBreakout<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Portchannelguard {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Portchannelguard<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Portsec {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Portsec<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SpeedMisconfigured {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct SpeedMisconfigured<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct StormControl {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct StormControl<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct StuckQueue {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct StuckQueue<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SwitchcardUnreachable {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct SwitchcardUnreachable<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TapPortInit {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct TapPortInit<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Tapagg {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Tapagg<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Tpid {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Tpid<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TransceiverAdapter {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct TransceiverAdapter<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct UplinkFailureDetection {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct UplinkFailureDetection<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct XcvrMisconfigured {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct XcvrMisconfigured<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct XcvrOverheat {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct XcvrOverheat<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct XcvrPowerUnsupported {
-            scalar detection("detection", 0) -> bool;
-            scalar recovery("recovery", 1) -> bool;
-            scalar recovery_interval("recovery_interval", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct XcvrPowerUnsupported<'a, Mode> {
+        pub detection: ::validated_data::Field<bool>,
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct XcvrUnsupported {
-            scalar recovery("recovery", 0) -> bool;
-            scalar recovery_interval("recovery_interval", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct XcvrUnsupported<'a, Mode> {
+        pub recovery: ::validated_data::Field<bool>,
+        pub recovery_interval: ::validated_data::Field<i64>,
     }
 }

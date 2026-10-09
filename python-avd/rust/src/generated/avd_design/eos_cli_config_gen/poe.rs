@@ -2,16 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Reboot {
-        scalar action("action", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct Reboot<'a, Mode> {
+    pub action: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct InterfaceShutdown {
-        scalar action("action", 0) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct InterfaceShutdown<'a, Mode> {
+    pub action: ::validated_data::Field<&'a str>,
 }

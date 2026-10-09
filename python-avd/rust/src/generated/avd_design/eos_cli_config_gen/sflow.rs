@@ -2,140 +2,97 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model destinations("destinations", 1) -> item::Destinations<'a>;
-            scalar source("source", 2) -> &'a str;
-            scalar source_interface("source_interface", 3) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub destinations: ::validated_data::Field<item::Destinations<'a, Mode>>,
+        pub source: ::validated_data::Field<&'a str>,
+        pub source_interface: ::validated_data::Field<&'a str>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Destinations {
-                model item (0) -> destinations::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(destination))]
+        pub struct Destinations<'a, Mode> (::validated_data::Field<destinations::Item<'a, Mode>>);
 
         pub mod destinations {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar destination("destination", 0) -> &'a str;
-                    scalar port("port", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub destination: ::validated_data::Field<&'a str>,
+                pub port: ::validated_data::Field<i64>,
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Destinations {
-        model item (0) -> destinations::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(destination))]
+pub struct Destinations<'a, Mode> (::validated_data::Field<destinations::Item<'a, Mode>>);
 
 pub mod destinations {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar destination("destination", 0) -> &'a str;
-            scalar port("port", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub destination: ::validated_data::Field<&'a str>,
+        pub port: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Extensions {
-        model item (0) -> extensions::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Extensions<'a, Mode> (::validated_data::Field<extensions::Item<'a, Mode>>);
 
 pub mod extensions {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar enabled("enabled", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Interface {
-        model disable("disable", 0) -> interface::Disable<'a>;
-        model egress("egress", 1) -> interface::Egress<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Interface<'a, Mode> {
+    pub disable: ::validated_data::Field<interface::Disable<'a, Mode>>,
+    pub egress: ::validated_data::Field<interface::Egress<'a, Mode>>,
 }
 
 pub mod interface {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Disable {
-            scalar default("default", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Disable<'a, Mode> {
+        pub default: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Egress {
-            scalar enable_default("enable_default", 0) -> bool;
-            scalar unmodified("unmodified", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Egress<'a, Mode> {
+        pub enable_default: ::validated_data::RequiredValue<bool, Mode>,
+        pub unmodified: ::validated_data::Field<bool>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct HardwareAcceleration {
-        scalar enabled("enabled", 0) -> bool;
-        scalar sample("sample", 1) -> i64;
-        model modules("modules", 2) -> hardware_acceleration::Modules<'a>;
-    }
+#[::validated_data::data_view]
+pub struct HardwareAcceleration<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub sample: ::validated_data::Field<i64>,
+    pub modules: ::validated_data::Field<hardware_acceleration::Modules<'a, Mode>>,
 }
 
 pub mod hardware_acceleration {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Modules {
-            model item (0) -> modules::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Modules<'a, Mode> (::validated_data::Field<modules::Item<'a, Mode>>);
 
     pub mod modules {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar enabled("enabled", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub enabled: ::validated_data::Field<bool>,
         }
     }
 }

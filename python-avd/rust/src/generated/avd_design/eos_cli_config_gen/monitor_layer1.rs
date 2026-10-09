@@ -2,11 +2,9 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct LoggingTransceiver {
-        scalar dom("dom", 0) -> bool;
-        scalar communication("communication", 1) -> bool;
-        scalar enabled("enabled", 2) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct LoggingTransceiver<'a, Mode> {
+    pub dom: ::validated_data::Field<bool>,
+    pub communication: ::validated_data::Field<bool>,
+    pub enabled: ::validated_data::Field<bool>,
 }

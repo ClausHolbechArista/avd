@@ -2,117 +2,87 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct License {
-        scalar license_name("license_name", 0) -> &'a str;
-        scalar license_key("license_key", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct License<'a, Mode> {
+    pub license_name: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub license_key: ::validated_data::RequiredValue<&'a str, Mode>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Profiles {
-        model item (0) -> profiles::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
 
 pub mod profiles {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar cipher("cipher", 1) -> &'a str;
-            model connection_keys("connection_keys", 2) -> item::ConnectionKeys<'a>;
-            model mka("mka", 3) -> item::Mka<'a>;
-            scalar sci("sci", 4) -> bool;
-            model l2_protocols("l2_protocols", 5) -> item::L2Protocols<'a>;
-            model traffic_unprotected("traffic_unprotected", 6) -> item::TrafficUnprotected<'a>;
-            model replay_protection("replay_protection", 7) -> item::ReplayProtection<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub cipher: ::validated_data::Field<&'a str>,
+        pub connection_keys: ::validated_data::Field<item::ConnectionKeys<'a, Mode>>,
+        pub mka: ::validated_data::Field<item::Mka<'a, Mode>>,
+        pub sci: ::validated_data::Field<bool>,
+        pub l2_protocols: ::validated_data::Field<item::L2Protocols<'a, Mode>>,
+        pub traffic_unprotected: ::validated_data::Field<item::TrafficUnprotected<'a, Mode>>,
+        pub replay_protection: ::validated_data::Field<item::ReplayProtection<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct ConnectionKeys {
-                model item (0) -> connection_keys::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(id))]
+        pub struct ConnectionKeys<'a, Mode> (::validated_data::Field<connection_keys::Item<'a, Mode>>);
 
         pub mod connection_keys {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar id("id", 0) -> &'a str;
-                    scalar encrypted_key("encrypted_key", 1) -> &'a str;
-                    scalar fallback("fallback", 2) -> bool;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub id: ::validated_data::Field<&'a str>,
+                pub encrypted_key: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub fallback: ::validated_data::Field<bool>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Mka {
-                scalar key_server_priority("key_server_priority", 0) -> i64;
-                model session("session", 1) -> mka::Session<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Mka<'a, Mode> {
+            pub key_server_priority: ::validated_data::Field<i64>,
+            pub session: ::validated_data::Field<mka::Session<'a, Mode>>,
         }
 
         pub mod mka {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Session {
-                    scalar rekey_period("rekey_period", 0) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Session<'a, Mode> {
+                pub rekey_period: ::validated_data::Field<i64>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct L2Protocols {
-                model ethernet_flow_control("ethernet_flow_control", 0) -> l2_protocols::EthernetFlowControl<'a>;
-                model lldp("lldp", 1) -> l2_protocols::Lldp<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct L2Protocols<'a, Mode> {
+            pub ethernet_flow_control: ::validated_data::Field<l2_protocols::EthernetFlowControl<'a, Mode>>,
+            pub lldp: ::validated_data::Field<l2_protocols::Lldp<'a, Mode>>,
         }
 
         pub mod l2_protocols {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct EthernetFlowControl {
-                    scalar mode("mode", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct EthernetFlowControl<'a, Mode> {
+                pub mode: ::validated_data::RequiredValue<&'a str, Mode>,
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Lldp {
-                    scalar mode("mode", 0) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Lldp<'a, Mode> {
+                pub mode: ::validated_data::RequiredValue<&'a str, Mode>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct TrafficUnprotected {
-                scalar action("action", 0) -> &'a str;
-                scalar allow_active_sak("allow_active_sak", 1) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct TrafficUnprotected<'a, Mode> {
+            pub action: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub allow_active_sak: ::validated_data::Field<bool>,
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct ReplayProtection {
-                scalar disabled("disabled", 0) -> bool;
-                scalar window("window", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct ReplayProtection<'a, Mode> {
+            pub disabled: ::validated_data::Field<bool>,
+            pub window: ::validated_data::Field<i64>,
         }
     }
 }

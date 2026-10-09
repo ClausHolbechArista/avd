@@ -2,68 +2,50 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ControlPlane {
-        model tcp_mss("tcp_mss", 0) -> control_plane::TcpMss<'a>;
-        scalar ipv4_access_group_ingress_default("ipv4_access_group_ingress_default", 1) -> &'a str;
-        model ipv4_access_groups("ipv4_access_groups", 2) -> control_plane::Ipv4AccessGroups<'a>;
-        scalar ipv6_access_group_ingress_default("ipv6_access_group_ingress_default", 3) -> &'a str;
-        model ipv6_access_groups("ipv6_access_groups", 4) -> control_plane::Ipv6AccessGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct ControlPlane<'a, Mode> {
+    pub tcp_mss: ::validated_data::Field<control_plane::TcpMss<'a, Mode>>,
+    pub ipv4_access_group_ingress_default: ::validated_data::Field<&'a str>,
+    pub ipv4_access_groups: ::validated_data::Field<control_plane::Ipv4AccessGroups<'a, Mode>>,
+    pub ipv6_access_group_ingress_default: ::validated_data::Field<&'a str>,
+    pub ipv6_access_groups: ::validated_data::Field<control_plane::Ipv6AccessGroups<'a, Mode>>,
 }
 
 pub mod control_plane {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct TcpMss {
-            scalar ipv4("ipv4", 0) -> i64;
-            scalar ipv6("ipv6", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct TcpMss<'a, Mode> {
+        pub ipv4: ::validated_data::Field<i64>,
+        pub ipv6: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv4AccessGroups {
-            model item (0) -> ipv4_access_groups::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Ipv4AccessGroups<'a, Mode> (::validated_data::Field<ipv4_access_groups::Item<'a, Mode>>);
 
     pub mod ipv4_access_groups {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar acl_name("acl_name", 0) -> &'a str;
-                scalar vrf("vrf", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub acl_name: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub vrf: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv6AccessGroups {
-            model item (0) -> ipv6_access_groups::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Ipv6AccessGroups<'a, Mode> (::validated_data::Field<ipv6_access_groups::Item<'a, Mode>>);
 
     pub mod ipv6_access_groups {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar acl_name("acl_name", 0) -> &'a str;
-                scalar vrf("vrf", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub acl_name: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub vrf: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct L1 {
-        scalar unsupported_speed_action("unsupported_speed_action", 0) -> &'a str;
-        scalar unsupported_error_correction_action("unsupported_error_correction_action", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct L1<'a, Mode> {
+    pub unsupported_speed_action: ::validated_data::Field<&'a str>,
+    pub unsupported_error_correction_action: ::validated_data::Field<&'a str>,
 }

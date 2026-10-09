@@ -2,60 +2,45 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar counters_per_entry("counters_per_entry", 1) -> bool;
-        model entries("entries", 2) -> item::Entries<'a>;
-        model sequence_numbers("sequence_numbers", 3) -> item::SequenceNumbers<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub counters_per_entry: ::validated_data::Field<bool>,
+    pub entries: ::validated_data::Field<item::Entries<'a, Mode>>,
+    pub sequence_numbers: ::validated_data::Field<item::SequenceNumbers<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Entries {
-            model item (0) -> entries::Item<'a>;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar sequence("sequence", 0) -> i64;
-                scalar action("action", 1) -> &'a str;
-                scalar remark("remark", 2) -> &'a str;
-                scalar source("source", 3) -> &'a str;
-                scalar vlan("vlan", 4) -> i64;
-                scalar vlan_mask("vlan_mask", 5) -> &'a str;
-                scalar inner_vlan("inner_vlan", 6) -> i64;
-                scalar inner_vlan_mask("inner_vlan_mask", 7) -> &'a str;
-                scalar log("log", 8) -> bool;
-                scalar mirror_session("mirror_session", 9) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub sequence: ::validated_data::Field<i64>,
+            pub action: ::validated_data::Field<&'a str>,
+            pub remark: ::validated_data::Field<&'a str>,
+            pub source: ::validated_data::Field<&'a str>,
+            pub vlan: ::validated_data::Field<i64>,
+            pub vlan_mask: ::validated_data::Field<&'a str>,
+            pub inner_vlan: ::validated_data::Field<i64>,
+            pub inner_vlan_mask: ::validated_data::Field<&'a str>,
+            pub log: ::validated_data::Field<bool>,
+            pub mirror_session: ::validated_data::Field<&'a str>,
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SequenceNumbers {
-            model item (0) -> sequence_numbers::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(sequence))]
+    pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar sequence("sequence", 0) -> i64;
-                scalar action("action", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub sequence: ::validated_data::Field<i64>,
+            pub action: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 }

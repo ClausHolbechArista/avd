@@ -2,47 +2,30 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DomainList {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct DomainList<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Servers {
-        model item (0) -> servers::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar vrf("vrf", 0) -> &'a str;
-            scalar ip_address("ip_address", 1) -> &'a str;
-            scalar priority("priority", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub ip_address: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub priority: ::validated_data::Field<i64>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar source_interface("source_interface", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub source_interface: ::validated_data::Field<&'a str>,
     }
 }

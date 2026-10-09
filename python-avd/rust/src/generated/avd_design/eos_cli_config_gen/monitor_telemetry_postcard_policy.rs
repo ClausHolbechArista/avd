@@ -2,149 +2,104 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Ingress {
-        model collection("collection", 0) -> ingress::Collection<'a>;
-        model sample("sample", 1) -> ingress::Sample<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Ingress<'a, Mode> {
+    pub collection: ::validated_data::Field<ingress::Collection<'a, Mode>>,
+    pub sample: ::validated_data::Field<ingress::Sample<'a, Mode>>,
 }
 
 pub mod ingress {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Collection {
-            scalar source("source", 0) -> &'a str;
-            scalar destination("destination", 1) -> &'a str;
-            scalar version("version", 2) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Collection<'a, Mode> {
+        pub source: ::validated_data::Field<&'a str>,
+        pub destination: ::validated_data::Field<&'a str>,
+        pub version: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Sample {
-            scalar rate("rate", 0) -> i64;
-            model tcp_udp_checksum("tcp_udp_checksum", 1) -> sample::TcpUdpChecksum<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Sample<'a, Mode> {
+        pub rate: ::validated_data::Field<i64>,
+        pub tcp_udp_checksum: ::validated_data::Field<sample::TcpUdpChecksum<'a, Mode>>,
     }
 
     pub mod sample {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct TcpUdpChecksum {
-                scalar value("value", 0) -> i64;
-                scalar mask("mask", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct TcpUdpChecksum<'a, Mode> {
+            pub value: ::validated_data::Field<i64>,
+            pub mask: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct MarkerVxlan {
-        scalar enabled("enabled", 0) -> bool;
-        scalar header_word_zero_bit("header_word_zero_bit", 1) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct MarkerVxlan<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub header_word_zero_bit: ::validated_data::Field<i64>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Profiles {
-        model item (0) -> profiles::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
 
 pub mod profiles {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar ingress_sample_policy("ingress_sample_policy", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub ingress_sample_policy: ::validated_data::Field<&'a str>,
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct SamplePolicies {
-        model item (0) -> sample_policies::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct SamplePolicies<'a, Mode> (::validated_data::Field<sample_policies::Item<'a, Mode>>);
 
 pub mod sample_policies {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model match_rules("match_rules", 1) -> item::MatchRules<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub match_rules: ::validated_data::Field<item::MatchRules<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct MatchRules {
-                model item (0) -> match_rules::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        pub struct MatchRules<'a, Mode> (::validated_data::Field<match_rules::Item<'a, Mode>>);
 
         pub mod match_rules {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar name("name", 0) -> &'a str;
-                    scalar field_type("type", 1) -> &'a str;
-                    scalar destination_prefix("destination_prefix", 2) -> &'a str;
-                    scalar source_prefix("source_prefix", 3) -> &'a str;
-                    model protocols("protocols", 4) -> item::Protocols<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub name: ::validated_data::Field<&'a str>,
+                #[data_view(rename = "type")]
+                pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub destination_prefix: ::validated_data::Field<&'a str>,
+                pub source_prefix: ::validated_data::Field<&'a str>,
+                pub protocols: ::validated_data::Field<item::Protocols<'a, Mode>>,
             }
 
             pub mod item {
 
-                ::validation::define_archive_indexed_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Protocols {
-                        model item (0) -> protocols::Item<'a>;
-                        primary_key_fields: [0];
-                    }
-                }
+                #[::validated_data::data_view(indexed_list, primary_key(protocol))]
+                pub struct Protocols<'a, Mode> (::validated_data::Field<protocols::Item<'a, Mode>>);
 
                 pub mod protocols {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct Item {
-                            scalar protocol("protocol", 0) -> &'a str;
-                            model source_ports("source_ports", 1) -> item::SourcePorts<'a>;
-                            model destination_ports("destination_ports", 2) -> item::DestinationPorts<'a>;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct Item<'a, Mode> {
+                        pub protocol: ::validated_data::Field<&'a str>,
+                        pub source_ports: ::validated_data::Field<item::SourcePorts<'a, Mode>>,
+                        pub destination_ports: ::validated_data::Field<item::DestinationPorts<'a, Mode>>,
                     }
 
                     pub mod item {
 
-                        ::validation::define_archive_list_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct SourcePorts {
-                                scalar item (0) -> &'a str;
-                            }
-                        }
+                        #[::validated_data::data_view(list)]
+                        pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-                        ::validation::define_archive_list_view! {
-                            #[derive(Clone, Copy, Debug)]
-                            pub struct DestinationPorts {
-                                scalar item (0) -> &'a str;
-                            }
-                        }
+                        #[::validated_data::data_view(list)]
+                        pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
                     }
                 }
             }

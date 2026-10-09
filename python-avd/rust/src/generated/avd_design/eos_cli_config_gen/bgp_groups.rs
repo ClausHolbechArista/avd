@@ -2,29 +2,19 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar name("name", 0) -> &'a str;
-        scalar vrf("vrf", 1) -> &'a str;
-        model neighbors("neighbors", 2) -> item::Neighbors<'a>;
-        model bgp_maintenance_profiles("bgp_maintenance_profiles", 3) -> item::BgpMaintenanceProfiles<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub name: ::validated_data::Field<&'a str>,
+    pub vrf: ::validated_data::Field<&'a str>,
+    pub neighbors: ::validated_data::Field<item::Neighbors<'a, Mode>>,
+    pub bgp_maintenance_profiles: ::validated_data::Field<item::BgpMaintenanceProfiles<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Neighbors {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Neighbors<'a, Mode> (::validated_data::Field<&'a str>);
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct BgpMaintenanceProfiles {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct BgpMaintenanceProfiles<'a, Mode> (::validated_data::Field<&'a str>);
 }

@@ -2,62 +2,48 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Policies {
-        model sand_profiles("sand_profiles", 0) -> policies::SandProfiles<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Policies<'a, Mode> {
+    pub sand_profiles: ::validated_data::Field<policies::SandProfiles<'a, Mode>>,
 }
 
 pub mod policies {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SandProfiles {
-            model item (0) -> sand_profiles::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct SandProfiles<'a, Mode> (::validated_data::Field<sand_profiles::Item<'a, Mode>>);
 
     pub mod sand_profiles {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                model fields("fields", 1) -> item::Fields<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub fields: ::validated_data::Field<item::Fields<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Fields {
-                    model udp("udp", 0) -> fields::Udp<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Fields<'a, Mode> {
+                pub udp: ::validated_data::Field<fields::Udp<'a, Mode>>,
             }
 
             pub mod fields {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Udp {
-                        scalar dst_port("dst_port", 0) -> i64;
-                        scalar payload_bytes("payload_bytes", 1) -> &'a str;
-                        model field_match("match", 2) -> udp::FieldMatch<'a>;
-                    }
+                #[::validated_data::data_view]
+                pub struct Udp<'a, Mode> {
+                    pub dst_port: ::validated_data::RequiredValue<i64, Mode>,
+                    pub payload_bytes: ::validated_data::Field<&'a str>,
+                    #[data_view(rename = "match")]
+                    pub field_match: ::validated_data::Field<udp::FieldMatch<'a, Mode>>,
                 }
 
                 pub mod udp {
 
-                    ::validation::define_archive_dict_view! {
-                        #[derive(Clone, Copy, Debug)]
-                        pub struct FieldMatch {
-                            scalar payload_bits("payload_bits", 0) -> &'a str;
-                            scalar pattern("pattern", 1) -> &'a str;
-                            scalar hash_payload_bytes("hash_payload_bytes", 2) -> &'a str;
-                        }
+                    #[::validated_data::data_view]
+                    pub struct FieldMatch<'a, Mode> {
+                        pub payload_bits: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub pattern: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub hash_payload_bytes: ::validated_data::RequiredValue<&'a str, Mode>,
                     }
                 }
             }
@@ -65,67 +51,52 @@ pub mod policies {
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Cluster {
-        scalar destination_grouping("destination_grouping", 0) -> &'a str;
-        scalar prefix_length("prefix_length", 1) -> i64;
-        scalar forwarding_type("forwarding_type", 2) -> &'a str;
-        scalar load_balance_method_flow_round_robin("load_balance_method_flow_round_robin", 3) -> bool;
-        model flow("flow", 4) -> cluster::Flow<'a>;
-        model port_groups("port_groups", 5) -> cluster::PortGroups<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Cluster<'a, Mode> {
+    pub destination_grouping: ::validated_data::Field<&'a str>,
+    pub prefix_length: ::validated_data::Field<i64>,
+    pub forwarding_type: ::validated_data::Field<&'a str>,
+    pub load_balance_method_flow_round_robin: ::validated_data::Field<bool>,
+    pub flow: ::validated_data::Field<cluster::Flow<'a, Mode>>,
+    pub port_groups: ::validated_data::Field<cluster::PortGroups<'a, Mode>>,
 }
 
 pub mod cluster {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Flow {
-            scalar monitor("monitor", 0) -> bool;
-            scalar source_learning_aging_timeout("source_learning_aging_timeout", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Flow<'a, Mode> {
+        pub monitor: ::validated_data::Field<bool>,
+        pub source_learning_aging_timeout: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PortGroups {
-            model item (0) -> port_groups::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(group))]
+    pub struct PortGroups<'a, Mode> (::validated_data::Field<port_groups::Item<'a, Mode>>);
 
     pub mod port_groups {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar group("group", 0) -> &'a str;
-                scalar balance_factor("balance_factor", 1) -> i64;
-                scalar interface("interface", 2) -> &'a str;
-                model flow("flow", 3) -> item::Flow<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub group: ::validated_data::Field<&'a str>,
+            pub balance_factor: ::validated_data::Field<i64>,
+            pub interface: ::validated_data::Field<&'a str>,
+            pub flow: ::validated_data::Field<item::Flow<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Flow {
-                    scalar limit("limit", 0) -> i64;
-                    scalar warning("warning", 1) -> i64;
-                    model exhaustion_action("exhaustion_action", 2) -> flow::ExhaustionAction<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Flow<'a, Mode> {
+                pub limit: ::validated_data::Field<i64>,
+                pub warning: ::validated_data::Field<i64>,
+                pub exhaustion_action: ::validated_data::Field<flow::ExhaustionAction<'a, Mode>>,
             }
 
             pub mod flow {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct ExhaustionAction {
-                        scalar dscp("dscp", 0) -> i64;
-                        scalar traffic_class("traffic_class", 1) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct ExhaustionAction<'a, Mode> {
+                    pub dscp: ::validated_data::Field<i64>,
+                    pub traffic_class: ::validated_data::Field<i64>,
                 }
             }
         }

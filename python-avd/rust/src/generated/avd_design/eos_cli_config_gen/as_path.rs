@@ -2,42 +2,31 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct AccessLists {
-        model item (0) -> access_lists::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct AccessLists<'a, Mode> (::validated_data::Field<access_lists::Item<'a, Mode>>);
 
 pub mod access_lists {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model entries("entries", 1) -> item::Entries<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub entries: ::validated_data::Field<item::Entries<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Entries {
-                model item (0) -> entries::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
         pub mod entries {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar field_type("type", 0) -> &'a str;
-                    scalar field_match("match", 1) -> &'a str;
-                    scalar origin("origin", 2) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                #[data_view(rename = "type")]
+                pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                #[data_view(rename = "match")]
+                pub field_match: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub origin: ::validated_data::Field<&'a str>,
             }
         }
     }

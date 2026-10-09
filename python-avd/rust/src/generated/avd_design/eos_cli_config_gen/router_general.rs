@@ -2,109 +2,77 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct RouterId {
-        scalar ipv4("ipv4", 0) -> &'a str;
-        scalar ipv6("ipv6", 1) -> &'a str;
-    }
+#[::validated_data::data_view]
+pub struct RouterId<'a, Mode> {
+    pub ipv4: ::validated_data::Field<&'a str>,
+    pub ipv6: ::validated_data::Field<&'a str>,
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Vrfs {
-        model item (0) -> vrfs::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            model leak_routes("leak_routes", 1) -> item::LeakRoutes<'a>;
-            model routes("routes", 2) -> item::Routes<'a>;
-            scalar software_forwarding_hardware_offload_mtu("software_forwarding_hardware_offload_mtu", 3) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub leak_routes: ::validated_data::Field<item::LeakRoutes<'a, Mode>>,
+        pub routes: ::validated_data::Field<item::Routes<'a, Mode>>,
+        pub software_forwarding_hardware_offload_mtu: ::validated_data::Field<i64>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct LeakRoutes {
-                model item (0) -> leak_routes::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct LeakRoutes<'a, Mode> (::validated_data::Field<leak_routes::Item<'a, Mode>>);
 
         pub mod leak_routes {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar source_vrf("source_vrf", 0) -> &'a str;
-                    scalar subscribe_policy("subscribe_policy", 1) -> &'a str;
-                    scalar subscribe_rcf("subscribe_rcf", 2) -> &'a str;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub source_vrf: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub subscribe_policy: ::validated_data::Field<&'a str>,
+                pub subscribe_rcf: ::validated_data::Field<&'a str>,
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Routes {
-                model dynamic_prefix_lists("dynamic_prefix_lists", 0) -> routes::DynamicPrefixLists<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Routes<'a, Mode> {
+            pub dynamic_prefix_lists: ::validated_data::Field<routes::DynamicPrefixLists<'a, Mode>>,
         }
 
         pub mod routes {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct DynamicPrefixLists {
-                    model item (0) -> dynamic_prefix_lists::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct DynamicPrefixLists<'a, Mode> (::validated_data::Field<dynamic_prefix_lists::Item<'a, Mode>>);
 
             pub mod dynamic_prefix_lists {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar name("name", 0) -> &'a str;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub name: ::validated_data::Field<&'a str>,
                 }
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct ControlFunctions {
-        model code_units("code_units", 0) -> control_functions::CodeUnits<'a>;
-    }
+#[::validated_data::data_view]
+pub struct ControlFunctions<'a, Mode> {
+    pub code_units: ::validated_data::Field<control_functions::CodeUnits<'a, Mode>>,
 }
 
 pub mod control_functions {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct CodeUnits {
-            model item (0) -> code_units::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct CodeUnits<'a, Mode> (::validated_data::Field<code_units::Item<'a, Mode>>);
 
     pub mod code_units {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar content("content", 1) -> &'a str;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub content: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 }

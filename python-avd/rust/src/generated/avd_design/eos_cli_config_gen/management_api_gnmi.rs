@@ -2,98 +2,72 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Transport {
-        model grpc("grpc", 0) -> transport::Grpc<'a>;
-        model grpc_tunnels("grpc_tunnels", 1) -> transport::GrpcTunnels<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Transport<'a, Mode> {
+    pub grpc: ::validated_data::Field<transport::Grpc<'a, Mode>>,
+    pub grpc_tunnels: ::validated_data::Field<transport::GrpcTunnels<'a, Mode>>,
 }
 
 pub mod transport {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Grpc {
-            model item (0) -> grpc::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct Grpc<'a, Mode> (::validated_data::Field<grpc::Item<'a, Mode>>);
 
     pub mod grpc {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar ssl_profile("ssl_profile", 1) -> &'a str;
-                scalar vrf("vrf", 2) -> &'a str;
-                scalar notification_timestamp("notification_timestamp", 3) -> &'a str;
-                scalar ip_access_group("ip_access_group", 4) -> &'a str;
-                scalar port("port", 5) -> i64;
-                scalar authorization_requests("authorization_requests", 6) -> bool;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub ssl_profile: ::validated_data::Field<&'a str>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub notification_timestamp: ::validated_data::Field<&'a str>,
+            pub ip_access_group: ::validated_data::Field<&'a str>,
+            pub port: ::validated_data::Field<i64>,
+            pub authorization_requests: ::validated_data::Field<bool>,
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct GrpcTunnels {
-            model item (0) -> grpc_tunnels::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    pub struct GrpcTunnels<'a, Mode> (::validated_data::Field<grpc_tunnels::Item<'a, Mode>>);
 
     pub mod grpc_tunnels {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar name("name", 0) -> &'a str;
-                scalar shutdown("shutdown", 1) -> bool;
-                scalar tunnel_ssl_profile("tunnel_ssl_profile", 2) -> &'a str;
-                scalar gnmi_ssl_profile("gnmi_ssl_profile", 3) -> &'a str;
-                scalar vrf("vrf", 4) -> &'a str;
-                model destination("destination", 5) -> item::Destination<'a>;
-                model local_interface("local_interface", 6) -> item::LocalInterface<'a>;
-                model target("target", 7) -> item::Target<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub name: ::validated_data::Field<&'a str>,
+            pub shutdown: ::validated_data::Field<bool>,
+            pub tunnel_ssl_profile: ::validated_data::Field<&'a str>,
+            pub gnmi_ssl_profile: ::validated_data::Field<&'a str>,
+            pub vrf: ::validated_data::Field<&'a str>,
+            pub destination: ::validated_data::Field<item::Destination<'a, Mode>>,
+            pub local_interface: ::validated_data::Field<item::LocalInterface<'a, Mode>>,
+            pub target: ::validated_data::Field<item::Target<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Destination {
-                    scalar address("address", 0) -> &'a str;
-                    scalar port("port", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Destination<'a, Mode> {
+                pub address: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub port: ::validated_data::RequiredValue<i64, Mode>,
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct LocalInterface {
-                    scalar name("name", 0) -> &'a str;
-                    scalar port("port", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct LocalInterface<'a, Mode> {
+                pub name: ::validated_data::RequiredValue<&'a str, Mode>,
+                pub port: ::validated_data::RequiredValue<i64, Mode>,
             }
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Target {
-                    scalar use_serial_number("use_serial_number", 0) -> bool;
-                    model target_ids("target_ids", 1) -> target::TargetIds<'a>;
-                }
+            #[::validated_data::data_view]
+            pub struct Target<'a, Mode> {
+                pub use_serial_number: ::validated_data::Field<bool>,
+                pub target_ids: ::validated_data::Field<target::TargetIds<'a, Mode>>,
             }
 
             pub mod target {
 
-                ::validation::define_archive_list_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct TargetIds {
-                        scalar item (0) -> &'a str;
-                    }
-                }
+                #[::validated_data::data_view(list)]
+                pub struct TargetIds<'a, Mode> (::validated_data::Field<&'a str>);
             }
         }
     }

@@ -2,39 +2,31 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar profile("profile", 0) -> &'a str;
-        model announce("announce", 1) -> item::Announce<'a>;
-        scalar delay_req("delay_req", 2) -> i64;
-        model sync_message("sync_message", 3) -> item::SyncMessage<'a>;
-        scalar transport("transport", 4) -> &'a str;
-        model management("management", 5) -> item::Management<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub profile: ::validated_data::Field<&'a str>,
+    pub announce: ::validated_data::Field<item::Announce<'a, Mode>>,
+    pub delay_req: ::validated_data::Field<i64>,
+    pub sync_message: ::validated_data::Field<item::SyncMessage<'a, Mode>>,
+    pub transport: ::validated_data::Field<&'a str>,
+    pub management: ::validated_data::Field<item::Management<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Announce {
-            scalar interval("interval", 0) -> i64;
-            scalar timeout("timeout", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Announce<'a, Mode> {
+        pub interval: ::validated_data::Field<i64>,
+        pub timeout: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct SyncMessage {
-            scalar interval("interval", 0) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct SyncMessage<'a, Mode> {
+        pub interval: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Management {
-            scalar drop("drop", 0) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct Management<'a, Mode> {
+        pub drop: ::validated_data::Field<bool>,
     }
 }

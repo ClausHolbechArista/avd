@@ -2,292 +2,219 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Profiles {
-        model item (0) -> profiles::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
 
 pub mod profiles {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar vrf("vrf", 1) -> &'a str;
-            model destination("destination", 2) -> item::Destination<'a>;
-            model source("source", 3) -> item::Source<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        pub vrf: ::validated_data::Field<&'a str>,
+        pub destination: ::validated_data::Field<item::Destination<'a, Mode>>,
+        pub source: ::validated_data::Field<item::Source<'a, Mode>>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Destination {
-                model dynamic("dynamic", 0) -> destination::Dynamic<'a>;
-                model field_static("static", 1) -> destination::FieldStatic<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Destination<'a, Mode> {
+            pub dynamic: ::validated_data::Field<destination::Dynamic<'a, Mode>>,
+            #[data_view(rename = "static")]
+            pub field_static: ::validated_data::Field<destination::FieldStatic<'a, Mode>>,
         }
 
         pub mod destination {
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Dynamic {
-                    model item (0) -> dynamic::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(access_list))]
+            pub struct Dynamic<'a, Mode> (::validated_data::Field<dynamic::Item<'a, Mode>>);
 
             pub mod dynamic {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar access_list("access_list", 0) -> &'a str;
-                        scalar comment("comment", 1) -> &'a str;
-                        scalar pool_name("pool_name", 2) -> &'a str;
-                        scalar priority("priority", 3) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub access_list: ::validated_data::Field<&'a str>,
+                    pub comment: ::validated_data::Field<&'a str>,
+                    pub pool_name: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub priority: ::validated_data::Field<i64>,
                 }
             }
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct FieldStatic {
-                    model item (0) -> field_static::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct FieldStatic<'a, Mode> (::validated_data::Field<field_static::Item<'a, Mode>>);
 
             pub mod field_static {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar access_list("access_list", 0) -> &'a str;
-                        scalar comment("comment", 1) -> &'a str;
-                        scalar direction("direction", 2) -> &'a str;
-                        scalar group("group", 3) -> i64;
-                        scalar original_ip("original_ip", 4) -> &'a str;
-                        scalar original_port("original_port", 5) -> i64;
-                        scalar priority("priority", 6) -> i64;
-                        scalar protocol("protocol", 7) -> &'a str;
-                        scalar translated_ip("translated_ip", 8) -> &'a str;
-                        scalar translated_port("translated_port", 9) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub access_list: ::validated_data::Field<&'a str>,
+                    pub comment: ::validated_data::Field<&'a str>,
+                    pub direction: ::validated_data::Field<&'a str>,
+                    pub group: ::validated_data::Field<i64>,
+                    pub original_ip: ::validated_data::Field<&'a str>,
+                    pub original_port: ::validated_data::Field<i64>,
+                    pub priority: ::validated_data::Field<i64>,
+                    pub protocol: ::validated_data::Field<&'a str>,
+                    pub translated_ip: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub translated_port: ::validated_data::Field<i64>,
                 }
             }
         }
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Source {
-                model dynamic("dynamic", 0) -> source::Dynamic<'a>;
-                model field_static("static", 1) -> source::FieldStatic<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Source<'a, Mode> {
+            pub dynamic: ::validated_data::Field<source::Dynamic<'a, Mode>>,
+            #[data_view(rename = "static")]
+            pub field_static: ::validated_data::Field<source::FieldStatic<'a, Mode>>,
         }
 
         pub mod source {
 
-            ::validation::define_archive_indexed_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Dynamic {
-                    model item (0) -> dynamic::Item<'a>;
-                    primary_key_fields: [0];
-                }
-            }
+            #[::validated_data::data_view(indexed_list, primary_key(access_list))]
+            pub struct Dynamic<'a, Mode> (::validated_data::Field<dynamic::Item<'a, Mode>>);
 
             pub mod dynamic {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar access_list("access_list", 0) -> &'a str;
-                        scalar comment("comment", 1) -> &'a str;
-                        scalar nat_type("nat_type", 2) -> &'a str;
-                        scalar pool_name("pool_name", 3) -> &'a str;
-                        scalar priority("priority", 4) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub access_list: ::validated_data::Field<&'a str>,
+                    pub comment: ::validated_data::Field<&'a str>,
+                    pub nat_type: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub pool_name: ::validated_data::Field<&'a str>,
+                    pub priority: ::validated_data::Field<i64>,
                 }
             }
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct FieldStatic {
-                    model item (0) -> field_static::Item<'a>;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct FieldStatic<'a, Mode> (::validated_data::Field<field_static::Item<'a, Mode>>);
 
             pub mod field_static {
 
-                ::validation::define_archive_dict_view! {
-                    #[derive(Clone, Copy, Debug)]
-                    pub struct Item {
-                        scalar access_list("access_list", 0) -> &'a str;
-                        scalar comment("comment", 1) -> &'a str;
-                        scalar direction("direction", 2) -> &'a str;
-                        scalar group("group", 3) -> i64;
-                        scalar original_ip("original_ip", 4) -> &'a str;
-                        scalar original_port("original_port", 5) -> i64;
-                        scalar priority("priority", 6) -> i64;
-                        scalar protocol("protocol", 7) -> &'a str;
-                        scalar translated_ip("translated_ip", 8) -> &'a str;
-                        scalar translated_port("translated_port", 9) -> i64;
-                    }
+                #[::validated_data::data_view]
+                pub struct Item<'a, Mode> {
+                    pub access_list: ::validated_data::Field<&'a str>,
+                    pub comment: ::validated_data::Field<&'a str>,
+                    pub direction: ::validated_data::Field<&'a str>,
+                    pub group: ::validated_data::Field<i64>,
+                    pub original_ip: ::validated_data::Field<&'a str>,
+                    pub original_port: ::validated_data::Field<i64>,
+                    pub priority: ::validated_data::Field<i64>,
+                    pub protocol: ::validated_data::Field<&'a str>,
+                    pub translated_ip: ::validated_data::RequiredValue<&'a str, Mode>,
+                    pub translated_port: ::validated_data::Field<i64>,
                 }
             }
         }
     }
 }
 
-::validation::define_archive_indexed_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Pools {
-        model item (0) -> pools::Item<'a>;
-        primary_key_fields: [0];
-    }
-}
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct Pools<'a, Mode> (::validated_data::Field<pools::Item<'a, Mode>>);
 
 pub mod pools {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar name("name", 0) -> &'a str;
-            scalar field_type("type", 1) -> &'a str;
-            scalar prefix_length("prefix_length", 2) -> i64;
-            model ranges("ranges", 3) -> item::Ranges<'a>;
-            scalar utilization_log_threshold("utilization_log_threshold", 4) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub name: ::validated_data::Field<&'a str>,
+        #[data_view(rename = "type")]
+        pub field_type: ::validated_data::Field<&'a str>,
+        pub prefix_length: ::validated_data::Field<i64>,
+        pub ranges: ::validated_data::Field<item::Ranges<'a, Mode>>,
+        pub utilization_log_threshold: ::validated_data::Field<i64>,
     }
 
     pub mod item {
 
-        ::validation::define_archive_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Ranges {
-                model item (0) -> ranges::Item<'a>;
-            }
-        }
+        #[::validated_data::data_view(list)]
+        pub struct Ranges<'a, Mode> (::validated_data::Field<ranges::Item<'a, Mode>>);
 
         pub mod ranges {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar first_ip("first_ip", 0) -> &'a str;
-                    scalar last_ip("last_ip", 1) -> &'a str;
-                    scalar first_port("first_port", 2) -> i64;
-                    scalar last_port("last_port", 3) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub first_ip: ::validated_data::Field<&'a str>,
+                pub last_ip: ::validated_data::Field<&'a str>,
+                pub first_port: ::validated_data::Field<i64>,
+                pub last_port: ::validated_data::Field<i64>,
             }
         }
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Synchronization {
-        scalar description("description", 0) -> &'a str;
-        scalar expiry_interval("expiry_interval", 1) -> i64;
-        scalar local_interface("local_interface", 2) -> &'a str;
-        scalar peer_address("peer_address", 3) -> &'a str;
-        model port_range("port_range", 4) -> synchronization::PortRange<'a>;
-        scalar shutdown("shutdown", 5) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct Synchronization<'a, Mode> {
+    pub description: ::validated_data::Field<&'a str>,
+    pub expiry_interval: ::validated_data::Field<i64>,
+    pub local_interface: ::validated_data::Field<&'a str>,
+    pub peer_address: ::validated_data::Field<&'a str>,
+    pub port_range: ::validated_data::Field<synchronization::PortRange<'a, Mode>>,
+    pub shutdown: ::validated_data::Field<bool>,
 }
 
 pub mod synchronization {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct PortRange {
-            scalar first_port("first_port", 0) -> i64;
-            scalar last_port("last_port", 1) -> i64;
-            scalar split_disabled("split_disabled", 2) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct PortRange<'a, Mode> {
+        pub first_port: ::validated_data::Field<i64>,
+        pub last_port: ::validated_data::Field<i64>,
+        pub split_disabled: ::validated_data::Field<bool>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Translation {
-        model address_selection("address_selection", 0) -> translation::AddressSelection<'a>;
-        scalar counters("counters", 1) -> bool;
-        model low_mark("low_mark", 2) -> translation::LowMark<'a>;
-        model max_entries("max_entries", 3) -> translation::MaxEntries<'a>;
-        model timeouts("timeouts", 4) -> translation::Timeouts<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Translation<'a, Mode> {
+    pub address_selection: ::validated_data::Field<translation::AddressSelection<'a, Mode>>,
+    pub counters: ::validated_data::Field<bool>,
+    pub low_mark: ::validated_data::Field<translation::LowMark<'a, Mode>>,
+    pub max_entries: ::validated_data::Field<translation::MaxEntries<'a, Mode>>,
+    pub timeouts: ::validated_data::Field<translation::Timeouts<'a, Mode>>,
 }
 
 pub mod translation {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct AddressSelection {
-            scalar any("any", 0) -> bool;
-            scalar hash_field_source_ip("hash_field_source_ip", 1) -> bool;
-        }
+    #[::validated_data::data_view]
+    pub struct AddressSelection<'a, Mode> {
+        pub any: ::validated_data::Field<bool>,
+        pub hash_field_source_ip: ::validated_data::Field<bool>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct LowMark {
-            scalar percentage("percentage", 0) -> i64;
-            scalar host_percentage("host_percentage", 1) -> i64;
-        }
+    #[::validated_data::data_view]
+    pub struct LowMark<'a, Mode> {
+        pub percentage: ::validated_data::Field<i64>,
+        pub host_percentage: ::validated_data::Field<i64>,
     }
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct MaxEntries {
-            scalar limit("limit", 0) -> i64;
-            scalar host_limit("host_limit", 1) -> i64;
-            model ip_limits("ip_limits", 2) -> max_entries::IpLimits<'a>;
-        }
+    #[::validated_data::data_view]
+    pub struct MaxEntries<'a, Mode> {
+        pub limit: ::validated_data::Field<i64>,
+        pub host_limit: ::validated_data::Field<i64>,
+        pub ip_limits: ::validated_data::Field<max_entries::IpLimits<'a, Mode>>,
     }
 
     pub mod max_entries {
 
-        ::validation::define_archive_indexed_list_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct IpLimits {
-                model item (0) -> ip_limits::Item<'a>;
-                primary_key_fields: [0];
-            }
-        }
+        #[::validated_data::data_view(indexed_list, primary_key(ip))]
+        pub struct IpLimits<'a, Mode> (::validated_data::Field<ip_limits::Item<'a, Mode>>);
 
         pub mod ip_limits {
 
-            ::validation::define_archive_dict_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct Item {
-                    scalar ip("ip", 0) -> &'a str;
-                    scalar limit("limit", 1) -> i64;
-                }
+            #[::validated_data::data_view]
+            pub struct Item<'a, Mode> {
+                pub ip: ::validated_data::Field<&'a str>,
+                pub limit: ::validated_data::RequiredValue<i64, Mode>,
             }
         }
     }
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Timeouts {
-            model item (0) -> timeouts::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(protocol))]
+    pub struct Timeouts<'a, Mode> (::validated_data::Field<timeouts::Item<'a, Mode>>);
 
     pub mod timeouts {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar protocol("protocol", 0) -> &'a str;
-                scalar timeout("timeout", 1) -> i64;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub protocol: ::validated_data::Field<&'a str>,
+            pub timeout: ::validated_data::RequiredValue<i64, Mode>,
         }
     }
 }

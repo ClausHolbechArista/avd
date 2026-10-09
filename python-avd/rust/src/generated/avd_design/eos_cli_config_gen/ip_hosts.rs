@@ -2,20 +2,14 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar hostname("hostname", 0) -> &'a str;
-        model ipv4_addresses("ipv4_addresses", 1) -> item::Ipv4Addresses<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub hostname: ::validated_data::Field<&'a str>,
+    pub ipv4_addresses: ::validated_data::RequiredValue<item::Ipv4Addresses<'a, Mode>, Mode>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Ipv4Addresses {
-            scalar item (0) -> &'a str;
-        }
-    }
+    #[::validated_data::data_view(list)]
+    pub struct Ipv4Addresses<'a, Mode> (::validated_data::Field<&'a str>);
 }

@@ -2,11 +2,9 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Lldp {
-        scalar transmit("transmit", 0) -> bool;
-        scalar receive("receive", 1) -> bool;
-        scalar ztp_vlan("ztp_vlan", 2) -> i64;
-    }
+#[::validated_data::data_view]
+pub struct Lldp<'a, Mode> {
+    pub transmit: ::validated_data::Field<bool>,
+    pub receive: ::validated_data::Field<bool>,
+    pub ztp_vlan: ::validated_data::Field<i64>,
 }

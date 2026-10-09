@@ -2,42 +2,29 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Item {
-        scalar platform("platform", 0) -> &'a str;
-        model speeds("speeds", 1) -> item::Speeds<'a>;
-    }
+#[::validated_data::data_view]
+pub struct Item<'a, Mode> {
+    pub platform: ::validated_data::Field<&'a str>,
+    pub speeds: ::validated_data::Field<item::Speeds<'a, Mode>>,
 }
 
 pub mod item {
 
-    ::validation::define_archive_indexed_list_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Speeds {
-            model item (0) -> speeds::Item<'a>;
-            primary_key_fields: [0];
-        }
-    }
+    #[::validated_data::data_view(indexed_list, primary_key(speed))]
+    pub struct Speeds<'a, Mode> (::validated_data::Field<speeds::Item<'a, Mode>>);
 
     pub mod speeds {
 
-        ::validation::define_archive_dict_view! {
-            #[derive(Clone, Copy, Debug)]
-            pub struct Item {
-                scalar speed("speed", 0) -> &'a str;
-                model speed_groups("speed_groups", 1) -> item::SpeedGroups<'a>;
-            }
+        #[::validated_data::data_view]
+        pub struct Item<'a, Mode> {
+            pub speed: ::validated_data::Field<&'a str>,
+            pub speed_groups: ::validated_data::Field<item::SpeedGroups<'a, Mode>>,
         }
 
         pub mod item {
 
-            ::validation::define_archive_list_view! {
-                #[derive(Clone, Copy, Debug)]
-                pub struct SpeedGroups {
-                    scalar item (0) -> &'a str;
-                }
-            }
+            #[::validated_data::data_view(list)]
+            pub struct SpeedGroups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 }

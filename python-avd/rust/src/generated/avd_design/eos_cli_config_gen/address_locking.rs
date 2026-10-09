@@ -2,43 +2,27 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DhcpServersIpv4 {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct DhcpServersIpv4<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct DhcpServerInterfaces {
-        scalar item (0) -> &'a str;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct DhcpServerInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-::validation::define_archive_list_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct Leases {
-        model item (0) -> leases::Item<'a>;
-    }
-}
+#[::validated_data::data_view(list)]
+pub struct Leases<'a, Mode> (::validated_data::Field<leases::Item<'a, Mode>>);
 
 pub mod leases {
 
-    ::validation::define_archive_dict_view! {
-        #[derive(Clone, Copy, Debug)]
-        pub struct Item {
-            scalar ip("ip", 0) -> &'a str;
-            scalar mac("mac", 1) -> &'a str;
-        }
+    #[::validated_data::data_view]
+    pub struct Item<'a, Mode> {
+        pub ip: ::validated_data::RequiredValue<&'a str, Mode>,
+        pub mac: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }
 
-::validation::define_archive_dict_view! {
-    #[derive(Clone, Copy, Debug)]
-    pub struct LockedAddress {
-        scalar expiration_mac_disabled("expiration_mac_disabled", 0) -> bool;
-        scalar ipv4_enforcement_disabled("ipv4_enforcement_disabled", 1) -> bool;
-        scalar ipv6_enforcement_disabled("ipv6_enforcement_disabled", 2) -> bool;
-    }
+#[::validated_data::data_view]
+pub struct LockedAddress<'a, Mode> {
+    pub expiration_mac_disabled: ::validated_data::Field<bool>,
+    pub ipv4_enforcement_disabled: ::validated_data::Field<bool>,
+    pub ipv6_enforcement_disabled: ::validated_data::Field<bool>,
 }
