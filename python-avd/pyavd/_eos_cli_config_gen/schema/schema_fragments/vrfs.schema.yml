@@ -1,3 +1,4 @@
+---
 # Copyright (c) 2023-2026 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
@@ -21,6 +22,12 @@ keys:
             - int
         description:
           type: str
+        rd:
+          type: str
+          description: |-
+            Renders Route Distinguisher under 'vrf instance'.
+            This is deprecated in EOS; configure the Route Distinguisher under 'router bgp' VRF submode instead using `router_bgp.vrfs[].rd`.
+            This key is kept only to support existing/legacy device configurations and is intentionally not shown in the generated device documentation.
         ip_routing:
           type: bool
         ipv6_routing:
@@ -34,6 +41,8 @@ keys:
             It will not affect the generated EOS configuration.
 
           keys:
-            tenant:
-              type: str
+            tenants:
+              type: list
               description: Key only used for documentation or validation purposes.
+              items:
+                type: str

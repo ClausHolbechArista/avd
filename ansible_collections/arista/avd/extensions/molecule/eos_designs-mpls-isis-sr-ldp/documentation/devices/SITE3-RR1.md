@@ -47,9 +47,9 @@
 
 ##### IPv6
 
-| Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
-| -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | - | - |
+| Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway | ND RA Disabled | ND RA RX Accept | ND Managed Config Flag | ND Other Config Flag | ND Cache | ND RA DNS Servers |
+| -------------------- | ----------- | ---- | --- | ------------ | ------------ | -------------- | --------------- | ---------------------- | -------------------- | -------- | ----------------- |
+| Management1 | OOB_MANAGEMENT | oob | MGMT | - | - | - | - | - | - | - | - |
 
 #### Management Interfaces Device Configuration
 
@@ -66,9 +66,9 @@ interface Management1
 
 #### Management API HTTP Summary
 
-| HTTP | HTTPS | UNIX-Socket | Default Services |
-| ---- | ----- | ----------- | ---------------- |
-| False | True | - | - |
+| HTTP | HTTPS | UNIX-Socket | Default Services | Session Timeout |
+| ---- | ----- | ----------- | ---------------- | --------------- |
+| False | True | - | - | 1440 minutes |
 
 #### Management API VRF Access
 
@@ -136,9 +136,9 @@ vlan internal order ascending range 1006 1199
 
 ##### IPv6
 
-| Interface | Description | VRF | IPv6 Address |
-| --------- | ----------- | --- | ------------ |
-| Loopback0 | ROUTER_ID | default | 2000:1234:ffff:ffff::c/128 |
+| Interface | Description | VRF | IPv6 Addresses |
+| --------- | ----------- | --- | -------------- |
+| Loopback0 | ROUTER_ID | default | 2001:db8:100:ffff::c/128 |
 
 ##### ISIS
 
@@ -154,10 +154,10 @@ interface Loopback0
    description ROUTER_ID
    no shutdown
    ip address 100.70.0.12/32
-   ipv6 address 2000:1234:ffff:ffff::c/128
+   ipv6 address 2001:db8:100:ffff::c/128
    mpls ldp interface
    node-segment ipv4 index 112
-   node-segment ipv6 index 112
+   node-segment ipv6 index 1112
    isis enable CORE
    isis passive
 ```
@@ -197,7 +197,7 @@ no ip routing vrf MGMT
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
-| MGMT | false |
+| MGMT | False |
 
 #### IPv6 Routing Device Configuration
 
@@ -252,7 +252,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.200.5
 
 | Loopback | IPv4 Index | IPv6 Index |
 | -------- | ---------- | ---------- |
-| Loopback0 | 112 | 112 |
+| Loopback0 | 112 | 1112 |
 
 #### ISIS IPv4 Address Family Summary
 
@@ -268,6 +268,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.200.5
 | -------- | ----- |
 | IPv6 Address-family Enabled | True |
 | Maximum-paths | 4 |
+| Multi-topology Enabled | True |
 | TI-LFA Mode | link-protection |
 
 #### Router ISIS Device Configuration
@@ -289,6 +290,7 @@ router isis CORE
    !
    address-family ipv6 unicast
       maximum-paths 4
+      multi-topology
       fast-reroute ti-lfa mode link-protection
    !
    segment-routing mpls
@@ -319,18 +321,6 @@ ASN Notation: asplain
 
 #### Router BGP Peer Groups
 
-##### MPLS-OVERLAY-PEERS
-
-| Settings | Value |
-| -------- | ----- |
-| Address Family | mpls |
-| Remote AS | 65000 |
-| Route Reflector Client | Yes |
-| Source | Loopback0 |
-| BFD | True |
-| Send community | all |
-| Maximum routes | 0 (no limit) |
-
 ##### RR-OVERLAY-PEERS
 
 | Settings | Value |
@@ -344,10 +334,10 @@ ASN Notation: asplain
 
 #### BGP Neighbors
 
-| Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
-| -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
-| 100.70.0.8 | Inherited from peer group RR-OVERLAY-PEERS | default | - | Inherited from peer group RR-OVERLAY-PEERS | Inherited from peer group RR-OVERLAY-PEERS | - | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | - |
-| 100.70.0.9 | Inherited from peer group RR-OVERLAY-PEERS | default | - | Inherited from peer group RR-OVERLAY-PEERS | Inherited from peer group RR-OVERLAY-PEERS | - | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | - |
+| Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Maximum-accepted-routes | Maximum-advertised-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
+| -------- | --------- | --- | -------- | -------------- | -------------- | ----------------------- | ------------------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
+| 100.70.0.8 | Inherited from peer group RR-OVERLAY-PEERS | default | - | Inherited from peer group RR-OVERLAY-PEERS | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | - |
+| 100.70.0.9 | Inherited from peer group RR-OVERLAY-PEERS | default | - | Inherited from peer group RR-OVERLAY-PEERS | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | Inherited from peer group RR-OVERLAY-PEERS | - | - | - | - |
 
 #### Router BGP VPN-IPv4 Address Family
 
@@ -355,7 +345,6 @@ ASN Notation: asplain
 
 | Peer Group | Activate | Route-map In | Route-map Out | RCF In | RCF Out | Peer-tag In | Peer-tag Out |
 | ---------- | -------- | ------------ | ------------- | ------ | ------- | ----------- | ------------ |
-| MPLS-OVERLAY-PEERS | True | - | - | - | - | - | - |
 | RR-OVERLAY-PEERS | True | - | - | - | - | - | - |
 
 #### Router BGP Device Configuration
@@ -370,14 +359,6 @@ router bgp 65000
    maximum-paths 4
    distance bgp 20 200 200
    bgp route-reflector preserve-attributes always
-   neighbor MPLS-OVERLAY-PEERS peer group
-   neighbor MPLS-OVERLAY-PEERS remote-as 65000
-   neighbor MPLS-OVERLAY-PEERS update-source Loopback0
-   neighbor MPLS-OVERLAY-PEERS bfd
-   neighbor MPLS-OVERLAY-PEERS route-reflector-client
-   neighbor MPLS-OVERLAY-PEERS password 7 <removed>
-   neighbor MPLS-OVERLAY-PEERS send-community
-   neighbor MPLS-OVERLAY-PEERS maximum-routes 0
    neighbor RR-OVERLAY-PEERS peer group
    neighbor RR-OVERLAY-PEERS remote-as 65000
    neighbor RR-OVERLAY-PEERS update-source Loopback0
@@ -391,11 +372,9 @@ router bgp 65000
    neighbor 100.70.0.9 description SITE2-RR1_Loopback0
    !
    address-family ipv4
-      no neighbor MPLS-OVERLAY-PEERS activate
       no neighbor RR-OVERLAY-PEERS activate
    !
    address-family vpn-ipv4
-      neighbor MPLS-OVERLAY-PEERS activate
       neighbor RR-OVERLAY-PEERS activate
 ```
 

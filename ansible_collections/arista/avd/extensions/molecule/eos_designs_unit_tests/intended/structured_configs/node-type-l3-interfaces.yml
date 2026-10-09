@@ -77,8 +77,33 @@ ethernet_interfaces:
     peer_type: l3_interface
   sflow:
     enable: true
+- name: Ethernet46
+  description: peer4_Ethernet1
+  shutdown: false
+  ip_address: 192.168.46.1/31
+  ipv6_addresses:
+  - 2001:db8::1/64
+  - 2001:db8:1::1/64
+  metadata:
+    peer: peer4
+    peer_interface: Ethernet1
+    peer_type: l3_interface
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet45
+  description: Main interface without ip address
+  shutdown: false
+  metadata:
+    peer_type: l3_interface
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
 hostname: node-type-l3-interfaces
 ip_routing: true
+ipv6_unicast_routing: true
 loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
@@ -109,20 +134,10 @@ router_bgp:
   bgp:
     default:
       ipv4_unicast: false
-  peer_groups:
-  - name: IPv4-UNDERLAY-PEERS
-    metadata:
-      type: ipv4
-    send_community: all
-    maximum_routes: 12000
   redistribute:
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
-  address_family_ipv4:
-    peer_groups:
-    - name: IPv4-UNDERLAY-PEERS
-      activate: true
 service_routing_protocols_model: multi-agent
 sflow:
   vrfs:

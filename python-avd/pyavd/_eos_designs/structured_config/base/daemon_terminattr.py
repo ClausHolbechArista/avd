@@ -3,11 +3,12 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
+import ipaddress
 from typing import TYPE_CHECKING, Protocol
 
+from pyavd._cv.constants import CV_REGION_TO_SERVER_MAP, CVAAS_STREAMING_PREFIX
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
-from pyavd._eos_designs.structured_config.constants import CV_REGION_TO_SERVER_MAP
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
 
@@ -42,11 +43,23 @@ class DaemonTerminattrMixin(Protocol):
             # Do not add any config when we have no clusters configured.
             return
 
+        self._validate_onprem_or_cvaas_clusters_dependencies(clusters)
         self.structured_config.daemon_terminattr._update(
             ingestexclude=cv_settings.terminattr.ingestexclude,
             smashexcludes=cv_settings.terminattr.smashexcludes,
             disable_aaa=cv_settings.terminattr.disable_aaa,
+            flowdns=cv_settings.terminattr.flowdns,
         )
+
+        if cv_settings.terminattr.cvtargetconfigs:
+            self.structured_config.daemon_terminattr.cvtargetconfigs = cv_settings.terminattr.cvtargetconfigs._cast_as(
+                EosCliConfigGen.DaemonTerminattr.Cvtargetconfigs
+            )
+
+        if cv_settings.terminattr.custom_cv_options:
+            self.structured_config.daemon_terminattr.custom_cv_options = cv_settings.terminattr.custom_cv_options._cast_as(
+                EosCliConfigGen.DaemonTerminattr.CustomCvOptions
+            )
 
         if first_tracker_exported_to_cloudvision is not None:
             flow_tracking_vrf = self.shared_utils.get_vrf(
@@ -97,7 +110,7 @@ class DaemonTerminattrMixin(Protocol):
     def get_cv_addrs(cluster: EosDesigns.CvSettings.Cvaas.ClustersItem | EosDesigns.CvSettings.OnpremClustersItem) -> EosCliConfigGen.DaemonTerminattr.Cvaddrs:
         match cluster:
             case EosDesigns.CvSettings.Cvaas.ClustersItem():
-                fqdn = CV_REGION_TO_SERVER_MAP[cluster.region]
+                fqdn = f"{CVAAS_STREAMING_PREFIX}.{CV_REGION_TO_SERVER_MAP[cluster.region]}"
                 return EosCliConfigGen.DaemonTerminattr.Cvaddrs([f"{fqdn}:443"])
             case EosDesigns.CvSettings.OnpremClustersItem():
                 return EosCliConfigGen.DaemonTerminattr.Cvaddrs(f"{server.name}:{server.port}" for server in cluster.servers)
@@ -129,3 +142,61 @@ class DaemonTerminattrMixin(Protocol):
                 " Please configure 'cv_settings' when enabling 'sflow_settings.export_to_cloudvision.enabled'."
             )
             raise AristaAvdInvalidInputsError(msg)
+
+    def _validate_onprem_or_cvaas_clusters_dependencies(
+        self: AvdStructuredConfigBaseProtocol,
+        clusters: list[EosDesigns.CvSettings.Cvaas.ClustersItem | EosDesigns.CvSettings.OnpremClustersItem],
+    ) -> None:
+        """
+        Validate infrastructure dependencies required when CloudVision clusters are configured.
+
+        This validation applies to both CloudVision on-prem and CVaaS clusters and enforces the following requirements:
+
+        - NTP must be configured when any CloudVision cluster is defined.
+        - DNS must be configured for CVaaS clusters.
+        - DNS must be configured for on-prem clusters if any server is specified using a DNS name instead of an IP address.
+
+        Raises:
+            AristaAvdInvalidInputsError: If required NTP or DNS settings are missing.
+        """
+        # NTP is always required
+        if not self.inputs.ntp_settings.servers:
+            msg = (
+                "'ntp_settings.servers' must be configured when CloudVision "
+                "clusters 'cv_settings.onprem_clusters[].servers[]' or 'cv_settings.cvaas.clusters[]' are defined."
+            )
+            raise AristaAvdInvalidInputsError(msg)
+
+        # If DNS is already configured, no further DNS validation is needed
+        if self.inputs.dns_settings.servers:
+            return
+        for cluster in clusters:
+            match cluster:
+                # DNS is always required for CVaaS
+                case EosDesigns.CvSettings.Cvaas.ClustersItem():
+                    msg = "'dns_settings' must be configured when 'cv_settings.cvaas.clusters[]' are defined with 'cv_settings.cvaas.enabled: true'."
+                    raise AristaAvdInvalidInputsError(msg)
+                # DNS is required for on-prem clusters using DNS names
+                case EosDesigns.CvSettings.OnpremClustersItem():
+                    if any(self._is_dns_name(server.name) for server in cluster.servers):
+                        msg = "'dns_settings' must be configured when 'cv_settings.onprem_clusters[].servers[].name' is set to a DNS name."
+                        raise AristaAvdInvalidInputsError(msg)
+
+    @staticmethod
+    def _is_dns_name(value: str) -> bool:
+        """
+        Determine whether a value represents a DNS name.
+
+        The value is considered a DNS name if it cannot be parsed as a valid IPv4 or IPv6 address.
+
+        Args:
+            value: The string value to evaluate.
+
+        Returns:
+            True if the value is not a valid IP address, otherwise False.
+        """
+        try:
+            ipaddress.ip_address(value)
+        except ValueError:
+            return True
+        return False

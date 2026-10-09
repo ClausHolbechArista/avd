@@ -40,7 +40,7 @@ class VrfsMixin(Protocol):
                 if vrf_name == "default":
                     continue
                 new_vrf = EosCliConfigGen.VrfsItem(name=vrf_name)
-                new_vrf.metadata.tenant = tenant.name
+                new_vrf.metadata.tenants.append(tenant.name)
 
                 # MLAG IBGP Peering VLANs per VRF
                 if self.inputs.overlay_mlag_rfc5549 and self._mlag_ibgp_peering_enabled(vrf, tenant):
@@ -55,6 +55,12 @@ class VrfsMixin(Protocol):
                     new_vrf.description = vrf.description
                 self.structured_config.vrfs.append(new_vrf, ignore_fields=("metadata",))
 
+                # If the VRF already existed (shared VRF across multiple tenants),
+                # append this tenant to the existing item's metadata.
+                existing_vrf = self.structured_config.vrfs.obtain(vrf_name)
+                if tenant.name not in existing_vrf.metadata.tenants:
+                    existing_vrf.metadata.tenants.append(tenant.name)
+
     def _has_ipv6(
         self: AvdStructuredConfigNetworkServicesProtocol, vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem
     ) -> bool:
@@ -63,4 +69,8 @@ class VrfsMixin(Protocol):
 
         Expects a VRF definition coming from filtered_tenants, where all keys have been set and filtered
         """
-        return any(svi.ipv6_address or svi.ipv6_address_virtuals for svi in vrf.svis)
+        return (
+            any(svi.ipv6_address or svi.ipv6_address_virtuals for svi in vrf.svis)
+            or any(l3_interface.ipv6_addresses for l3_interface in vrf.l3_interfaces)
+            or any(l3_port_channel.ipv6_addresses for l3_port_channel in vrf.l3_port_channels)
+        )

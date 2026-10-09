@@ -9,11 +9,11 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFactsProtocol
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
-from pyavd._utils import remove_cached_property_type
+from pyavd._utils.remove_cached_property_type import remove_cached_property_type
 from pyavd.j2filters import list_compress, natural_sort, range_expand
 
 if TYPE_CHECKING:
-    from . import EosDesignsFactsGeneratorProtocol
+    from .generator import EosDesignsFactsGeneratorProtocol
 
 
 class UplinksMixin(EosDesignsFactsProtocol, Protocol):
@@ -125,39 +125,43 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
         These facts are leveraged by templates for this device when rendering uplinks
         and by templates for peer devices when rendering downlinks
         """
-        if self.shared_utils.uplink_type == "port-channel":
-            get_uplink = self._get_port_channel_uplink
-        elif self.shared_utils.uplink_type == "p2p-vrfs":
-            if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
-                msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'p2p-vrfs' as 'uplink_type'."
-                raise AristaAvdError(msg)
-            get_uplink = self._get_p2p_vrfs_uplink
-        elif self.shared_utils.uplink_type == "lan":
-            if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
-                msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'lan' as 'uplink_type'."
-                raise AristaAvdError(msg)
-            if len(self.shared_utils.uplink_interfaces) > 1:
-                msg = f"'uplink_type: lan' only supports a single uplink interface. Got {self.shared_utils.uplink_interfaces}."
-                raise AristaAvdError(msg)
-                # TODO: Adjust error message when we add lan-port-channel support.
-                # uplink_type: lan' only supports a single uplink interface.
-                # Got {self._uplink_interfaces}. Consider 'uplink_type: lan-port-channel' if applicable.
-            get_uplink = self._get_l2_uplink
-        else:
-            # Uplink type is 'p2p'.
-            get_uplink = self._get_p2p_uplink
+        match self.shared_utils.uplink_type:
+            case "port-channel":
+                if self.inputs.avd_design_future.raise_for_underlay_router_with_uplink_type_port_channel and self.shared_utils.underlay_router is True:
+                    msg = "'underlay_router: true' is not supported with 'uplink_type: port-channel'."
+                    raise AristaAvdInvalidInputsError(msg)
+                get_uplink = self._get_port_channel_uplink
+            case "l2-ethernet":
+                if self.shared_utils.underlay_router is True:
+                    msg = "'underlay_router: true' is not supported with 'uplink_type: l2-ethernet'."
+                    raise AristaAvdInvalidInputsError(msg)
+                get_uplink = self._get_l2_uplink
+            case "p2p-vrfs":
+                if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
+                    msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'p2p-vrfs' as 'uplink_type'."
+                    raise AristaAvdError(msg)
+                get_uplink = self._get_p2p_vrfs_uplink
+            case "lan":
+                if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
+                    msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'lan' as 'uplink_type'."
+                    raise AristaAvdError(msg)
+                if len(self.shared_utils.uplink_interfaces) > 1:
+                    msg = f"'uplink_type: lan' only supports a single uplink interface. Got {self.shared_utils.uplink_interfaces}."
+                    raise AristaAvdError(msg)
+                    # TODO: Adjust error message when we add lan-port-channel support.
+                    # uplink_type: lan' only supports a single uplink interface.
+                    # Got {self._uplink_interfaces}. Consider 'uplink_type: lan-port-channel' if applicable.
+                get_uplink = self._get_l2_uplink
+            case _:
+                # Uplink type is 'p2p'.
+                get_uplink = self._get_p2p_uplink
 
         uplinks = EosDesignsFactsProtocol.Uplinks()
         uplink_switches = self.shared_utils.uplink_switches
         uplink_switch_interfaces = self.uplink_switch_interfaces
-        for uplink_index, uplink_interface in enumerate(self.shared_utils.uplink_interfaces):
-            if len(uplink_switches) <= uplink_index or len(uplink_switch_interfaces) <= uplink_index:
-                # Invalid length of input variables. Skipping
-                continue
-
-            uplink_switch = uplink_switches[uplink_index]
-            uplink_switch_interface = uplink_switch_interfaces[uplink_index]
-
+        for uplink_index, uplink_interface, uplink_switch, uplink_switch_interface in zip(
+            range(len(uplink_switches)), self.shared_utils.uplink_interfaces, uplink_switches, uplink_switch_interfaces, strict=True
+        ):
             uplink = get_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface)
             uplinks.append(uplink)
 
@@ -275,7 +279,11 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
         uplink_switch: str,
         uplink_switch_interface: str,
     ) -> EosDesignsFactsProtocol.UplinksItem:
-        """Return a single uplink dictionary for an L2 uplink. Reused for both uplink_type port-channel, lan and TODO: lan-port-channel."""
+        """
+        Return a single uplink dictionary for an L2 uplink.
+
+        Used for uplink_type port-channel, l2-ethernet, lan and TODO: lan-port-channel.
+        """
         uplink_switch_facts = self.get_peer_facts_generator(uplink_switch)
         uplink = EosDesignsFactsProtocol.UplinksItem(
             interface=uplink_interface,
@@ -297,7 +305,6 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
             elif self.shared_utils.ptp_enabled:
                 uplink.ptp.enable = True
 
-        # Remove vlans if upstream switch does not have them #}
         if self.inputs.enable_trunk_groups:
             uplink.trunk_groups.append_unique("UPLINK")
             if self.shared_utils.mlag is True and self.shared_utils.group:
@@ -305,12 +312,14 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
             else:
                 uplink.peer_trunk_groups.append_unique(self.shared_utils.hostname)
 
-        uplink_vlans = set(self._vlans)
-        uplink_vlans = uplink_vlans.intersection(uplink_switch_facts._vlans)
-
-        if self.shared_utils.configure_inband_mgmt or self.shared_utils.configure_inband_mgmt_ipv6:
-            # Always add inband_mgmt_vlan even if the uplink switch does not have this vlan defined
-            uplink_vlans.add(self.shared_utils.node_config.inband_mgmt_vlan)
+        if self.inputs.avd_design_future.consistent_uplink_vlans or self.shared_utils.uplink_type == "l2-ethernet":
+            uplink_vlans = self._available_vlans
+        else:
+            uplink_vlans = self._candidate_vlans
+            uplink_vlans = uplink_vlans.intersection(uplink_switch_facts._candidate_vlans)
+            if self.shared_utils.configure_inband_mgmt or self.shared_utils.configure_inband_mgmt_ipv6:
+                # Always add inband_mgmt_vlan even if the uplink switch does not have this vlan defined
+                uplink_vlans = uplink_vlans.union((self.shared_utils.node_config.inband_mgmt_vlan,))
 
         uplink.vlans = list_compress(list(uplink_vlans)) if uplink_vlans else "none"
 
@@ -402,10 +411,8 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
 
         These are used to generate the "avd_topology_peers" fact covering downlinks for all devices.
         """
-        # Since uplinks logic silently skips extra entries in uplink vars, we only need to parse shortest list.
-        min_length = min(len(self.uplink_switch_interfaces), len(self.shared_utils.uplink_interfaces), len(self.shared_utils.uplink_switches))
         # Using set to only get unique uplink switches
-        unique_uplink_switches = set(self.shared_utils.uplink_switches[:min_length])
+        unique_uplink_switches = set(self.shared_utils.uplink_switches)
         return EosDesignsFactsProtocol.UplinkPeers(natural_sort(unique_uplink_switches))
 
     @cached_property
@@ -438,15 +445,23 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
     @remove_cached_property_type
     @cached_property
     def uplink_switch_interfaces(self: EosDesignsFactsGeneratorProtocol) -> EosDesignsFactsProtocol.UplinkSwitchInterfaces:
-        if _uplink_switch_interfaces := self.shared_utils.node_config.uplink_switch_interfaces or self.shared_utils.cv_topology_config.uplink_switch_interfaces:
-            return EosDesignsFactsProtocol.UplinkSwitchInterfaces(range_expand(_uplink_switch_interfaces))
+        if _uplink_switch_interfaces := range_expand(
+            self.shared_utils.node_config.uplink_switch_interfaces or self.shared_utils.cv_topology_config.uplink_switch_interfaces
+        ):
+            if len(self.shared_utils.uplink_switches) != len(_uplink_switch_interfaces):
+                msg = (
+                    f"Lengths of 'uplink_switches' {len(self.shared_utils.uplink_switches)} and 'uplink_switch_interfaces' {len(_uplink_switch_interfaces)} do "
+                    "not match."
+                )
+                raise AristaAvdInvalidInputsError(msg, host=self.shared_utils.hostname)
+            return EosDesignsFactsProtocol.UplinkSwitchInterfaces(_uplink_switch_interfaces)
 
         if not self.shared_utils.uplink_switches:
             return EosDesignsFactsProtocol.UplinkSwitchInterfaces()
 
         if self.id is None:
-            msg = f"'id' is not set on '{self.shared_utils.hostname}'."
-            raise AristaAvdInvalidInputsError(msg)
+            msg = "'id' is not set."
+            raise AristaAvdInvalidInputsError(msg, host=self.shared_utils.hostname)
 
         uplink_switch_interfaces = EosDesignsFactsProtocol.UplinkSwitchInterfaces()
         uplink_switch_counter = {}
@@ -466,10 +481,10 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
                 uplink_switch_interfaces.append(uplink_switch_facts._default_downlink_interfaces[downlink_index])
             elif uplink_switch_downlink_interfaces_length == 0:
                 msg = (
-                    f"'uplink_switch_interfaces' is not set on '{self.shared_utils.hostname}' and 'uplink_switch' '{uplink_switch}' "
-                    f"does not have any 'downlink_interfaces' set under 'default_interfaces'. At least one or the other must be defined."
+                    f"Either 'downlink_interfaces' must be set under 'default_interfaces' for uplink_switch' '{uplink_switch}' "
+                    "or 'uplink_switch_interfaces' must be set."
                 )
-                raise AristaAvdError(msg)
+                raise AristaAvdError(msg, host=self.shared_utils.hostname)
             else:
                 msg = (
                     f"'uplink_switch_interfaces' is not set on '{self.shared_utils.hostname}' and 'uplink_switch' '{uplink_switch}' "
@@ -477,6 +492,6 @@ class UplinksMixin(EosDesignsFactsProtocol, Protocol):
                     f"The uplink switch requires at least {downlink_index + 1} downlink_interfaces, but "
                     f"only {uplink_switch_downlink_interfaces_length} are configured."
                 )
-                raise AristaAvdError(msg)
+                raise AristaAvdError(msg, host=uplink_switch)
 
         return uplink_switch_interfaces

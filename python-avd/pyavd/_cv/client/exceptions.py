@@ -20,6 +20,10 @@ class CVResourceInvalidState(CVClientException):
     """Invalid state for CloudVision Resource."""
 
 
+class CVWorkspaceFailed(CVClientException):
+    """CloudVision Workspace failed."""
+
+
 class CVWorkspaceBuildTimeout(CVClientException):
     """Build of CloudVision Workspace timed out."""
 
@@ -63,3 +67,52 @@ class CVGRPCStatusUnavailable(CVClientException):
 
 class CVManifestError(CVClientException):
     """Error while creating a CVManifest instance from a user AvdManifest."""
+
+
+class CVClientBulkAPIError(CVClientException):
+    """Bulk API call failed due to server-side error(s). See logging for details."""
+
+    cv_client_method_name: str
+    """Name of the CVClient method that failed."""
+    number_of_errors: int
+    """Number of returned errors."""
+
+    def __init__(self, cv_client_method_name: str, number_of_errors: int) -> None:
+        self.cv_client_method_name = cv_client_method_name
+        self.number_of_errors = number_of_errors
+        msg = (
+            f"{number_of_errors} server-side error(s) was returned from the '{self.cv_client_method_name}' bulk API call. "
+            "Please check logs for the failed items and error messages."
+        )
+        super().__init__(msg)
+
+
+class CVGRPCError(CVClientException):
+    """GRPC call failed."""
+
+
+class CVClientInvalidServerName(CVClientException):
+    """CloudVision server FQDN is invalid."""
+
+
+class CVWorkspaceSynchronizationFailed(CVClientException):
+    """Synchronization/rebase of CloudVision Workspace failed."""
+
+
+class CVWorkspaceSynchronizationAttemptsExhausted(CVClientException):
+    """Maximum number of Workspace synchronization attempts have been made but Workspace synchronization is still required."""
+
+    max_sync_retries: int
+    """Number of attempted Workspace synchronization attempts."""
+    workspace_name: str
+    workspace_id: str
+
+    def __init__(self, max_sync_retries: int, workspace_name: str, workspace_id: str) -> None:
+        self.max_sync_retries = max_sync_retries
+        self.workspace_name = workspace_name
+        self.workspace_id = workspace_id
+        msg = (
+            f"Maximum number of Workspace synchronization attempts ({self.max_sync_retries}) have been made for Workspace {self.workspace_name} "
+            f"(id: {self.workspace_id}) but Workspace synchronization is still required."
+        )
+        super().__init__(msg)

@@ -11,6 +11,7 @@ maintenance:
       shutdown:
         max_delay: 300
   bgp_profiles:
+    - name: bgp2
     - name: BP1
       initiator:
         route_map_inout: RM-MAINTENANCE
@@ -20,6 +21,21 @@ maintenance:
     - name: BP3
       initiator:
         route_map_inout: RM-MAINTENANCE3
+    - name: BP4
+      initiator:
+        route_map_in: RM-MAINTENANCE-IN
+    - name: BP5
+      initiator:
+        route_map_out: RM-MAINTENANCE-OUT
+    - name: BP6
+      initiator:
+        route_map_in: RM-MAINTENANCE-IN
+        route_map_out: RM-MAINTENANCE-OUT
+    - name: BP7
+      initiator:
+        route_map_inout: RM-MAINTENANCE-INOUT
+        route_map_in: RM-MAINTENANCE-IN
+        route_map_out: RM-MAINTENANCE-OUT
   unit_profiles:
     - name: UP1
       on_boot:
@@ -32,9 +48,14 @@ maintenance:
       profile: UP1
       groups:
         bgp_groups:
+          - bgp_group
           - BGP_GROUP_1
           - BGP_GROUP_2
         interface_groups:
+          - inrerface_group
           - INTERFACE_GROUP_1
     # Adding a unit with no profile for issue/2488
     - name: System
+      quiesce: false
+    - name: UNIT2
+      quiesce: true

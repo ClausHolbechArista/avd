@@ -8,18 +8,41 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any, ClassVar, final
 
-from ansible.errors import AnsibleActionFail
 from ansible.plugins.action import ActionBase
 
-from .log_config import AvdLoggingConfig, LoggerState, get_avd_log_level
+from ansible_collections.arista.avd.plugins.plugin_utils.utils.raise_action_fail import raise_action_fail
+
+from .log_config import AVDLoggingConfig, LoggerState, get_avd_log_level
 from .log_handlers import AnsibleDisplayHandler, ContextFilter, SaveToResultHandler
 
 
-class AvdActionPlugin(ActionBase):
+def _handle_captured_warnings(captured_warnings: list[warnings.WarningMessage], result: dict[str, Any]) -> None:
+    """Add captured Python warnings to the appropriate lists in the Ansible result."""
+    if not captured_warnings:
+        return
+
+    result.setdefault("deprecations", [])
+    result.setdefault("warnings", [])
+    for warning in captured_warnings:
+        message = str(warning.message)
+        if not issubclass(warning.category, DeprecationWarning):
+            # Catch-all for standard Python warnings from any library
+            result["warnings"].append(message)
+            continue
+
+        deprecation: dict[str, Any] = {"msg": message}
+        if (date := getattr(warning.message, "date", None)) is not None:
+            deprecation.update(date=date, collection_name="arista.avd")
+        elif (version := getattr(warning.message, "version", None)) is not None:
+            deprecation.update(version=version, collection_name="arista.avd")
+        result["deprecations"].append(deprecation)
+
+
+class AVDActionPlugin(ActionBase):
     """Base class for AVD Ansible action plugins to provide common functionality."""
 
     _primary_logger_name: ClassVar[str] = "ansible_collections.arista.avd"
-    _logging_config: ClassVar[AvdLoggingConfig] = AvdLoggingConfig()
+    _logging_config: ClassVar[AVDLoggingConfig] = AVDLoggingConfig()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the action plugin."""
@@ -89,27 +112,14 @@ class AvdActionPlugin(ActionBase):
                 # Run the plugin
                 self.main(task_vars)
 
-            # Process captured Python warnings and update the result object
-            if captured_warnings:
-                self.result.setdefault("deprecations", [])
-                self.result.setdefault("warnings", [])
-                for w in captured_warnings:
-                    msg = str(w.message)
-                    if issubclass(w.category, DeprecationWarning):
-                        # AvdDeprecationWarning's are added from AvdSchemaTools with more context
-                        # This is a catch-all for other deprecations
-                        self.result["deprecations"].append({"msg": msg})
-                    else:
-                        # Catch-all for standard Python warnings from any library
-                        self.result["warnings"].append(msg)
+            _handle_captured_warnings(captured_warnings, self.result)
 
         except Exception as exc:
             # Recast errors as AnsibleActionFail
-            # Ignoring Pyright since 'ansible_name' is not typed in Ansible world
-            msg = f"Error during plugin '{self.ansible_name}' execution: '{exc}'"  # pyright: ignore[reportAttributeAccessIssue]
-            raise AnsibleActionFail(msg) from exc
-        else:
-            return self.result
+            msg = f"Error during plugin '{self.ansible_name}' execution: {exc}"
+            raise_action_fail(msg, exc)
+
+        return self.result
 
     @contextmanager
     def _logging_context(

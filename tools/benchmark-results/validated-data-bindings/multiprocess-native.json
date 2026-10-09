@@ -1,0 +1,46 @@
+{
+  "implementation": "native",
+  "workers": 4,
+  "retained_handles": [
+    "20000",
+    "20000",
+    "20000",
+    "20000"
+  ],
+  "processes": [
+    {
+      "pid": 58,
+      "rss_kb": 25376,
+      "pss_kb": 13653,
+      "private_clean_kb": 0,
+      "private_dirty_kb": 11028
+    },
+    {
+      "pid": 59,
+      "rss_kb": 25128,
+      "pss_kb": 13594,
+      "private_clean_kb": 0,
+      "private_dirty_kb": 11036
+    },
+    {
+      "pid": 60,
+      "rss_kb": 25472,
+      "pss_kb": 13726,
+      "private_clean_kb": 72,
+      "private_dirty_kb": 11032
+    },
+    {
+      "pid": 61,
+      "rss_kb": 25352,
+      "pss_kb": 13650,
+      "private_clean_kb": 0,
+      "private_dirty_kb": 11036
+    }
+  ],
+  "aggregate_kb": {
+    "rss_kb": 101328,
+    "pss_kb": 54623,
+    "private_clean_kb": 72,
+    "private_dirty_kb": 44132
+  }
+}
