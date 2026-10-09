@@ -4,29 +4,16 @@
 # ruff: noqa: PYI021
 
 from pathlib import Path
-from typing import Any
 
-class _ValueHandle: ...
+from . import _validated_data as _validated_data
 
 class OpaqueData:
     """Immutable relaxed-validation payload without Python field accessors."""
 
-    def __init__(self, handle: _ValueHandle) -> None: ...
     def __bool__(self) -> bool:
         """Return whether the payload contains entries without materializing it."""
     def to_json(self) -> str:
         """Explicitly materialize JSON for facts serialization or a legacy merger."""
-
-class _DictView:
-    def __init__(self, handle: _ValueHandle) -> None: ...
-    def _get_field(self, slot: int) -> Any: ...
-
-class _ListView:
-    def __init__(self, handle: _ValueHandle) -> None: ...
-    def __len__(self) -> int: ...
-    def _get_item(self, index: int) -> Any: ...
-    def _get_by_primary_key(self, components: tuple[bool | int | str, ...]) -> Any: ...
-    def _contains_primary_key(self, components: tuple[bool | int | str, ...]) -> bool: ...
 
 class PublicationResult:
     """Diagnostics and optional path from validated-data archive publication."""
@@ -49,5 +36,3 @@ class PublicationResult:
 
 def archive_avd_design(input_json: str, destination: Path, schema_archive: Path) -> PublicationResult:
     """Validate one host's AVD Design inputs and publish an archive when valid."""
-
-def _open_avd_design_handle(archive: Path, schema_archive: Path) -> _ValueHandle: ...

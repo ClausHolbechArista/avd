@@ -16,3 +16,4 @@ serde = "1.0.229"
 serde_json = "1.0.150"
 validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "d67e138", default-features = false, features = ["archive", "regex-perf"] }
 validated-data = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "d67e138" }
+validated-data-py = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "d67e138" }
