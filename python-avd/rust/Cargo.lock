@@ -34,8 +34,8 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
 name = "avdschema"
-version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
 dependencies = [
  "blake3",
  "derive_more",
@@ -676,6 +676,8 @@ dependencies = [
  "pyo3",
  "serde",
  "serde_json",
+ "validated-data",
+ "validated-data-py",
  "validation",
 ]
 
@@ -1108,18 +1110,48 @@ dependencies = [
 ]
 
 [[package]]
+name = "validated-data"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
+dependencies = [
+ "derive_more",
+ "mmap-guard",
+ "rkyv",
+ "self_cell",
+ "serde_json",
+ "validated-data-macros",
+]
+
+[[package]]
+name = "validated-data-macros"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "validated-data-py"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
+dependencies = [
+ "pyo3",
+ "validated-data",
+]
+
+[[package]]
 name = "validation"
-version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
 dependencies = [
  "avdschema",
  "derive_more",
  "log",
- "mmap-guard",
- "rkyv",
- "self_cell",
  "serde",
  "serde_json",
+ "validated-data",
  "yaml-parser",
 ]
 
@@ -1238,8 +1270,8 @@ dependencies = [
 
 [[package]]
 name = "yaml-parser"
-version = "0.0.10"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=d67e138#d67e1384dac279bf048bd9ca712cfb6de08881af"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=7f6745d4261d88d890362c6f8e38b3beb5e2decf#7f6745d4261d88d890362c6f8e38b3beb5e2decf"
 dependencies = [
  "avdschema",
  "derive_more",
