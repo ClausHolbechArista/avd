@@ -1,5 +1,10 @@
 router_bgp:
   as: 65101
+  route_distinguisher:
+    assignment_auto:
+      range:
+        start: 25
+        end: 29
   bgp:
     default:
       ipv4_unicast: false
@@ -10,6 +15,13 @@ router_bgp:
     additional_paths:
       receive: false
       send: disabled
+    labeled_unicast:
+      rib:
+        ip:
+          enabled: true
+          route_map: RM-test2
+        tunnel:
+          enabled: true
   neighbor_default:
     send_community: large
   graceful_restart:
@@ -69,6 +81,8 @@ router_bgp:
       additional_paths:
         install_ecmp_primary: true
         send: disabled
+    next_hop:
+      resolution_disabled: false
     redistribute:
       bgp:
         enabled: true
@@ -112,6 +126,8 @@ router_bgp:
         install: true
         send: ecmp
         send_limit: 8
+    next_hop:
+      resolution_disabled: false
     redistribute:
       attached_host:
         enabled: true
@@ -149,6 +165,10 @@ router_bgp:
           nssa_type: 1
           include_leaked: true
           route_map: RM-REDISTRIBUTE-OSPF-NSSA-EXTERNAL
+  address_family_vpn_ipv6:
+    domain_identifier: "65000:0"
+    next_hop:
+      resolution_disabled: false
   address_family_ipv4_multicast:
     redistribute:
       ospf:
@@ -183,3 +203,16 @@ router_bgp:
     bgp:
       additional_paths:
         send: disabled
+  vrfs:
+    - name: VRF01
+      rd_evpn_domain:
+        domain: all
+        rd: "10.50.64.15:30003"
+    - name: VRF02
+      rd_evpn_domain:
+        domain: remote
+        rd: "10.50.64.15:30006"
+    - name: VRF03
+      redistribute:
+        connected:
+          enabled: true

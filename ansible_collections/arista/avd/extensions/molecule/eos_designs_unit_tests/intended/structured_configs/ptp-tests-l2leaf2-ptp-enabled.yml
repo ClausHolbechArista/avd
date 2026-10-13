@@ -46,6 +46,8 @@ port_channel_interfaces:
     sync_message:
       interval: -3
     transport: ipv4
+    management:
+      drop: true
   switchport:
     enabled: true
     mode: trunk
@@ -89,7 +91,8 @@ vlans:
 - id: 11
   name: VLAN11
   metadata:
-    tenant: PTP
+    tenants:
+    - PTP
 vrfs:
 - name: MGMT
   ip_routing: false
