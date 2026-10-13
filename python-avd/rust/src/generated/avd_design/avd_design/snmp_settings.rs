@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignSnmpSettingsVrfsList", item_name = "AVDDesignSnmpSettingsVrfsListIndexedItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsVrfsItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub enable: ::validated_data::Field<bool>,
@@ -17,12 +17,12 @@ pub mod vrfs {
     }
 }
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignSnmpSettingsUsersList"))]
 pub struct Users<'a, Mode> (::validated_data::Field<users::Item<'a, Mode>>);
 
 pub mod users {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsUsersItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub group: ::validated_data::Field<&'a str>,
@@ -35,12 +35,12 @@ pub mod users {
     }
 }
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignSnmpSettingsHostsList"))]
 pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
 pub mod hosts {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsHostsItems"))]
     pub struct Item<'a, Mode> {
         pub host: ::validated_data::Field<&'a str>,
         pub vrf: ::validated_data::Field<&'a str>,
@@ -51,12 +51,12 @@ pub mod hosts {
 
     pub mod item {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "AVDDesignSnmpSettingsHostsItemsUsersList"))]
         pub struct Users<'a, Mode> (::validated_data::Field<users::Item<'a, Mode>>);
 
         pub mod users {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsHostsItemsUsersItems"))]
             pub struct Item<'a, Mode> {
                 pub username: ::validated_data::Field<&'a str>,
                 pub authentication_level: ::validated_data::Field<&'a str>,
@@ -65,12 +65,12 @@ pub mod hosts {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignSnmpSettingsCommunitiesList", item_name = "AVDDesignSnmpSettingsCommunitiesListIndexedItem"))]
 pub struct Communities<'a, Mode> (::validated_data::Field<communities::Item<'a, Mode>>);
 
 pub mod communities {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsCommunitiesItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub access: ::validated_data::Field<&'a str>,
@@ -82,24 +82,24 @@ pub mod communities {
 
     pub mod item {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsCommunitiesItemsAccessListIpv4"))]
         pub struct AccessListIpv4<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsCommunitiesItemsAccessListIpv6"))]
         pub struct AccessListIpv6<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
         }
     }
 }
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignSnmpSettingsViewsList"))]
 pub struct Views<'a, Mode> (::validated_data::Field<views::Item<'a, Mode>>);
 
 pub mod views {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsViewsItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub mib_family_name: ::validated_data::Field<&'a str>,
@@ -107,12 +107,12 @@ pub mod views {
     }
 }
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignSnmpSettingsGroupsList"))]
 pub struct Groups<'a, Mode> (::validated_data::Field<groups::Item<'a, Mode>>);
 
 pub mod groups {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignSnmpSettingsGroupsItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub version: ::validated_data::Field<&'a str>,

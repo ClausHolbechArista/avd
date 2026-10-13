@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDefaultInterfacesItems"))]
 pub struct Item<'a, Mode> {
     pub types: ::validated_data::RequiredValue<item::Types<'a, Mode>, Mode>,
     pub platforms: ::validated_data::RequiredValue<item::Platforms<'a, Mode>, Mode>,
@@ -15,18 +15,18 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesItemsTypesList"))]
     pub struct Types<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesItemsPlatformsList"))]
     pub struct Platforms<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesItemsUplinkInterfacesList"))]
     pub struct UplinkInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesItemsMlagInterfacesList"))]
     pub struct MlagInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesItemsDownlinkInterfacesList"))]
     pub struct DownlinkInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
 }

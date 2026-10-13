@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignInternalVlanOrderRange"))]
 pub struct Range<'a, Mode> {
     pub beginning: ::validated_data::RequiredValue<i64, Mode>,
     pub ending: ::validated_data::RequiredValue<i64, Mode>,

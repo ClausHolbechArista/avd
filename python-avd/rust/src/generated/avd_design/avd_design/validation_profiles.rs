@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignValidationProfilesItems"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub parent_profile: ::validated_data::Field<&'a str>,
@@ -15,7 +15,7 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignValidationProfilesItemsHardware"))]
     pub struct Hardware<'a, Mode> {
         pub min_power_supplies: ::validated_data::Field<i64>,
         pub min_fans: ::validated_data::Field<i64>,
@@ -28,11 +28,11 @@ pub mod item {
 
     pub mod hardware {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "AVDDesignValidationProfilesItemsHardwareTransceiverManufacturersList"))]
         pub struct TransceiverManufacturers<'a, Mode> (::validated_data::Field<&'a str>);
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignValidationProfilesItemsLogging"))]
     pub struct Logging<'a, Mode> {
         pub validate_no_errors_period: ::validated_data::Field<i64>,
     }

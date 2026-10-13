@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItems"))]
 pub struct Item<'a, Mode> {
     pub profile: ::validated_data::Field<&'a str>,
     pub name: ::validated_data::Field<&'a str>,
@@ -41,10 +41,10 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignL3InterfaceProfilesItemsIpv6AddressesList"))]
     pub struct Ipv6Addresses<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsBgp"))]
     pub struct Bgp<'a, Mode> {
         pub peer_as: ::validated_data::RequiredValue<&'a str, Mode>,
         pub ipv4_prefix_list_in: ::validated_data::Field<&'a str>,
@@ -53,30 +53,30 @@ pub mod item {
         pub ipv6_prefix_list_out: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignL3InterfaceProfilesItemsStaticRoutesList"))]
     pub struct StaticRoutes<'a, Mode> (::validated_data::Field<static_routes::Item<'a, Mode>>);
 
     pub mod static_routes {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsStaticRoutesItems"))]
         pub struct Item<'a, Mode> {
             pub prefix: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsCvPathfinderInternetExit"))]
     pub struct CvPathfinderInternetExit<'a, Mode> {
         pub policies: ::validated_data::Field<cv_pathfinder_internet_exit::Policies<'a, Mode>>,
     }
 
     pub mod cv_pathfinder_internet_exit {
 
-        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignL3InterfaceProfilesItemsCvPathfinderInternetExitPoliciesList", item_name = "AVDDesignL3InterfaceProfilesItemsCvPathfinderInternetExitPoliciesListIndexedItem"))]
         pub struct Policies<'a, Mode> (::validated_data::Field<policies::Item<'a, Mode>>);
 
         pub mod policies {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsCvPathfinderInternetExitPoliciesItems"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::Field<&'a str>,
                 pub tunnel_interface_numbers: ::validated_data::Field<&'a str>,
@@ -84,7 +84,7 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsRxQueue"))]
     pub struct RxQueue<'a, Mode> {
         pub count: ::validated_data::Field<i64>,
         pub workers: ::validated_data::Field<rx_queue::Workers<'a, Mode>>,
@@ -93,11 +93,11 @@ pub mod item {
 
     pub mod rx_queue {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "AVDDesignL3InterfaceProfilesItemsRxQueueWorkersList"))]
         pub struct Workers<'a, Mode> (::validated_data::Field<&'a str>);
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignL3InterfaceProfilesItemsFlowTracking"))]
     pub struct FlowTracking<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub name: ::validated_data::Field<&'a str>,

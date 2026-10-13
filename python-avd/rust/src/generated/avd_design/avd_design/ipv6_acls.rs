@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItems"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub entries: ::validated_data::RequiredValue<item::Entries<'a, Mode>, Mode>,
@@ -12,12 +12,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesList"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItemsEntriesItems"))]
         pub struct Item<'a, Mode> {
             pub source: ::validated_data::Field<&'a str>,
             pub destination: ::validated_data::Field<&'a str>,
@@ -48,23 +48,23 @@ pub mod item {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsSourcePortsList"))]
             pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsDestinationPortsList"))]
             pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsTcpFlagsList"))]
             pub struct TcpFlags<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(sequence))]
+    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "AVDDesignIpv6AclsItemsSequenceNumbersList", item_name = "AVDDesignIpv6AclsItemsSequenceNumbersListIndexedItem"))]
     pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItemsSequenceNumbersItems"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::Field<i64>,
             pub action: ::validated_data::RequiredValue<&'a str, Mode>,

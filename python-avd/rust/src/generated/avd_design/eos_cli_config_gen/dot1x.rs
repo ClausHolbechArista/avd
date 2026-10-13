@@ -118,7 +118,7 @@ pub mod aaa {
             }
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenDot1xAaaUnresponsivePhoneAction"))]
         pub struct PhoneAction<'a, Mode> {
             pub apply_cached_results: ::validated_data::Field<bool>,
             pub cached_results_timeout: ::validated_data::Field<phone_action::CachedResultsTimeout<'a, Mode>>,
@@ -128,7 +128,7 @@ pub mod aaa {
 
         pub mod phone_action {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "EosCliConfigGenDot1xAaaUnresponsivePhoneActionCachedResultsTimeout"))]
             pub struct CachedResultsTimeout<'a, Mode> {
                 pub time_duration: ::validated_data::RequiredValue<i64, Mode>,
                 pub time_duration_unit: ::validated_data::RequiredValue<&'a str, Mode>,

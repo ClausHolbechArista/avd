@@ -2,18 +2,18 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsAuthentication"))]
 pub struct Authentication<'a, Mode> {
     pub radius_groups: ::validated_data::Field<authentication::RadiusGroups<'a, Mode>>,
 }
 
 pub mod authentication {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDot1xSettingsAuthenticationRadiusGroupsList"))]
     pub struct RadiusGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsAccounting"))]
 pub struct Accounting<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub mode: ::validated_data::Field<&'a str>,
@@ -24,11 +24,11 @@ pub struct Accounting<'a, Mode> {
 
 pub mod accounting {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDot1xSettingsAccountingRadiusGroupsList"))]
     pub struct RadiusGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDynamicAuthorization"))]
 pub struct DynamicAuthorization<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub additional_groups: ::validated_data::Field<dynamic_authorization::AdditionalGroups<'a, Mode>>,
@@ -36,11 +36,11 @@ pub struct DynamicAuthorization<'a, Mode> {
 
 pub mod dynamic_authorization {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignDot1xSettingsDynamicAuthorizationAdditionalGroupsList"))]
     pub struct AdditionalGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsMacBasedAuthentication"))]
 pub struct MacBasedAuthentication<'a, Mode> {
     pub username_format: ::validated_data::Field<mac_based_authentication::UsernameFormat<'a, Mode>>,
     pub delay: ::validated_data::Field<i64>,
@@ -49,20 +49,20 @@ pub struct MacBasedAuthentication<'a, Mode> {
 
 pub mod mac_based_authentication {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsMacBasedAuthenticationUsernameFormat"))]
     pub struct UsernameFormat<'a, Mode> {
         pub delimiter: ::validated_data::RequiredValue<&'a str, Mode>,
         pub letter_case: ::validated_data::RequiredValue<&'a str, Mode>,
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsRadiusAvPairs"))]
 pub struct RadiusAvPairs<'a, Mode> {
     pub service_type: ::validated_data::Field<bool>,
     pub framed_mtu: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfiling"))]
 pub struct DeviceProfiling<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub dhcp: ::validated_data::Field<device_profiling::Dhcp<'a, Mode>>,
@@ -71,7 +71,7 @@ pub struct DeviceProfiling<'a, Mode> {
 
 pub mod device_profiling {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingDhcp"))]
     pub struct Dhcp<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub hostname: ::validated_data::Field<dhcp::Hostname<'a, Mode>>,
@@ -81,26 +81,26 @@ pub mod device_profiling {
 
     pub mod dhcp {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingDhcpHostname"))]
         pub struct Hostname<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub auth_only: ::validated_data::Field<bool>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingDhcpParameterRequestList"))]
         pub struct ParameterRequestList<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub auth_only: ::validated_data::Field<bool>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingDhcpVendorClassId"))]
         pub struct VendorClassId<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub auth_only: ::validated_data::Field<bool>,
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingLldp"))]
     pub struct Lldp<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub system_name: ::validated_data::Field<lldp::SystemName<'a, Mode>>,
@@ -109,13 +109,13 @@ pub mod device_profiling {
 
     pub mod lldp {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingLldpSystemName"))]
         pub struct SystemName<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub auth_only: ::validated_data::Field<bool>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsDeviceProfilingLldpSystemDescription"))]
         pub struct SystemDescription<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub auth_only: ::validated_data::Field<bool>,
@@ -123,7 +123,7 @@ pub mod device_profiling {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettingsWebAuthentication"))]
 pub struct WebAuthentication<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub ipv4_acl: ::validated_data::Field<&'a str>,

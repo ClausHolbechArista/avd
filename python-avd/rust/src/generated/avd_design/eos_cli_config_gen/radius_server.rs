@@ -31,7 +31,7 @@ pub mod servers {
 
     pub mod item {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenRadiusServerServersItemsTls"))]
         pub struct Tls<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub ssl_profile: ::validated_data::Field<&'a str>,

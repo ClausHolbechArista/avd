@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItems"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub actions: ::validated_data::Field<item::Actions<'a, Mode>>,
@@ -17,27 +17,27 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItemsActions"))]
     pub struct Actions<'a, Mode> {
         pub bash_command: ::validated_data::Field<&'a str>,
         pub log: ::validated_data::Field<bool>,
         pub increment_device_health_metric: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItemsTriggerOnCounters"))]
     pub struct TriggerOnCounters<'a, Mode> {
         pub condition: ::validated_data::Field<&'a str>,
         pub granularity_per_source: ::validated_data::Field<bool>,
         pub poll_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItemsTriggerOnLogging"))]
     pub struct TriggerOnLogging<'a, Mode> {
         pub poll_interval: ::validated_data::Field<i64>,
         pub regex: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItemsTriggerOnIntf"))]
     pub struct TriggerOnIntf<'a, Mode> {
         pub interface: ::validated_data::RequiredValue<&'a str, Mode>,
         pub ip: ::validated_data::Field<bool>,
@@ -45,7 +45,7 @@ pub mod item {
         pub operstatus: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEventHandlersItemsTriggerOnMaintenance"))]
     pub struct TriggerOnMaintenance<'a, Mode> {
         pub operation: ::validated_data::RequiredValue<&'a str, Mode>,
         pub bgp_peer: ::validated_data::Field<&'a str>,
