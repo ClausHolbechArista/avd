@@ -2,14 +2,14 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsEnablePassword"))]
 pub struct EnablePassword<'a, Mode> {
     pub password: ::validated_data::Field<&'a str>,
     pub cleartext_password: ::validated_data::Field<&'a str>,
     pub password_type: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsTacacs"))]
 pub struct Tacacs<'a, Mode> {
     pub servers: ::validated_data::Field<tacacs::Servers<'a, Mode>>,
     pub vrfs: ::validated_data::Field<tacacs::Vrfs<'a, Mode>>,
@@ -18,12 +18,12 @@ pub struct Tacacs<'a, Mode> {
 
 pub mod tacacs {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignAaaSettingsTacacsServersList"))]
     pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsTacacsServersItems"))]
         pub struct Item<'a, Mode> {
             pub host: ::validated_data::RequiredValue<&'a str, Mode>,
             pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
@@ -35,30 +35,30 @@ pub mod tacacs {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignAaaSettingsTacacsServersItemsGroupsList"))]
             pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignAaaSettingsTacacsVrfsList", item_name = "AVDDesignAaaSettingsTacacsVrfsListIndexedItem"))]
     pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsTacacsVrfsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub source_interface: ::validated_data::Field<&'a str>,
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsTacacsPolicy"))]
     pub struct Policy<'a, Mode> {
         pub ignore_unknown_mandatory_attribute: ::validated_data::Field<bool>,
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsRadius"))]
 pub struct Radius<'a, Mode> {
     pub servers: ::validated_data::Field<radius::Servers<'a, Mode>>,
     pub vrfs: ::validated_data::Field<radius::Vrfs<'a, Mode>>,
@@ -66,12 +66,12 @@ pub struct Radius<'a, Mode> {
 
 pub mod radius {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignAaaSettingsRadiusServersList"))]
     pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsRadiusServersItems"))]
         pub struct Item<'a, Mode> {
             pub host: ::validated_data::RequiredValue<&'a str, Mode>,
             pub groups: ::validated_data::Field<item::Groups<'a, Mode>>,
@@ -85,17 +85,17 @@ pub mod radius {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignAaaSettingsRadiusServersItemsGroupsList"))]
             pub struct Groups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignAaaSettingsRadiusVrfsList", item_name = "AVDDesignAaaSettingsRadiusVrfsListIndexedItem"))]
     pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
     pub mod vrfs {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsRadiusVrfsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub source_interface: ::validated_data::Field<&'a str>,
@@ -103,7 +103,7 @@ pub mod radius {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsAuthentication"))]
 pub struct Authentication<'a, Mode> {
     pub login: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authentication::Login<'a, Mode>>,
     pub enable: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authentication::Enable<'a, Mode>>,
@@ -113,7 +113,7 @@ pub struct Authentication<'a, Mode> {
 pub mod authentication {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsAuthorization"))]
 pub struct Authorization<'a, Mode> {
     pub policy: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authorization::Policy<'a, Mode>>,
     pub exec: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_authorization::Exec<'a, Mode>>,
@@ -125,7 +125,7 @@ pub struct Authorization<'a, Mode> {
 pub mod authorization {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsAccounting"))]
 pub struct Accounting<'a, Mode> {
     pub exec: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_accounting::Exec<'a, Mode>>,
     pub system: ::validated_data::Field<super::super::eos_cli_config_gen::aaa_accounting::System<'a, Mode>>,
@@ -135,18 +135,18 @@ pub struct Accounting<'a, Mode> {
 pub mod accounting {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettingsRootLogin"))]
 pub struct RootLogin<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub sha512_password: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignAaaSettingsLocalUsersList", item_name = "AVDDesignAaaSettingsLocalUsersListIndexedItem"))]
 pub struct LocalUsers<'a, Mode> (::validated_data::Field<local_users::Item<'a, Mode>>);
 
 pub mod local_users {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignAaaSettingsLocalUsersItems"))]
     pub struct Item<'a, Mode> {
         pub sha512_password: ::validated_data::Field<&'a str>,
         pub cleartext_password: ::validated_data::Field<&'a str>,

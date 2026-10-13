@@ -152,7 +152,7 @@ def build_schema_classes() -> None:
 
 
 def build_validated_data_models() -> None:
-    """Generate AVD-owned Rust views and matching Python declarations."""
+    """Generate AVD-owned Rust views with native bindings and matching Python typing stubs."""
     from pyavd_utils_gen.validated_data_generation import generate_validated_data_models  # noqa: PLC0415
 
     LOGGER.info("Generating validated-data Rust views and Python declarations")
@@ -166,11 +166,10 @@ def build_validated_data_models() -> None:
         "AVDDesign",
         reused_schemas={"eos_cli_config_gen": ("EosCliConfigGen", "EosCliConfigGen")},
     )
-    for generated_file in (VALIDATED_DATA_PYI_FILE,):
-        LOGGER.info("Running 'ruff' for generated validated-data file: %s", generated_file)
-        subprocess.run(["ruff", "format", str(generated_file)], check=True)  # noqa: S603, S607
-        subprocess.run(["ruff", "check", "--fix", str(generated_file)], check=True)  # noqa: S603, S607
-        subprocess.run(["ruff", "format", str(generated_file)], check=True)  # noqa: S603, S607
+    LOGGER.info("Running 'ruff' for generated validated-data typing stub: %s", VALIDATED_DATA_PYI_FILE)
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "check", "--fix", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
 
 
 def build_schemas() -> None:

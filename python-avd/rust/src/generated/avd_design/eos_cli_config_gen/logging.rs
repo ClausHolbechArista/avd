@@ -2,18 +2,18 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenLoggingBuffered"))]
 pub struct Buffered<'a, Mode> {
     pub size: ::validated_data::Field<i64>,
     pub level: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenLoggingSynchronous"))]
 pub struct Synchronous<'a, Mode> {
     pub level: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenLoggingFormat"))]
 pub struct Format<'a, Mode> {
     pub timestamp: ::validated_data::Field<&'a str>,
     pub hostname: ::validated_data::Field<&'a str>,
@@ -58,7 +58,7 @@ pub mod vrfs {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenLoggingPolicy"))]
 pub struct Policy<'a, Mode> {
     #[data_view(rename = "match")]
     pub field_match: ::validated_data::Field<policy::FieldMatch<'a, Mode>>,
@@ -66,19 +66,19 @@ pub struct Policy<'a, Mode> {
 
 pub mod policy {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenLoggingPolicyMatch"))]
     pub struct FieldMatch<'a, Mode> {
         pub match_lists: ::validated_data::Field<field_match::MatchLists<'a, Mode>>,
     }
 
     pub mod field_match {
 
-        #[::validated_data::data_view(indexed_list, primary_key(name))]
+        #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenLoggingPolicyMatchMatchListsList", item_name = "EosCliConfigGenLoggingPolicyMatchMatchListsListIndexedItem"))]
         pub struct MatchLists<'a, Mode> (::validated_data::Field<match_lists::Item<'a, Mode>>);
 
         pub mod match_lists {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "EosCliConfigGenLoggingPolicyMatchMatchListsItems"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::Field<&'a str>,
                 pub action: ::validated_data::RequiredValue<&'a str, Mode>,
@@ -87,7 +87,7 @@ pub mod policy {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenLoggingEvent"))]
 pub struct Event<'a, Mode> {
     pub congestion_drops_interval: ::validated_data::Field<i64>,
     pub global_link_status: ::validated_data::Field<bool>,
@@ -96,14 +96,14 @@ pub struct Event<'a, Mode> {
 
 pub mod event {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenLoggingEventStormControl"))]
     pub struct StormControl<'a, Mode> {
         pub discards: ::validated_data::Field<storm_control::Discards<'a, Mode>>,
     }
 
     pub mod storm_control {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenLoggingEventStormControlDiscards"))]
         pub struct Discards<'a, Mode> {
             #[data_view(rename = "global")]
             pub field_global: ::validated_data::Field<bool>,
@@ -112,12 +112,12 @@ pub mod event {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(facility))]
+#[::validated_data::data_view(indexed_list, primary_key(facility), python(name = "EosCliConfigGenLoggingLevelList", item_name = "EosCliConfigGenLoggingLevelListIndexedItem"))]
 pub struct Level<'a, Mode> (::validated_data::Field<level::Item<'a, Mode>>);
 
 pub mod level {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenLoggingLevelItems"))]
     pub struct Item<'a, Mode> {
         pub facility: ::validated_data::Field<&'a str>,
         pub severity: ::validated_data::RequiredValue<&'a str, Mode>,

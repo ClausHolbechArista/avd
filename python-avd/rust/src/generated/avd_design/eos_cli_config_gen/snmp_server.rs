@@ -185,7 +185,7 @@ pub mod hosts {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenSnmpServerTraps"))]
 pub struct Traps<'a, Mode> {
     pub enable: ::validated_data::Field<bool>,
     pub snmp_traps: ::validated_data::Field<traps::SnmpTraps<'a, Mode>>,
@@ -193,12 +193,12 @@ pub struct Traps<'a, Mode> {
 
 pub mod traps {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "EosCliConfigGenSnmpServerTrapsSnmpTrapsList"))]
     pub struct SnmpTraps<'a, Mode> (::validated_data::Field<snmp_traps::Item<'a, Mode>>);
 
     pub mod snmp_traps {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenSnmpServerTrapsSnmpTrapsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub enabled: ::validated_data::Field<bool>,

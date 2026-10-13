@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsIpv4UnderlayPeers"))]
 pub struct Ipv4UnderlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -16,7 +16,7 @@ pub struct Ipv4UnderlayPeers<'a, Mode> {
 pub mod ipv4_underlay_peers {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsMlagIpv4VrfsPeer"))]
 pub struct MlagIpv4VrfsPeer<'a, Mode> {
     pub name: ::validated_data::RequiredValue<&'a str, Mode>,
     pub password: ::validated_data::Field<&'a str>,
@@ -30,7 +30,7 @@ pub struct MlagIpv4VrfsPeer<'a, Mode> {
 pub mod mlag_ipv4_vrfs_peer {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsMlagIpv4UnderlayPeer"))]
 pub struct MlagIpv4UnderlayPeer<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -44,7 +44,7 @@ pub struct MlagIpv4UnderlayPeer<'a, Mode> {
 pub mod mlag_ipv4_underlay_peer {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsEvpnOverlayPeers"))]
 pub struct EvpnOverlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -57,7 +57,7 @@ pub struct EvpnOverlayPeers<'a, Mode> {
 pub mod evpn_overlay_peers {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsEvpnOverlayCore"))]
 pub struct EvpnOverlayCore<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -70,7 +70,7 @@ pub struct EvpnOverlayCore<'a, Mode> {
 pub mod evpn_overlay_core {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsMplsOverlayPeers"))]
 pub struct MplsOverlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -83,7 +83,7 @@ pub struct MplsOverlayPeers<'a, Mode> {
 pub mod mpls_overlay_peers {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsRrOverlayPeers"))]
 pub struct RrOverlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -96,7 +96,7 @@ pub struct RrOverlayPeers<'a, Mode> {
 pub mod rr_overlay_peers {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsIpvpnGatewayPeers"))]
 pub struct IpvpnGatewayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -109,7 +109,7 @@ pub struct IpvpnGatewayPeers<'a, Mode> {
 pub mod ipvpn_gateway_peers {
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsWanOverlayPeers"))]
 pub struct WanOverlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -124,18 +124,18 @@ pub struct WanOverlayPeers<'a, Mode> {
 
 pub mod wan_overlay_peers {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsWanOverlayPeersBfdTimers"))]
     pub struct BfdTimers<'a, Mode> {
         pub interval: ::validated_data::RequiredValue<i64, Mode>,
         pub min_rx: ::validated_data::RequiredValue<i64, Mode>,
         pub multiplier: ::validated_data::RequiredValue<i64, Mode>,
     }
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignBgpPeerGroupsWanOverlayPeersListenRangePrefixesList"))]
     pub struct ListenRangePrefixes<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsWanRrOverlayPeers"))]
 pub struct WanRrOverlayPeers<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub password: ::validated_data::Field<&'a str>,
@@ -149,7 +149,7 @@ pub struct WanRrOverlayPeers<'a, Mode> {
 
 pub mod wan_rr_overlay_peers {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroupsWanRrOverlayPeersBfdTimers"))]
     pub struct BfdTimers<'a, Mode> {
         pub interval: ::validated_data::RequiredValue<i64, Mode>,
         pub min_rx: ::validated_data::RequiredValue<i64, Mode>,

@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignPlatformSpeedGroupsItems"))]
 pub struct Item<'a, Mode> {
     pub platform: ::validated_data::Field<&'a str>,
     pub speeds: ::validated_data::Field<item::Speeds<'a, Mode>>,
@@ -10,12 +10,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(speed))]
+    #[::validated_data::data_view(indexed_list, primary_key(speed), python(name = "AVDDesignPlatformSpeedGroupsItemsSpeedsList", item_name = "AVDDesignPlatformSpeedGroupsItemsSpeedsListIndexedItem"))]
     pub struct Speeds<'a, Mode> (::validated_data::Field<speeds::Item<'a, Mode>>);
 
     pub mod speeds {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignPlatformSpeedGroupsItemsSpeedsItems"))]
         pub struct Item<'a, Mode> {
             pub speed: ::validated_data::Field<&'a str>,
             pub speed_groups: ::validated_data::Field<item::SpeedGroups<'a, Mode>>,
@@ -23,7 +23,7 @@ pub mod item {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignPlatformSpeedGroupsItemsSpeedsItemsSpeedGroupsList"))]
             pub struct SpeedGroups<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }

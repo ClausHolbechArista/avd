@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignNodeTypeKeysItems"))]
 pub struct Item<'a, Mode> {
     pub key: ::validated_data::Field<&'a str>,
     #[data_view(rename = "type")]
@@ -30,17 +30,17 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignNodeTypeKeysItemsDefaultOverlayAddressFamiliesList"))]
     pub struct DefaultOverlayAddressFamilies<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignNodeTypeKeysItemsNetworkServices"))]
     pub struct NetworkServices<'a, Mode> {
         pub l1: ::validated_data::Field<bool>,
         pub l2: ::validated_data::Field<bool>,
         pub l3: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignNodeTypeKeysItemsIpAddressing"))]
     pub struct IpAddressing<'a, Mode> {
         pub python_module: ::validated_data::Field<&'a str>,
         pub python_class_name: ::validated_data::Field<&'a str>,
@@ -58,7 +58,7 @@ pub mod item {
         pub vtep_ip: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignNodeTypeKeysItemsInterfaceDescriptions"))]
     pub struct InterfaceDescriptions<'a, Mode> {
         pub python_module: ::validated_data::Field<&'a str>,
         pub python_class_name: ::validated_data::Field<&'a str>,

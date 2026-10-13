@@ -457,20 +457,20 @@ pub struct DigitalTwin<'a, Mode> {
     pub internet_access: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenMetadataInterfaces"))]
 pub struct Interfaces<'a, Mode> {
     pub errdisable: ::validated_data::Field<interfaces::Errdisable<'a, Mode>>,
 }
 
 pub mod interfaces {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenMetadataInterfacesErrdisable"))]
     pub struct Errdisable<'a, Mode> {
         pub only_avd_interfaces: ::validated_data::Field<bool>,
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenMetadataBgp"))]
 pub struct Bgp<'a, Mode> {
     pub check_tcp_queues: ::validated_data::Field<bool>,
     pub minimum_established_time: ::validated_data::Field<i64>,

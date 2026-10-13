@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignWanPathGroupsItems"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub id: ::validated_data::RequiredValue<i64, Mode>,
@@ -16,25 +16,25 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignWanPathGroupsItemsIpsec"))]
     pub struct Ipsec<'a, Mode> {
         pub dynamic_peers: ::validated_data::Field<bool>,
         pub static_peers: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignWanPathGroupsItemsImportPathGroupsList"))]
     pub struct ImportPathGroups<'a, Mode> (::validated_data::Field<import_path_groups::Item<'a, Mode>>);
 
     pub mod import_path_groups {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignWanPathGroupsItemsImportPathGroupsItems"))]
         pub struct Item<'a, Mode> {
             pub remote: ::validated_data::Field<&'a str>,
             pub local: ::validated_data::Field<&'a str>,
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignWanPathGroupsItemsDpsKeepalive"))]
     pub struct DpsKeepalive<'a, Mode> {
         pub interval: ::validated_data::Field<&'a str>,
         pub failure_threshold: ::validated_data::Field<i64>,

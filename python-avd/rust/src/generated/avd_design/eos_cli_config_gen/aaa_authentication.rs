@@ -2,14 +2,14 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthenticationLogin"))]
 pub struct Login<'a, Mode> {
     pub default: ::validated_data::Field<&'a str>,
     pub command_api: ::validated_data::Field<&'a str>,
     pub console: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthenticationEnable"))]
 pub struct Enable<'a, Mode> {
     pub default: ::validated_data::Field<&'a str>,
 }
@@ -19,7 +19,7 @@ pub struct Dot1x<'a, Mode> {
     pub default: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthenticationPolicies"))]
 pub struct Policies<'a, Mode> {
     pub on_failure_log: ::validated_data::Field<bool>,
     pub on_success_log: ::validated_data::Field<bool>,
@@ -29,12 +29,12 @@ pub struct Policies<'a, Mode> {
 
 pub mod policies {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthenticationPoliciesLocal"))]
     pub struct Local<'a, Mode> {
         pub allow_nopassword: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthenticationPoliciesLockout"))]
     pub struct Lockout<'a, Mode> {
         pub failure: ::validated_data::RequiredValue<i64, Mode>,
         pub duration: ::validated_data::RequiredValue<i64, Mode>,

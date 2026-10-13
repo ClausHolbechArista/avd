@@ -140,7 +140,7 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsFlowcontrol"))]
     pub struct Flowcontrol<'a, Mode> {
         pub received: ::validated_data::Field<&'a str>,
     }
@@ -694,7 +694,7 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsPoe"))]
     pub struct Poe<'a, Mode> {
         pub disabled: ::validated_data::Field<bool>,
         pub priority: ::validated_data::Field<&'a str>,
@@ -708,23 +708,23 @@ pub mod item {
 
     pub mod poe {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsPoeReboot"))]
         pub struct Reboot<'a, Mode> {
             pub action: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsPoeLinkDown"))]
         pub struct LinkDown<'a, Mode> {
             pub action: ::validated_data::Field<&'a str>,
             pub power_off_delay: ::validated_data::Field<i64>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsPoeShutdown"))]
         pub struct Shutdown<'a, Mode> {
             pub action: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenEthernetInterfacesItemsPoeLimit"))]
         pub struct Limit<'a, Mode> {
             #[data_view(rename = "class")]
             pub field_class: ::validated_data::Field<i64>,

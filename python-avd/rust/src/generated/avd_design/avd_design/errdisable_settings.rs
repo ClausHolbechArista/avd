@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCauses"))]
 pub struct Causes<'a, Mode> {
     pub acl: ::validated_data::Field<causes::Acl<'a, Mode>>,
     pub arp_inspection: ::validated_data::Field<causes::ArpInspection<'a, Mode>>,
@@ -41,218 +41,218 @@ pub struct Causes<'a, Mode> {
 
 pub mod causes {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesAcl"))]
     pub struct Acl<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesArpInspection"))]
     pub struct ArpInspection<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesBpduguard"))]
     pub struct Bpduguard<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesDot1x"))]
     pub struct Dot1x<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesDot1xCoa"))]
     pub struct Dot1xCoa<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesDot1xPhoneClassification"))]
     pub struct Dot1xPhoneClassification<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesDot1xSessionReplace"))]
     pub struct Dot1xSessionReplace<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesErrorCorrectionEncoding"))]
     pub struct ErrorCorrectionEncoding<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesFabricCapacityLow"))]
     pub struct FabricCapacityLow<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesHardwareSpeedGroup"))]
     pub struct HardwareSpeedGroup<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesHitlessReloadDown"))]
     pub struct HitlessReloadDown<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesInterfaceSpeed"))]
     pub struct InterfaceSpeed<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesInternalError"))]
     pub struct InternalError<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesLacpRateLimit"))]
     pub struct LacpRateLimit<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesLinkChange"))]
     pub struct LinkChange<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesLinkFlap"))]
     pub struct LinkFlap<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesNoInternalVlan"))]
     pub struct NoInternalVlan<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesPortBreakout"))]
     pub struct PortBreakout<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesPortchannelguard"))]
     pub struct Portchannelguard<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesPortsec"))]
     pub struct Portsec<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesSpeedMisconfigured"))]
     pub struct SpeedMisconfigured<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesStormControl"))]
     pub struct StormControl<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesStuckQueue"))]
     pub struct StuckQueue<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesSwitchcardUnreachable"))]
     pub struct SwitchcardUnreachable<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesTapPortInit"))]
     pub struct TapPortInit<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesTapagg"))]
     pub struct Tapagg<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesTpid"))]
     pub struct Tpid<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesTransceiverAdapter"))]
     pub struct TransceiverAdapter<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesUplinkFailureDetection"))]
     pub struct UplinkFailureDetection<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesXcvrMisconfigured"))]
     pub struct XcvrMisconfigured<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesXcvrOverheat"))]
     pub struct XcvrOverheat<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesXcvrPowerUnsupported"))]
     pub struct XcvrPowerUnsupported<'a, Mode> {
         pub detection: ::validated_data::Field<bool>,
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignErrdisableSettingsCausesXcvrUnsupported"))]
     pub struct XcvrUnsupported<'a, Mode> {
         pub recovery: ::validated_data::Field<bool>,
         pub recovery_interval: ::validated_data::Field<i64>,

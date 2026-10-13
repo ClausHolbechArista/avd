@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesign"))]
 pub struct AvdDesign<'a, Mode> {
     pub aaa_settings: ::validated_data::Field<AaaSettings<'a, Mode>>,
     pub address_locking_settings: ::validated_data::Field<AddressLockingSettings<'a, Mode>>,
@@ -231,18 +231,18 @@ pub struct AvdDesign<'a, Mode> {
     pub wan_virtual_topologies: ::validated_data::Field<WanVirtualTopologies<'a, Mode>>,
     pub zscaler_endpoints: ::validated_data::Field<ZscalerEndpoints<'a, Mode>>,
     #[data_view(dynamic = "custom_node_type_keys.key")]
-    pub custom_node_type_keys_key: ::validated_data::Field<DynamicSlot12224<'a, Mode>>,
+    pub custom_node_type_keys_key: ::validated_data::Field<DynamicSlot12232<'a, Mode>>,
     #[data_view(dynamic = "connected_endpoints_keys.key")]
-    pub connected_endpoints_keys_key: ::validated_data::Field<DynamicSlot13723<'a, Mode>>,
+    pub connected_endpoints_keys_key: ::validated_data::Field<DynamicSlot13731<'a, Mode>>,
     #[data_view(dynamic = "custom_connected_endpoints_keys.key")]
-    pub custom_connected_endpoints_keys_key: ::validated_data::Field<DynamicSlot13911<'a, Mode>>,
+    pub custom_connected_endpoints_keys_key: ::validated_data::Field<DynamicSlot13919<'a, Mode>>,
     #[data_view(dynamic = "network_services_keys.name")]
-    pub network_services_keys_name: ::validated_data::Field<DynamicSlot14099<'a, Mode>>,
+    pub network_services_keys_name: ::validated_data::Field<DynamicSlot14107<'a, Mode>>,
     #[data_view(dynamic = "node_type_keys.key")]
-    pub node_type_keys_key: ::validated_data::Field<DynamicSlot15021<'a, Mode>>,
+    pub node_type_keys_key: ::validated_data::Field<DynamicSlot15029<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAaaSettings"))]
 pub struct AaaSettings<'a, Mode> {
     pub enable_password: ::validated_data::Field<aaa_settings::EnablePassword<'a, Mode>>,
     pub tacacs: ::validated_data::Field<aaa_settings::Tacacs<'a, Mode>>,
@@ -256,7 +256,7 @@ pub struct AaaSettings<'a, Mode> {
 
 pub mod aaa_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAddressLockingSettings"))]
 pub struct AddressLockingSettings<'a, Mode> {
     pub local_interface: ::validated_data::Field<&'a str>,
     pub dhcp_server_interfaces: ::validated_data::Field<address_locking_settings::DhcpServerInterfaces<'a, Mode>>,
@@ -268,7 +268,7 @@ pub struct AddressLockingSettings<'a, Mode> {
 
 pub mod address_locking_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignAvdDesignFuture"))]
 pub struct AvdDesignFuture<'a, Mode> {
     pub accept_dhcp_default_route_for_mgmt_ip_dhcp: ::validated_data::Field<bool>,
     pub accept_ra_default_route_for_ipv6_mgmt_ip_auto_config: ::validated_data::Field<bool>,
@@ -278,6 +278,7 @@ pub struct AvdDesignFuture<'a, Mode> {
     pub consistent_uplink_vlans: ::validated_data::Field<bool>,
     pub fix_address_locking_dhcp_server_interfaces: ::validated_data::Field<bool>,
     pub fix_match_ipv6_prefix_list_on_mlag_route_map: ::validated_data::Field<bool>,
+    pub fix_mlag_ibgp_peering_ipv6_pool: ::validated_data::Field<bool>,
     pub fix_radius_server_group_tls: ::validated_data::Field<bool>,
     pub only_configure_ipv6_inband_mgmt_prefix_list_when_used: ::validated_data::Field<bool>,
     pub only_configure_mlag_vrfs_peer_group_when_used: ::validated_data::Field<bool>,
@@ -288,25 +289,25 @@ pub struct AvdDesignFuture<'a, Mode> {
     pub remove_redundant_ipv4_unicast_for_peer_groups: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignEosDesignsValidationConfiguration"))]
 pub struct EosDesignsValidationConfiguration<'a, Mode> {
     pub warn_eos_config_keys: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBfdMultihop"))]
 pub struct BfdMultihop<'a, Mode> {
     pub interval: ::validated_data::RequiredValue<i64, Mode>,
     pub min_rx: ::validated_data::RequiredValue<i64, Mode>,
     pub multiplier: ::validated_data::RequiredValue<i64, Mode>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpGracefulRestart"))]
 pub struct BgpGracefulRestart<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub restart_time: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignBgpPeerGroups"))]
 pub struct BgpPeerGroups<'a, Mode> {
     pub ipv4_underlay_peers: ::validated_data::Field<bgp_peer_groups::Ipv4UnderlayPeers<'a, Mode>>,
     pub mlag_ipv4_vrfs_peer: ::validated_data::Field<bgp_peer_groups::MlagIpv4VrfsPeer<'a, Mode>>,
@@ -322,22 +323,22 @@ pub struct BgpPeerGroups<'a, Mode> {
 
 pub mod bgp_peer_groups;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignConnectedEndpointsList", item_name = "AVDDesignConnectedEndpointsListIndexedItem"))]
 pub struct ConnectedEndpoints<'a, Mode> (::validated_data::Field<connected_endpoints::Item<'a, Mode>>);
 
 pub mod connected_endpoints;
 
-#[::validated_data::data_view(indexed_list, primary_key(key))]
+#[::validated_data::data_view(indexed_list, primary_key(key), python(name = "AVDDesignCustomConnectedEndpointsKeysList", item_name = "AVDDesignCustomConnectedEndpointsKeysListIndexedItem"))]
 pub struct CustomConnectedEndpointsKeys<'a, Mode> (::validated_data::Field<custom_connected_endpoints_keys::Item<'a, Mode>>);
 
 pub mod custom_connected_endpoints_keys;
 
-#[::validated_data::data_view(indexed_list, primary_key(key))]
+#[::validated_data::data_view(indexed_list, primary_key(key), python(name = "AVDDesignConnectedEndpointsKeysList", item_name = "AVDDesignConnectedEndpointsKeysListIndexedItem"))]
 pub struct ConnectedEndpointsKeys<'a, Mode> (::validated_data::Field<connected_endpoints_keys::Item<'a, Mode>>);
 
 pub mod connected_endpoints_keys;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignCoreInterfaces"))]
 pub struct CoreInterfaces<'a, Mode> {
     pub p2p_links_ip_pools: ::validated_data::Field<core_interfaces::P2pLinksIpPools<'a, Mode>>,
     pub p2p_links_profiles: ::validated_data::Field<core_interfaces::P2pLinksProfiles<'a, Mode>>,
@@ -346,25 +347,25 @@ pub struct CoreInterfaces<'a, Mode> {
 
 pub mod core_interfaces;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignCustomStructuredConfigurationPrefixList"))]
 pub struct CustomStructuredConfigurationPrefix<'a, Mode> (::validated_data::Field<&'a str>);
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvPathfinderGlobalSitesList", item_name = "AVDDesignCvPathfinderGlobalSitesListIndexedItem"))]
 pub struct CvPathfinderGlobalSites<'a, Mode> (::validated_data::Field<cv_pathfinder_global_sites::Item<'a, Mode>>);
 
 pub mod cv_pathfinder_global_sites;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvPathfinderInternetExitPoliciesList", item_name = "AVDDesignCvPathfinderInternetExitPoliciesListIndexedItem"))]
 pub struct CvPathfinderInternetExitPolicies<'a, Mode> (::validated_data::Field<cv_pathfinder_internet_exit_policies::Item<'a, Mode>>);
 
 pub mod cv_pathfinder_internet_exit_policies;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvPathfinderRegionsList", item_name = "AVDDesignCvPathfinderRegionsListIndexedItem"))]
 pub struct CvPathfinderRegions<'a, Mode> (::validated_data::Field<cv_pathfinder_regions::Item<'a, Mode>>);
 
 pub mod cv_pathfinder_regions;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignCvSettings"))]
 pub struct CvSettings<'a, Mode> {
     pub cvaas: ::validated_data::Field<cv_settings::Cvaas<'a, Mode>>,
     pub onprem_clusters: ::validated_data::Field<cv_settings::OnpremClusters<'a, Mode>>,
@@ -374,37 +375,37 @@ pub struct CvSettings<'a, Mode> {
 
 pub mod cv_settings;
 
-#[::validated_data::data_view(indexed_list, primary_key(hostname))]
+#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesignCvTopologyList", item_name = "AVDDesignCvTopologyListIndexedItem"))]
 pub struct CvTopology<'a, Mode> (::validated_data::Field<cv_topology::Item<'a, Mode>>);
 
 pub mod cv_topology;
 
-#[::validated_data::data_view(indexed_list, primary_key(field_type))]
+#[::validated_data::data_view(indexed_list, primary_key(field_type), python(name = "AVDDesignCvTopologyLevelsList", item_name = "AVDDesignCvTopologyLevelsListIndexedItem"))]
 pub struct CvTopologyLevels<'a, Mode> (::validated_data::Field<cv_topology_levels::Item<'a, Mode>>);
 
 pub mod cv_topology_levels;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignDefaultInterfacesList"))]
 pub struct DefaultInterfaces<'a, Mode> (::validated_data::Field<default_interfaces::Item<'a, Mode>>);
 
 pub mod default_interfaces;
 
-#[::validated_data::data_view(indexed_list, primary_key(node_type))]
+#[::validated_data::data_view(indexed_list, primary_key(node_type), python(name = "AVDDesignDefaultNodeTypesList", item_name = "AVDDesignDefaultNodeTypesListIndexedItem"))]
 pub struct DefaultNodeTypes<'a, Mode> (::validated_data::Field<default_node_types::Item<'a, Mode>>);
 
 pub mod default_node_types;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignDeviceProfilesList", item_name = "AVDDesignDeviceProfilesListIndexedItem"))]
 pub struct DeviceProfiles<'a, Mode> (::validated_data::Field<device_profiles::Item<'a, Mode>>);
 
 pub mod device_profiles;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignDevicesList", item_name = "AVDDesignDevicesListIndexedItem"))]
 pub struct Devices<'a, Mode> (::validated_data::Field<devices::Item<'a, Mode>>);
 
 pub mod devices;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDigitalTwin"))]
 pub struct DigitalTwin<'a, Mode> {
     pub environment: ::validated_data::Field<&'a str>,
     pub fabric: ::validated_data::RequiredValue<digital_twin::Fabric<'a, Mode>, Mode>,
@@ -413,7 +414,7 @@ pub struct DigitalTwin<'a, Mode> {
 
 pub mod digital_twin;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDnsSettings"))]
 pub struct DnsSettings<'a, Mode> {
     pub domain: ::validated_data::Field<&'a str>,
     pub domain_list: ::validated_data::Field<dns_settings::DomainList<'a, Mode>>,
@@ -425,7 +426,7 @@ pub struct DnsSettings<'a, Mode> {
 
 pub mod dns_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDot1xSettings"))]
 pub struct Dot1xSettings<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub authentication: ::validated_data::Field<dot1x_settings::Authentication<'a, Mode>>,
@@ -442,12 +443,12 @@ pub struct Dot1xSettings<'a, Mode> {
 
 pub mod dot1x_settings;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignEosDesignsCustomTemplatesList"))]
 pub struct EosDesignsCustomTemplates<'a, Mode> (::validated_data::Field<eos_designs_custom_templates::Item<'a, Mode>>);
 
 pub mod eos_designs_custom_templates;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignEosDesignsDocumentation"))]
 pub struct EosDesignsDocumentation<'a, Mode> {
     pub enable: ::validated_data::Field<bool>,
     pub connected_endpoints: ::validated_data::Field<bool>,
@@ -456,7 +457,7 @@ pub struct EosDesignsDocumentation<'a, Mode> {
     pub toc: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignErrdisableSettings"))]
 pub struct ErrdisableSettings<'a, Mode> {
     pub recovery_interval: ::validated_data::Field<i64>,
     pub causes: ::validated_data::Field<errdisable_settings::Causes<'a, Mode>>,
@@ -464,7 +465,7 @@ pub struct ErrdisableSettings<'a, Mode> {
 
 pub mod errdisable_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignEvpnHostflapDetection"))]
 pub struct EvpnHostflapDetection<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub threshold: ::validated_data::Field<i64>,
@@ -472,12 +473,12 @@ pub struct EvpnHostflapDetection<'a, Mode> {
     pub expiry_timeout: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignEvpnVlanBundlesList", item_name = "AVDDesignEvpnVlanBundlesListIndexedItem"))]
 pub struct EvpnVlanBundles<'a, Mode> (::validated_data::Field<evpn_vlan_bundles::Item<'a, Mode>>);
 
 pub mod evpn_vlan_bundles;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignFabricFlowTracking"))]
 pub struct FabricFlowTracking<'a, Mode> {
     pub uplinks: ::validated_data::Field<fabric_flow_tracking::Uplinks<'a, Mode>>,
     pub downlinks: ::validated_data::Field<fabric_flow_tracking::Downlinks<'a, Mode>>,
@@ -493,7 +494,7 @@ pub struct FabricFlowTracking<'a, Mode> {
 
 pub mod fabric_flow_tracking;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignFabricIpAddressing"))]
 pub struct FabricIpAddressing<'a, Mode> {
     pub loopback: ::validated_data::Field<fabric_ip_addressing::Loopback<'a, Mode>>,
     pub mlag: ::validated_data::Field<fabric_ip_addressing::Mlag<'a, Mode>>,
@@ -503,14 +504,14 @@ pub struct FabricIpAddressing<'a, Mode> {
 
 pub mod fabric_ip_addressing;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignFabricNumbering"))]
 pub struct FabricNumbering<'a, Mode> {
     pub node_id: ::validated_data::Field<fabric_numbering::NodeId<'a, Mode>>,
 }
 
 pub mod fabric_numbering;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignFabricSflow"))]
 pub struct FabricSflow<'a, Mode> {
     pub uplinks: ::validated_data::Field<bool>,
     pub downlinks: ::validated_data::Field<bool>,
@@ -521,7 +522,7 @@ pub struct FabricSflow<'a, Mode> {
     pub l3_interfaces: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignFlowTrackingSettings"))]
 pub struct FlowTrackingSettings<'a, Mode> {
     pub sampled: ::validated_data::Field<flow_tracking_settings::Sampled<'a, Mode>>,
     pub hardware: ::validated_data::Field<flow_tracking_settings::Hardware<'a, Mode>>,
@@ -531,18 +532,19 @@ pub struct FlowTrackingSettings<'a, Mode> {
 
 pub mod flow_tracking_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignGeneralSettings"))]
 pub struct GeneralSettings<'a, Mode> {
     pub interface_defaults: ::validated_data::Field<general_settings::InterfaceDefaults<'a, Mode>>,
     pub arp: ::validated_data::Field<general_settings::Arp<'a, Mode>>,
     pub ip_icmp_redirect: ::validated_data::Field<bool>,
     pub dhcp_relay: ::validated_data::Field<general_settings::DhcpRelay<'a, Mode>>,
     pub suspended_vlans: ::validated_data::Field<general_settings::SuspendedVlans<'a, Mode>>,
+    pub ip_software_forwarding_exceed_action_drop: ::validated_data::Field<general_settings::IpSoftwareForwardingExceedActionDrop<'a, Mode>>,
 }
 
 pub mod general_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignGenerateCvTags"))]
 pub struct GenerateCvTags<'a, Mode> {
     pub topology_hints: ::validated_data::Field<bool>,
     pub campus_fabric: ::validated_data::Field<bool>,
@@ -552,7 +554,7 @@ pub struct GenerateCvTags<'a, Mode> {
 
 pub mod generate_cv_tags;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignInternalVlanOrder"))]
 pub struct InternalVlanOrder<'a, Mode> {
     pub allocation: ::validated_data::RequiredValue<&'a str, Mode>,
     pub range: ::validated_data::Field<internal_vlan_order::Range<'a, Mode>>,
@@ -560,52 +562,52 @@ pub struct InternalVlanOrder<'a, Mode> {
 
 pub mod internal_vlan_order;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignIpsecSettings"))]
 pub struct IpsecSettings<'a, Mode> {
     pub bind_connection_to_interface: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignIpv4AclsList", item_name = "AVDDesignIpv4AclsListIndexedItem"))]
 pub struct Ipv4Acls<'a, Mode> (::validated_data::Field<ipv4_acls::Item<'a, Mode>>);
 
 pub mod ipv4_acls;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignIpv4PrefixListCatalogList", item_name = "AVDDesignIpv4PrefixListCatalogListIndexedItem"))]
 pub struct Ipv4PrefixListCatalog<'a, Mode> (::validated_data::Field<ipv4_prefix_list_catalog::Item<'a, Mode>>);
 
 pub mod ipv4_prefix_list_catalog;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignIpv4StandardAclsList", item_name = "AVDDesignIpv4StandardAclsListIndexedItem"))]
 pub struct Ipv4StandardAcls<'a, Mode> (::validated_data::Field<ipv4_standard_acls::Item<'a, Mode>>);
 
 pub mod ipv4_standard_acls;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignIpv6AclsList", item_name = "AVDDesignIpv6AclsListIndexedItem"))]
 pub struct Ipv6Acls<'a, Mode> (::validated_data::Field<ipv6_acls::Item<'a, Mode>>);
 
 pub mod ipv6_acls;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignIpv6MgmtDestinationNetworksList"))]
 pub struct Ipv6MgmtDestinationNetworks<'a, Mode> (::validated_data::Field<&'a str>);
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignIpv6PrefixListCatalogList", item_name = "AVDDesignIpv6PrefixListCatalogListIndexedItem"))]
 pub struct Ipv6PrefixListCatalog<'a, Mode> (::validated_data::Field<ipv6_prefix_list_catalog::Item<'a, Mode>>);
 
 pub mod ipv6_prefix_list_catalog;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignIsisTiLfa"))]
 pub struct IsisTiLfa<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub protection: ::validated_data::Field<&'a str>,
     pub local_convergence_delay: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesignL2vlanProfilesList", item_name = "AVDDesignL2vlanProfilesListIndexedItem"))]
 pub struct L2vlanProfiles<'a, Mode> (::validated_data::Field<l2vlan_profiles::Item<'a, Mode>>);
 
 pub mod l2vlan_profiles;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignL3Edge"))]
 pub struct L3Edge<'a, Mode> {
     pub p2p_links_ip_pools: ::validated_data::Field<l3_edge::P2pLinksIpPools<'a, Mode>>,
     pub p2p_links_profiles: ::validated_data::Field<l3_edge::P2pLinksProfiles<'a, Mode>>,
@@ -614,12 +616,12 @@ pub struct L3Edge<'a, Mode> {
 
 pub mod l3_edge;
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesignL3InterfaceProfilesList", item_name = "AVDDesignL3InterfaceProfilesListIndexedItem"))]
 pub struct L3InterfaceProfiles<'a, Mode> (::validated_data::Field<l3_interface_profiles::Item<'a, Mode>>);
 
 pub mod l3_interface_profiles;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignLoggingSettings"))]
 pub struct LoggingSettings<'a, Mode> {
     pub use_local_interface_cli: ::validated_data::Field<bool>,
     pub hosts: ::validated_data::Field<logging_settings::Hosts<'a, Mode>>,
@@ -640,12 +642,12 @@ pub struct LoggingSettings<'a, Mode> {
 
 pub mod logging_settings;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignMacAclsList", item_name = "AVDDesignMacAclsListIndexedItem"))]
 pub struct MacAcls<'a, Mode> (::validated_data::Field<mac_acls::Item<'a, Mode>>);
 
 pub mod mac_acls;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignManagementEapi"))]
 pub struct ManagementEapi<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub enable_http: ::validated_data::Field<bool>,
@@ -656,7 +658,7 @@ pub struct ManagementEapi<'a, Mode> {
 
 pub mod management_eapi;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignManagementSettings"))]
 pub struct ManagementSettings<'a, Mode> {
     pub console: ::validated_data::Field<super::eos_cli_config_gen::ManagementConsole<'a, Mode>>,
     pub banners: ::validated_data::Field<super::eos_cli_config_gen::Banners<'a, Mode>>,
@@ -664,10 +666,10 @@ pub struct ManagementSettings<'a, Mode> {
 
 pub mod management_settings;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignMgmtDestinationNetworksList"))]
 pub struct MgmtDestinationNetworks<'a, Mode> (::validated_data::Field<&'a str>);
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignMgmtInterfaceSettings"))]
 pub struct MgmtInterfaceSettings<'a, Mode> {
     pub description: ::validated_data::Field<&'a str>,
     pub vrf: ::validated_data::Field<&'a str>,
@@ -678,12 +680,12 @@ pub struct MgmtInterfaceSettings<'a, Mode> {
 
 pub mod mgmt_interface_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignMlagIbgpPeeringVrfs"))]
 pub struct MlagIbgpPeeringVrfs<'a, Mode> {
     pub base_vlan: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignMonitorConnectivity"))]
 pub struct MonitorConnectivity<'a, Mode> {
     pub shutdown: ::validated_data::Field<bool>,
     pub interval: ::validated_data::Field<i64>,
@@ -697,32 +699,32 @@ pub struct MonitorConnectivity<'a, Mode> {
 
 pub mod monitor_connectivity;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignNetworkPortsList"))]
 pub struct NetworkPorts<'a, Mode> (::validated_data::Field<network_ports::Item<'a, Mode>>);
 
 pub mod network_ports;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignNetworkServicesList", item_name = "AVDDesignNetworkServicesListIndexedItem"))]
 pub struct NetworkServices<'a, Mode> (::validated_data::Field<network_services::Item<'a, Mode>>);
 
 pub mod network_services;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignNetworkServicesKeysList", item_name = "AVDDesignNetworkServicesKeysListIndexedItem"))]
 pub struct NetworkServicesKeys<'a, Mode> (::validated_data::Field<network_services_keys::Item<'a, Mode>>);
 
 pub mod network_services_keys;
 
-#[::validated_data::data_view(indexed_list, primary_key(key))]
+#[::validated_data::data_view(indexed_list, primary_key(key), python(name = "AVDDesignCustomNodeTypeKeysList", item_name = "AVDDesignCustomNodeTypeKeysListIndexedItem"))]
 pub struct CustomNodeTypeKeys<'a, Mode> (::validated_data::Field<custom_node_type_keys::Item<'a, Mode>>);
 
 pub mod custom_node_type_keys;
 
-#[::validated_data::data_view(indexed_list, primary_key(key))]
+#[::validated_data::data_view(indexed_list, primary_key(key), python(name = "AVDDesignNodeTypeKeysList", item_name = "AVDDesignNodeTypeKeysListIndexedItem"))]
 pub struct NodeTypeKeys<'a, Mode> (::validated_data::Field<node_type_keys::Item<'a, Mode>>);
 
 pub mod node_type_keys;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignNtpSettings"))]
 pub struct NtpSettings<'a, Mode> {
     pub server_vrf: ::validated_data::Field<&'a str>,
     pub set_first_ntp_server_as_preferred: ::validated_data::Field<bool>,
@@ -735,10 +737,10 @@ pub struct NtpSettings<'a, Mode> {
 
 pub mod ntp_settings;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignOverlayCvxServersList"))]
 pub struct OverlayCvxServers<'a, Mode> (::validated_data::Field<&'a str>);
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignOverlayRdType"))]
 pub struct OverlayRdType<'a, Mode> {
     pub admin_subfield: ::validated_data::Field<&'a str>,
     pub admin_subfield_offset: ::validated_data::Field<i64>,
@@ -747,39 +749,39 @@ pub struct OverlayRdType<'a, Mode> {
     pub vlan_assigned_number_subfield: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignOverlayRtType"))]
 pub struct OverlayRtType<'a, Mode> {
     pub admin_subfield: ::validated_data::Field<&'a str>,
     pub vrf_admin_subfield: ::validated_data::Field<&'a str>,
     pub vlan_assigned_number_subfield: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignCustomPlatformSettingsList"))]
 pub struct CustomPlatformSettings<'a, Mode> (::validated_data::Field<custom_platform_settings::Item<'a, Mode>>);
 
 pub mod custom_platform_settings;
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignPlatformSettingsList"))]
 pub struct PlatformSettings<'a, Mode> (::validated_data::Field<platform_settings::Item<'a, Mode>>);
 
 pub mod platform_settings;
 
-#[::validated_data::data_view(indexed_list, primary_key(platform))]
+#[::validated_data::data_view(indexed_list, primary_key(platform), python(name = "AVDDesignPlatformSpeedGroupsList", item_name = "AVDDesignPlatformSpeedGroupsListIndexedItem"))]
 pub struct PlatformSpeedGroups<'a, Mode> (::validated_data::Field<platform_speed_groups::Item<'a, Mode>>);
 
 pub mod platform_speed_groups;
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesignPortProfilesList", item_name = "AVDDesignPortProfilesListIndexedItem"))]
 pub struct PortProfiles<'a, Mode> (::validated_data::Field<port_profiles::Item<'a, Mode>>);
 
 pub mod port_profiles;
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesignPtpProfilesList", item_name = "AVDDesignPtpProfilesListIndexedItem"))]
 pub struct PtpProfiles<'a, Mode> (::validated_data::Field<ptp_profiles::Item<'a, Mode>>);
 
 pub mod ptp_profiles;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignPtpSettings"))]
 pub struct PtpSettings<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub profile: ::validated_data::Field<&'a str>,
@@ -791,7 +793,7 @@ pub struct PtpSettings<'a, Mode> {
 
 pub mod ptp_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignQueueMonitorLength"))]
 pub struct QueueMonitorLength<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub notifying: ::validated_data::Field<bool>,
@@ -804,12 +806,12 @@ pub struct QueueMonitorLength<'a, Mode> {
 
 pub mod queue_monitor_length;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignRedundancy"))]
 pub struct Redundancy<'a, Mode> {
     pub protocol: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignSflowSettings"))]
 pub struct SflowSettings<'a, Mode> {
     pub polling_interval: ::validated_data::Field<i64>,
     pub sample: ::validated_data::Field<sflow_settings::Sample<'a, Mode>>,
@@ -820,7 +822,7 @@ pub struct SflowSettings<'a, Mode> {
 
 pub mod sflow_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignSnmpSettings"))]
 pub struct SnmpSettings<'a, Mode> {
     pub contact: ::validated_data::Field<&'a str>,
     pub location: ::validated_data::Field<bool>,
@@ -840,7 +842,7 @@ pub struct SnmpSettings<'a, Mode> {
 
 pub mod snmp_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignSourceInterfaces"))]
 pub struct SourceInterfaces<'a, Mode> {
     pub http_client: ::validated_data::Field<source_interfaces::HttpClient<'a, Mode>>,
     pub ssh_client: ::validated_data::Field<source_interfaces::SshClient<'a, Mode>>,
@@ -848,7 +850,7 @@ pub struct SourceInterfaces<'a, Mode> {
 
 pub mod source_interfaces;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignSpanningTreeSettings"))]
 pub struct SpanningTreeSettings<'a, Mode> {
     pub mode: ::validated_data::Field<&'a str>,
     pub priority: ::validated_data::Field<i64>,
@@ -859,7 +861,7 @@ pub struct SpanningTreeSettings<'a, Mode> {
 
 pub mod spanning_tree_settings;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignSshSettings"))]
 pub struct SshSettings<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub vrfs: ::validated_data::Field<ssh_settings::Vrfs<'a, Mode>>,
@@ -869,12 +871,12 @@ pub struct SshSettings<'a, Mode> {
 
 pub mod ssh_settings;
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesignSviProfilesList", item_name = "AVDDesignSviProfilesListIndexedItem"))]
 pub struct SviProfiles<'a, Mode> (::validated_data::Field<svi_profiles::Item<'a, Mode>>);
 
 pub mod svi_profiles;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignTrunkGroups"))]
 pub struct TrunkGroups<'a, Mode> {
     pub mlag: ::validated_data::Field<trunk_groups::Mlag<'a, Mode>>,
     pub mlag_l3: ::validated_data::Field<trunk_groups::MlagL3<'a, Mode>>,
@@ -883,17 +885,17 @@ pub struct TrunkGroups<'a, Mode> {
 
 pub mod trunk_groups;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignUnderlayMulticastAnycastRp"))]
 pub struct UnderlayMulticastAnycastRp<'a, Mode> {
     pub mode: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(rp))]
+#[::validated_data::data_view(indexed_list, primary_key(rp), python(name = "AVDDesignUnderlayMulticastRpsList", item_name = "AVDDesignUnderlayMulticastRpsListIndexedItem"))]
 pub struct UnderlayMulticastRps<'a, Mode> (::validated_data::Field<underlay_multicast_rps::Item<'a, Mode>>);
 
 pub mod underlay_multicast_rps;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignUnderlayOspfAuthentication"))]
 pub struct UnderlayOspfAuthentication<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub message_digest_keys: ::validated_data::RequiredValue<underlay_ospf_authentication::MessageDigestKeys<'a, Mode>, Mode>,
@@ -901,27 +903,27 @@ pub struct UnderlayOspfAuthentication<'a, Mode> {
 
 pub mod underlay_ospf_authentication;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignUplinkPtp"))]
 pub struct UplinkPtp<'a, Mode> {
     pub enable: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignValidationProfilesList", item_name = "AVDDesignValidationProfilesListIndexedItem"))]
 pub struct ValidationProfiles<'a, Mode> (::validated_data::Field<validation_profiles::Item<'a, Mode>>);
 
 pub mod validation_profiles;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignWanCarriersList", item_name = "AVDDesignWanCarriersListIndexedItem"))]
 pub struct WanCarriers<'a, Mode> (::validated_data::Field<wan_carriers::Item<'a, Mode>>);
 
 pub mod wan_carriers;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignWanHa"))]
 pub struct WanHa<'a, Mode> {
     pub lan_ha_path_group_name: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignWanIpsecProfiles"))]
 pub struct WanIpsecProfiles<'a, Mode> {
     pub control_plane: ::validated_data::RequiredValue<wan_ipsec_profiles::ControlPlane<'a, Mode>, Mode>,
     pub data_plane: ::validated_data::Field<wan_ipsec_profiles::DataPlane<'a, Mode>>,
@@ -929,17 +931,17 @@ pub struct WanIpsecProfiles<'a, Mode> {
 
 pub mod wan_ipsec_profiles;
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignWanPathGroupsList", item_name = "AVDDesignWanPathGroupsListIndexedItem"))]
 pub struct WanPathGroups<'a, Mode> (::validated_data::Field<wan_path_groups::Item<'a, Mode>>);
 
 pub mod wan_path_groups;
 
-#[::validated_data::data_view(indexed_list, primary_key(hostname))]
+#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesignWanRouteServersList", item_name = "AVDDesignWanRouteServersListIndexedItem"))]
 pub struct WanRouteServers<'a, Mode> (::validated_data::Field<wan_route_servers::Item<'a, Mode>>);
 
 pub mod wan_route_servers;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologies"))]
 pub struct WanVirtualTopologies<'a, Mode> {
     pub vrfs: ::validated_data::Field<wan_virtual_topologies::Vrfs<'a, Mode>>,
     pub control_plane_virtual_topology: ::validated_data::Field<wan_virtual_topologies::ControlPlaneVirtualTopology<'a, Mode>>,
@@ -948,7 +950,7 @@ pub struct WanVirtualTopologies<'a, Mode> {
 
 pub mod wan_virtual_topologies;
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignZscalerEndpoints"))]
 pub struct ZscalerEndpoints<'a, Mode> {
     pub primary: ::validated_data::RequiredValue<zscaler_endpoints::Primary<'a, Mode>, Mode>,
     pub secondary: ::validated_data::Field<zscaler_endpoints::Secondary<'a, Mode>>,
@@ -960,34 +962,34 @@ pub struct ZscalerEndpoints<'a, Mode> {
 pub mod zscaler_endpoints;
 
 #[::validated_data::data_view]
-pub struct DynamicSlot12224<'a, Mode> {
-    pub defaults: ::validated_data::Field<dynamic_slot_12224::Defaults<'a, Mode>>,
-    pub node_groups: ::validated_data::Field<dynamic_slot_12224::NodeGroups<'a, Mode>>,
-    pub nodes: ::validated_data::Field<dynamic_slot_12224::Nodes<'a, Mode>>,
+pub struct DynamicSlot12232<'a, Mode> {
+    pub defaults: ::validated_data::Field<dynamic_slot_12232::Defaults<'a, Mode>>,
+    pub node_groups: ::validated_data::Field<dynamic_slot_12232::NodeGroups<'a, Mode>>,
+    pub nodes: ::validated_data::Field<dynamic_slot_12232::Nodes<'a, Mode>>,
 }
 
-pub mod dynamic_slot_12224;
+pub mod dynamic_slot_12232;
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct DynamicSlot13723<'a, Mode> (::validated_data::Field<dynamic_slot_13723::Item<'a, Mode>>);
+pub struct DynamicSlot13731<'a, Mode> (::validated_data::Field<dynamic_slot_13731::Item<'a, Mode>>);
 
-pub mod dynamic_slot_13723;
-
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct DynamicSlot13911<'a, Mode> (::validated_data::Field<dynamic_slot_13911::Item<'a, Mode>>);
-
-pub mod dynamic_slot_13911;
+pub mod dynamic_slot_13731;
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct DynamicSlot14099<'a, Mode> (::validated_data::Field<dynamic_slot_14099::Item<'a, Mode>>);
+pub struct DynamicSlot13919<'a, Mode> (::validated_data::Field<dynamic_slot_13919::Item<'a, Mode>>);
 
-pub mod dynamic_slot_14099;
+pub mod dynamic_slot_13919;
+
+#[::validated_data::data_view(indexed_list, primary_key(name))]
+pub struct DynamicSlot14107<'a, Mode> (::validated_data::Field<dynamic_slot_14107::Item<'a, Mode>>);
+
+pub mod dynamic_slot_14107;
 
 #[::validated_data::data_view]
-pub struct DynamicSlot15021<'a, Mode> {
-    pub defaults: ::validated_data::Field<dynamic_slot_15021::Defaults<'a, Mode>>,
-    pub node_groups: ::validated_data::Field<dynamic_slot_15021::NodeGroups<'a, Mode>>,
-    pub nodes: ::validated_data::Field<dynamic_slot_15021::Nodes<'a, Mode>>,
+pub struct DynamicSlot15029<'a, Mode> {
+    pub defaults: ::validated_data::Field<dynamic_slot_15029::Defaults<'a, Mode>>,
+    pub node_groups: ::validated_data::Field<dynamic_slot_15029::NodeGroups<'a, Mode>>,
+    pub nodes: ::validated_data::Field<dynamic_slot_15029::Nodes<'a, Mode>>,
 }
 
-pub mod dynamic_slot_15021;
+pub mod dynamic_slot_15029;

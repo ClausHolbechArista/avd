@@ -134,12 +134,9 @@ mod _rust {
         let native = PyModule::new(py, "pyavd._validated_data")?;
         let opaque = py.get_type::<super::PyOpaqueData>();
         let undefined = py.import("pyavd._utils.undefined")?.getattr("Undefined")?;
-        validated_data_py::install_models(
-            &native,
-            super::generated::avd_design::native::BINDINGS,
-            &opaque,
-            &undefined,
-        )?;
+        validated_data_py::install_models::<
+            super::generated::avd_design::avd_design::AvdDesign<'static>,
+        >(&native, &opaque, &undefined)?;
         native.add("OpaqueData", &opaque)?;
         native.add_function(wrap_pyfunction!(super::open_avd_design, &native)?)?;
         py.import("sys")?

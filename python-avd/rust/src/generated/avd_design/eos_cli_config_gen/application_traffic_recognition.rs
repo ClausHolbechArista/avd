@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionCategoriesList", item_name = "EosCliConfigGenApplicationTrafficRecognitionCategoriesListIndexedItem"))]
 pub struct Categories<'a, Mode> (::validated_data::Field<categories::Item<'a, Mode>>);
 
 pub mod categories {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionCategoriesItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub applications: ::validated_data::Field<item::Applications<'a, Mode>>,
@@ -15,12 +15,12 @@ pub mod categories {
 
     pub mod item {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionCategoriesItemsApplicationsList"))]
         pub struct Applications<'a, Mode> (::validated_data::Field<applications::Item<'a, Mode>>);
 
         pub mod applications {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionCategoriesItemsApplicationsItems"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::RequiredValue<&'a str, Mode>,
                 pub service: ::validated_data::Field<&'a str>,
@@ -29,7 +29,7 @@ pub mod categories {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSets"))]
 pub struct FieldSets<'a, Mode> {
     pub l4_ports: ::validated_data::Field<field_sets::L4Ports<'a, Mode>>,
     pub ipv4_prefixes: ::validated_data::Field<field_sets::Ipv4Prefixes<'a, Mode>>,
@@ -37,12 +37,12 @@ pub struct FieldSets<'a, Mode> {
 
 pub mod field_sets {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsL4PortsList", item_name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsL4PortsListIndexedItem"))]
     pub struct L4Ports<'a, Mode> (::validated_data::Field<l4_ports::Item<'a, Mode>>);
 
     pub mod l4_ports {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsL4PortsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub port_values: ::validated_data::Field<item::PortValues<'a, Mode>>,
@@ -50,17 +50,17 @@ pub mod field_sets {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsL4PortsItemsPortValuesList"))]
             pub struct PortValues<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsIpv4PrefixesList", item_name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsIpv4PrefixesListIndexedItem"))]
     pub struct Ipv4Prefixes<'a, Mode> (::validated_data::Field<ipv4_prefixes::Item<'a, Mode>>);
 
     pub mod ipv4_prefixes {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsIpv4PrefixesItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub prefix_values: ::validated_data::Field<item::PrefixValues<'a, Mode>>,
@@ -68,13 +68,13 @@ pub mod field_sets {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionFieldSetsIpv4PrefixesItemsPrefixValuesList"))]
             pub struct PrefixValues<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplications"))]
 pub struct Applications<'a, Mode> {
     pub ipv4_applications: ::validated_data::Field<applications::Ipv4Applications<'a, Mode>>,
     pub l4_applications: ::validated_data::Field<applications::L4Applications<'a, Mode>>,
@@ -82,12 +82,12 @@ pub struct Applications<'a, Mode> {
 
 pub mod applications {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsList", item_name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsListIndexedItem"))]
     pub struct Ipv4Applications<'a, Mode> (::validated_data::Field<ipv4_applications::Item<'a, Mode>>);
 
     pub mod ipv4_applications {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub src_prefix_set_name: ::validated_data::Field<&'a str>,
@@ -103,23 +103,23 @@ pub mod applications {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsItemsDscpRangesList"))]
             pub struct DscpRanges<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsItemsProtocolsList"))]
             pub struct Protocols<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsIpv4ApplicationsItemsProtocolRangesList"))]
             pub struct ProtocolRanges<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsL4ApplicationsList", item_name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsL4ApplicationsListIndexedItem"))]
     pub struct L4Applications<'a, Mode> (::validated_data::Field<l4_applications::Item<'a, Mode>>);
 
     pub mod l4_applications {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsL4ApplicationsItems"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub protocols: ::validated_data::Field<item::Protocols<'a, Mode>>,
@@ -132,21 +132,21 @@ pub mod applications {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsL4ApplicationsItemsProtocolsList"))]
             pub struct Protocols<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationsL4ApplicationsItemsProtocolRangesList"))]
             pub struct ProtocolRanges<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesList", item_name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesListIndexedItem"))]
 pub struct ApplicationProfiles<'a, Mode> (::validated_data::Field<application_profiles::Item<'a, Mode>>);
 
 pub mod application_profiles {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub applications: ::validated_data::Field<item::Applications<'a, Mode>>,
@@ -156,27 +156,27 @@ pub mod application_profiles {
 
     pub mod item {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItemsApplicationsList"))]
         pub struct Applications<'a, Mode> (::validated_data::Field<applications::Item<'a, Mode>>);
 
         pub mod applications {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItemsApplicationsItems"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::RequiredValue<&'a str, Mode>,
                 pub service: ::validated_data::Field<&'a str>,
             }
         }
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItemsApplicationTransportsList"))]
         pub struct ApplicationTransports<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItemsCategoriesList"))]
         pub struct Categories<'a, Mode> (::validated_data::Field<categories::Item<'a, Mode>>);
 
         pub mod categories {
 
-            #[::validated_data::data_view]
+            #[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognitionApplicationProfilesItemsCategoriesItems"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::RequiredValue<&'a str, Mode>,
                 pub service: ::validated_data::Field<&'a str>,

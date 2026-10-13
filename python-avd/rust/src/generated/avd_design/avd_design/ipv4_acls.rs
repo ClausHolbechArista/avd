@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignIpv4AclsItems"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub entries: ::validated_data::RequiredValue<item::Entries<'a, Mode>, Mode>,
@@ -12,12 +12,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
+    #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesList"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view]
+        #[::validated_data::data_view(python(name = "AVDDesignIpv4AclsItemsEntriesItems"))]
         pub struct Item<'a, Mode> {
             pub source: ::validated_data::Field<&'a str>,
             pub destination: ::validated_data::Field<&'a str>,
@@ -49,13 +49,13 @@ pub mod item {
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsSourcePortsList"))]
             pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsDestinationPortsList"))]
             pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
+            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsTcpFlagsList"))]
             pub struct TcpFlags<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }

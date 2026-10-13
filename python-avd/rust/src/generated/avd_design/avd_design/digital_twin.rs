@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "AVDDesignDigitalTwinFabric"))]
 pub struct Fabric<'a, Mode> {
     pub act_os_version: ::validated_data::Field<&'a str>,
     pub act_username: ::validated_data::Field<&'a str>,

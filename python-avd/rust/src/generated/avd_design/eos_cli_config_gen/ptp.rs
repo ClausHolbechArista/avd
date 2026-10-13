@@ -77,7 +77,7 @@ pub mod monitor {
     }
 }
 
-#[::validated_data::data_view]
+#[::validated_data::data_view(python(name = "EosCliConfigGenPtpFreeRunning"))]
 pub struct FreeRunning<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub source_clock_hardware: ::validated_data::Field<bool>,

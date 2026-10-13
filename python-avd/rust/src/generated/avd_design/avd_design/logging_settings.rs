@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(list)]
+#[::validated_data::data_view(list, python(name = "AVDDesignLoggingSettingsHostsList"))]
 pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);
 
 pub mod hosts {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignLoggingSettingsHostsItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::RequiredValue<&'a str, Mode>,
         pub vrf: ::validated_data::Field<&'a str>,
@@ -18,17 +18,17 @@ pub mod hosts {
 
     pub mod item {
 
-        #[::validated_data::data_view(list)]
+        #[::validated_data::data_view(list, python(name = "AVDDesignLoggingSettingsHostsItemsPortsList"))]
         pub struct Ports<'a, Mode> (::validated_data::Field<i64>);
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignLoggingSettingsVrfsList", item_name = "AVDDesignLoggingSettingsVrfsListIndexedItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view]
+    #[::validated_data::data_view(python(name = "AVDDesignLoggingSettingsVrfsItems"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub source_interface: ::validated_data::Field<&'a str>,
