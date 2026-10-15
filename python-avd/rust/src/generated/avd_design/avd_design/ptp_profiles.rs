@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignPtpProfilesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.PtpProfilesItemBase"))]
 pub struct Item<'a, Mode> {
     pub profile: ::validated_data::Field<&'a str>,
     pub announce: ::validated_data::Field<item::Announce<'a, Mode>>,
@@ -14,18 +14,18 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(python(name = "AVDDesignPtpProfilesItemsAnnounce"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.PtpProfilesItemBase.Announce"))]
     pub struct Announce<'a, Mode> {
         pub interval: ::validated_data::Field<i64>,
         pub timeout: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignPtpProfilesItemsSyncMessage"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.PtpProfilesItemBase.SyncMessage"))]
     pub struct SyncMessage<'a, Mode> {
         pub interval: ::validated_data::Field<i64>,
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignPtpProfilesItemsManagement"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.PtpProfilesItemBase.Management"))]
     pub struct Management<'a, Mode> {
         pub drop: ::validated_data::Field<bool>,
     }

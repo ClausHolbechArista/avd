@@ -96,8 +96,8 @@ pub mod item {
                 pub route_map_out: ::validated_data::Field<&'a str>,
                 pub rcf_in: ::validated_data::Field<&'a str>,
                 pub rcf_out: ::validated_data::Field<&'a str>,
-                pub default_originate: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_bgp::address_family_ipv4::peer_groups::item::DefaultOriginate<'a, Mode>>,
-                pub next_hop: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_bgp::address_family_ipv4::peer_groups::item::NextHop<'a, Mode>>,
+                pub default_originate: ::validated_data::Field<super::super::super::super::super::eos_config::router_bgp::address_family_ipv4::peer_groups::item::DefaultOriginate<'a, Mode>>,
+                pub next_hop: ::validated_data::Field<super::super::super::super::super::eos_config::router_bgp::address_family_ipv4::peer_groups::item::NextHop<'a, Mode>>,
                 pub prefix_list_in: ::validated_data::Field<&'a str>,
                 pub prefix_list_out: ::validated_data::Field<&'a str>,
             }
@@ -388,7 +388,7 @@ pub mod item {
             pub validate_bgp_peers: ::validated_data::Field<bool>,
             pub raw_eos_cli: ::validated_data::Field<&'a str>,
             #[data_view(relaxed)]
-            pub structured_config: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::EosCliConfigGen<'a, ::validated_data::RelaxedValidated>>,
+            pub structured_config: ::validated_data::Field<super::super::super::super::eos_config::EosConfig<'a, ::validated_data::RelaxedValidated>>,
         }
 
         pub mod item {
@@ -449,7 +449,7 @@ pub mod item {
                 pub message_digest_keys: ::validated_data::Field<ospf::MessageDigestKeys<'a, Mode>>,
                 pub nodes: ::validated_data::Field<ospf::Nodes<'a, Mode>>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_ospf::process_ids::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::router_ospf::process_ids::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod ospf {
@@ -546,7 +546,7 @@ pub mod item {
                 pub struct Item<'a, Mode> {
                     pub id: ::validated_data::Field<i64>,
                     pub name: ::validated_data::RequiredValue<&'a str, Mode>,
-                    pub address_locking: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::vlans::item::address_locking::AddressFamily<'a, Mode>>,
+                    pub address_locking: ::validated_data::Field<super::super::super::super::super::super::eos_config::vlans::item::address_locking::AddressFamily<'a, Mode>>,
                     pub profile: ::validated_data::Field<&'a str>,
                     pub tags: ::validated_data::Field<item::Tags<'a, Mode>>,
                     pub evpn_vlan_bundle: ::validated_data::Field<&'a str>,
@@ -591,7 +591,7 @@ pub mod item {
                     pub bgp: ::validated_data::Field<item::Bgp<'a, Mode>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     pub evpn_l2_multi_domain: ::validated_data::Field<bool>,
                 }
 
@@ -650,7 +650,7 @@ pub mod item {
                             pub bgp: ::validated_data::Field<item::Bgp<'a, Mode>>,
                             pub raw_eos_cli: ::validated_data::Field<&'a str>,
                             #[data_view(relaxed)]
-                            pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                            pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                             pub evpn_l2_multi_domain: ::validated_data::Field<bool>,
                         }
 
@@ -855,7 +855,7 @@ pub mod item {
                             #[::validated_data::data_view]
                             pub struct Bgp<'a, Mode> {
                                 #[data_view(relaxed)]
-                                pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
+                                pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::super::eos_config::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
                                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                             }
 
@@ -1060,7 +1060,7 @@ pub mod item {
                     #[::validated_data::data_view]
                     pub struct Bgp<'a, Mode> {
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                     }
 
@@ -1099,7 +1099,7 @@ pub mod item {
                     pub monitor_sessions: ::validated_data::Field<item::MonitorSessions<'a, Mode>>,
                     pub campus_link_type: ::validated_data::Field<item::CampusLinkType<'a, Mode>>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 }
 
@@ -1295,7 +1295,7 @@ pub mod item {
                     pub ospf: ::validated_data::Field<item::Ospf<'a, Mode>>,
                     pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 }
 
@@ -1314,7 +1314,7 @@ pub mod item {
                             pub peer_interface: ::validated_data::Field<&'a str>,
                             pub speed: ::validated_data::Field<&'a str>,
                             #[data_view(relaxed)]
-                            pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                            pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                         }
 
                         pub mod item {
@@ -1527,7 +1527,7 @@ pub mod item {
                     pub local_as: ::validated_data::Field<&'a str>,
                     pub weight: ::validated_data::Field<i64>,
                     pub bfd: ::validated_data::Field<bool>,
-                    pub bfd_timers: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::router_bgp::vrfs::item::neighbors::item::BfdTimers<'a, Mode>>,
+                    pub bfd_timers: ::validated_data::Field<super::super::super::super::super::super::eos_config::router_bgp::vrfs::item::neighbors::item::BfdTimers<'a, Mode>>,
                     pub route_reflector_client: ::validated_data::Field<bool>,
                     pub shutdown: ::validated_data::Field<bool>,
                 }
@@ -1551,7 +1551,7 @@ pub mod item {
                 pub graceful_restart: ::validated_data::Field<bgp::GracefulRestart<'a, Mode>>,
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_bgp::vrfs::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::router_bgp::vrfs::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod bgp {
@@ -1631,8 +1631,8 @@ pub mod item {
                         pub route_map_out: ::validated_data::Field<&'a str>,
                         pub rcf_in: ::validated_data::Field<&'a str>,
                         pub rcf_out: ::validated_data::Field<&'a str>,
-                        pub default_originate: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::router_bgp::address_family_ipv4::peer_groups::item::DefaultOriginate<'a, Mode>>,
-                        pub next_hop: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::router_bgp::address_family_ipv4::peer_groups::item::NextHop<'a, Mode>>,
+                        pub default_originate: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::router_bgp::address_family_ipv4::peer_groups::item::DefaultOriginate<'a, Mode>>,
+                        pub next_hop: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::router_bgp::address_family_ipv4::peer_groups::item::NextHop<'a, Mode>>,
                         pub prefix_list_in: ::validated_data::Field<&'a str>,
                         pub prefix_list_out: ::validated_data::Field<&'a str>,
                     }
@@ -1844,7 +1844,7 @@ pub mod item {
             pub name: ::validated_data::RequiredValue<&'a str, Mode>,
             pub profile: ::validated_data::Field<&'a str>,
             pub tags: ::validated_data::Field<item::Tags<'a, Mode>>,
-            pub address_locking: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::vlans::item::address_locking::AddressFamily<'a, Mode>>,
+            pub address_locking: ::validated_data::Field<super::super::super::super::eos_config::vlans::item::address_locking::AddressFamily<'a, Mode>>,
             pub vni_override: ::validated_data::Field<i64>,
             pub rt_override: ::validated_data::Field<&'a str>,
             pub rd_override: ::validated_data::Field<&'a str>,
@@ -1909,7 +1909,7 @@ pub mod item {
             #[::validated_data::data_view]
             pub struct Bgp<'a, Mode> {
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
             }
 
@@ -1959,7 +1959,7 @@ pub mod item {
                     pub number: ::validated_data::Field<i64>,
                     pub port_channel: ::validated_data::Field<item::PortChannel<'a, Mode>>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 }
 
@@ -1968,7 +1968,7 @@ pub mod item {
                     #[::validated_data::data_view]
                     pub struct PortChannel<'a, Mode> {
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                     }
 

@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignEvpnVlanBundlesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.EvpnVlanBundlesItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub id: ::validated_data::RequiredValue<i64, Mode>,
@@ -14,7 +14,7 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(python(name = "AVDDesignEvpnVlanBundlesItemsBgp"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.EvpnVlanBundlesItemBase.Bgp"))]
     pub struct Bgp<'a, Mode> {
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
     }

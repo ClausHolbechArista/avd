@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCvPathfinderGlobalSitesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderGlobalSitesItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub description: ::validated_data::Field<&'a str>,

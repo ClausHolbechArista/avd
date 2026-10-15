@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCoreInterfacesP2pLinksIpPoolsList", item_name = "AVDDesignCoreInterfacesP2pLinksIpPoolsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CoreInterfaces.P2pLinksIpPools", item_name = "AVDDesign.CoreInterfaces.P2pLinksIpPoolsItem"))]
 pub struct P2pLinksIpPools<'a, Mode> (::validated_data::Field<p2p_links_ip_pools::Item<'a, Mode>>);
 
 pub mod p2p_links_ip_pools {
 
-    #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksIpPoolsItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksIpPoolsItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub ipv4_pool: ::validated_data::Field<&'a str>,
@@ -17,12 +17,12 @@ pub mod p2p_links_ip_pools {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCoreInterfacesP2pLinksProfilesList", item_name = "AVDDesignCoreInterfacesP2pLinksProfilesListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CoreInterfaces.P2pLinksProfiles", item_name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItem"))]
 pub struct P2pLinksProfiles<'a, Mode> (::validated_data::Field<p2p_links_profiles::Item<'a, Mode>>);
 
 pub mod p2p_links_profiles {
 
-    #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub id: ::validated_data::Field<i64>,
@@ -63,32 +63,32 @@ pub mod p2p_links_profiles {
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
         pub routing_protocol: ::validated_data::Field<&'a str>,
         #[data_view(relaxed)]
-        pub ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsIpList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Ip"))]
         pub struct Ip<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsIpv6List"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Ipv6"))]
         pub struct Ipv6<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsNodesList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Nodes"))]
         pub struct Nodes<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsInterfacesList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Interfaces"))]
         pub struct Interfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsAsList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.As"))]
         pub struct FieldAs<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsDescriptionsList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Descriptions"))]
         pub struct Descriptions<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPtp"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Ptp"))]
         pub struct Ptp<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub roles: ::validated_data::Field<ptp::Roles<'a, Mode>>,
@@ -97,17 +97,17 @@ pub mod p2p_links_profiles {
 
         pub mod ptp {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPtpRolesList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.Ptp.Roles"))]
             pub struct Roles<'a, Mode> (::validated_data::Field<&'a str>);
         }
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsFlowTracking"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.FlowTracking"))]
         pub struct FlowTracking<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub name: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPortChannel"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.PortChannel"))]
         pub struct PortChannel<'a, Mode> {
             pub description: ::validated_data::Field<&'a str>,
             pub mode: ::validated_data::Field<&'a str>,
@@ -118,12 +118,12 @@ pub mod p2p_links_profiles {
 
         pub mod port_channel {
 
-            #[::validated_data::data_view(indexed_list, primary_key(node), python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPortChannelNodesChildInterfacesList", item_name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPortChannelNodesChildInterfacesListIndexedItem"))]
+            #[::validated_data::data_view(indexed_list, primary_key(node), python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.PortChannel.NodesChildInterfaces", item_name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.PortChannel.NodesChildInterfacesItem"))]
             pub struct NodesChildInterfaces<'a, Mode> (::validated_data::Field<nodes_child_interfaces::Item<'a, Mode>>);
 
             pub mod nodes_child_interfaces {
 
-                #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPortChannelNodesChildInterfacesItems"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.PortChannel.NodesChildInterfacesItemBase"))]
                 pub struct Item<'a, Mode> {
                     pub node: ::validated_data::Field<&'a str>,
                     pub interfaces: ::validated_data::Field<item::Interfaces<'a, Mode>>,
@@ -132,23 +132,23 @@ pub mod p2p_links_profiles {
 
                 pub mod item {
 
-                    #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsPortChannelNodesChildInterfacesItemsInterfacesList"))]
+                    #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.PortChannel.NodesChildInterfacesItemBase.Interfaces"))]
                     pub struct Interfaces<'a, Mode> (::validated_data::Field<&'a str>);
                 }
             }
         }
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksProfilesItemsCampusLinkTypeList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksProfilesItemBase.CampusLinkType"))]
         pub struct CampusLinkType<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }
 
-#[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksList"))]
+#[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinks"))]
 pub struct P2pLinks<'a, Mode> (::validated_data::Field<p2p_links::Item<'a, Mode>>);
 
 pub mod p2p_links {
 
-    #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksItem"))]
     pub struct Item<'a, Mode> {
         pub nodes: ::validated_data::RequiredValue<item::Nodes<'a, Mode>, Mode>,
         pub profile: ::validated_data::Field<&'a str>,
@@ -189,32 +189,32 @@ pub mod p2p_links {
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
         pub routing_protocol: ::validated_data::Field<&'a str>,
         #[data_view(relaxed)]
-        pub ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsNodesList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Nodes"))]
         pub struct Nodes<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsIpList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Ip"))]
         pub struct Ip<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsIpv6List"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Ipv6"))]
         pub struct Ipv6<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsInterfacesList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Interfaces"))]
         pub struct Interfaces<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsAsList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.As"))]
         pub struct FieldAs<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsDescriptionsList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Descriptions"))]
         pub struct Descriptions<'a, Mode> (::validated_data::Field<&'a str>);
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksItemsPtp"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Ptp"))]
         pub struct Ptp<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub roles: ::validated_data::Field<ptp::Roles<'a, Mode>>,
@@ -223,17 +223,17 @@ pub mod p2p_links {
 
         pub mod ptp {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsPtpRolesList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.Ptp.Roles"))]
             pub struct Roles<'a, Mode> (::validated_data::Field<&'a str>);
         }
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksItemsFlowTracking"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.FlowTracking"))]
         pub struct FlowTracking<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub name: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksItemsPortChannel"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.PortChannel"))]
         pub struct PortChannel<'a, Mode> {
             pub description: ::validated_data::Field<&'a str>,
             pub mode: ::validated_data::Field<&'a str>,
@@ -244,12 +244,12 @@ pub mod p2p_links {
 
         pub mod port_channel {
 
-            #[::validated_data::data_view(indexed_list, primary_key(node), python(name = "AVDDesignCoreInterfacesP2pLinksItemsPortChannelNodesChildInterfacesList", item_name = "AVDDesignCoreInterfacesP2pLinksItemsPortChannelNodesChildInterfacesListIndexedItem"))]
+            #[::validated_data::data_view(indexed_list, primary_key(node), python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.PortChannel.NodesChildInterfaces", item_name = "AVDDesign.CoreInterfaces.P2pLinksItem.PortChannel.NodesChildInterfacesItem"))]
             pub struct NodesChildInterfaces<'a, Mode> (::validated_data::Field<nodes_child_interfaces::Item<'a, Mode>>);
 
             pub mod nodes_child_interfaces {
 
-                #[::validated_data::data_view(python(name = "AVDDesignCoreInterfacesP2pLinksItemsPortChannelNodesChildInterfacesItems"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.PortChannel.NodesChildInterfacesItemBase"))]
                 pub struct Item<'a, Mode> {
                     pub node: ::validated_data::Field<&'a str>,
                     pub interfaces: ::validated_data::Field<item::Interfaces<'a, Mode>>,
@@ -258,13 +258,13 @@ pub mod p2p_links {
 
                 pub mod item {
 
-                    #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsPortChannelNodesChildInterfacesItemsInterfacesList"))]
+                    #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.PortChannel.NodesChildInterfacesItemBase.Interfaces"))]
                     pub struct Interfaces<'a, Mode> (::validated_data::Field<&'a str>);
                 }
             }
         }
 
-        #[::validated_data::data_view(list, python(name = "AVDDesignCoreInterfacesP2pLinksItemsCampusLinkTypeList"))]
+        #[::validated_data::data_view(list, python(name = "AVDDesign.CoreInterfaces.P2pLinksItem.CampusLinkType"))]
         pub struct CampusLinkType<'a, Mode> (::validated_data::Field<&'a str>);
     }
 }

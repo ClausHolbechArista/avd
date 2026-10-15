@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenTcamProfileProfilesList", item_name = "EosCliConfigGenTcamProfileProfilesListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EOSConfig.TcamProfile.Profiles", item_name = "EOSConfig.TcamProfile.ProfilesItem"))]
 pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
 
 pub mod profiles {
 
-    #[::validated_data::data_view(python(name = "EosCliConfigGenTcamProfileProfilesItems"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.TcamProfile.ProfilesItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub config: ::validated_data::Field<&'a str>,

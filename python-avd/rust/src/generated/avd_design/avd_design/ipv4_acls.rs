@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignIpv4AclsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.Ipv4AclsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub entries: ::validated_data::RequiredValue<item::Entries<'a, Mode>, Mode>,
@@ -12,12 +12,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv4AclsItemBase.Entries"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view(python(name = "AVDDesignIpv4AclsItemsEntriesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.Ipv4AclsItemBase.EntriesItem"))]
         pub struct Item<'a, Mode> {
             pub source: ::validated_data::Field<&'a str>,
             pub destination: ::validated_data::Field<&'a str>,
@@ -49,13 +49,13 @@ pub mod item {
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsSourcePortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv4AclsItemBase.EntriesItem.SourcePorts"))]
             pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsDestinationPortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv4AclsItemBase.EntriesItem.DestinationPorts"))]
             pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv4AclsItemsEntriesItemsTcpFlagsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv4AclsItemBase.EntriesItem.TcpFlags"))]
             pub struct TcpFlags<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }

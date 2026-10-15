@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenPeerFiltersItems"))]
+#[::validated_data::data_view(python(name = "EOSConfig.PeerFiltersItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub sequence_numbers: ::validated_data::RequiredValue<item::SequenceNumbers<'a, Mode>, Mode>,
@@ -10,12 +10,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "EosCliConfigGenPeerFiltersItemsSequenceNumbersList", item_name = "EosCliConfigGenPeerFiltersItemsSequenceNumbersListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "EOSConfig.PeerFiltersItemBase.SequenceNumbers", item_name = "EOSConfig.PeerFiltersItemBase.SequenceNumbersItem"))]
     pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        #[::validated_data::data_view(python(name = "EosCliConfigGenPeerFiltersItemsSequenceNumbersItems"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.PeerFiltersItemBase.SequenceNumbersItemBase"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::Field<i64>,
             #[data_view(rename = "match")]

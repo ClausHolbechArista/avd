@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.Ipv6AclsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub entries: ::validated_data::RequiredValue<item::Entries<'a, Mode>, Mode>,
@@ -12,12 +12,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv6AclsItemBase.Entries"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItemsEntriesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.Ipv6AclsItemBase.EntriesItem"))]
         pub struct Item<'a, Mode> {
             pub source: ::validated_data::Field<&'a str>,
             pub destination: ::validated_data::Field<&'a str>,
@@ -48,23 +48,23 @@ pub mod item {
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsSourcePortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv6AclsItemBase.EntriesItem.SourcePorts"))]
             pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsDestinationPortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv6AclsItemBase.EntriesItem.DestinationPorts"))]
             pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignIpv6AclsItemsEntriesItemsTcpFlagsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv6AclsItemBase.EntriesItem.TcpFlags"))]
             pub struct TcpFlags<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "AVDDesignIpv6AclsItemsSequenceNumbersList", item_name = "AVDDesignIpv6AclsItemsSequenceNumbersListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "AVDDesign.Ipv6AclsItemBase.SequenceNumbers", item_name = "AVDDesign.Ipv6AclsItemBase.SequenceNumbersItem"))]
     pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        #[::validated_data::data_view(python(name = "AVDDesignIpv6AclsItemsSequenceNumbersItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.Ipv6AclsItemBase.SequenceNumbersItemBase"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::Field<i64>,
             pub action: ::validated_data::RequiredValue<&'a str, Mode>,

@@ -60,22 +60,45 @@ def test_native_catalog_matches_every_generated_stub_model() -> None:
     assert native is _rust._validated_data
     assert native.__name__ == "pyavd._validated_data"
     stub_path = Path(__file__).parents[2] / "pyavd/_validated_data.pyi"
-    declarations = {node.name: node for node in ast.parse(stub_path.read_text()).body if isinstance(node, ast.ClassDef)}
+    declarations: dict[str, ast.ClassDef] = {}
+
+    def collect_declarations(body: list[ast.stmt], scope: str = "") -> None:
+        for node in body:
+            if isinstance(node, ast.ClassDef):
+                name = f"{scope}.{node.name}" if scope else node.name
+                declarations[name] = node
+                collect_declarations(node.body, name)
+
+    collect_declarations(ast.parse(stub_path.read_text()).body)
     assert not stub_path.with_suffix(".py").exists()
-    native_models = {name: value for name, value in vars(native).items() if isinstance(value, type) and value.__module__ == native.__name__}
-    assert native_models.keys() == declarations.keys()
+    native_models: dict[str, type] = {}
+
+    def collect_native(namespace: object, scope: str = "") -> None:
+        for local_name, value in vars(namespace).items():
+            if isinstance(value, type) and value.__module__ == native.__name__:
+                name = f"{scope}.{local_name}" if scope else local_name
+                native_models[name] = value
+                assert value.__name__ == local_name
+                assert value.__qualname__ == name
+                collect_native(value, name)
+
+    collect_native(native)
+    assert native_models.keys() == {name for name in declarations if not name.startswith("_")}
     assert len(native_models) > 1000
+    assert {name for name in native_models if "." not in name} == {"AVDDesign", "EOSConfig"}
+    assert not hasattr(native, "EosCliConfigGen")
 
     def declared_properties(name: str) -> set[str]:
         declaration = declarations[name]
         properties = {node.name for node in declaration.body if isinstance(node, ast.FunctionDef) and not node.name.startswith("_")}
         for base in declaration.bases:
-            if isinstance(base, ast.Name) and base.id in declarations:
-                properties.update(declared_properties(base.id))
+            base_name = ast.unparse(base.value if isinstance(base, ast.Subscript) else base)
+            if base_name in declarations:
+                properties.update(declared_properties(base_name))
         return properties
 
-    for name in declarations:
-        assert _public_properties(native_models[name]) == declared_properties(name), name
+    for name, model in native_models.items():
+        assert _public_properties(model) == declared_properties(name), name
 
 
 def test_binding_collection_edge_cases_and_ownership(tmp_path: Path) -> None:
@@ -92,7 +115,9 @@ def test_binding_collection_edge_cases_and_ownership(tmp_path: Path) -> None:
     root = models.open_avd_design(archive, schema)
     devices = root.devices
     item = devices["leaf1"]
-    assert isinstance(item, models.AVDDesignDevicesItems)
+    assert type(item) is models.AVDDesign.DevicesItem
+    assert isinstance(item, models.AVDDesign.DevicesItemBase)
+    assert models.AVDDesign.DevicesItem.__base__ is models.AVDDesign.DevicesItemBase
     assert devices.get("absent") is Undefined
     assert devices.get("absent", None) is None
     assert devices.get("absent", default=None) is None

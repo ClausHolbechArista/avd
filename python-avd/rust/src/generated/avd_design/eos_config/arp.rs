@@ -2,13 +2,13 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenArpPersistent"))]
+#[::validated_data::data_view(python(name = "EOSConfig.Arp.Persistent"))]
 pub struct Persistent<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub refresh_delay: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenArpAging"))]
+#[::validated_data::data_view(python(name = "EOSConfig.Arp.Aging"))]
 pub struct Aging<'a, Mode> {
     pub timeout_default: ::validated_data::Field<i64>,
 }

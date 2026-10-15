@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCvTopologyItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvTopologyItemBase"))]
 pub struct Item<'a, Mode> {
     pub hostname: ::validated_data::Field<&'a str>,
     pub platform: ::validated_data::RequiredValue<&'a str, Mode>,
@@ -11,12 +11,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvTopologyItemsInterfacesList", item_name = "AVDDesignCvTopologyItemsInterfacesListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvTopologyItemBase.Interfaces", item_name = "AVDDesign.CvTopologyItemBase.InterfacesItem"))]
     pub struct Interfaces<'a, Mode> (::validated_data::Field<interfaces::Item<'a, Mode>>);
 
     pub mod interfaces {
 
-        #[::validated_data::data_view(python(name = "AVDDesignCvTopologyItemsInterfacesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CvTopologyItemBase.InterfacesItemBase"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub neighbor: ::validated_data::Field<&'a str>,

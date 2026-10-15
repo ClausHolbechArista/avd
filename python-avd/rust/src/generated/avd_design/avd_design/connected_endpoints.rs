@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     #[data_view(rename = "type")]
@@ -13,12 +13,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.Adapters"))]
     pub struct Adapters<'a, Mode> (::validated_data::Field<adapters::Item<'a, Mode>>);
 
     pub mod adapters {
 
-        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem"))]
         pub struct Item<'a, Mode> {
             pub switch_ports: ::validated_data::RequiredValue<item::SwitchPorts<'a, Mode>, Mode>,
             pub switches: ::validated_data::RequiredValue<item::Switches<'a, Mode>, Mode>,
@@ -46,7 +46,7 @@ pub mod item {
             pub spanning_tree_bpdufilter: ::validated_data::Field<&'a str>,
             pub spanning_tree_bpduguard: ::validated_data::Field<&'a str>,
             pub spanning_tree_link_type: ::validated_data::Field<&'a str>,
-            pub flowcontrol: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::item::Flowcontrol<'a, Mode>>,
+            pub flowcontrol: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::item::Flowcontrol<'a, Mode>>,
             pub qos_profile: ::validated_data::Field<&'a str>,
             pub ptp: ::validated_data::Field<item::Ptp<'a, Mode>>,
             pub sflow: ::validated_data::Field<bool>,
@@ -54,7 +54,7 @@ pub mod item {
             pub link_tracking: ::validated_data::Field<item::LinkTracking<'a, Mode>>,
             pub dot1x: ::validated_data::Field<item::Dot1x<'a, Mode>>,
             pub address_locking: ::validated_data::Field<item::AddressLocking<'a, Mode>>,
-            pub poe: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::item::Poe<'a, Mode>>,
+            pub poe: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::item::Poe<'a, Mode>>,
             pub storm_control: ::validated_data::Field<item::StormControl<'a, Mode>>,
             pub monitor_sessions: ::validated_data::Field<item::MonitorSessions<'a, Mode>>,
             pub ethernet_segment: ::validated_data::Field<item::EthernetSegment<'a, Mode>>,
@@ -63,29 +63,29 @@ pub mod item {
             pub campus_link_type: ::validated_data::Field<item::CampusLinkType<'a, Mode>>,
             pub raw_eos_cli: ::validated_data::Field<&'a str>,
             #[data_view(relaxed)]
-            pub structured_config: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+            pub structured_config: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSwitchPortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.SwitchPorts"))]
             pub struct SwitchPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSwitchesList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Switches"))]
             pub struct Switches<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsEndpointPortsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.EndpointPorts"))]
             pub struct EndpointPorts<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDescriptionsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Descriptions"))]
             pub struct Descriptions<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(indexed_list, primary_key(number), python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSubinterfacesList", item_name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSubinterfacesListIndexedItem"))]
+            #[::validated_data::data_view(indexed_list, primary_key(number), python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Subinterfaces", item_name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.SubinterfacesItem"))]
             pub struct Subinterfaces<'a, Mode> (::validated_data::Field<subinterfaces::Item<'a, Mode>>);
 
             pub mod subinterfaces {
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSubinterfacesItems"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.SubinterfacesItemBase"))]
                 pub struct Item<'a, Mode> {
                     pub number: ::validated_data::Field<i64>,
                     pub description: ::validated_data::Field<&'a str>,
@@ -94,19 +94,19 @@ pub mod item {
                     pub encapsulation_vlan: ::validated_data::Field<item::EncapsulationVlan<'a, Mode>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 }
 
                 pub mod item {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsSubinterfacesItemsEncapsulationVlan"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.SubinterfacesItemBase.EncapsulationVlan"))]
                     pub struct EncapsulationVlan<'a, Mode> {
                         pub client_dot1q: ::validated_data::Field<i64>,
                     }
                 }
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannel"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel"))]
             pub struct PortChannel<'a, Mode> {
                 pub subinterfaces: ::validated_data::Field<port_channel::Subinterfaces<'a, Mode>>,
                 pub mode: ::validated_data::Field<&'a str>,
@@ -119,17 +119,17 @@ pub mod item {
                 pub lacp_timer: ::validated_data::Field<port_channel::LacpTimer<'a, Mode>>,
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod port_channel {
 
-                #[::validated_data::data_view(indexed_list, primary_key(number), python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelSubinterfacesList", item_name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelSubinterfacesListIndexedItem"))]
+                #[::validated_data::data_view(indexed_list, primary_key(number), python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.Subinterfaces", item_name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.SubinterfacesItem"))]
                 pub struct Subinterfaces<'a, Mode> (::validated_data::Field<subinterfaces::Item<'a, Mode>>);
 
                 pub mod subinterfaces {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelSubinterfacesItems"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.SubinterfacesItemBase"))]
                     pub struct Item<'a, Mode> {
                         pub number: ::validated_data::Field<i64>,
                         pub description: ::validated_data::Field<&'a str>,
@@ -138,19 +138,19 @@ pub mod item {
                         pub encapsulation_vlan: ::validated_data::Field<item::EncapsulationVlan<'a, Mode>>,
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {
 
-                        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelSubinterfacesItemsEncapsulationVlan"))]
+                        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.SubinterfacesItemBase.EncapsulationVlan"))]
                         pub struct EncapsulationVlan<'a, Mode> {
                             pub client_dot1q: ::validated_data::Field<i64>,
                         }
                     }
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelLacpFallback"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.LacpFallback"))]
                 pub struct LacpFallback<'a, Mode> {
                     pub mode: ::validated_data::Field<&'a str>,
                     pub individual: ::validated_data::Field<lacp_fallback::Individual<'a, Mode>>,
@@ -159,7 +159,7 @@ pub mod item {
 
                 pub mod lacp_fallback {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelLacpFallbackIndividual"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.LacpFallback.Individual"))]
                     pub struct Individual<'a, Mode> {
                         pub profile: ::validated_data::Field<&'a str>,
                         pub vlans: ::validated_data::Field<&'a str>,
@@ -168,36 +168,36 @@ pub mod item {
                     }
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPortChannelLacpTimer"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.PortChannel.LacpTimer"))]
                 pub struct LacpTimer<'a, Mode> {
                     pub mode: ::validated_data::Field<&'a str>,
                     pub multiplier: ::validated_data::Field<i64>,
                 }
             }
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsTrunkGroupsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.TrunkGroups"))]
             pub struct TrunkGroups<'a, Mode> (::validated_data::Field<&'a str>);
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsPtp"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Ptp"))]
             pub struct Ptp<'a, Mode> {
                 pub enabled: ::validated_data::Field<bool>,
                 pub endpoint_role: ::validated_data::Field<&'a str>,
                 pub profile: ::validated_data::Field<&'a str>,
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsFlowTracking"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.FlowTracking"))]
             pub struct FlowTracking<'a, Mode> {
                 pub enabled: ::validated_data::Field<bool>,
                 pub name: ::validated_data::Field<&'a str>,
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsLinkTracking"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.LinkTracking"))]
             pub struct LinkTracking<'a, Mode> {
                 pub enabled: ::validated_data::Field<bool>,
                 pub name: ::validated_data::Field<&'a str>,
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1x"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x"))]
             pub struct Dot1x<'a, Mode> {
                 pub authentication_failure: ::validated_data::Field<dot1x::AuthenticationFailure<'a, Mode>>,
                 pub port_control: ::validated_data::Field<&'a str>,
@@ -216,33 +216,33 @@ pub mod item {
 
             pub mod dot1x {
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xAuthenticationFailure"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.AuthenticationFailure"))]
                 pub struct AuthenticationFailure<'a, Mode> {
                     pub allow_access_list: ::validated_data::Field<&'a str>,
                     pub action: ::validated_data::Field<&'a str>,
                     pub allow_vlan: ::validated_data::Field<i64>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xPae"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Pae"))]
                 pub struct Pae<'a, Mode> {
                     pub mode: ::validated_data::Field<&'a str>,
                     pub supplicant_profile: ::validated_data::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xHostMode"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.HostMode"))]
                 pub struct HostMode<'a, Mode> {
                     pub mode: ::validated_data::Field<&'a str>,
                     pub multi_host_authenticated: ::validated_data::Field<bool>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xMacBasedAuthentication"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.MacBasedAuthentication"))]
                 pub struct MacBasedAuthentication<'a, Mode> {
                     pub enabled: ::validated_data::Field<bool>,
                     pub always: ::validated_data::Field<bool>,
                     pub host_mode_common: ::validated_data::Field<bool>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xTimeout"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Timeout"))]
                 pub struct Timeout<'a, Mode> {
                     pub idle_host: ::validated_data::Field<i64>,
                     pub quiet_period: ::validated_data::Field<i64>,
@@ -251,13 +251,13 @@ pub mod item {
                     pub tx_period: ::validated_data::Field<i64>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xUnauthorized"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Unauthorized"))]
                 pub struct Unauthorized<'a, Mode> {
                     pub access_vlan_membership_egress: ::validated_data::Field<bool>,
                     pub native_vlan_membership_egress: ::validated_data::Field<bool>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xEapol"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Eapol"))]
                 pub struct Eapol<'a, Mode> {
                     pub disabled: ::validated_data::Field<bool>,
                     pub authentication_failure_fallback_mba: ::validated_data::Field<eapol::AuthenticationFailureFallbackMba<'a, Mode>>,
@@ -265,30 +265,30 @@ pub mod item {
 
                 pub mod eapol {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xEapolAuthenticationFailureFallbackMba"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Eapol.AuthenticationFailureFallbackMba"))]
                     pub struct AuthenticationFailureFallbackMba<'a, Mode> {
                         pub enabled: ::validated_data::Field<bool>,
                         pub timeout: ::validated_data::Field<i64>,
                     }
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xAaa"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Aaa"))]
                 pub struct Aaa<'a, Mode> {
                     pub unresponsive: ::validated_data::Field<aaa::Unresponsive<'a, Mode>>,
                 }
 
                 pub mod aaa {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xAaaUnresponsive"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Aaa.Unresponsive"))]
                     pub struct Unresponsive<'a, Mode> {
                         pub eap_response: ::validated_data::Field<&'a str>,
                         pub action: ::validated_data::Field<unresponsive::Action<'a, Mode>>,
-                        pub phone_action: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::dot1x::aaa::unresponsive::PhoneAction<'a, Mode>>,
+                        pub phone_action: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::dot1x::aaa::unresponsive::PhoneAction<'a, Mode>>,
                     }
 
                     pub mod unresponsive {
 
-                        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xAaaUnresponsiveAction"))]
+                        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Aaa.Unresponsive.Action"))]
                         pub struct Action<'a, Mode> {
                             pub traffic_allow_access_list: ::validated_data::Field<&'a str>,
                             pub apply_alternate: ::validated_data::Field<bool>,
@@ -300,7 +300,7 @@ pub mod item {
 
                         pub mod action {
 
-                            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsDot1xAaaUnresponsiveActionCachedResultsTimeout"))]
+                            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.Dot1x.Aaa.Unresponsive.Action.CachedResultsTimeout"))]
                             pub struct CachedResultsTimeout<'a, Mode> {
                                 pub time_duration: ::validated_data::RequiredValue<i64, Mode>,
                                 pub time_duration_unit: ::validated_data::RequiredValue<&'a str, Mode>,
@@ -310,13 +310,13 @@ pub mod item {
                 }
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsAddressLocking"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.AddressLocking"))]
             pub struct AddressLocking<'a, Mode> {
                 pub ipv4: ::validated_data::Field<bool>,
                 pub ipv6: ::validated_data::Field<bool>,
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsStormControl"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.StormControl"))]
             pub struct StormControl<'a, Mode> {
                 pub all: ::validated_data::Field<storm_control::All<'a, Mode>>,
                 pub broadcast: ::validated_data::Field<storm_control::Broadcast<'a, Mode>>,
@@ -326,37 +326,37 @@ pub mod item {
 
             pub mod storm_control {
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsStormControlAll"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.StormControl.All"))]
                 pub struct All<'a, Mode> {
                     pub level: ::validated_data::Field<&'a str>,
                     pub unit: ::validated_data::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsStormControlBroadcast"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.StormControl.Broadcast"))]
                 pub struct Broadcast<'a, Mode> {
                     pub level: ::validated_data::Field<&'a str>,
                     pub unit: ::validated_data::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsStormControlMulticast"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.StormControl.Multicast"))]
                 pub struct Multicast<'a, Mode> {
                     pub level: ::validated_data::Field<&'a str>,
                     pub unit: ::validated_data::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsStormControlUnknownUnicast"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.StormControl.UnknownUnicast"))]
                 pub struct UnknownUnicast<'a, Mode> {
                     pub level: ::validated_data::Field<&'a str>,
                     pub unit: ::validated_data::Field<&'a str>,
                 }
             }
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessions"))]
             pub struct MonitorSessions<'a, Mode> (::validated_data::Field<monitor_sessions::Item<'a, Mode>>);
 
             pub mod monitor_sessions {
 
-                #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItems"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem"))]
                 pub struct Item<'a, Mode> {
                     pub name: ::validated_data::RequiredValue<&'a str, Mode>,
                     pub role: ::validated_data::Field<&'a str>,
@@ -366,7 +366,7 @@ pub mod item {
 
                 pub mod item {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItemsSourceSettings"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem.SourceSettings"))]
                     pub struct SourceSettings<'a, Mode> {
                         pub direction: ::validated_data::Field<&'a str>,
                         pub access_group: ::validated_data::Field<source_settings::AccessGroup<'a, Mode>>,
@@ -374,7 +374,7 @@ pub mod item {
 
                     pub mod source_settings {
 
-                        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItemsSourceSettingsAccessGroup"))]
+                        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem.SourceSettings.AccessGroup"))]
                         pub struct AccessGroup<'a, Mode> {
                             #[data_view(rename = "type")]
                             pub field_type: ::validated_data::Field<&'a str>,
@@ -383,7 +383,7 @@ pub mod item {
                         }
                     }
 
-                    #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItemsSessionSettings"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem.SessionSettings"))]
                     pub struct SessionSettings<'a, Mode> {
                         pub encapsulation_gre_metadata_tx: ::validated_data::Field<bool>,
                         pub header_remove_size: ::validated_data::Field<i64>,
@@ -396,14 +396,14 @@ pub mod item {
 
                     pub mod session_settings {
 
-                        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItemsSessionSettingsAccessGroup"))]
+                        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem.SessionSettings.AccessGroup"))]
                         pub struct AccessGroup<'a, Mode> {
                             #[data_view(rename = "type")]
                             pub field_type: ::validated_data::Field<&'a str>,
                             pub name: ::validated_data::Field<&'a str>,
                         }
 
-                        #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsMonitorSessionsItemsSessionSettingsTruncate"))]
+                        #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.MonitorSessionsItem.SessionSettings.Truncate"))]
                         pub struct Truncate<'a, Mode> {
                             pub enabled: ::validated_data::Field<bool>,
                             pub size: ::validated_data::Field<i64>,
@@ -412,7 +412,7 @@ pub mod item {
                 }
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsEthernetSegment"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.EthernetSegment"))]
             pub struct EthernetSegment<'a, Mode> {
                 pub short_esi: ::validated_data::RequiredValue<&'a str, Mode>,
                 pub redundancy: ::validated_data::Field<&'a str>,
@@ -423,11 +423,11 @@ pub mod item {
 
             pub mod ethernet_segment {
 
-                #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsEthernetSegmentDesignatedForwarderPreferencesList"))]
+                #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.EthernetSegment.DesignatedForwarderPreferences"))]
                 pub struct DesignatedForwarderPreferences<'a, Mode> (::validated_data::Field<i64>);
             }
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignConnectedEndpointsItemsAdaptersItemsCampusLinkTypeList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.ConnectedEndpointsItemBase.AdaptersItem.CampusLinkType"))]
             pub struct CampusLinkType<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }

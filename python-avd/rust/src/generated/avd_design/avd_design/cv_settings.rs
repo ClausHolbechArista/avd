@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCvSettingsCvaas"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvSettings.Cvaas"))]
 pub struct Cvaas<'a, Mode> {
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
     pub clusters: ::validated_data::Field<cvaas::Clusters<'a, Mode>>,
@@ -10,12 +10,12 @@ pub struct Cvaas<'a, Mode> {
 
 pub mod cvaas {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvSettingsCvaasClustersList", item_name = "AVDDesignCvSettingsCvaasClustersListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvSettings.Cvaas.Clusters", item_name = "AVDDesign.CvSettings.Cvaas.ClustersItem"))]
     pub struct Clusters<'a, Mode> (::validated_data::Field<clusters::Item<'a, Mode>>);
 
     pub mod clusters {
 
-        #[::validated_data::data_view(python(name = "AVDDesignCvSettingsCvaasClustersItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CvSettings.Cvaas.ClustersItemBase"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub region: ::validated_data::Field<&'a str>,
@@ -26,12 +26,12 @@ pub mod cvaas {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvSettingsOnpremClustersList", item_name = "AVDDesignCvSettingsOnpremClustersListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvSettings.OnpremClusters", item_name = "AVDDesign.CvSettings.OnpremClustersItem"))]
 pub struct OnpremClusters<'a, Mode> (::validated_data::Field<onprem_clusters::Item<'a, Mode>>);
 
 pub mod onprem_clusters {
 
-    #[::validated_data::data_view(python(name = "AVDDesignCvSettingsOnpremClustersItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.CvSettings.OnpremClustersItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub servers: ::validated_data::RequiredValue<item::Servers<'a, Mode>, Mode>,
@@ -42,12 +42,12 @@ pub mod onprem_clusters {
 
     pub mod item {
 
-        #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvSettingsOnpremClustersItemsServersList", item_name = "AVDDesignCvSettingsOnpremClustersItemsServersListIndexedItem"))]
+        #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvSettings.OnpremClustersItemBase.Servers", item_name = "AVDDesign.CvSettings.OnpremClustersItemBase.ServersItem"))]
         pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
         pub mod servers {
 
-            #[::validated_data::data_view(python(name = "AVDDesignCvSettingsOnpremClustersItemsServersItems"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.CvSettings.OnpremClustersItemBase.ServersItemBase"))]
             pub struct Item<'a, Mode> {
                 pub name: ::validated_data::Field<&'a str>,
                 pub port: ::validated_data::Field<i64>,
@@ -56,7 +56,7 @@ pub mod onprem_clusters {
     }
 }
 
-#[::validated_data::data_view(python(name = "AVDDesignCvSettingsTerminattr"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvSettings.Terminattr"))]
 pub struct Terminattr<'a, Mode> {
     pub ingestexclude: ::validated_data::Field<&'a str>,
     pub smashexcludes: ::validated_data::Field<&'a str>,
@@ -68,15 +68,15 @@ pub struct Terminattr<'a, Mode> {
 
 pub mod terminattr {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignCvSettingsTerminattrCvtargetconfigsList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.CvSettings.Terminattr.Cvtargetconfigs"))]
     pub struct Cvtargetconfigs<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignCvSettingsTerminattrCustomCvOptionsList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.CvSettings.Terminattr.CustomCvOptions"))]
     pub struct CustomCvOptions<'a, Mode> (::validated_data::Field<custom_cv_options::Item<'a, Mode>>);
 
     pub mod custom_cv_options {
 
-        #[::validated_data::data_view(python(name = "AVDDesignCvSettingsTerminattrCustomCvOptionsItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CvSettings.Terminattr.CustomCvOptionsItem"))]
         pub struct Item<'a, Mode> {
             pub flag: ::validated_data::RequiredValue<&'a str, Mode>,
             pub value: ::validated_data::Field<&'a str>,

@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignManagementEapiVrfsList", item_name = "AVDDesignManagementEapiVrfsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.ManagementEapi.Vrfs", item_name = "AVDDesign.ManagementEapi.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view(python(name = "AVDDesignManagementEapiVrfsItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.ManagementEapi.VrfsItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub enabled: ::validated_data::RequiredValue<bool, Mode>,

@@ -164,7 +164,7 @@ def build_validated_data_models() -> None:
         VALIDATED_DATA_PYI_FILE,
         "AvdDesign",
         "AVDDesign",
-        reused_schemas={"eos_cli_config_gen": ("EosCliConfigGen", "EosCliConfigGen")},
+        reused_schemas={"eos_cli_config_gen": ("EosConfig", "EOSConfig")},
     )
     LOGGER.info("Running 'ruff' for generated validated-data typing stub: %s", VALIDATED_DATA_PYI_FILE)
     subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607

@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignIpv6PrefixListCatalogItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.Ipv6PrefixListCatalogItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub sequence_numbers: ::validated_data::RequiredValue<item::SequenceNumbers<'a, Mode>, Mode>,
@@ -10,12 +10,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "AVDDesignIpv6PrefixListCatalogItemsSequenceNumbersList", item_name = "AVDDesignIpv6PrefixListCatalogItemsSequenceNumbersListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(sequence), python(name = "AVDDesign.Ipv6PrefixListCatalogItemBase.SequenceNumbers", item_name = "AVDDesign.Ipv6PrefixListCatalogItemBase.SequenceNumbersItem"))]
     pub struct SequenceNumbers<'a, Mode> (::validated_data::Field<sequence_numbers::Item<'a, Mode>>);
 
     pub mod sequence_numbers {
 
-        #[::validated_data::data_view(python(name = "AVDDesignIpv6PrefixListCatalogItemsSequenceNumbersItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.Ipv6PrefixListCatalogItemBase.SequenceNumbersItemBase"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::RequiredValue<i64, Mode>,
             pub action: ::validated_data::RequiredValue<&'a str, Mode>,

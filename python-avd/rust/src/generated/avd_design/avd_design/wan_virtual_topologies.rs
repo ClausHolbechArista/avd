@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignWanVirtualTopologiesVrfsList", item_name = "AVDDesignWanVirtualTopologiesVrfsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.WanVirtualTopologies.Vrfs", item_name = "AVDDesign.WanVirtualTopologies.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesVrfsItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.VrfsItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub policy: ::validated_data::Field<&'a str>,
@@ -15,7 +15,7 @@ pub mod vrfs {
     }
 }
 
-#[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopology"))]
+#[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology"))]
 pub struct ControlPlaneVirtualTopology<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub application_profile: ::validated_data::Field<&'a str>,
@@ -23,27 +23,27 @@ pub struct ControlPlaneVirtualTopology<'a, Mode> {
     pub dscp: ::validated_data::Field<i64>,
     pub lowest_hop_count: ::validated_data::Field<bool>,
     pub constraints: ::validated_data::Field<control_plane_virtual_topology::Constraints<'a, Mode>>,
-    pub outlier_elimination: ::validated_data::Field<super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
-    pub metric_order: ::validated_data::Field<super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
+    pub outlier_elimination: ::validated_data::Field<super::super::eos_config::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
+    pub metric_order: ::validated_data::Field<super::super::eos_config::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
     pub path_groups: ::validated_data::Field<control_plane_virtual_topology::PathGroups<'a, Mode>>,
     pub internet_exit: ::validated_data::Field<control_plane_virtual_topology::InternetExit<'a, Mode>>,
 }
 
 pub mod control_plane_virtual_topology {
 
-    #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopologyConstraints"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology.Constraints"))]
     pub struct Constraints<'a, Mode> {
         pub jitter: ::validated_data::Field<i64>,
         pub latency: ::validated_data::Field<i64>,
         pub loss_rate: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopologyPathGroupsList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology.PathGroups"))]
     pub struct PathGroups<'a, Mode> (::validated_data::Field<path_groups::Item<'a, Mode>>);
 
     pub mod path_groups {
 
-        #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopologyPathGroupsItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology.PathGroupsItem"))]
         pub struct Item<'a, Mode> {
             pub names: ::validated_data::RequiredValue<item::Names<'a, Mode>, Mode>,
             pub preference: ::validated_data::Field<&'a str>,
@@ -51,23 +51,23 @@ pub mod control_plane_virtual_topology {
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopologyPathGroupsItemsNamesList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology.PathGroupsItem.Names"))]
             pub struct Names<'a, Mode> (::validated_data::Field<&'a str>);
         }
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesControlPlaneVirtualTopologyInternetExit"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.ControlPlaneVirtualTopology.InternetExit"))]
     pub struct InternetExit<'a, Mode> {
         pub policy: ::validated_data::Field<&'a str>,
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignWanVirtualTopologiesPoliciesList", item_name = "AVDDesignWanVirtualTopologiesPoliciesListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.WanVirtualTopologies.Policies", item_name = "AVDDesign.WanVirtualTopologies.PoliciesItem"))]
 pub struct Policies<'a, Mode> (::validated_data::Field<policies::Item<'a, Mode>>);
 
 pub mod policies {
 
-    #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub application_virtual_topologies: ::validated_data::Field<item::ApplicationVirtualTopologies<'a, Mode>>,
@@ -76,12 +76,12 @@ pub mod policies {
 
     pub mod item {
 
-        #[::validated_data::data_view(indexed_list, primary_key(application_profile), python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesList", item_name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesListIndexedItem"))]
+        #[::validated_data::data_view(indexed_list, primary_key(application_profile), python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologies", item_name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItem"))]
         pub struct ApplicationVirtualTopologies<'a, Mode> (::validated_data::Field<application_virtual_topologies::Item<'a, Mode>>);
 
         pub mod application_virtual_topologies {
 
-            #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItems"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase"))]
             pub struct Item<'a, Mode> {
                 pub application_profile: ::validated_data::Field<&'a str>,
                 pub name: ::validated_data::Field<&'a str>,
@@ -90,27 +90,27 @@ pub mod policies {
                 pub dscp: ::validated_data::Field<i64>,
                 pub lowest_hop_count: ::validated_data::Field<bool>,
                 pub constraints: ::validated_data::Field<item::Constraints<'a, Mode>>,
-                pub outlier_elimination: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
-                pub metric_order: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
+                pub outlier_elimination: ::validated_data::Field<super::super::super::super::super::eos_config::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
+                pub metric_order: ::validated_data::Field<super::super::super::super::super::eos_config::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
                 pub path_groups: ::validated_data::Field<item::PathGroups<'a, Mode>>,
                 pub internet_exit: ::validated_data::Field<item::InternetExit<'a, Mode>>,
             }
 
             pub mod item {
 
-                #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItemsConstraints"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase.Constraints"))]
                 pub struct Constraints<'a, Mode> {
                     pub jitter: ::validated_data::Field<i64>,
                     pub latency: ::validated_data::Field<i64>,
                     pub loss_rate: ::validated_data::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItemsPathGroupsList"))]
+                #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase.PathGroups"))]
                 pub struct PathGroups<'a, Mode> (::validated_data::Field<path_groups::Item<'a, Mode>>);
 
                 pub mod path_groups {
 
-                    #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItemsPathGroupsItems"))]
+                    #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase.PathGroupsItem"))]
                     pub struct Item<'a, Mode> {
                         pub names: ::validated_data::RequiredValue<item::Names<'a, Mode>, Mode>,
                         pub preference: ::validated_data::Field<&'a str>,
@@ -118,19 +118,19 @@ pub mod policies {
 
                     pub mod item {
 
-                        #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItemsPathGroupsItemsNamesList"))]
+                        #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase.PathGroupsItem.Names"))]
                         pub struct Names<'a, Mode> (::validated_data::Field<&'a str>);
                     }
                 }
 
-                #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsApplicationVirtualTopologiesItemsInternetExit"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.ApplicationVirtualTopologiesItemBase.InternetExit"))]
                 pub struct InternetExit<'a, Mode> {
                     pub policy: ::validated_data::Field<&'a str>,
                 }
             }
         }
 
-        #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopology"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology"))]
         pub struct DefaultVirtualTopology<'a, Mode> {
             pub name: ::validated_data::Field<&'a str>,
             pub drop_unmatched: ::validated_data::Field<bool>,
@@ -138,27 +138,27 @@ pub mod policies {
             pub dscp: ::validated_data::Field<i64>,
             pub lowest_hop_count: ::validated_data::Field<bool>,
             pub constraints: ::validated_data::Field<default_virtual_topology::Constraints<'a, Mode>>,
-            pub outlier_elimination: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
-            pub metric_order: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
+            pub outlier_elimination: ::validated_data::Field<super::super::super::super::eos_config::router_adaptive_virtual_topology::profiles::item::OutlierElimination<'a, Mode>>,
+            pub metric_order: ::validated_data::Field<super::super::super::super::eos_config::router_adaptive_virtual_topology::profiles::item::MetricOrder<'a, Mode>>,
             pub path_groups: ::validated_data::Field<default_virtual_topology::PathGroups<'a, Mode>>,
             pub internet_exit: ::validated_data::Field<default_virtual_topology::InternetExit<'a, Mode>>,
         }
 
         pub mod default_virtual_topology {
 
-            #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopologyConstraints"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology.Constraints"))]
             pub struct Constraints<'a, Mode> {
                 pub jitter: ::validated_data::Field<i64>,
                 pub latency: ::validated_data::Field<i64>,
                 pub loss_rate: ::validated_data::Field<&'a str>,
             }
 
-            #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopologyPathGroupsList"))]
+            #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology.PathGroups"))]
             pub struct PathGroups<'a, Mode> (::validated_data::Field<path_groups::Item<'a, Mode>>);
 
             pub mod path_groups {
 
-                #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopologyPathGroupsItems"))]
+                #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology.PathGroupsItem"))]
                 pub struct Item<'a, Mode> {
                     pub names: ::validated_data::RequiredValue<item::Names<'a, Mode>, Mode>,
                     pub preference: ::validated_data::Field<&'a str>,
@@ -166,12 +166,12 @@ pub mod policies {
 
                 pub mod item {
 
-                    #[::validated_data::data_view(list, python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopologyPathGroupsItemsNamesList"))]
+                    #[::validated_data::data_view(list, python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology.PathGroupsItem.Names"))]
                     pub struct Names<'a, Mode> (::validated_data::Field<&'a str>);
                 }
             }
 
-            #[::validated_data::data_view(python(name = "AVDDesignWanVirtualTopologiesPoliciesItemsDefaultVirtualTopologyInternetExit"))]
+            #[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies.PoliciesItemBase.DefaultVirtualTopology.InternetExit"))]
             pub struct InternetExit<'a, Mode> {
                 pub policy: ::validated_data::Field<&'a str>,
             }
