@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenIpHostsItems"))]
+#[::validated_data::data_view(python(name = "EOSConfig.IpHostsItemBase"))]
 pub struct Item<'a, Mode> {
     pub hostname: ::validated_data::Field<&'a str>,
     pub ipv4_addresses: ::validated_data::RequiredValue<item::Ipv4Addresses<'a, Mode>, Mode>,
@@ -10,6 +10,6 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "EosCliConfigGenIpHostsItemsIpv4AddressesList"))]
+    #[::validated_data::data_view(list, python(name = "EOSConfig.IpHostsItemBase.Ipv4Addresses"))]
     pub struct Ipv4Addresses<'a, Mode> (::validated_data::Field<&'a str>);
 }

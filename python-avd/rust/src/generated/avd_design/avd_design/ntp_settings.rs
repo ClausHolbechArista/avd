@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignNtpSettingsServersList", item_name = "AVDDesignNtpSettingsServersListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.NtpSettings.Servers", item_name = "AVDDesign.NtpSettings.ServersItem"))]
 pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    #[::validated_data::data_view(python(name = "AVDDesignNtpSettingsServersItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.NtpSettings.ServersItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub burst: ::validated_data::Field<bool>,
@@ -20,12 +20,12 @@ pub mod servers {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(id), python(name = "AVDDesignNtpSettingsAuthenticationKeysList", item_name = "AVDDesignNtpSettingsAuthenticationKeysListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(id), python(name = "AVDDesign.NtpSettings.AuthenticationKeys", item_name = "AVDDesign.NtpSettings.AuthenticationKeysItem"))]
 pub struct AuthenticationKeys<'a, Mode> (::validated_data::Field<authentication_keys::Item<'a, Mode>>);
 
 pub mod authentication_keys {
 
-    #[::validated_data::data_view(python(name = "AVDDesignNtpSettingsAuthenticationKeysItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.NtpSettings.AuthenticationKeysItemBase"))]
     pub struct Item<'a, Mode> {
         pub key: ::validated_data::Field<&'a str>,
         pub cleartext_key: ::validated_data::Field<&'a str>,

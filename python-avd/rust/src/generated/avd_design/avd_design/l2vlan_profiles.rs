@@ -2,11 +2,11 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase"))]
 pub struct Item<'a, Mode> {
     pub profile: ::validated_data::Field<&'a str>,
     pub parent_profile: ::validated_data::Field<&'a str>,
-    pub address_locking: ::validated_data::Field<super::super::eos_cli_config_gen::vlans::item::address_locking::AddressFamily<'a, Mode>>,
+    pub address_locking: ::validated_data::Field<super::super::eos_config::vlans::item::address_locking::AddressFamily<'a, Mode>>,
     pub vni_override: ::validated_data::Field<i64>,
     pub rt_override: ::validated_data::Field<&'a str>,
     pub rd_override: ::validated_data::Field<&'a str>,
@@ -26,21 +26,21 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignL2vlanProfilesItemsTrunkGroupsList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.L2vlanProfilesItemBase.TrunkGroups"))]
     pub struct TrunkGroups<'a, Mode> (::validated_data::Field<&'a str>);
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsEvpnL2Multicast"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.EvpnL2Multicast"))]
     pub struct EvpnL2Multicast<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsVxlanFloodMulticast"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.VxlanFloodMulticast"))]
     pub struct VxlanFloodMulticast<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub underlay_multicast_group: ::validated_data::Field<&'a str>,
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsIgmpSnooping"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.IgmpSnooping"))]
     pub struct IgmpSnooping<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub querier: ::validated_data::Field<igmp_snooping::Querier<'a, Mode>>,
@@ -49,7 +49,7 @@ pub mod item {
 
     pub mod igmp_snooping {
 
-        #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsIgmpSnoopingQuerier"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.IgmpSnooping.Querier"))]
         pub struct Querier<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub source_address: ::validated_data::Field<&'a str>,
@@ -57,7 +57,7 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsIgmpSnoopingQuerier2"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.IgmpSnoopingQuerier"))]
     pub struct IgmpSnoopingQuerier<'a, Mode> {
         pub enabled: ::validated_data::Field<bool>,
         pub source_address: ::validated_data::Field<&'a str>,
@@ -65,17 +65,17 @@ pub mod item {
         pub fast_leave: ::validated_data::Field<bool>,
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsBgp"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.Bgp"))]
     pub struct Bgp<'a, Mode> {
         #[data_view(relaxed)]
-        pub structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub structured_config: ::validated_data::Field<super::super::super::eos_config::router_bgp::vlans::Item<'a, ::validated_data::RelaxedValidated>>,
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
     }
 
     pub mod bgp {
     }
 
-    #[::validated_data::data_view(python(name = "AVDDesignL2vlanProfilesItemsPrivateVlan"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase.PrivateVlan"))]
     pub struct PrivateVlan<'a, Mode> {
         #[data_view(rename = "type")]
         pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,

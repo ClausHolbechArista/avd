@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignMacAclsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.MacAclsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub counters_per_entry: ::validated_data::Field<bool>,
@@ -11,12 +11,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignMacAclsItemsEntriesList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.MacAclsItemBase.Entries"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view(python(name = "AVDDesignMacAclsItemsEntriesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.MacAclsItemBase.EntriesItem"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::Field<i64>,
             pub action: ::validated_data::Field<&'a str>,

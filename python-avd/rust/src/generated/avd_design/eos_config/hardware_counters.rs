@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(list, python(name = "EosCliConfigGenHardwareCountersFeaturesList"))]
+#[::validated_data::data_view(list, python(name = "EOSConfig.HardwareCounters.Features"))]
 pub struct Features<'a, Mode> (::validated_data::Field<features::Item<'a, Mode>>);
 
 pub mod features {
 
-    #[::validated_data::data_view(python(name = "EosCliConfigGenHardwareCountersFeaturesItems"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.HardwareCounters.FeaturesItem"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::RequiredValue<&'a str, Mode>,
         pub direction: ::validated_data::Field<&'a str>,

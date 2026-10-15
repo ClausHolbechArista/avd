@@ -69,7 +69,7 @@ pub mod rapid_pvst_instances {
     }
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenSpanningTreePortIdAllocationPortChannelRange"))]
+#[::validated_data::data_view(python(name = "EOSConfig.SpanningTree.PortIdAllocationPortChannelRange"))]
 pub struct PortIdAllocationPortChannelRange<'a, Mode> {
     pub minimum: ::validated_data::RequiredValue<i64, Mode>,
     pub maximum: ::validated_data::RequiredValue<i64, Mode>,

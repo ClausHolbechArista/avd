@@ -10,10 +10,10 @@ name = "_rust"
 crate-type = ["cdylib"]
 
 [dependencies]
-avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "32ccdc3959598a1fa282e48a83308d19213e4cd0", default-features = false, features = ["mmap"] }
+avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "6b608d8a4b5ba3e7afe3f65a6b357b2225e55538", default-features = false, features = ["mmap"] }
 pyo3 = { version = "0.29.0", features = ["abi3-py310"] }
 serde = "1.0.229"
 serde_json = "1.0.150"
-validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "32ccdc3959598a1fa282e48a83308d19213e4cd0", default-features = false, features = ["archive", "regex-perf"] }
-validated-data = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "32ccdc3959598a1fa282e48a83308d19213e4cd0" }
-validated-data-py = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "32ccdc3959598a1fa282e48a83308d19213e4cd0" }
+validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "6b608d8a4b5ba3e7afe3f65a6b357b2225e55538", default-features = false, features = ["archive", "regex-perf"] }
+validated-data = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "6b608d8a4b5ba3e7afe3f65a6b357b2225e55538" }
+validated-data-py = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "6b608d8a4b5ba3e7afe3f65a6b357b2225e55538" }

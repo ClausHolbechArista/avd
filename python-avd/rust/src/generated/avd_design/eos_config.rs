@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 #[::validated_data::data_view]
-pub struct EosCliConfigGen<'a, Mode> {
+pub struct EosConfig<'a, Mode> {
     pub aaa_accounting: ::validated_data::Field<AaaAccounting<'a, Mode>>,
     pub aaa_authentication: ::validated_data::Field<AaaAuthentication<'a, Mode>>,
     pub aaa_authorization: ::validated_data::Field<AaaAuthorization<'a, Mode>>,
@@ -282,7 +282,7 @@ pub struct Agents<'a, Mode> (::validated_data::Field<agents::Item<'a, Mode>>);
 
 pub mod agents;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenApplicationTrafficRecognition"))]
+#[::validated_data::data_view(python(name = "EOSConfig.ApplicationTrafficRecognition"))]
 pub struct ApplicationTrafficRecognition<'a, Mode> {
     pub categories: ::validated_data::Field<application_traffic_recognition::Categories<'a, Mode>>,
     pub field_sets: ::validated_data::Field<application_traffic_recognition::FieldSets<'a, Mode>>,
@@ -309,7 +309,7 @@ pub struct AsPath<'a, Mode> {
 
 pub mod as_path;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenBanners"))]
+#[::validated_data::data_view(python(name = "EOSConfig.Banners"))]
 pub struct Banners<'a, Mode> {
     pub login: ::validated_data::Field<&'a str>,
     pub motd: ::validated_data::Field<&'a str>,
@@ -500,12 +500,12 @@ pub struct EthernetInterfaces<'a, Mode> (::validated_data::Field<ethernet_interf
 
 pub mod ethernet_interfaces;
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenEventHandlersList", item_name = "EosCliConfigGenEventHandlersListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EOSConfig.EventHandlers", item_name = "EOSConfig.EventHandlersItem"))]
 pub struct EventHandlers<'a, Mode> (::validated_data::Field<event_handlers::Item<'a, Mode>>);
 
 pub mod event_handlers;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenEventMonitor"))]
+#[::validated_data::data_view(python(name = "EOSConfig.EventMonitor"))]
 pub struct EventMonitor<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
 }
@@ -528,7 +528,7 @@ pub struct Hardware<'a, Mode> {
 
 pub mod hardware;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenHardwareCounters"))]
+#[::validated_data::data_view(python(name = "EOSConfig.HardwareCounters"))]
 pub struct HardwareCounters<'a, Mode> {
     pub features: ::validated_data::Field<hardware_counters::Features<'a, Mode>>,
 }
@@ -612,7 +612,7 @@ pub struct IpHardware<'a, Mode> {
 
 pub mod ip_hardware;
 
-#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "EosCliConfigGenIpHostsList", item_name = "EosCliConfigGenIpHostsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "EOSConfig.IpHosts", item_name = "EOSConfig.IpHostsItem"))]
 pub struct IpHosts<'a, Mode> (::validated_data::Field<ip_hosts::Item<'a, Mode>>);
 
 pub mod ip_hosts;
@@ -835,7 +835,7 @@ pub struct LoadBalance<'a, Mode> {
 
 pub mod load_balance;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenLoadInterval"))]
+#[::validated_data::data_view(python(name = "EOSConfig.LoadInterval"))]
 pub struct LoadInterval<'a, Mode> {
     pub default: ::validated_data::Field<i64>,
 }
@@ -875,7 +875,7 @@ pub struct MacAccessLists<'a, Mode> (::validated_data::Field<mac_access_lists::I
 
 pub mod mac_access_lists;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenMacAddressTable"))]
+#[::validated_data::data_view(python(name = "EOSConfig.MacAddressTable"))]
 pub struct MacAddressTable<'a, Mode> {
     pub aging_time: ::validated_data::Field<i64>,
     pub notification_host_flap: ::validated_data::Field<mac_address_table::NotificationHostFlap<'a, Mode>>,
@@ -942,7 +942,7 @@ pub struct ManagementApiModels<'a, Mode> {
 
 pub mod management_api_models;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenManagementConsole"))]
+#[::validated_data::data_view(python(name = "EOSConfig.ManagementConsole"))]
 pub struct ManagementConsole<'a, Mode> {
     pub idle_timeout: ::validated_data::Field<i64>,
 }
@@ -1088,7 +1088,7 @@ pub struct MonitorConnectivity<'a, Mode> {
 
 pub mod monitor_connectivity;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenMonitorLayer1"))]
+#[::validated_data::data_view(python(name = "EOSConfig.MonitorLayer1"))]
 pub struct MonitorLayer1<'a, Mode> {
     pub enabled: ::validated_data::Field<bool>,
     pub logging_mac_fault: ::validated_data::Field<bool>,
@@ -1196,7 +1196,7 @@ pub struct PatchPanel<'a, Mode> {
 
 pub mod patch_panel;
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EosCliConfigGenPeerFiltersList", item_name = "EosCliConfigGenPeerFiltersListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EOSConfig.PeerFilters", item_name = "EOSConfig.PeerFiltersItem"))]
 pub struct PeerFilters<'a, Mode> (::validated_data::Field<peer_filters::Item<'a, Mode>>);
 
 pub mod peer_filters;
@@ -1303,7 +1303,7 @@ pub struct QueueMonitorLength<'a, Mode> {
 
 pub mod queue_monitor_length;
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenQueueMonitorStreaming"))]
+#[::validated_data::data_view(python(name = "EOSConfig.QueueMonitorStreaming"))]
 pub struct QueueMonitorStreaming<'a, Mode> {
     pub enable: ::validated_data::Field<bool>,
     pub ip_access_group: ::validated_data::Field<&'a str>,
@@ -1604,7 +1604,7 @@ pub struct ServiceRoutingConfigurationBgp<'a, Mode> {
     pub no_equals_default: ::validated_data::Field<bool>,
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenServiceUnsupportedTransceiver"))]
+#[::validated_data::data_view(python(name = "EOSConfig.ServiceUnsupportedTransceiver"))]
 pub struct ServiceUnsupportedTransceiver<'a, Mode> {
     pub license_name: ::validated_data::Field<&'a str>,
     pub license_key: ::validated_data::Field<&'a str>,

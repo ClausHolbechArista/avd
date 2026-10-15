@@ -21,7 +21,7 @@ pub struct Defaults<'a, Mode> {
     pub always_configure_ip_routing: ::validated_data::Field<bool>,
     pub raw_eos_cli: ::validated_data::Field<&'a str>,
     #[data_view(relaxed)]
-    pub structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::EosCliConfigGen<'a, ::validated_data::RelaxedValidated>>,
+    pub structured_config: ::validated_data::Field<super::super::eos_config::EosConfig<'a, ::validated_data::RelaxedValidated>>,
     pub uplink_type: ::validated_data::Field<&'a str>,
     pub uplink_ipv4_pool: ::validated_data::Field<&'a str>,
     pub uplink_ipv6_pool: ::validated_data::Field<&'a str>,
@@ -40,19 +40,19 @@ pub struct Defaults<'a, Mode> {
     pub uplink_port_channel_id: ::validated_data::Field<i64>,
     pub uplink_switch_port_channel_id: ::validated_data::Field<i64>,
     #[data_view(relaxed)]
-    pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     #[data_view(relaxed)]
-    pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+    pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
     pub short_esi: ::validated_data::Field<&'a str>,
     pub isis_system_id_prefix: ::validated_data::Field<&'a str>,
     pub isis_maximum_paths: ::validated_data::Field<i64>,
@@ -99,7 +99,7 @@ pub struct Defaults<'a, Mode> {
     pub spanning_tree_priority: ::validated_data::Field<i64>,
     pub spanning_tree_root_super: ::validated_data::Field<bool>,
     pub spanning_tree_mst_pvst_boundary: ::validated_data::Field<bool>,
-    pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::eos_cli_config_gen::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
+    pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::eos_config::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
     pub virtual_router_mac_address: ::validated_data::Field<&'a str>,
     pub inband_mgmt_interface: ::validated_data::Field<&'a str>,
     pub inband_mgmt_vlan: ::validated_data::Field<i64>,
@@ -360,7 +360,7 @@ pub mod defaults {
         pub ttl: ::validated_data::Field<i64>,
         pub forward_unicast: ::validated_data::Field<bool>,
         pub forward_v1: ::validated_data::Field<bool>,
-        pub free_running: ::validated_data::Field<super::super::super::eos_cli_config_gen::ptp::FreeRunning<'a, Mode>>,
+        pub free_running: ::validated_data::Field<super::super::super::eos_config::ptp::FreeRunning<'a, Mode>>,
         pub dscp: ::validated_data::Field<ptp::Dscp<'a, Mode>>,
         pub monitor: ::validated_data::Field<ptp::Monitor<'a, Mode>>,
     }
@@ -491,7 +491,7 @@ pub mod defaults {
             pub raw_eos_cli: ::validated_data::Field<&'a str>,
             pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
             #[data_view(relaxed)]
-            pub structured_config: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+            pub structured_config: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         }
 
         pub mod item {
@@ -595,7 +595,7 @@ pub mod defaults {
             pub raw_eos_cli: ::validated_data::Field<&'a str>,
             pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
             #[data_view(relaxed)]
-            pub structured_config: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+            pub structured_config: ::validated_data::Field<super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         }
 
         pub mod item {
@@ -614,7 +614,7 @@ pub mod defaults {
                     pub speed: ::validated_data::Field<&'a str>,
                     pub rx_queue: ::validated_data::Field<item::RxQueue<'a, Mode>>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 }
 
                 pub mod item {
@@ -738,7 +738,7 @@ pub mod node_groups {
         pub always_configure_ip_routing: ::validated_data::Field<bool>,
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
         #[data_view(relaxed)]
-        pub structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::EosCliConfigGen<'a, ::validated_data::RelaxedValidated>>,
+        pub structured_config: ::validated_data::Field<super::super::super::eos_config::EosConfig<'a, ::validated_data::RelaxedValidated>>,
         pub uplink_type: ::validated_data::Field<&'a str>,
         pub uplink_ipv4_pool: ::validated_data::Field<&'a str>,
         pub uplink_ipv6_pool: ::validated_data::Field<&'a str>,
@@ -757,19 +757,19 @@ pub mod node_groups {
         pub uplink_port_channel_id: ::validated_data::Field<i64>,
         pub uplink_switch_port_channel_id: ::validated_data::Field<i64>,
         #[data_view(relaxed)]
-        pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         pub short_esi: ::validated_data::Field<&'a str>,
         pub isis_system_id_prefix: ::validated_data::Field<&'a str>,
         pub isis_maximum_paths: ::validated_data::Field<i64>,
@@ -816,7 +816,7 @@ pub mod node_groups {
         pub spanning_tree_priority: ::validated_data::Field<i64>,
         pub spanning_tree_root_super: ::validated_data::Field<bool>,
         pub spanning_tree_mst_pvst_boundary: ::validated_data::Field<bool>,
-        pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::eos_cli_config_gen::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
+        pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::eos_config::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
         pub virtual_router_mac_address: ::validated_data::Field<&'a str>,
         pub inband_mgmt_interface: ::validated_data::Field<&'a str>,
         pub inband_mgmt_vlan: ::validated_data::Field<i64>,
@@ -886,7 +886,7 @@ pub mod node_groups {
                 pub always_configure_ip_routing: ::validated_data::Field<bool>,
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::EosCliConfigGen<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::EosConfig<'a, ::validated_data::RelaxedValidated>>,
                 pub uplink_type: ::validated_data::Field<&'a str>,
                 pub uplink_ipv4_pool: ::validated_data::Field<&'a str>,
                 pub uplink_ipv6_pool: ::validated_data::Field<&'a str>,
@@ -905,19 +905,19 @@ pub mod node_groups {
                 pub uplink_port_channel_id: ::validated_data::Field<i64>,
                 pub uplink_switch_port_channel_id: ::validated_data::Field<i64>,
                 #[data_view(relaxed)]
-                pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 #[data_view(relaxed)]
-                pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 pub short_esi: ::validated_data::Field<&'a str>,
                 pub isis_system_id_prefix: ::validated_data::Field<&'a str>,
                 pub isis_maximum_paths: ::validated_data::Field<i64>,
@@ -964,7 +964,7 @@ pub mod node_groups {
                 pub spanning_tree_priority: ::validated_data::Field<i64>,
                 pub spanning_tree_root_super: ::validated_data::Field<bool>,
                 pub spanning_tree_mst_pvst_boundary: ::validated_data::Field<bool>,
-                pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
+                pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::super::super::eos_config::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
                 pub virtual_router_mac_address: ::validated_data::Field<&'a str>,
                 pub inband_mgmt_interface: ::validated_data::Field<&'a str>,
                 pub inband_mgmt_vlan: ::validated_data::Field<i64>,
@@ -1244,7 +1244,7 @@ pub mod node_groups {
                     pub ttl: ::validated_data::Field<i64>,
                     pub forward_unicast: ::validated_data::Field<bool>,
                     pub forward_v1: ::validated_data::Field<bool>,
-                    pub free_running: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ptp::FreeRunning<'a, Mode>>,
+                    pub free_running: ::validated_data::Field<super::super::super::super::super::super::eos_config::ptp::FreeRunning<'a, Mode>>,
                     pub dscp: ::validated_data::Field<ptp::Dscp<'a, Mode>>,
                     pub monitor: ::validated_data::Field<ptp::Monitor<'a, Mode>>,
                 }
@@ -1375,7 +1375,7 @@ pub mod node_groups {
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                         pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {
@@ -1479,7 +1479,7 @@ pub mod node_groups {
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                         pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {
@@ -1498,7 +1498,7 @@ pub mod node_groups {
                                 pub speed: ::validated_data::Field<&'a str>,
                                 pub rx_queue: ::validated_data::Field<item::RxQueue<'a, Mode>>,
                                 #[data_view(relaxed)]
-                                pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                                pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                             }
 
                             pub mod item {
@@ -1814,7 +1814,7 @@ pub mod node_groups {
             pub ttl: ::validated_data::Field<i64>,
             pub forward_unicast: ::validated_data::Field<bool>,
             pub forward_v1: ::validated_data::Field<bool>,
-            pub free_running: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ptp::FreeRunning<'a, Mode>>,
+            pub free_running: ::validated_data::Field<super::super::super::super::eos_config::ptp::FreeRunning<'a, Mode>>,
             pub dscp: ::validated_data::Field<ptp::Dscp<'a, Mode>>,
             pub monitor: ::validated_data::Field<ptp::Monitor<'a, Mode>>,
         }
@@ -1945,7 +1945,7 @@ pub mod node_groups {
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod item {
@@ -2049,7 +2049,7 @@ pub mod node_groups {
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod item {
@@ -2068,7 +2068,7 @@ pub mod node_groups {
                         pub speed: ::validated_data::Field<&'a str>,
                         pub rx_queue: ::validated_data::Field<item::RxQueue<'a, Mode>>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {
@@ -2193,7 +2193,7 @@ pub mod nodes {
         pub always_configure_ip_routing: ::validated_data::Field<bool>,
         pub raw_eos_cli: ::validated_data::Field<&'a str>,
         #[data_view(relaxed)]
-        pub structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::EosCliConfigGen<'a, ::validated_data::RelaxedValidated>>,
+        pub structured_config: ::validated_data::Field<super::super::super::eos_config::EosConfig<'a, ::validated_data::RelaxedValidated>>,
         pub uplink_type: ::validated_data::Field<&'a str>,
         pub uplink_ipv4_pool: ::validated_data::Field<&'a str>,
         pub uplink_ipv6_pool: ::validated_data::Field<&'a str>,
@@ -2212,19 +2212,19 @@ pub mod nodes {
         pub uplink_port_channel_id: ::validated_data::Field<i64>,
         pub uplink_switch_port_channel_id: ::validated_data::Field<i64>,
         #[data_view(relaxed)]
-        pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_switch_ethernet_structured_config: ::validated_data::Field<super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub uplink_switch_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_port_channel_structured_config: ::validated_data::Field<super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_peer_vlan_structured_config: ::validated_data::Field<super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         #[data_view(relaxed)]
-        pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::eos_cli_config_gen::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+        pub mlag_peer_l3_vlan_structured_config: ::validated_data::Field<super::super::super::eos_config::vlan_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         pub short_esi: ::validated_data::Field<&'a str>,
         pub isis_system_id_prefix: ::validated_data::Field<&'a str>,
         pub isis_maximum_paths: ::validated_data::Field<i64>,
@@ -2271,7 +2271,7 @@ pub mod nodes {
         pub spanning_tree_priority: ::validated_data::Field<i64>,
         pub spanning_tree_root_super: ::validated_data::Field<bool>,
         pub spanning_tree_mst_pvst_boundary: ::validated_data::Field<bool>,
-        pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::eos_cli_config_gen::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
+        pub spanning_tree_port_id_allocation_port_channel_range: ::validated_data::Field<super::super::super::eos_config::spanning_tree::PortIdAllocationPortChannelRange<'a, Mode>>,
         pub virtual_router_mac_address: ::validated_data::Field<&'a str>,
         pub inband_mgmt_interface: ::validated_data::Field<&'a str>,
         pub inband_mgmt_vlan: ::validated_data::Field<i64>,
@@ -2551,7 +2551,7 @@ pub mod nodes {
             pub ttl: ::validated_data::Field<i64>,
             pub forward_unicast: ::validated_data::Field<bool>,
             pub forward_v1: ::validated_data::Field<bool>,
-            pub free_running: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ptp::FreeRunning<'a, Mode>>,
+            pub free_running: ::validated_data::Field<super::super::super::super::eos_config::ptp::FreeRunning<'a, Mode>>,
             pub dscp: ::validated_data::Field<ptp::Dscp<'a, Mode>>,
             pub monitor: ::validated_data::Field<ptp::Monitor<'a, Mode>>,
         }
@@ -2682,7 +2682,7 @@ pub mod nodes {
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod item {
@@ -2786,7 +2786,7 @@ pub mod nodes {
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 pub flow_tracking: ::validated_data::Field<item::FlowTracking<'a, Mode>>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod item {
@@ -2805,7 +2805,7 @@ pub mod nodes {
                         pub speed: ::validated_data::Field<&'a str>,
                         pub rx_queue: ::validated_data::Field<item::RxQueue<'a, Mode>>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {

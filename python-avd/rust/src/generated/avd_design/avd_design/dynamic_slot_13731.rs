@@ -46,7 +46,7 @@ pub mod item {
             pub spanning_tree_bpdufilter: ::validated_data::Field<&'a str>,
             pub spanning_tree_bpduguard: ::validated_data::Field<&'a str>,
             pub spanning_tree_link_type: ::validated_data::Field<&'a str>,
-            pub flowcontrol: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::item::Flowcontrol<'a, Mode>>,
+            pub flowcontrol: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::item::Flowcontrol<'a, Mode>>,
             pub qos_profile: ::validated_data::Field<&'a str>,
             pub ptp: ::validated_data::Field<item::Ptp<'a, Mode>>,
             pub sflow: ::validated_data::Field<bool>,
@@ -54,7 +54,7 @@ pub mod item {
             pub link_tracking: ::validated_data::Field<item::LinkTracking<'a, Mode>>,
             pub dot1x: ::validated_data::Field<item::Dot1x<'a, Mode>>,
             pub address_locking: ::validated_data::Field<item::AddressLocking<'a, Mode>>,
-            pub poe: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::item::Poe<'a, Mode>>,
+            pub poe: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::item::Poe<'a, Mode>>,
             pub storm_control: ::validated_data::Field<item::StormControl<'a, Mode>>,
             pub monitor_sessions: ::validated_data::Field<item::MonitorSessions<'a, Mode>>,
             pub ethernet_segment: ::validated_data::Field<item::EthernetSegment<'a, Mode>>,
@@ -63,7 +63,7 @@ pub mod item {
             pub campus_link_type: ::validated_data::Field<item::CampusLinkType<'a, Mode>>,
             pub raw_eos_cli: ::validated_data::Field<&'a str>,
             #[data_view(relaxed)]
-            pub structured_config: ::validated_data::Field<super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+            pub structured_config: ::validated_data::Field<super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
         }
 
         pub mod item {
@@ -94,7 +94,7 @@ pub mod item {
                     pub encapsulation_vlan: ::validated_data::Field<item::EncapsulationVlan<'a, Mode>>,
                     pub raw_eos_cli: ::validated_data::Field<&'a str>,
                     #[data_view(relaxed)]
-                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_cli_config_gen::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                    pub structured_config: ::validated_data::Field<super::super::super::super::super::super::eos_config::ethernet_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                 }
 
                 pub mod item {
@@ -119,7 +119,7 @@ pub mod item {
                 pub lacp_timer: ::validated_data::Field<port_channel::LacpTimer<'a, Mode>>,
                 pub raw_eos_cli: ::validated_data::Field<&'a str>,
                 #[data_view(relaxed)]
-                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                pub structured_config: ::validated_data::Field<super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
             }
 
             pub mod port_channel {
@@ -138,7 +138,7 @@ pub mod item {
                         pub encapsulation_vlan: ::validated_data::Field<item::EncapsulationVlan<'a, Mode>>,
                         pub raw_eos_cli: ::validated_data::Field<&'a str>,
                         #[data_view(relaxed)]
-                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
+                        pub structured_config: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::port_channel_interfaces::Item<'a, ::validated_data::RelaxedValidated>>,
                     }
 
                     pub mod item {
@@ -283,7 +283,7 @@ pub mod item {
                     pub struct Unresponsive<'a, Mode> {
                         pub eap_response: ::validated_data::Field<&'a str>,
                         pub action: ::validated_data::Field<unresponsive::Action<'a, Mode>>,
-                        pub phone_action: ::validated_data::Field<super::super::super::super::super::super::super::eos_cli_config_gen::dot1x::aaa::unresponsive::PhoneAction<'a, Mode>>,
+                        pub phone_action: ::validated_data::Field<super::super::super::super::super::super::super::eos_config::dot1x::aaa::unresponsive::PhoneAction<'a, Mode>>,
                     }
 
                     pub mod unresponsive {

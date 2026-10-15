@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCustomConnectedEndpointsKeysItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CustomConnectedEndpointsKeysItemBase"))]
 pub struct Item<'a, Mode> {
     pub key: ::validated_data::Field<&'a str>,
     #[data_view(rename = "type")]

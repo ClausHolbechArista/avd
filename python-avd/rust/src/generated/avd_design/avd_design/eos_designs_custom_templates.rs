@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignEosDesignsCustomTemplatesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.EosDesignsCustomTemplatesItem"))]
 pub struct Item<'a, Mode> {
     pub template: ::validated_data::RequiredValue<&'a str, Mode>,
     pub options: ::validated_data::Field<item::Options<'a, Mode>>,
@@ -10,7 +10,7 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(python(name = "AVDDesignEosDesignsCustomTemplatesItemsOptions"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.EosDesignsCustomTemplatesItem.Options"))]
     pub struct Options<'a, Mode> {
         pub list_merge: ::validated_data::Field<&'a str>,
         pub strip_empty_keys: ::validated_data::Field<bool>,

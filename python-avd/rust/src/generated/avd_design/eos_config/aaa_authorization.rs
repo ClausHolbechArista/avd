@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthorizationPolicy"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Policy"))]
 pub struct Policy<'a, Mode> {
     pub local_default_role: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthorizationExec"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Exec"))]
 pub struct Exec<'a, Mode> {
     pub default: ::validated_data::Field<&'a str>,
 }
@@ -23,7 +23,7 @@ pub mod dynamic {
     pub struct Dot1xAdditionalGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthorizationCommands"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands"))]
 pub struct Commands<'a, Mode> {
     pub all_default: ::validated_data::Field<&'a str>,
     pub privilege: ::validated_data::Field<commands::Privilege<'a, Mode>>,
@@ -31,12 +31,12 @@ pub struct Commands<'a, Mode> {
 
 pub mod commands {
 
-    #[::validated_data::data_view(list, python(name = "EosCliConfigGenAaaAuthorizationCommandsPrivilegeList"))]
+    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAuthorization.Commands.Privilege"))]
     pub struct Privilege<'a, Mode> (::validated_data::Field<privilege::Item<'a, Mode>>);
 
     pub mod privilege {
 
-        #[::validated_data::data_view(python(name = "EosCliConfigGenAaaAuthorizationCommandsPrivilegeItems"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands.PrivilegeItem"))]
         pub struct Item<'a, Mode> {
             pub level: ::validated_data::RequiredValue<&'a str, Mode>,
             pub default: ::validated_data::RequiredValue<&'a str, Mode>,

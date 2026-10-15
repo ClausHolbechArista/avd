@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignMgmtInterfaceSettingsLldp"))]
+#[::validated_data::data_view(python(name = "AVDDesign.MgmtInterfaceSettings.Lldp"))]
 pub struct Lldp<'a, Mode> {
     pub transmit: ::validated_data::Field<bool>,
     pub receive: ::validated_data::Field<bool>,

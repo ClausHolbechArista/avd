@@ -10,7 +10,7 @@ pub struct Timers<'a, Mode> {
     pub send_failure_hold_time: ::validated_data::Field<i64>,
 }
 
-#[::validated_data::data_view(python(name = "EosCliConfigGenRouterBgpDistance"))]
+#[::validated_data::data_view(python(name = "EOSConfig.RouterBgp.Distance"))]
 pub struct Distance<'a, Mode> {
     pub external_routes: ::validated_data::RequiredValue<i64, Mode>,
     pub internal_routes: ::validated_data::RequiredValue<i64, Mode>,
@@ -1203,7 +1203,7 @@ pub mod address_family_ipv4 {
 
         pub mod item {
 
-            #[::validated_data::data_view(python(name = "EosCliConfigGenRouterBgpAddressFamilyIpv4PeerGroupsItemsDefaultOriginate"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.RouterBgp.AddressFamilyIpv4.PeerGroupsItemBase.DefaultOriginate"))]
             pub struct DefaultOriginate<'a, Mode> {
                 pub always: ::validated_data::Field<bool>,
                 pub route_map: ::validated_data::Field<&'a str>,
@@ -1217,14 +1217,14 @@ pub mod address_family_ipv4 {
                 pub send_limit: ::validated_data::Field<i64>,
             }
 
-            #[::validated_data::data_view(python(name = "EosCliConfigGenRouterBgpAddressFamilyIpv4PeerGroupsItemsNextHop"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.RouterBgp.AddressFamilyIpv4.PeerGroupsItemBase.NextHop"))]
             pub struct NextHop<'a, Mode> {
                 pub address_family_ipv6: ::validated_data::Field<next_hop::AddressFamilyIpv6<'a, Mode>>,
             }
 
             pub mod next_hop {
 
-                #[::validated_data::data_view(python(name = "EosCliConfigGenRouterBgpAddressFamilyIpv4PeerGroupsItemsNextHopAddressFamilyIpv6"))]
+                #[::validated_data::data_view(python(name = "EOSConfig.RouterBgp.AddressFamilyIpv4.PeerGroupsItemBase.NextHop.AddressFamilyIpv6"))]
                 pub struct AddressFamilyIpv6<'a, Mode> {
                     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
                     pub originate: ::validated_data::Field<bool>,
@@ -3166,7 +3166,7 @@ pub mod vrfs {
                     pub prepend_own_disabled: ::validated_data::Field<bool>,
                 }
 
-                #[::validated_data::data_view(python(name = "EosCliConfigGenRouterBgpVrfsItemsNeighborsItemsBfdTimers"))]
+                #[::validated_data::data_view(python(name = "EOSConfig.RouterBgp.VrfsItemBase.NeighborsItemBase.BfdTimers"))]
                 pub struct BfdTimers<'a, Mode> {
                     pub interval: ::validated_data::RequiredValue<i64, Mode>,
                     pub min_rx: ::validated_data::RequiredValue<i64, Mode>,

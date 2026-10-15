@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCvPathfinderInternetExitPoliciesItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderInternetExitPoliciesItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     #[data_view(rename = "type")]
@@ -13,7 +13,7 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(python(name = "AVDDesignCvPathfinderInternetExitPoliciesItemsZscaler"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderInternetExitPoliciesItemBase.Zscaler"))]
     pub struct Zscaler<'a, Mode> {
         pub ipsec_key_salt: ::validated_data::RequiredValue<&'a str, Mode>,
         pub domain_name: ::validated_data::RequiredValue<&'a str, Mode>,
@@ -26,7 +26,7 @@ pub mod item {
 
     pub mod zscaler {
 
-        #[::validated_data::data_view(python(name = "AVDDesignCvPathfinderInternetExitPoliciesItemsZscalerFirewall"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderInternetExitPoliciesItemBase.Zscaler.Firewall"))]
         pub struct Firewall<'a, Mode> {
             pub enabled: ::validated_data::Field<bool>,
             pub ips: ::validated_data::Field<bool>,

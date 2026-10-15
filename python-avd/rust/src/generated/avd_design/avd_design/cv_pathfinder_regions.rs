@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignCvPathfinderRegionsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderRegionsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::RequiredValue<&'a str, Mode>,
     pub description: ::validated_data::Field<&'a str>,
@@ -12,12 +12,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignCvPathfinderRegionsItemsSitesList", item_name = "AVDDesignCvPathfinderRegionsItemsSitesListIndexedItem"))]
+    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvPathfinderRegionsItemBase.Sites", item_name = "AVDDesign.CvPathfinderRegionsItemBase.SitesItem"))]
     pub struct Sites<'a, Mode> (::validated_data::Field<sites::Item<'a, Mode>>);
 
     pub mod sites {
 
-        #[::validated_data::data_view(python(name = "AVDDesignCvPathfinderRegionsItemsSitesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.CvPathfinderRegionsItemBase.SitesItemBase"))]
         pub struct Item<'a, Mode> {
             pub name: ::validated_data::RequiredValue<&'a str, Mode>,
             pub description: ::validated_data::Field<&'a str>,

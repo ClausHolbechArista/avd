@@ -2,12 +2,12 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignSshSettingsVrfsList", item_name = "AVDDesignSshSettingsVrfsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.SshSettings.Vrfs", item_name = "AVDDesign.SshSettings.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view(python(name = "AVDDesignSshSettingsVrfsItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.SshSettings.VrfsItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub enabled: ::validated_data::RequiredValue<bool, Mode>,
@@ -16,12 +16,12 @@ pub mod vrfs {
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesignSshSettingsClientVrfsList", item_name = "AVDDesignSshSettingsClientVrfsListIndexedItem"))]
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.SshSettings.ClientVrfs", item_name = "AVDDesign.SshSettings.ClientVrfsItem"))]
 pub struct ClientVrfs<'a, Mode> (::validated_data::Field<client_vrfs::Item<'a, Mode>>);
 
 pub mod client_vrfs {
 
-    #[::validated_data::data_view(python(name = "AVDDesignSshSettingsClientVrfsItems"))]
+    #[::validated_data::data_view(python(name = "AVDDesign.SshSettings.ClientVrfsItemBase"))]
     pub struct Item<'a, Mode> {
         pub name: ::validated_data::Field<&'a str>,
         pub source_interface: ::validated_data::Field<&'a str>,

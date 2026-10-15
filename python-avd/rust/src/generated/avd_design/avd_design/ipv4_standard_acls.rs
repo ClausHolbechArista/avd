@@ -2,7 +2,7 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesignIpv4StandardAclsItems"))]
+#[::validated_data::data_view(python(name = "AVDDesign.Ipv4StandardAclsItemBase"))]
 pub struct Item<'a, Mode> {
     pub name: ::validated_data::Field<&'a str>,
     pub counters_per_entry: ::validated_data::Field<bool>,
@@ -11,12 +11,12 @@ pub struct Item<'a, Mode> {
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesignIpv4StandardAclsItemsEntriesList"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.Ipv4StandardAclsItemBase.Entries"))]
     pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view(python(name = "AVDDesignIpv4StandardAclsItemsEntriesItems"))]
+        #[::validated_data::data_view(python(name = "AVDDesign.Ipv4StandardAclsItemBase.EntriesItem"))]
         pub struct Item<'a, Mode> {
             pub sequence: ::validated_data::Field<i64>,
             pub action: ::validated_data::Field<&'a str>,
