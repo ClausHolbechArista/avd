@@ -2,14 +2,16 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesign.DefaultNodeTypesItemBase"))]
+#[::validated_data::data_view(python(name = "AVDDesign.DefaultNodeTypesItemBase", schema = Dict(1463)))]
 pub struct Item<'a, Mode> {
+    #[data_view(schema = Str(1230))]
     pub node_type: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(610))]
     pub match_hostnames: ::validated_data::RequiredValue<item::MatchHostnames<'a, Mode>, Mode>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesign.DefaultNodeTypesItemBase.MatchHostnames"))]
+    #[::validated_data::data_view(list, python(name = "AVDDesign.DefaultNodeTypesItemBase.MatchHostnames", schema = List(610)))]
     pub struct MatchHostnames<'a, Mode> (::validated_data::RequiredValue<&'a str, Mode>);
 }

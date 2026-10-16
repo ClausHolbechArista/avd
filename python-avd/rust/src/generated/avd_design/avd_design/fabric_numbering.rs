@@ -2,8 +2,10 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesign.FabricNumbering.NodeId"))]
+#[::validated_data::data_view(python(name = "AVDDesign.FabricNumbering.NodeId", schema = Dict(1570)))]
 pub struct NodeId<'a, Mode> {
+    #[data_view(schema = Str(1404))]
     pub algorithm: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Str(1405))]
     pub pools_file: ::validated_data::Field<&'a str>,
 }

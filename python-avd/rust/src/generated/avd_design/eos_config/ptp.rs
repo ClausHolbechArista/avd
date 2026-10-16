@@ -77,8 +77,10 @@ pub mod monitor {
     }
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.Ptp.FreeRunning"))]
+#[::validated_data::data_view(python(name = "EOSConfig.Ptp.FreeRunning", schema = Dict(818)))]
 pub struct FreeRunning<'a, Mode> {
+    #[data_view(schema = Bool(292))]
     pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    #[data_view(schema = Bool(293))]
     pub source_clock_hardware: ::validated_data::Field<bool>,
 }

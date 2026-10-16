@@ -140,8 +140,9 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Flowcontrol"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Flowcontrol", schema = Dict(213)))]
     pub struct Flowcontrol<'a, Mode> {
+        #[data_view(schema = Str(181))]
         pub received: ::validated_data::Field<&'a str>,
     }
 
@@ -694,41 +695,55 @@ pub mod item {
         }
     }
 
-    #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe", schema = Dict(264)))]
     pub struct Poe<'a, Mode> {
+        #[data_view(schema = Bool(151))]
         pub disabled: ::validated_data::Field<bool>,
+        #[data_view(schema = Str(238))]
         pub priority: ::validated_data::Field<&'a str>,
+        #[data_view(schema = Dict(260))]
         pub reboot: ::validated_data::Field<poe::Reboot<'a, Mode>>,
+        #[data_view(schema = Dict(261))]
         pub link_down: ::validated_data::Field<poe::LinkDown<'a, Mode>>,
+        #[data_view(schema = Dict(262))]
         pub shutdown: ::validated_data::Field<poe::Shutdown<'a, Mode>>,
+        #[data_view(schema = Dict(263))]
         pub limit: ::validated_data::Field<poe::Limit<'a, Mode>>,
+        #[data_view(schema = Bool(153))]
         pub negotiation_lldp: ::validated_data::Field<bool>,
+        #[data_view(schema = Bool(154))]
         pub legacy_detect: ::validated_data::Field<bool>,
     }
 
     pub mod poe {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Reboot"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Reboot", schema = Dict(260)))]
         pub struct Reboot<'a, Mode> {
+            #[data_view(schema = Str(239))]
             pub action: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.LinkDown"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.LinkDown", schema = Dict(261)))]
         pub struct LinkDown<'a, Mode> {
+            #[data_view(schema = Str(239))]
             pub action: ::validated_data::Field<&'a str>,
+            #[data_view(schema = Int(103))]
             pub power_off_delay: ::validated_data::Field<i64>,
         }
 
-        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Shutdown"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Shutdown", schema = Dict(262)))]
         pub struct Shutdown<'a, Mode> {
+            #[data_view(schema = Str(239))]
             pub action: ::validated_data::Field<&'a str>,
         }
 
-        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Limit"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.EthernetInterfacesItemBase.Poe.Limit", schema = Dict(263)))]
         pub struct Limit<'a, Mode> {
-            #[data_view(rename = "class")]
+            #[data_view(schema = Int(104), rename = "class")]
             pub field_class: ::validated_data::Field<i64>,
+            #[data_view(schema = Str(240))]
             pub watts: ::validated_data::Field<&'a str>,
+            #[data_view(schema = Bool(152))]
             pub fixed: ::validated_data::Field<bool>,
         }
     }

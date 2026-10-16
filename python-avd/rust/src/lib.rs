@@ -11,8 +11,8 @@ use avdschema::Store;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
 use validated_data::DataStore;
-use validated_data::ValueHandle;
 use validated_data_py::PyValueHandle;
+use validated_data_py::ViewHandle;
 use validation::archive::validate_json_to_archive;
 
 #[allow(dead_code, non_snake_case, reason = "generated API exceeds the current call graph and preserves schema key spelling")]
@@ -48,7 +48,7 @@ struct PublicationResult {
     skip_from_py_object
 )]
 #[derive(Clone, Debug)]
-struct PyOpaqueData(ValueHandle);
+struct PyOpaqueData(ViewHandle);
 
 #[pymethods]
 impl PyOpaqueData {
@@ -75,6 +75,7 @@ fn archive_avd_design(
 ) -> PyResult<PublicationResult> {
     let schemas = Store::from_file(&schema_archive)
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
+    check_schema(&schemas)?;
     let publication = validate_json_to_archive(
         &schemas,
         "avd_design",
@@ -102,6 +103,7 @@ fn open_avd_design(
 ) -> PyResult<Py<PyAny>> {
     let schemas = Store::from_file(&schema_archive)
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
+    check_schema(&schemas)?;
     let data = Arc::new(
         DataStore::from_file(
             &archive,
@@ -116,7 +118,17 @@ fn open_avd_design(
         .import("pyavd._rust")?
         .getattr("_validated_data")?
         .cast_into::<pyo3::types::PyModule>()?;
-    validated_data_py::wrap_named(&module, "AVDDesign", data.root_handle())
+    validated_data_py::wrap_with_schema(&module, "AVDDesign", data.root_handle(), Arc::new(schemas))
+}
+
+/// Generated schema IDs are meaningful only in the exact combined store used at build time.
+fn check_schema(schemas: &Store) -> PyResult<()> {
+    if schemas.archive_hash() != generated::avd_design::SCHEMA_HASH {
+        return Err(PyRuntimeError::new_err(
+            "schema archive does not match the generated data models",
+        ));
+    }
+    Ok(())
 }
 
 fn to_json(value: &impl serde::Serialize) -> PyResult<String> {

@@ -2,9 +2,10 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "AVDDesign.CvTopologyLevelsItemBase"))]
+#[::validated_data::data_view(python(name = "AVDDesign.CvTopologyLevelsItemBase", schema = Dict(1461)))]
 pub struct Item<'a, Mode> {
-    #[data_view(rename = "type")]
+    #[data_view(schema = Str(1217), rename = "type")]
     pub field_type: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Int(528))]
     pub level: ::validated_data::RequiredValue<i64, Mode>,
 }
