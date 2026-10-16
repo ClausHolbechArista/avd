@@ -2,13 +2,15 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Policy"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Policy", schema = Dict(48)))]
 pub struct Policy<'a, Mode> {
+    #[data_view(schema = Str(3))]
     pub local_default_role: ::validated_data::Field<&'a str>,
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Exec"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Exec", schema = Dict(49)))]
 pub struct Exec<'a, Mode> {
+    #[data_view(schema = Str(18))]
     pub default: ::validated_data::Field<&'a str>,
 }
 
@@ -23,22 +25,26 @@ pub mod dynamic {
     pub struct Dot1xAdditionalGroups<'a, Mode> (::validated_data::Field<&'a str>);
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands", schema = Dict(52)))]
 pub struct Commands<'a, Mode> {
+    #[data_view(schema = Str(19))]
     pub all_default: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(27))]
     pub privilege: ::validated_data::Field<commands::Privilege<'a, Mode>>,
 }
 
 pub mod commands {
 
-    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAuthorization.Commands.Privilege"))]
+    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAuthorization.Commands.Privilege", schema = List(27)))]
     pub struct Privilege<'a, Mode> (::validated_data::Field<privilege::Item<'a, Mode>>);
 
     pub mod privilege {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands.PrivilegeItem"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Commands.PrivilegeItem", schema = Dict(51)))]
         pub struct Item<'a, Mode> {
+            #[data_view(schema = Str(20))]
             pub level: ::validated_data::RequiredValue<&'a str, Mode>,
+            #[data_view(schema = Str(21))]
             pub default: ::validated_data::RequiredValue<&'a str, Mode>,
         }
     }

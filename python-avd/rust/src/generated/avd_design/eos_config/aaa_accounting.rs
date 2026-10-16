@@ -2,83 +2,95 @@
 // Generated from the AVD schema. Do not edit by hand.
 
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec", schema = Dict(32)))]
 pub struct Exec<'a, Mode> {
+    #[data_view(schema = Dict(31))]
     pub console: ::validated_data::Field<exec::Console<'a, Mode>>,
+    #[data_view(schema = Dict(31))]
     pub default: ::validated_data::Field<exec::Default<'a, Mode>>,
 }
 
 pub mod exec {
 
-    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Console"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Console", schema = Dict(31)))]
     pub struct Console<'a, Mode> {
-        #[data_view(rename = "type")]
+        #[data_view(schema = Str(7), rename = "type")]
         pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        #[data_view(schema = List(23))]
         pub methods: ::validated_data::Field<console::Methods<'a, Mode>>,
     }
 
     pub mod console {
 
-        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Exec.Console.Methods"))]
+        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Exec.Console.Methods", schema = List(23)))]
         pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Console.MethodsItem"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Console.MethodsItem", schema = Dict(30)))]
             pub struct Item<'a, Mode> {
+                #[data_view(schema = Str(8))]
                 pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                #[data_view(schema = Str(9))]
                 pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 
-    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Default"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Default", schema = Dict(31)))]
     pub struct Default<'a, Mode> {
-        #[data_view(rename = "type")]
+        #[data_view(schema = Str(7), rename = "type")]
         pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        #[data_view(schema = List(23))]
         pub methods: ::validated_data::Field<default::Methods<'a, Mode>>,
     }
 
     pub mod default {
 
-        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Exec.Default.Methods"))]
+        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Exec.Default.Methods", schema = List(23)))]
         pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Default.MethodsItem"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec.Default.MethodsItem", schema = Dict(30)))]
             pub struct Item<'a, Mode> {
+                #[data_view(schema = Str(8))]
                 pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                #[data_view(schema = Str(9))]
                 pub group: ::validated_data::Field<&'a str>,
             }
         }
     }
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System", schema = Dict(34)))]
 pub struct System<'a, Mode> {
+    #[data_view(schema = Dict(33))]
     pub default: ::validated_data::Field<system::Default<'a, Mode>>,
 }
 
 pub mod system {
 
-    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System.Default"))]
+    #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System.Default", schema = Dict(33)))]
     pub struct Default<'a, Mode> {
-        #[data_view(rename = "type")]
+        #[data_view(schema = Str(7), rename = "type")]
         pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+        #[data_view(schema = List(23))]
         pub methods: ::validated_data::Field<default::Methods<'a, Mode>>,
     }
 
     pub mod default {
 
-        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.System.Default.Methods"))]
+        #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.System.Default.Methods", schema = List(23)))]
         pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
         pub mod methods {
 
-            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System.Default.MethodsItem"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.System.Default.MethodsItem", schema = Dict(30)))]
             pub struct Item<'a, Mode> {
+                #[data_view(schema = Str(8))]
                 pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                #[data_view(schema = Str(9))]
                 pub group: ::validated_data::Field<&'a str>,
             }
         }
@@ -116,66 +128,76 @@ pub mod dot1x {
     }
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands"))]
+#[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands", schema = Dict(39)))]
 pub struct Commands<'a, Mode> {
+    #[data_view(schema = List(25))]
     pub console: ::validated_data::Field<commands::Console<'a, Mode>>,
+    #[data_view(schema = List(25))]
     pub default: ::validated_data::Field<commands::Default<'a, Mode>>,
 }
 
 pub mod commands {
 
-    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.Console"))]
+    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.Console", schema = List(25)))]
     pub struct Console<'a, Mode> (::validated_data::Field<console::Item<'a, Mode>>);
 
     pub mod console {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem", schema = Dict(38)))]
         pub struct Item<'a, Mode> {
+            #[data_view(schema = Str(12))]
             pub commands: ::validated_data::Field<&'a str>,
-            #[data_view(rename = "type")]
+            #[data_view(schema = Str(7), rename = "type")]
             pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+            #[data_view(schema = List(23))]
             pub methods: ::validated_data::Field<item::Methods<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem.Methods"))]
+            #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem.Methods", schema = List(23)))]
             pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
             pub mod methods {
 
-                #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem.MethodsItem"))]
+                #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.ConsoleItem.MethodsItem", schema = Dict(30)))]
                 pub struct Item<'a, Mode> {
+                    #[data_view(schema = Str(8))]
                     pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                    #[data_view(schema = Str(9))]
                     pub group: ::validated_data::Field<&'a str>,
                 }
             }
         }
     }
 
-    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.Default"))]
+    #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.Default", schema = List(25)))]
     pub struct Default<'a, Mode> (::validated_data::Field<default::Item<'a, Mode>>);
 
     pub mod default {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem", schema = Dict(38)))]
         pub struct Item<'a, Mode> {
+            #[data_view(schema = Str(12))]
             pub commands: ::validated_data::Field<&'a str>,
-            #[data_view(rename = "type")]
+            #[data_view(schema = Str(7), rename = "type")]
             pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
+            #[data_view(schema = List(23))]
             pub methods: ::validated_data::Field<item::Methods<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem.Methods"))]
+            #[::validated_data::data_view(list, python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem.Methods", schema = List(23)))]
             pub struct Methods<'a, Mode> (::validated_data::Field<methods::Item<'a, Mode>>);
 
             pub mod methods {
 
-                #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem.MethodsItem"))]
+                #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Commands.DefaultItem.MethodsItem", schema = Dict(30)))]
                 pub struct Item<'a, Mode> {
+                    #[data_view(schema = Str(8))]
                     pub method: ::validated_data::RequiredValue<&'a str, Mode>,
+                    #[data_view(schema = Str(9))]
                     pub group: ::validated_data::Field<&'a str>,
                 }
             }

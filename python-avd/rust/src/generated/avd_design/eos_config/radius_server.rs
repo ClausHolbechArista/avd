@@ -31,10 +31,13 @@ pub mod servers {
 
     pub mod item {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.RadiusServer.ServersItem.Tls"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.RadiusServer.ServersItem.Tls", schema = Dict(863)))]
         pub struct Tls<'a, Mode> {
+            #[data_view(schema = Bool(306))]
             pub enabled: ::validated_data::Field<bool>,
+            #[data_view(schema = Str(731))]
             pub ssl_profile: ::validated_data::Field<&'a str>,
+            #[data_view(schema = Int(351))]
             pub port: ::validated_data::Field<i64>,
         }
     }

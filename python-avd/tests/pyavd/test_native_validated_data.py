@@ -148,3 +148,39 @@ def test_binding_collection_edge_cases_and_ownership(tmp_path: Path) -> None:
     assert list(iterator) == ["Ethernet1", "Ethernet2", "Ethernet3"]
     assert [(key, value.name) for key, value in items] == [("leaf1", "leaf1")]
     assert list(keys) == ["leaf1"]
+
+
+def test_defaults_and_dynamic_keys_use_borrowed_schema_views(tmp_path: Path) -> None:
+    """Expose native AVD defaults and typed selector groups without populating host inputs."""
+    schema = Path(__file__).parents[2] / "pyavd/_schema/schemas.rkyv"
+    archive = tmp_path / "host.rkyv"
+    result = _rust.archive_avd_design(
+        json.dumps({"fabric_name": "TEST", "l3leaf": {"defaults": {"id": 1}, "nodes": [{"name": "leaf1", "id": 2}]}}),
+        archive,
+        schema,
+    )
+    assert result.destination == archive, result.errors_json
+    root = _validated_data.open_avd_design(archive, schema)
+    assert root._is_defined("fabric_name")
+    assert not root._is_default("fabric_name")
+    assert not root._is_defined("node_type_keys")
+    assert root._is_default("node_type_keys")
+    assert root.node_type_keys["l3leaf"].connected_endpoints is True
+    assert not root.node_type_keys["l3leaf"]._is_defined("connected_endpoints")
+    assert root.node_type_keys["l3leaf"]._is_default("connected_endpoints")
+    assert len(root.devices) == 0
+    assert root._is_default("devices")
+    groups = root._dynamic_keys
+    assert list(groups.node_types.keys()) == ["l3leaf"]
+    leaf = groups.node_types["l3leaf"].value
+    assert leaf.defaults.id == 1
+    assert leaf.defaults._is_defined("id")
+    assert leaf.nodes["leaf1"].id == 2
+    assert leaf.defaults.platform is None
+    assert not leaf.defaults._is_defined("platform")
+    assert not leaf.defaults._is_default("platform")
+    assert leaf.defaults.structured_config.to_json() == "{}"
+    assert leaf.defaults._is_default("structured_config")
+    iterator = iter(groups.node_types)
+    del root, groups, leaf
+    assert next(iterator).value.nodes["leaf1"].id == 2

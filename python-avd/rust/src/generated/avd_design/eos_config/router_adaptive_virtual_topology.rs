@@ -36,24 +36,31 @@ pub mod profiles {
 
     pub mod item {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.MetricOrder"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.MetricOrder", schema = Dict(876)))]
         pub struct MetricOrder<'a, Mode> {
+            #[data_view(schema = Str(749))]
             pub preferred_metric: ::validated_data::RequiredValue<&'a str, Mode>,
         }
 
-        #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.OutlierElimination"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.OutlierElimination", schema = Dict(878)))]
         pub struct OutlierElimination<'a, Mode> {
+            #[data_view(schema = Bool(309))]
             pub disabled: ::validated_data::Field<bool>,
+            #[data_view(schema = Dict(877))]
             pub threshold: ::validated_data::Field<outlier_elimination::Threshold<'a, Mode>>,
         }
 
         pub mod outlier_elimination {
 
-            #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.OutlierElimination.Threshold"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.RouterAdaptiveVirtualTopology.ProfilesItemBase.OutlierElimination.Threshold", schema = Dict(877)))]
             pub struct Threshold<'a, Mode> {
+                #[data_view(schema = Int(356))]
                 pub jitter: ::validated_data::Field<i64>,
+                #[data_view(schema = Int(357))]
                 pub latency: ::validated_data::Field<i64>,
+                #[data_view(schema = Str(750))]
                 pub load: ::validated_data::Field<&'a str>,
+                #[data_view(schema = Str(751))]
                 pub loss_rate: ::validated_data::Field<&'a str>,
             }
         }

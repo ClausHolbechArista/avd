@@ -118,19 +118,25 @@ pub mod aaa {
             }
         }
 
-        #[::validated_data::data_view(python(name = "EOSConfig.Dot1x.Aaa.Unresponsive.PhoneAction"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.Dot1x.Aaa.Unresponsive.PhoneAction", schema = Dict(153)))]
         pub struct PhoneAction<'a, Mode> {
+            #[data_view(schema = Bool(48))]
             pub apply_cached_results: ::validated_data::Field<bool>,
+            #[data_view(schema = Dict(151))]
             pub cached_results_timeout: ::validated_data::Field<phone_action::CachedResultsTimeout<'a, Mode>>,
+            #[data_view(schema = Bool(50))]
             pub apply_alternate: ::validated_data::Field<bool>,
+            #[data_view(schema = Bool(49))]
             pub traffic_allow: ::validated_data::Field<bool>,
         }
 
         pub mod phone_action {
 
-            #[::validated_data::data_view(python(name = "EOSConfig.Dot1x.Aaa.Unresponsive.PhoneAction.CachedResultsTimeout"))]
+            #[::validated_data::data_view(python(name = "EOSConfig.Dot1x.Aaa.Unresponsive.PhoneAction.CachedResultsTimeout", schema = Dict(151)))]
             pub struct CachedResultsTimeout<'a, Mode> {
+                #[data_view(schema = Int(27))]
                 pub time_duration: ::validated_data::RequiredValue<i64, Mode>,
+                #[data_view(schema = Str(155))]
                 pub time_duration_unit: ::validated_data::RequiredValue<&'a str, Mode>,
             }
         }

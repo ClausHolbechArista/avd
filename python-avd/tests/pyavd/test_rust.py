@@ -102,7 +102,7 @@ def test_open_avd_design_exposes_typed_immutable_views(tmp_path: Path) -> None:
     assert device.id == 42
     assert device.vtep is True
     assert device.serial_number is None
-    assert device.platform is Undefined
+    assert device.platform is None
 
     uplink_interfaces = device.uplink_interfaces
     assert uplink_interfaces is not Undefined

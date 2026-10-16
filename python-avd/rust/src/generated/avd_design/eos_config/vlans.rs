@@ -24,9 +24,11 @@ pub mod item {
 
     pub mod address_locking {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.VlansItemBase.AddressLocking.AddressFamily"))]
+        #[::validated_data::data_view(python(name = "EOSConfig.VlansItemBase.AddressLocking.AddressFamily", schema = Dict(1340)))]
         pub struct AddressFamily<'a, Mode> {
+            #[data_view(schema = Bool(391))]
             pub ipv4: ::validated_data::Field<bool>,
+            #[data_view(schema = Bool(392))]
             pub ipv6: ::validated_data::Field<bool>,
         }
     }
