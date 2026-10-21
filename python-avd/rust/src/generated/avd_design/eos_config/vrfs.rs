@@ -1,30 +1,30 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct Vrfs<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::data_views::Field<Item<'a, Mode>>);
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Item<'a, Mode> {
-    pub name: ::validated_data::Field<&'a str>,
-    pub description: ::validated_data::Field<&'a str>,
-    pub rd: ::validated_data::Field<&'a str>,
-    pub ip_routing: ::validated_data::Field<bool>,
-    pub ipv6_routing: ::validated_data::Field<bool>,
-    pub ip_routing_ipv6_interfaces: ::validated_data::Field<bool>,
-    pub metadata: ::validated_data::Field<item::Metadata<'a, Mode>>,
+    pub name: ::data_views::Field<&'a str>,
+    pub description: ::data_views::Field<&'a str>,
+    pub rd: ::data_views::Field<&'a str>,
+    pub ip_routing: ::data_views::Field<bool>,
+    pub ipv6_routing: ::data_views::Field<bool>,
+    pub ip_routing_ipv6_interfaces: ::data_views::Field<bool>,
+    pub metadata: ::data_views::Field<item::Metadata<'a, Mode>>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Metadata<'a, Mode> {
-        pub tenants: ::validated_data::Field<metadata::Tenants<'a, Mode>>,
+        pub tenants: ::data_views::Field<metadata::Tenants<'a, Mode>>,
     }
 
     pub mod metadata {
 
-        #[::validated_data::data_view(list)]
-        pub struct Tenants<'a, Mode> (::validated_data::Field<&'a str>);
+        #[::data_views::data_view(list)]
+        pub struct Tenants<'a, Mode> (::data_views::Field<&'a str>);
     }
 }

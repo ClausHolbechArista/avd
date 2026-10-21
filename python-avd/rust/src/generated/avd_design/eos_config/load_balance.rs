@@ -1,54 +1,54 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct LoadBalance<'a, Mode> {
-    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
-    pub cluster: ::validated_data::Field<Cluster<'a, Mode>>,
+    pub policies: ::data_views::Field<Policies<'a, Mode>>,
+    pub cluster: ::data_views::Field<Cluster<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Policies<'a, Mode> {
-    pub sand_profiles: ::validated_data::Field<policies::SandProfiles<'a, Mode>>,
+    pub sand_profiles: ::data_views::Field<policies::SandProfiles<'a, Mode>>,
 }
 
 pub mod policies {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
-    pub struct SandProfiles<'a, Mode> (::validated_data::Field<sand_profiles::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(name))]
+    pub struct SandProfiles<'a, Mode> (::data_views::Field<sand_profiles::Item<'a, Mode>>);
 
     pub mod sand_profiles {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub name: ::validated_data::Field<&'a str>,
-            pub fields: ::validated_data::Field<item::Fields<'a, Mode>>,
+            pub name: ::data_views::Field<&'a str>,
+            pub fields: ::data_views::Field<item::Fields<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Fields<'a, Mode> {
-                pub udp: ::validated_data::Field<fields::Udp<'a, Mode>>,
+                pub udp: ::data_views::Field<fields::Udp<'a, Mode>>,
             }
 
             pub mod fields {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct Udp<'a, Mode> {
-                    pub dst_port: ::validated_data::RequiredValue<i64, Mode>,
-                    pub payload_bytes: ::validated_data::Field<&'a str>,
+                    pub dst_port: ::data_views::RequiredValue<i64, Mode>,
+                    pub payload_bytes: ::data_views::Field<&'a str>,
                     #[data_view(rename = "match")]
-                    pub field_match: ::validated_data::Field<udp::FieldMatch<'a, Mode>>,
+                    pub field_match: ::data_views::Field<udp::FieldMatch<'a, Mode>>,
                 }
 
                 pub mod udp {
 
-                    #[::validated_data::data_view]
+                    #[::data_views::data_view]
                     pub struct FieldMatch<'a, Mode> {
-                        pub payload_bits: ::validated_data::RequiredValue<&'a str, Mode>,
-                        pub pattern: ::validated_data::RequiredValue<&'a str, Mode>,
-                        pub hash_payload_bytes: ::validated_data::RequiredValue<&'a str, Mode>,
+                        pub payload_bits: ::data_views::RequiredValue<&'a str, Mode>,
+                        pub pattern: ::data_views::RequiredValue<&'a str, Mode>,
+                        pub hash_payload_bytes: ::data_views::RequiredValue<&'a str, Mode>,
                     }
                 }
             }
@@ -56,52 +56,52 @@ pub mod policies {
     }
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Cluster<'a, Mode> {
-    pub destination_grouping: ::validated_data::Field<&'a str>,
-    pub prefix_length: ::validated_data::Field<i64>,
-    pub forwarding_type: ::validated_data::Field<&'a str>,
-    pub load_balance_method_flow_round_robin: ::validated_data::Field<bool>,
-    pub flow: ::validated_data::Field<cluster::Flow<'a, Mode>>,
-    pub port_groups: ::validated_data::Field<cluster::PortGroups<'a, Mode>>,
+    pub destination_grouping: ::data_views::Field<&'a str>,
+    pub prefix_length: ::data_views::Field<i64>,
+    pub forwarding_type: ::data_views::Field<&'a str>,
+    pub load_balance_method_flow_round_robin: ::data_views::Field<bool>,
+    pub flow: ::data_views::Field<cluster::Flow<'a, Mode>>,
+    pub port_groups: ::data_views::Field<cluster::PortGroups<'a, Mode>>,
 }
 
 pub mod cluster {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Flow<'a, Mode> {
-        pub monitor: ::validated_data::Field<bool>,
-        pub source_learning_aging_timeout: ::validated_data::Field<i64>,
+        pub monitor: ::data_views::Field<bool>,
+        pub source_learning_aging_timeout: ::data_views::Field<i64>,
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(group))]
-    pub struct PortGroups<'a, Mode> (::validated_data::Field<port_groups::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(group))]
+    pub struct PortGroups<'a, Mode> (::data_views::Field<port_groups::Item<'a, Mode>>);
 
     pub mod port_groups {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub group: ::validated_data::Field<&'a str>,
-            pub balance_factor: ::validated_data::Field<i64>,
-            pub interface: ::validated_data::Field<&'a str>,
-            pub flow: ::validated_data::Field<item::Flow<'a, Mode>>,
+            pub group: ::data_views::Field<&'a str>,
+            pub balance_factor: ::data_views::Field<i64>,
+            pub interface: ::data_views::Field<&'a str>,
+            pub flow: ::data_views::Field<item::Flow<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Flow<'a, Mode> {
-                pub limit: ::validated_data::Field<i64>,
-                pub warning: ::validated_data::Field<i64>,
-                pub exhaustion_action: ::validated_data::Field<flow::ExhaustionAction<'a, Mode>>,
+                pub limit: ::data_views::Field<i64>,
+                pub warning: ::data_views::Field<i64>,
+                pub exhaustion_action: ::data_views::Field<flow::ExhaustionAction<'a, Mode>>,
             }
 
             pub mod flow {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct ExhaustionAction<'a, Mode> {
-                    pub dscp: ::validated_data::Field<i64>,
-                    pub traffic_class: ::validated_data::Field<i64>,
+                    pub dscp: ::data_views::Field<i64>,
+                    pub traffic_class: ::data_views::Field<i64>,
                 }
             }
         }

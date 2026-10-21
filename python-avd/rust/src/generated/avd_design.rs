@@ -6,7 +6,7 @@ const REGISTRY_HASH: [u8; 32] = [151, 17, 249, 66, 215, 189, 118, 112, 67, 86, 1
 pub const SCHEMA_HASH: [u8; 32] = [141, 89, 111, 211, 104, 121, 183, 4, 169, 75, 177, 21, 115, 57, 187, 91, 194, 96, 84, 162, 84, 181, 71, 38, 86, 98, 136, 7, 93, 202, 106, 102];
 pub mod eos_config;
 pub mod avd_design;
-pub const REGISTRY: ::validated_data::ModelRegistry = ::validated_data::ModelRegistry {
-    root_model: <avd_design::AvdDesign<'static> as ::validated_data::ArchiveModel>::DESCRIPTOR,
+pub const REGISTRY: ::data_views::ModelRegistry = ::data_views::ModelRegistry {
+    root_model: <avd_design::AvdDesign<'static> as ::data_views::ArchiveModel>::DESCRIPTOR,
     hash: REGISTRY_HASH,
 };

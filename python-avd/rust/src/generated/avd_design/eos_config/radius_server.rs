@@ -1,92 +1,92 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct RadiusServer<'a, Mode> {
-    pub attribute_32_include_in_access_req: ::validated_data::Field<Attribute32IncludeInAccessReq<'a, Mode>>,
-    pub deadtime: ::validated_data::Field<i64>,
-    pub dynamic_authorization: ::validated_data::Field<DynamicAuthorization<'a, Mode>>,
-    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
-    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
-    pub tls_ssl_profile: ::validated_data::Field<&'a str>,
+    pub attribute_32_include_in_access_req: ::data_views::Field<Attribute32IncludeInAccessReq<'a, Mode>>,
+    pub deadtime: ::data_views::Field<i64>,
+    pub dynamic_authorization: ::data_views::Field<DynamicAuthorization<'a, Mode>>,
+    pub servers: ::data_views::Field<Servers<'a, Mode>>,
+    pub vrfs: ::data_views::Field<Vrfs<'a, Mode>>,
+    pub tls_ssl_profile: ::data_views::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Attribute32IncludeInAccessReq<'a, Mode> {
-    pub hostname: ::validated_data::Field<bool>,
-    pub format: ::validated_data::Field<&'a str>,
+    pub hostname: ::data_views::Field<bool>,
+    pub format: ::data_views::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct DynamicAuthorization<'a, Mode> {
-    pub port: ::validated_data::Field<i64>,
-    pub tls_ssl_profile: ::validated_data::Field<&'a str>,
+    pub port: ::data_views::Field<i64>,
+    pub tls_ssl_profile: ::data_views::Field<&'a str>,
 }
 
-#[::validated_data::data_view(list)]
-pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
+#[::data_views::data_view(list)]
+pub struct Servers<'a, Mode> (::data_views::Field<servers::Item<'a, Mode>>);
 
 pub mod servers {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub host: ::validated_data::RequiredValue<&'a str, Mode>,
-        pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
-        pub timeout: ::validated_data::Field<i64>,
-        pub retransmit: ::validated_data::Field<i64>,
-        pub key: ::validated_data::Field<&'a str>,
-        pub key_type: ::validated_data::Field<&'a str>,
+        pub host: ::data_views::RequiredValue<&'a str, Mode>,
+        pub tls: ::data_views::Field<item::Tls<'a, Mode>>,
+        pub timeout: ::data_views::Field<i64>,
+        pub retransmit: ::data_views::Field<i64>,
+        pub key: ::data_views::Field<&'a str>,
+        pub key_type: ::data_views::Field<&'a str>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(python(name = "EOSConfig.RadiusServer.ServersItem.Tls", schema = Dict(863)))]
+        #[::data_views::data_view(python(name = "EOSConfig.RadiusServer.ServersItem.Tls", schema = Dict(863)))]
         pub struct Tls<'a, Mode> {
             #[data_view(schema = Bool(306))]
-            pub enabled: ::validated_data::Field<bool>,
+            pub enabled: ::data_views::Field<bool>,
             #[data_view(schema = Str(731))]
-            pub ssl_profile: ::validated_data::Field<&'a str>,
+            pub ssl_profile: ::data_views::Field<&'a str>,
             #[data_view(schema = Int(351))]
-            pub port: ::validated_data::Field<i64>,
+            pub port: ::data_views::Field<i64>,
         }
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct Vrfs<'a, Mode> (::data_views::Field<vrfs::Item<'a, Mode>>);
 
 pub mod vrfs {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub servers: ::validated_data::RequiredValue<item::Servers<'a, Mode>, Mode>,
+        pub name: ::data_views::Field<&'a str>,
+        pub servers: ::data_views::RequiredValue<item::Servers<'a, Mode>, Mode>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(list)]
-        pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
+        #[::data_views::data_view(list)]
+        pub struct Servers<'a, Mode> (::data_views::Field<servers::Item<'a, Mode>>);
 
         pub mod servers {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub host: ::validated_data::RequiredValue<&'a str, Mode>,
-                pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
-                pub timeout: ::validated_data::Field<i64>,
-                pub retransmit: ::validated_data::Field<i64>,
-                pub key: ::validated_data::Field<&'a str>,
-                pub key_type: ::validated_data::Field<&'a str>,
+                pub host: ::data_views::RequiredValue<&'a str, Mode>,
+                pub tls: ::data_views::Field<item::Tls<'a, Mode>>,
+                pub timeout: ::data_views::Field<i64>,
+                pub retransmit: ::data_views::Field<i64>,
+                pub key: ::data_views::Field<&'a str>,
+                pub key_type: ::data_views::Field<&'a str>,
             }
 
             pub mod item {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct Tls<'a, Mode> {
-                    pub enabled: ::validated_data::Field<bool>,
-                    pub ssl_profile: ::validated_data::Field<&'a str>,
-                    pub port: ::validated_data::Field<i64>,
+                    pub enabled: ::data_views::Field<bool>,
+                    pub ssl_profile: ::data_views::Field<&'a str>,
+                    pub port: ::data_views::Field<i64>,
                 }
             }
         }

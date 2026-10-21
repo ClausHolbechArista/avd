@@ -16,5 +16,5 @@ pyo3 = { workspace = true, features = ["abi3-py310"] }
 serde.workspace = true
 serde_json.workspace = true
 validation = { workspace = true, features = ["archive", "regex-perf"] }
-validated-data.workspace = true
-validated-data-py.workspace = true
+data-views.workspace = true
+data-views-py.workspace = true

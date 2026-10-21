@@ -1,13 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct IpSoftwareForwarding<'a, Mode> {
-    pub mtu: ::validated_data::Field<Mtu<'a, Mode>>,
+    pub mtu: ::data_views::Field<Mtu<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Mtu<'a, Mode> {
-    pub size: ::validated_data::Field<i64>,
-    pub exceed_action_drop: ::validated_data::Field<bool>,
+    pub size: ::data_views::Field<i64>,
+    pub exceed_action_drop: ::data_views::Field<bool>,
 }

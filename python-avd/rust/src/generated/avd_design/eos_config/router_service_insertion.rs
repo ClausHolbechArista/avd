@@ -1,37 +1,37 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct RouterServiceInsertion<'a, Mode> {
-    pub enabled: ::validated_data::Field<bool>,
-    pub connections: ::validated_data::Field<Connections<'a, Mode>>,
+    pub enabled: ::data_views::Field<bool>,
+    pub connections: ::data_views::Field<Connections<'a, Mode>>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct Connections<'a, Mode> (::validated_data::Field<connections::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct Connections<'a, Mode> (::data_views::Field<connections::Item<'a, Mode>>);
 
 pub mod connections {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub ethernet_interface: ::validated_data::Field<item::EthernetInterface<'a, Mode>>,
-        pub tunnel_interface: ::validated_data::Field<item::TunnelInterface<'a, Mode>>,
-        pub monitor_connectivity_host: ::validated_data::Field<&'a str>,
+        pub name: ::data_views::Field<&'a str>,
+        pub ethernet_interface: ::data_views::Field<item::EthernetInterface<'a, Mode>>,
+        pub tunnel_interface: ::data_views::Field<item::TunnelInterface<'a, Mode>>,
+        pub monitor_connectivity_host: ::data_views::Field<&'a str>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct EthernetInterface<'a, Mode> {
-            pub name: ::validated_data::RequiredValue<&'a str, Mode>,
-            pub next_hop: ::validated_data::RequiredValue<&'a str, Mode>,
+            pub name: ::data_views::RequiredValue<&'a str, Mode>,
+            pub next_hop: ::data_views::RequiredValue<&'a str, Mode>,
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct TunnelInterface<'a, Mode> {
-            pub primary: ::validated_data::Field<&'a str>,
-            pub secondary: ::validated_data::Field<&'a str>,
+            pub primary: ::data_views::Field<&'a str>,
+            pub secondary: ::data_views::Field<&'a str>,
         }
     }
 }

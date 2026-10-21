@@ -1,64 +1,64 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct IpAccessLists<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct IpAccessLists<'a, Mode> (::data_views::Field<Item<'a, Mode>>);
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Item<'a, Mode> {
-    pub name: ::validated_data::Field<&'a str>,
-    pub counters_per_entry: ::validated_data::Field<bool>,
-    pub entries: ::validated_data::Field<item::Entries<'a, Mode>>,
-    pub permit_response_traffic: ::validated_data::Field<&'a str>,
+    pub name: ::data_views::Field<&'a str>,
+    pub counters_per_entry: ::data_views::Field<bool>,
+    pub entries: ::data_views::Field<item::Entries<'a, Mode>>,
+    pub permit_response_traffic: ::data_views::Field<&'a str>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
-    pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
+    #[::data_views::data_view(list)]
+    pub struct Entries<'a, Mode> (::data_views::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub sequence: ::validated_data::Field<i64>,
-            pub remark: ::validated_data::Field<&'a str>,
-            pub action: ::validated_data::Field<&'a str>,
-            pub protocol: ::validated_data::Field<&'a str>,
-            pub source: ::validated_data::Field<&'a str>,
-            pub destination: ::validated_data::Field<&'a str>,
-            pub fragments: ::validated_data::Field<bool>,
-            pub ttl: ::validated_data::Field<i64>,
-            pub ttl_match: ::validated_data::Field<&'a str>,
-            pub vlan_inner: ::validated_data::Field<bool>,
-            pub source_ports_match: ::validated_data::Field<&'a str>,
-            pub source_ports: ::validated_data::Field<item::SourcePorts<'a, Mode>>,
-            pub destination_ports_match: ::validated_data::Field<&'a str>,
-            pub destination_ports: ::validated_data::Field<item::DestinationPorts<'a, Mode>>,
-            pub tcp_flags: ::validated_data::Field<item::TcpFlags<'a, Mode>>,
-            pub copy_captive_portal: ::validated_data::Field<bool>,
-            pub log: ::validated_data::Field<bool>,
-            pub icmp_type: ::validated_data::Field<&'a str>,
-            pub icmp_code: ::validated_data::Field<&'a str>,
-            pub nexthop_group: ::validated_data::Field<&'a str>,
-            pub tracked: ::validated_data::Field<bool>,
-            pub dscp: ::validated_data::Field<&'a str>,
-            pub vlan_number: ::validated_data::Field<i64>,
-            pub vlan_mask: ::validated_data::Field<&'a str>,
-            pub inner_vlan_number: ::validated_data::Field<i64>,
-            pub inner_vlan_mask: ::validated_data::Field<&'a str>,
+            pub sequence: ::data_views::Field<i64>,
+            pub remark: ::data_views::Field<&'a str>,
+            pub action: ::data_views::Field<&'a str>,
+            pub protocol: ::data_views::Field<&'a str>,
+            pub source: ::data_views::Field<&'a str>,
+            pub destination: ::data_views::Field<&'a str>,
+            pub fragments: ::data_views::Field<bool>,
+            pub ttl: ::data_views::Field<i64>,
+            pub ttl_match: ::data_views::Field<&'a str>,
+            pub vlan_inner: ::data_views::Field<bool>,
+            pub source_ports_match: ::data_views::Field<&'a str>,
+            pub source_ports: ::data_views::Field<item::SourcePorts<'a, Mode>>,
+            pub destination_ports_match: ::data_views::Field<&'a str>,
+            pub destination_ports: ::data_views::Field<item::DestinationPorts<'a, Mode>>,
+            pub tcp_flags: ::data_views::Field<item::TcpFlags<'a, Mode>>,
+            pub copy_captive_portal: ::data_views::Field<bool>,
+            pub log: ::data_views::Field<bool>,
+            pub icmp_type: ::data_views::Field<&'a str>,
+            pub icmp_code: ::data_views::Field<&'a str>,
+            pub nexthop_group: ::data_views::Field<&'a str>,
+            pub tracked: ::data_views::Field<bool>,
+            pub dscp: ::data_views::Field<&'a str>,
+            pub vlan_number: ::data_views::Field<i64>,
+            pub vlan_mask: ::data_views::Field<&'a str>,
+            pub inner_vlan_number: ::data_views::Field<i64>,
+            pub inner_vlan_mask: ::data_views::Field<&'a str>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view(list)]
-            pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
+            #[::data_views::data_view(list)]
+            pub struct SourcePorts<'a, Mode> (::data_views::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
-            pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
+            #[::data_views::data_view(list)]
+            pub struct DestinationPorts<'a, Mode> (::data_views::Field<&'a str>);
 
-            #[::validated_data::data_view(list)]
-            pub struct TcpFlags<'a, Mode> (::validated_data::Field<&'a str>);
+            #[::data_views::data_view(list)]
+            pub struct TcpFlags<'a, Mode> (::data_views::Field<&'a str>);
         }
     }
 }

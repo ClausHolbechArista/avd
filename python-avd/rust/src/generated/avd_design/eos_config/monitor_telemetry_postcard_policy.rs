@@ -1,113 +1,113 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct MonitorTelemetryPostcardPolicy<'a, Mode> {
-    pub disabled: ::validated_data::Field<bool>,
-    pub ingress: ::validated_data::Field<Ingress<'a, Mode>>,
-    pub marker_vxlan: ::validated_data::Field<MarkerVxlan<'a, Mode>>,
-    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
-    pub sample_policies: ::validated_data::Field<SamplePolicies<'a, Mode>>,
+    pub disabled: ::data_views::Field<bool>,
+    pub ingress: ::data_views::Field<Ingress<'a, Mode>>,
+    pub marker_vxlan: ::data_views::Field<MarkerVxlan<'a, Mode>>,
+    pub profiles: ::data_views::Field<Profiles<'a, Mode>>,
+    pub sample_policies: ::data_views::Field<SamplePolicies<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Ingress<'a, Mode> {
-    pub collection: ::validated_data::Field<ingress::Collection<'a, Mode>>,
-    pub sample: ::validated_data::Field<ingress::Sample<'a, Mode>>,
+    pub collection: ::data_views::Field<ingress::Collection<'a, Mode>>,
+    pub sample: ::data_views::Field<ingress::Sample<'a, Mode>>,
 }
 
 pub mod ingress {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Collection<'a, Mode> {
-        pub source: ::validated_data::Field<&'a str>,
-        pub destination: ::validated_data::Field<&'a str>,
-        pub version: ::validated_data::Field<i64>,
+        pub source: ::data_views::Field<&'a str>,
+        pub destination: ::data_views::Field<&'a str>,
+        pub version: ::data_views::Field<i64>,
     }
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Sample<'a, Mode> {
-        pub rate: ::validated_data::Field<i64>,
-        pub tcp_udp_checksum: ::validated_data::Field<sample::TcpUdpChecksum<'a, Mode>>,
+        pub rate: ::data_views::Field<i64>,
+        pub tcp_udp_checksum: ::data_views::Field<sample::TcpUdpChecksum<'a, Mode>>,
     }
 
     pub mod sample {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct TcpUdpChecksum<'a, Mode> {
-            pub value: ::validated_data::Field<i64>,
-            pub mask: ::validated_data::Field<&'a str>,
+            pub value: ::data_views::Field<i64>,
+            pub mask: ::data_views::Field<&'a str>,
         }
     }
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct MarkerVxlan<'a, Mode> {
-    pub enabled: ::validated_data::Field<bool>,
-    pub header_word_zero_bit: ::validated_data::Field<i64>,
+    pub enabled: ::data_views::Field<bool>,
+    pub header_word_zero_bit: ::data_views::Field<i64>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct Profiles<'a, Mode> (::data_views::Field<profiles::Item<'a, Mode>>);
 
 pub mod profiles {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub ingress_sample_policy: ::validated_data::Field<&'a str>,
+        pub name: ::data_views::Field<&'a str>,
+        pub ingress_sample_policy: ::data_views::Field<&'a str>,
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct SamplePolicies<'a, Mode> (::validated_data::Field<sample_policies::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct SamplePolicies<'a, Mode> (::data_views::Field<sample_policies::Item<'a, Mode>>);
 
 pub mod sample_policies {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub match_rules: ::validated_data::Field<item::MatchRules<'a, Mode>>,
+        pub name: ::data_views::Field<&'a str>,
+        pub match_rules: ::data_views::Field<item::MatchRules<'a, Mode>>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(indexed_list, primary_key(name))]
-        pub struct MatchRules<'a, Mode> (::validated_data::Field<match_rules::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(name))]
+        pub struct MatchRules<'a, Mode> (::data_views::Field<match_rules::Item<'a, Mode>>);
 
         pub mod match_rules {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub name: ::validated_data::Field<&'a str>,
+                pub name: ::data_views::Field<&'a str>,
                 #[data_view(rename = "type")]
-                pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
-                pub destination_prefix: ::validated_data::Field<&'a str>,
-                pub source_prefix: ::validated_data::Field<&'a str>,
-                pub protocols: ::validated_data::Field<item::Protocols<'a, Mode>>,
+                pub field_type: ::data_views::RequiredValue<&'a str, Mode>,
+                pub destination_prefix: ::data_views::Field<&'a str>,
+                pub source_prefix: ::data_views::Field<&'a str>,
+                pub protocols: ::data_views::Field<item::Protocols<'a, Mode>>,
             }
 
             pub mod item {
 
-                #[::validated_data::data_view(indexed_list, primary_key(protocol))]
-                pub struct Protocols<'a, Mode> (::validated_data::Field<protocols::Item<'a, Mode>>);
+                #[::data_views::data_view(indexed_list, primary_key(protocol))]
+                pub struct Protocols<'a, Mode> (::data_views::Field<protocols::Item<'a, Mode>>);
 
                 pub mod protocols {
 
-                    #[::validated_data::data_view]
+                    #[::data_views::data_view]
                     pub struct Item<'a, Mode> {
-                        pub protocol: ::validated_data::Field<&'a str>,
-                        pub source_ports: ::validated_data::Field<item::SourcePorts<'a, Mode>>,
-                        pub destination_ports: ::validated_data::Field<item::DestinationPorts<'a, Mode>>,
+                        pub protocol: ::data_views::Field<&'a str>,
+                        pub source_ports: ::data_views::Field<item::SourcePorts<'a, Mode>>,
+                        pub destination_ports: ::data_views::Field<item::DestinationPorts<'a, Mode>>,
                     }
 
                     pub mod item {
 
-                        #[::validated_data::data_view(list)]
-                        pub struct SourcePorts<'a, Mode> (::validated_data::Field<&'a str>);
+                        #[::data_views::data_view(list)]
+                        pub struct SourcePorts<'a, Mode> (::data_views::Field<&'a str>);
 
-                        #[::validated_data::data_view(list)]
-                        pub struct DestinationPorts<'a, Mode> (::validated_data::Field<&'a str>);
+                        #[::data_views::data_view(list)]
+                        pub struct DestinationPorts<'a, Mode> (::data_views::Field<&'a str>);
                     }
                 }
             }
