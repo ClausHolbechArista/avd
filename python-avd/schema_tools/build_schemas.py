@@ -130,6 +130,7 @@ def build_validated_data_models() -> None:
         "AvdDesign",
         "AVDDesign",
         reused_schemas={"eos_cli_config_gen": ("EosConfig", "EOSConfig")},
+        python_feature="python",
     )
     LOGGER.info("Running 'ruff' for generated validated-data typing package: %s", VALIDATED_DATA_PYI_DIR)
     subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607

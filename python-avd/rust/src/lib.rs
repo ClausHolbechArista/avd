@@ -2,24 +2,18 @@
 // Use of this source code is governed by the Apache License 2.0
 // that can be found in the LICENSE file.
 
-//! AVD-owned Python extension for validated-data publication and views.
+//! Python adapters for AVD data publication and native immutable model access.
+//!
+//! Domain models, schema compatibility and archive operations belong to `avd-data`.
+//! This extension registers Python classes and converts Rust results at the Python boundary.
 
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use avdschema::Store;
-use data_views::DataStore;
 use data_views_py::PyValueHandle;
 use data_views_py::ViewHandle;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
-use validation::archive::validate_json_to_archive;
-
-#[allow(dead_code, non_snake_case, reason = "generated API exceeds the current call graph and preserves schema key spelling")]
-#[rustfmt::skip]
-mod generated {
-    pub mod avd_design;
-}
 
 /// Result of validating and conditionally publishing one host archive.
 #[pyclass(get_all, module = "pyavd._rust")]
@@ -73,17 +67,8 @@ fn archive_avd_design(
     destination: PathBuf,
     schema_archive: PathBuf,
 ) -> PyResult<PublicationResult> {
-    let schemas = Store::from_file(&schema_archive)
+    let publication = avd_data::archive_avd_design(input_json, &destination, &schema_archive)
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
-    check_schema(&schemas)?;
-    let publication = validate_json_to_archive(
-        &schemas,
-        "avd_design",
-        input_json,
-        &destination,
-        generated::avd_design::REGISTRY,
-    )
-    .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
     let published_destination = publication.published.then_some(destination);
     Ok(PublicationResult {
         destination: published_destination,
@@ -101,34 +86,21 @@ fn open_avd_design(
     archive: PathBuf,
     schema_archive: PathBuf,
 ) -> PyResult<Py<PyAny>> {
-    let schemas = Store::from_file(&schema_archive)
+    let opened = avd_data::open_avd_design(&archive, &schema_archive)
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
-    check_schema(&schemas)?;
-    let data = Arc::new(
-        DataStore::from_file(
-            &archive,
-            schemas.archive_hash(),
-            generated::avd_design::REGISTRY,
-        )
-        .map_err(|error| PyRuntimeError::new_err(error.to_string()))?,
-    );
-    data.root_as::<generated::avd_design::avd_design::AvdDesign<'_>>()
+    opened
+        .root()
         .map_err(|error| PyRuntimeError::new_err(error.to_string()))?;
     let module = py
         .import("pyavd._rust")?
         .getattr("_validated_data")?
         .cast_into::<pyo3::types::PyModule>()?;
-    data_views_py::wrap_with_schema(&module, "AVDDesign", data.root_handle(), Arc::new(schemas))
-}
-
-/// Generated schema IDs are meaningful only in the exact combined store used at build time.
-fn check_schema(schemas: &Store) -> PyResult<()> {
-    if schemas.archive_hash() != generated::avd_design::SCHEMA_HASH {
-        return Err(PyRuntimeError::new_err(
-            "schema archive does not match the generated data models",
-        ));
-    }
-    Ok(())
+    data_views_py::wrap_with_schema(
+        &module,
+        "AVDDesign",
+        opened.data().root_handle(),
+        Arc::clone(opened.schemas()),
+    )
 }
 
 fn to_json(value: &impl serde::Serialize) -> PyResult<String> {
@@ -146,9 +118,9 @@ mod _rust {
         let native = PyModule::new(py, "pyavd._validated_data")?;
         let opaque = py.get_type::<super::PyOpaqueData>();
         let undefined = py.import("pyavd._utils.undefined")?.getattr("Undefined")?;
-        data_views_py::install_models::<
-            super::generated::avd_design::avd_design::AvdDesign<'static>,
-        >(&native, &opaque, &undefined)?;
+        data_views_py::install_models::<avd_data::avd_design::AvdDesign<'static>>(
+            &native, &opaque, &undefined,
+        )?;
         native.add("OpaqueData", &opaque)?;
         native.add_function(wrap_pyfunction!(super::open_avd_design, &native)?)?;
         py.import("sys")?

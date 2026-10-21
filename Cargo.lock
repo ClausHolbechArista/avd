@@ -33,9 +33,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
+name = "avd-data"
+version = "0.0.0"
+dependencies = [
+ "avdschema",
+ "data-views",
+ "data-views-py",
+ "derive_more",
+ "validation",
+]
+
+[[package]]
 name = "avdschema"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
 dependencies = [
  "blake3",
  "derive_more",
@@ -231,6 +242,40 @@ dependencies = [
  "darling_core",
  "quote",
  "syn 3.0.6",
+]
+
+[[package]]
+name = "data-views"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
+dependencies = [
+ "data-views-macros",
+ "derive_more",
+ "mmap-guard",
+ "rkyv",
+ "self_cell",
+ "serde_json",
+]
+
+[[package]]
+name = "data-views-macros"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "data-views-py"
+version = "0.0.12"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
+dependencies = [
+ "avdschema",
+ "data-views",
+ "pyo3",
+ "serde_json",
 ]
 
 [[package]]
@@ -672,13 +717,11 @@ dependencies = [
 name = "pyavd-rust"
 version = "0.0.0"
 dependencies = [
- "avdschema",
+ "avd-data",
+ "data-views-py",
  "pyo3",
  "serde",
  "serde_json",
- "data-views",
- "data-views-py",
- "validation",
 ]
 
 [[package]]
@@ -1110,50 +1153,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "data-views"
-version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
-dependencies = [
- "derive_more",
- "mmap-guard",
- "rkyv",
- "self_cell",
- "serde_json",
- "data-views-macros",
-]
-
-[[package]]
-name = "data-views-macros"
-version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
-name = "data-views-py"
-version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
-dependencies = [
- "avdschema",
- "pyo3",
- "serde_json",
- "data-views",
-]
-
-[[package]]
 name = "validation"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
 dependencies = [
  "avdschema",
+ "data-views",
  "derive_more",
  "log",
  "serde",
  "serde_json",
- "data-views",
  "yaml-parser",
 ]
 
@@ -1273,7 +1282,7 @@ dependencies = [
 [[package]]
 name = "yaml-parser"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=b94061aa48e473f719162535d127fc059bc826ce#b94061aa48e473f719162535d127fc059bc826ce"
 dependencies = [
  "avdschema",
  "derive_more",
