@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesign.SviProfiles", schema = List(781), item_name = "AVDDesign.SviProfilesItem"))]
+pub struct SviProfiles<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.SviProfilesItemBase", schema = Dict(1763)))]
 pub struct Item<'a, Mode> {

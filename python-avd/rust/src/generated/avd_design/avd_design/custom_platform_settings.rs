@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(list, python(name = "AVDDesign.CustomPlatformSettings", schema = List(763)))]
+pub struct CustomPlatformSettings<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.CustomPlatformSettingsItem", schema = Dict(1727)))]
 pub struct Item<'a, Mode> {

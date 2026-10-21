@@ -1,6 +1,29 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.FabricFlowTracking", schema = Dict(1564)))]
+pub struct FabricFlowTracking<'a, Mode> {
+    #[data_view(schema = Dict(1554))]
+    pub uplinks: ::validated_data::Field<Uplinks<'a, Mode>>,
+    #[data_view(schema = Dict(1555))]
+    pub downlinks: ::validated_data::Field<Downlinks<'a, Mode>>,
+    #[data_view(schema = Dict(1556))]
+    pub endpoints: ::validated_data::Field<Endpoints<'a, Mode>>,
+    #[data_view(schema = Dict(1557))]
+    pub l3_edge: ::validated_data::Field<L3Edge<'a, Mode>>,
+    #[data_view(schema = Dict(1558))]
+    pub core_interfaces: ::validated_data::Field<CoreInterfaces<'a, Mode>>,
+    #[data_view(schema = Dict(1559))]
+    pub mlag_interfaces: ::validated_data::Field<MlagInterfaces<'a, Mode>>,
+    #[data_view(schema = Dict(1560))]
+    pub l3_interfaces: ::validated_data::Field<L3Interfaces<'a, Mode>>,
+    #[data_view(schema = Dict(1561))]
+    pub l3_port_channels: ::validated_data::Field<L3PortChannels<'a, Mode>>,
+    #[data_view(schema = Dict(1562))]
+    pub dps_interfaces: ::validated_data::Field<DpsInterfaces<'a, Mode>>,
+    #[data_view(schema = Dict(1563))]
+    pub direct_wan_ha_links: ::validated_data::Field<DirectWanHaLinks<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.FabricFlowTracking.Uplinks", schema = Dict(1554)))]
 pub struct Uplinks<'a, Mode> {

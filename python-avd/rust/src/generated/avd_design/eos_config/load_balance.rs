@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct LoadBalance<'a, Mode> {
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+    pub cluster: ::validated_data::Field<Cluster<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Policies<'a, Mode> {

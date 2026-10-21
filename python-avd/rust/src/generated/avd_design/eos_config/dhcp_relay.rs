@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct DhcpRelay<'a, Mode> {
+    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
+    pub tunnel_requests_disabled: ::validated_data::Field<bool>,
+    pub mlag_peerlink_requests_disabled: ::validated_data::Field<bool>,
+    pub client_requests: ::validated_data::Field<ClientRequests<'a, Mode>>,
+    pub reply_source_address_validation: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view(list)]
 pub struct Servers<'a, Mode> (::validated_data::Field<&'a str>);

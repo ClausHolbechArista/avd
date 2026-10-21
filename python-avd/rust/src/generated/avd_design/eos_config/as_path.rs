@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct AsPath<'a, Mode> {
+    pub regex_mode: ::validated_data::Field<&'a str>,
+    pub access_lists: ::validated_data::Field<AccessLists<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct AccessLists<'a, Mode> (::validated_data::Field<access_lists::Item<'a, Mode>>);

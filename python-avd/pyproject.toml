@@ -120,7 +120,7 @@ extend_skip_glob = [
 extend = "../pyproject.toml"
 
 [tool.ruff.lint.extend-per-file-ignores]
-"pyavd/_validated_data.pyi" = [
+"pyavd/_validated_data/*.pyi" = [
   "E501", # Generated schema-path identifiers can exceed the configured line length.
 ]
 

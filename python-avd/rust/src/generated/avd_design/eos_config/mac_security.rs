@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MacSecurity<'a, Mode> {
+    pub license: ::validated_data::Field<License<'a, Mode>>,
+    pub fips_restrictions: ::validated_data::Field<bool>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct License<'a, Mode> {

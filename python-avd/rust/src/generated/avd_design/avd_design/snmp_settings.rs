@@ -1,6 +1,37 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.SnmpSettings", schema = Dict(1749)))]
+pub struct SnmpSettings<'a, Mode> {
+    #[data_view(schema = Str(948))]
+    pub contact: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Bool(644))]
+    pub location: ::validated_data::Field<bool>,
+    #[data_view(schema = Str(1627))]
+    pub location_template: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(772))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    #[data_view(schema = Bool(646))]
+    pub compute_local_engineid: ::validated_data::Field<bool>,
+    #[data_view(schema = Str(1630))]
+    pub compute_local_engineid_source: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Str(1631))]
+    pub local_engineid_ip: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Bool(647))]
+    pub compute_v3_user_localized_key: ::validated_data::Field<bool>,
+    #[data_view(schema = List(773))]
+    pub users: ::validated_data::Field<Users<'a, Mode>>,
+    #[data_view(schema = List(774))]
+    pub hosts: ::validated_data::Field<Hosts<'a, Mode>>,
+    #[data_view(schema = List(775))]
+    pub communities: ::validated_data::Field<Communities<'a, Mode>>,
+    #[data_view(schema = List(491))]
+    pub views: ::validated_data::Field<Views<'a, Mode>>,
+    #[data_view(schema = List(492))]
+    pub groups: ::validated_data::Field<Groups<'a, Mode>>,
+    #[data_view(schema = Dict(1243))]
+    pub traps: ::validated_data::Field<super::super::eos_config::snmp_server::Traps<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.SnmpSettings.Vrfs", schema = List(772), item_name = "AVDDesign.SnmpSettings.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);

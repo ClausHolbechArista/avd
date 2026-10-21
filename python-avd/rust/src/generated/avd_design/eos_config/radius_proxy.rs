@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RadiusProxy<'a, Mode> {
+    pub client_key: ::validated_data::Field<&'a str>,
+    pub client_session_idle_timeout: ::validated_data::Field<i64>,
+    pub dynamic_authorization: ::validated_data::Field<bool>,
+    pub client_groups: ::validated_data::Field<ClientGroups<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct ClientGroups<'a, Mode> (::validated_data::Field<client_groups::Item<'a, Mode>>);

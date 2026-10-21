@@ -1,6 +1,16 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct QueueMonitorLength<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub default_thresholds: ::validated_data::Field<DefaultThresholds<'a, Mode>>,
+    pub log: ::validated_data::Field<i64>,
+    pub notifying: ::validated_data::Field<bool>,
+    pub cpu: ::validated_data::Field<Cpu<'a, Mode>>,
+    pub tx_latency: ::validated_data::Field<bool>,
+    pub mirror: ::validated_data::Field<Mirror<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct DefaultThresholds<'a, Mode> {

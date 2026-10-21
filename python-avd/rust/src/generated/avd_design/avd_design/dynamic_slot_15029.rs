@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign._DynamicKeys.NodeTypes", schema = Dict(1807)))]
+pub struct DynamicSlot15029<'a, Mode> {
+    #[data_view(schema = Dict(1802))]
+    pub defaults: ::validated_data::Field<Defaults<'a, Mode>>,
+    #[data_view(schema = List(800))]
+    pub node_groups: ::validated_data::Field<NodeGroups<'a, Mode>>,
+    #[data_view(schema = List(799))]
+    pub nodes: ::validated_data::Field<Nodes<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign._DynamicKeys.NodeTypes.Defaults", schema = Dict(1802)))]
 pub struct Defaults<'a, Mode> {

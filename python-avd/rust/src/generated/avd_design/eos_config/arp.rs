@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Arp<'a, Mode> {
+    pub persistent: ::validated_data::Field<Persistent<'a, Mode>>,
+    pub aging: ::validated_data::Field<Aging<'a, Mode>>,
+    pub static_entries: ::validated_data::Field<StaticEntries<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.Arp.Persistent", schema = Dict(78)))]
 pub struct Persistent<'a, Mode> {

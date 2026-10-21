@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(rp), python(name = "AVDDesign.UnderlayMulticastRps", schema = List(785), item_name = "AVDDesign.UnderlayMulticastRpsItem"))]
+pub struct UnderlayMulticastRps<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.UnderlayMulticastRpsItemBase", schema = Dict(1770)))]
 pub struct Item<'a, Mode> {

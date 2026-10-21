@@ -1,6 +1,23 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Sflow<'a, Mode> {
+    pub sample: ::validated_data::Field<i64>,
+    pub sample_truncate_size: ::validated_data::Field<i64>,
+    pub sample_input_subinterface: ::validated_data::Field<bool>,
+    pub sample_output_subinterface: ::validated_data::Field<bool>,
+    pub dangerous: ::validated_data::Field<bool>,
+    pub polling_interval: ::validated_data::Field<i64>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub destinations: ::validated_data::Field<Destinations<'a, Mode>>,
+    pub source: ::validated_data::Field<&'a str>,
+    pub source_interface: ::validated_data::Field<&'a str>,
+    pub extensions: ::validated_data::Field<Extensions<'a, Mode>>,
+    pub interface: ::validated_data::Field<Interface<'a, Mode>>,
+    pub run: ::validated_data::Field<bool>,
+    pub hardware_acceleration: ::validated_data::Field<HardwareAcceleration<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);

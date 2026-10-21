@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct L2Protocol<'a, Mode> {
+    pub forwarding_profiles: ::validated_data::Field<ForwardingProfiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct ForwardingProfiles<'a, Mode> (::validated_data::Field<forwarding_profiles::Item<'a, Mode>>);

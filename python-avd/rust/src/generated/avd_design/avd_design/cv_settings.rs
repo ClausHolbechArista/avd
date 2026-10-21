@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.CvSettings", schema = Dict(1458)))]
+pub struct CvSettings<'a, Mode> {
+    #[data_view(schema = Dict(1454))]
+    pub cvaas: ::validated_data::Field<Cvaas<'a, Mode>>,
+    #[data_view(schema = List(599))]
+    pub onprem_clusters: ::validated_data::Field<OnpremClusters<'a, Mode>>,
+    #[data_view(schema = Dict(1457))]
+    pub terminattr: ::validated_data::Field<Terminattr<'a, Mode>>,
+    #[data_view(schema = Bool(455))]
+    pub set_source_interfaces: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.CvSettings.Cvaas", schema = Dict(1454)))]
 pub struct Cvaas<'a, Mode> {

@@ -1,6 +1,19 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.SflowSettings", schema = Dict(1743)))]
+pub struct SflowSettings<'a, Mode> {
+    #[data_view(schema = Int(630))]
+    pub polling_interval: ::validated_data::Field<i64>,
+    #[data_view(schema = Dict(1739))]
+    pub sample: ::validated_data::Field<Sample<'a, Mode>>,
+    #[data_view(schema = List(770))]
+    pub destinations: ::validated_data::Field<Destinations<'a, Mode>>,
+    #[data_view(schema = Dict(1741))]
+    pub export_to_cloudvision: ::validated_data::Field<ExportToCloudvision<'a, Mode>>,
+    #[data_view(schema = List(771))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.SflowSettings.Sample", schema = Dict(1739)))]
 pub struct Sample<'a, Mode> {

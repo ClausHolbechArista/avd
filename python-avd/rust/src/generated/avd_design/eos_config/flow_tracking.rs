@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct FlowTracking<'a, Mode> {
+    pub sampled: ::validated_data::Field<Sampled<'a, Mode>>,
+    pub hardware: ::validated_data::Field<Hardware<'a, Mode>>,
+    pub mirror_on_drop: ::validated_data::Field<MirrorOnDrop<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Sampled<'a, Mode> {

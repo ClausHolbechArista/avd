@@ -1,6 +1,35 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct DaemonTerminattr<'a, Mode> {
+    pub cvaddrs: ::validated_data::Field<Cvaddrs<'a, Mode>>,
+    pub clusters: ::validated_data::Field<Clusters<'a, Mode>>,
+    pub cvauth: ::validated_data::Field<Cvauth<'a, Mode>>,
+    pub cvobscurekeyfile: ::validated_data::Field<bool>,
+    pub cvproxy: ::validated_data::Field<&'a str>,
+    pub cvsourceip: ::validated_data::Field<&'a str>,
+    pub cvsourceintf: ::validated_data::Field<&'a str>,
+    pub cvvrf: ::validated_data::Field<&'a str>,
+    pub cvgnmi: ::validated_data::Field<bool>,
+    pub disable_aaa: ::validated_data::Field<bool>,
+    pub grpcaddr: ::validated_data::Field<&'a str>,
+    pub grpcreadonly: ::validated_data::Field<bool>,
+    pub ingestexclude: ::validated_data::Field<&'a str>,
+    pub smashexcludes: ::validated_data::Field<&'a str>,
+    pub sysdbexcludes: ::validated_data::Field<&'a str>,
+    pub taillogs: ::validated_data::Field<&'a str>,
+    pub ecodhcpaddr: ::validated_data::Field<&'a str>,
+    pub ipfix: ::validated_data::Field<bool>,
+    pub ipfixaddr: ::validated_data::Field<&'a str>,
+    pub sflow: ::validated_data::Field<bool>,
+    pub sflowaddr: ::validated_data::Field<&'a str>,
+    pub cvconfig: ::validated_data::Field<bool>,
+    pub cv_loss_timeout: ::validated_data::Field<i64>,
+    pub cvtargetconfigs: ::validated_data::Field<Cvtargetconfigs<'a, Mode>>,
+    pub flowdns: ::validated_data::Field<bool>,
+    pub custom_cv_options: ::validated_data::Field<CustomCvOptions<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list)]
 pub struct Cvaddrs<'a, Mode> (::validated_data::Field<&'a str>);

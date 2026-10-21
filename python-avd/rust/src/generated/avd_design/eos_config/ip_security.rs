@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct IpSecurity<'a, Mode> {
+    pub ike_policies: ::validated_data::Field<IkePolicies<'a, Mode>>,
+    pub sa_policies: ::validated_data::Field<SaPolicies<'a, Mode>>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+    pub key_controller: ::validated_data::Field<KeyController<'a, Mode>>,
+    pub hardware_encryption_disabled: ::validated_data::Field<bool>,
+    pub connection_tx_interface_match_source_ip: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct IkePolicies<'a, Mode> (::validated_data::Field<ike_policies::Item<'a, Mode>>);

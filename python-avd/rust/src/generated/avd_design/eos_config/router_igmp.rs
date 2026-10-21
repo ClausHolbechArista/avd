@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterIgmp<'a, Mode> {
+    pub host_proxy_match_mroute: ::validated_data::Field<&'a str>,
+    pub ssm_aware: ::validated_data::Field<bool>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);

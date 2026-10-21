@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterGeneral<'a, Mode> {
+    pub router_id: ::validated_data::Field<RouterId<'a, Mode>>,
+    pub nexthop_fast_failover: ::validated_data::Field<bool>,
+    pub software_forwarding_hardware_offload_mtu: ::validated_data::Field<i64>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub control_functions: ::validated_data::Field<ControlFunctions<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct RouterId<'a, Mode> {

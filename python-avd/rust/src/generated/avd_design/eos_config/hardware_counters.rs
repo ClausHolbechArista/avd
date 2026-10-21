@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "EOSConfig.HardwareCounters", schema = Dict(398)))]
+pub struct HardwareCounters<'a, Mode> {
+    #[data_view(schema = List(150))]
+    pub features: ::validated_data::Field<Features<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list, python(name = "EOSConfig.HardwareCounters.Features", schema = List(150)))]
 pub struct Features<'a, Mode> (::validated_data::Field<features::Item<'a, Mode>>);

@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.WanVirtualTopologies", schema = Dict(1797)))]
+pub struct WanVirtualTopologies<'a, Mode> {
+    #[data_view(schema = List(794))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    #[data_view(schema = Dict(1793))]
+    pub control_plane_virtual_topology: ::validated_data::Field<ControlPlaneVirtualTopology<'a, Mode>>,
+    #[data_view(schema = List(798))]
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.WanVirtualTopologies.Vrfs", schema = List(794), item_name = "AVDDesign.WanVirtualTopologies.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);

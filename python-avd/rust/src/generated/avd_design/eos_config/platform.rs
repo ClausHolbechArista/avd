@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Platform<'a, Mode> {
+    pub trident: ::validated_data::Field<Trident<'a, Mode>>,
+    pub sand: ::validated_data::Field<Sand<'a, Mode>>,
+    pub sfe: ::validated_data::Field<Sfe<'a, Mode>>,
+    pub fap: ::validated_data::Field<Fap<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Trident<'a, Mode> {

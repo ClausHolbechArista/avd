@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterAdaptiveVirtualTopology<'a, Mode> {
+    pub topology_role: ::validated_data::Field<&'a str>,
+    pub gateway_vxlan: ::validated_data::Field<bool>,
+    pub region: ::validated_data::Field<Region<'a, Mode>>,
+    pub zone: ::validated_data::Field<Zone<'a, Mode>>,
+    pub site: ::validated_data::Field<Site<'a, Mode>>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Region<'a, Mode> {

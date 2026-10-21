@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.SshSettings", schema = Dict(1761)))]
+pub struct SshSettings<'a, Mode> {
+    #[data_view(schema = Bool(658))]
+    pub enabled: ::validated_data::Field<bool>,
+    #[data_view(schema = List(778))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    #[data_view(schema = Int(235))]
+    pub idle_timeout: ::validated_data::Field<i64>,
+    #[data_view(schema = List(779))]
+    pub client_vrfs: ::validated_data::Field<ClientVrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.SshSettings.Vrfs", schema = List(778), item_name = "AVDDesign.SshSettings.VrfsItem"))]
 pub struct Vrfs<'a, Mode> (::validated_data::Field<vrfs::Item<'a, Mode>>);

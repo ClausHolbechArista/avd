@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Schedule<'a, Mode> {
+    pub config: ::validated_data::Field<Config<'a, Mode>>,
+    pub jobs: ::validated_data::Field<Jobs<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Config<'a, Mode> {

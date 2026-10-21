@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct ManagementLdap<'a, Mode> {
+    pub server_defaults: ::validated_data::Field<ServerDefaults<'a, Mode>>,
+    pub server_hosts: ::validated_data::Field<ServerHosts<'a, Mode>>,
+    pub group_policies: ::validated_data::Field<GroupPolicies<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct ServerDefaults<'a, Mode> {

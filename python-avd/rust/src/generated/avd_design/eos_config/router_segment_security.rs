@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterSegmentSecurity<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Policies<'a, Mode> (::validated_data::Field<policies::Item<'a, Mode>>);

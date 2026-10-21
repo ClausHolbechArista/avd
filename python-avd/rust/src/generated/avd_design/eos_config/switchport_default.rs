@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct SwitchportDefault<'a, Mode> {
+    pub mode: ::validated_data::Field<&'a str>,
+    pub phone: ::validated_data::Field<Phone<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Phone<'a, Mode> {

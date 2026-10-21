@@ -1,6 +1,25 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.MonitorConnectivity", schema = Dict(1631)))]
+pub struct MonitorConnectivity<'a, Mode> {
+    #[data_view(schema = Bool(7))]
+    pub shutdown: ::validated_data::Field<bool>,
+    #[data_view(schema = Int(77))]
+    pub interval: ::validated_data::Field<i64>,
+    #[data_view(schema = List(678))]
+    pub interface_sets: ::validated_data::Field<InterfaceSets<'a, Mode>>,
+    #[data_view(schema = Str(3))]
+    pub local_interfaces: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Bool(559))]
+    pub address_only: ::validated_data::Field<bool>,
+    #[data_view(schema = List(679))]
+    pub hosts: ::validated_data::Field<Hosts<'a, Mode>>,
+    #[data_view(schema = Str(584))]
+    pub name_server_group: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(681))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.MonitorConnectivity.InterfaceSets", schema = List(678), item_name = "AVDDesign.MonitorConnectivity.InterfaceSetsItem"))]
 pub struct InterfaceSets<'a, Mode> (::validated_data::Field<interface_sets::Item<'a, Mode>>);

@@ -1,6 +1,16 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Maintenance<'a, Mode> {
+    pub default_interface_profile: ::validated_data::Field<&'a str>,
+    pub default_bgp_profile: ::validated_data::Field<&'a str>,
+    pub default_unit_profile: ::validated_data::Field<&'a str>,
+    pub interface_profiles: ::validated_data::Field<InterfaceProfiles<'a, Mode>>,
+    pub bgp_profiles: ::validated_data::Field<BgpProfiles<'a, Mode>>,
+    pub unit_profiles: ::validated_data::Field<UnitProfiles<'a, Mode>>,
+    pub units: ::validated_data::Field<Units<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct InterfaceProfiles<'a, Mode> (::validated_data::Field<interface_profiles::Item<'a, Mode>>);

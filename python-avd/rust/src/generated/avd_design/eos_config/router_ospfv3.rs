@@ -1,6 +1,16 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterOspfv3<'a, Mode> {
+    pub router_id: ::validated_data::Field<&'a str>,
+    pub passive_interface_default: ::validated_data::Field<bool>,
+    pub auto_cost_reference_bandwidth: ::validated_data::Field<i64>,
+    pub address_family_ipv4: ::validated_data::Field<AddressFamilyIpv4<'a, Mode>>,
+    pub address_family_ipv6: ::validated_data::Field<AddressFamilyIpv6<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub eos_cli: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct AddressFamilyIpv4<'a, Mode> {

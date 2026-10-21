@@ -1,6 +1,24 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct SnmpServer<'a, Mode> {
+    pub engine_ids: ::validated_data::Field<EngineIds<'a, Mode>>,
+    pub extensions: ::validated_data::Field<Extensions<'a, Mode>>,
+    pub contact: ::validated_data::Field<&'a str>,
+    pub location: ::validated_data::Field<&'a str>,
+    pub communities: ::validated_data::Field<Communities<'a, Mode>>,
+    pub ipv4_acls: ::validated_data::Field<Ipv4Acls<'a, Mode>>,
+    pub ipv6_acls: ::validated_data::Field<Ipv6Acls<'a, Mode>>,
+    pub local_interfaces: ::validated_data::Field<LocalInterfaces<'a, Mode>>,
+    pub views: ::validated_data::Field<Views<'a, Mode>>,
+    pub groups: ::validated_data::Field<Groups<'a, Mode>>,
+    pub users: ::validated_data::Field<Users<'a, Mode>>,
+    pub hosts: ::validated_data::Field<Hosts<'a, Mode>>,
+    pub traps: ::validated_data::Field<Traps<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub ifmib_ifspeed_shape_rate: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view]
 pub struct EngineIds<'a, Mode> {

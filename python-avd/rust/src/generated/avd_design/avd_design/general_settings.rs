@@ -1,6 +1,21 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.GeneralSettings", schema = Dict(1587)))]
+pub struct GeneralSettings<'a, Mode> {
+    #[data_view(schema = Dict(1582))]
+    pub interface_defaults: ::validated_data::Field<InterfaceDefaults<'a, Mode>>,
+    #[data_view(schema = Dict(1583))]
+    pub arp: ::validated_data::Field<Arp<'a, Mode>>,
+    #[data_view(schema = Bool(7))]
+    pub ip_icmp_redirect: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(1584))]
+    pub dhcp_relay: ::validated_data::Field<DhcpRelay<'a, Mode>>,
+    #[data_view(schema = List(654))]
+    pub suspended_vlans: ::validated_data::Field<SuspendedVlans<'a, Mode>>,
+    #[data_view(schema = Dict(1586))]
+    pub ip_software_forwarding_exceed_action_drop: ::validated_data::Field<IpSoftwareForwardingExceedActionDrop<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.GeneralSettings.InterfaceDefaults", schema = Dict(1582)))]
 pub struct InterfaceDefaults<'a, Mode> {

@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Mpls<'a, Mode> {
+    pub ip: ::validated_data::Field<bool>,
+    pub ldp: ::validated_data::Field<Ldp<'a, Mode>>,
+    pub icmp: ::validated_data::Field<Icmp<'a, Mode>>,
+    pub rsvp: ::validated_data::Field<Rsvp<'a, Mode>>,
+    pub label_ranges: ::validated_data::Field<LabelRanges<'a, Mode>>,
+    pub tunnel: ::validated_data::Field<Tunnel<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Ldp<'a, Mode> {

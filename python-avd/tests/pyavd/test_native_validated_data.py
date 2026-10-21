@@ -59,7 +59,9 @@ def test_native_catalog_matches_every_generated_stub_model() -> None:
     native = _validated_data
     assert native is _rust._validated_data
     assert native.__name__ == "pyavd._validated_data"
-    stub_path = Path(__file__).parents[2] / "pyavd/_validated_data.pyi"
+    stub_package = Path(__file__).parents[2] / "pyavd/_validated_data"
+    stub_paths = sorted(stub_package.glob("*.pyi"))
+    assert {path.name for path in stub_paths} == {"__init__.pyi", "_base.pyi", "avd_design.pyi", "eos_config.pyi"}
     declarations: dict[str, ast.ClassDef] = {}
 
     def collect_declarations(body: list[ast.stmt], scope: str = "") -> None:
@@ -69,8 +71,10 @@ def test_native_catalog_matches_every_generated_stub_model() -> None:
                 declarations[name] = node
                 collect_declarations(node.body, name)
 
-    collect_declarations(ast.parse(stub_path.read_text()).body)
-    assert not stub_path.with_suffix(".py").exists()
+    for stub_path in stub_paths:
+        collect_declarations(ast.parse(stub_path.read_text()).body)
+    assert not stub_package.with_suffix(".py").exists()
+    assert not list(stub_package.glob("*.py"))
     native_models: dict[str, type] = {}
 
     def collect_native(namespace: object, scope: str = "") -> None:

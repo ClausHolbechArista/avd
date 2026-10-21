@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesign.L3InterfaceProfiles", schema = List(669), item_name = "AVDDesign.L3InterfaceProfilesItem"))]
+pub struct L3InterfaceProfiles<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.L3InterfaceProfilesItemBase", schema = Dict(1614)))]
 pub struct Item<'a, Mode> {

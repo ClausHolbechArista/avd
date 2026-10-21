@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign._DynamicKeys.ConnectedEndpoints", schema = List(801), item_name = "AVDDesign._DynamicKeys.ConnectedEndpointsItem"))]
+pub struct DynamicSlot13731<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign._DynamicKeys.ConnectedEndpointsItemBase", schema = Dict(1806)))]
 pub struct Item<'a, Mode> {

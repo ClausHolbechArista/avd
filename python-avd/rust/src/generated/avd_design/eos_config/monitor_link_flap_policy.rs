@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorLinkFlapPolicy<'a, Mode> {
+    pub damping_profiles: ::validated_data::Field<DampingProfiles<'a, Mode>>,
+    pub max_flap_profiles: ::validated_data::Field<MaxFlapProfiles<'a, Mode>>,
+    pub default_profiles: ::validated_data::Field<DefaultProfiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct DampingProfiles<'a, Mode> (::validated_data::Field<damping_profiles::Item<'a, Mode>>);

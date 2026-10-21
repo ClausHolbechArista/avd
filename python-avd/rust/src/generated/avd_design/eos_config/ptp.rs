@@ -1,6 +1,24 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Ptp<'a, Mode> {
+    pub mode: ::validated_data::Field<&'a str>,
+    pub profile: ::validated_data::Field<&'a str>,
+    pub mode_one_step: ::validated_data::Field<bool>,
+    pub forward_unicast: ::validated_data::Field<bool>,
+    pub clock_identity: ::validated_data::Field<&'a str>,
+    pub source: ::validated_data::Field<Source<'a, Mode>>,
+    pub priority1: ::validated_data::Field<i64>,
+    pub priority2: ::validated_data::Field<i64>,
+    pub ttl: ::validated_data::Field<i64>,
+    pub domain: ::validated_data::Field<i64>,
+    pub hold_ptp_time: ::validated_data::Field<i64>,
+    pub message_type: ::validated_data::Field<MessageType<'a, Mode>>,
+    pub monitor: ::validated_data::Field<Monitor<'a, Mode>>,
+    pub free_running: ::validated_data::Field<FreeRunning<'a, Mode>>,
+    pub forward_v1: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view]
 pub struct Source<'a, Mode> {

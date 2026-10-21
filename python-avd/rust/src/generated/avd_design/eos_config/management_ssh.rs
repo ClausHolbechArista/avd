@@ -1,6 +1,23 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct ManagementSsh<'a, Mode> {
+    pub authentication: ::validated_data::Field<Authentication<'a, Mode>>,
+    pub ip_access_group_in: ::validated_data::Field<&'a str>,
+    pub ipv6_access_group_in: ::validated_data::Field<&'a str>,
+    pub idle_timeout: ::validated_data::Field<i64>,
+    pub cipher: ::validated_data::Field<Cipher<'a, Mode>>,
+    pub key_exchange: ::validated_data::Field<KeyExchange<'a, Mode>>,
+    pub mac: ::validated_data::Field<Mac<'a, Mode>>,
+    pub fips_restrictions: ::validated_data::Field<bool>,
+    pub hostkey: ::validated_data::Field<Hostkey<'a, Mode>>,
+    pub enable: ::validated_data::Field<bool>,
+    pub connection: ::validated_data::Field<Connection<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub log_level: ::validated_data::Field<&'a str>,
+    pub client_alive: ::validated_data::Field<ClientAlive<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Authentication<'a, Mode> {

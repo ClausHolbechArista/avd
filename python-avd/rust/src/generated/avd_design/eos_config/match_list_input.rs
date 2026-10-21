@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MatchListInput<'a, Mode> {
+    pub prefix_ipv4: ::validated_data::Field<PrefixIpv4<'a, Mode>>,
+    pub prefix_ipv6: ::validated_data::Field<PrefixIpv6<'a, Mode>>,
+    pub string: ::validated_data::Field<String<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct PrefixIpv4<'a, Mode> (::validated_data::Field<prefix_ipv4::Item<'a, Mode>>);

@@ -1,6 +1,31 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.Dot1xSettings", schema = Dict(1542)))]
+pub struct Dot1xSettings<'a, Mode> {
+    #[data_view(schema = Bool(493))]
+    pub enabled: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(1527))]
+    pub authentication: ::validated_data::Field<Authentication<'a, Mode>>,
+    #[data_view(schema = Dict(1528))]
+    pub accounting: ::validated_data::Field<Accounting<'a, Mode>>,
+    #[data_view(schema = Bool(497))]
+    pub bypass_bpdu: ::validated_data::Field<bool>,
+    #[data_view(schema = Bool(498))]
+    pub bypass_lldp: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(1529))]
+    pub dynamic_authorization: ::validated_data::Field<DynamicAuthorization<'a, Mode>>,
+    #[data_view(schema = Dict(1531))]
+    pub mac_based_authentication: ::validated_data::Field<MacBasedAuthentication<'a, Mode>>,
+    #[data_view(schema = Dict(1532))]
+    pub radius_av_pairs: ::validated_data::Field<RadiusAvPairs<'a, Mode>>,
+    #[data_view(schema = Dict(1540))]
+    pub device_profiling: ::validated_data::Field<DeviceProfiling<'a, Mode>>,
+    #[data_view(schema = Bool(506))]
+    pub redistribute_in_evpn: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(1541))]
+    pub web_authentication: ::validated_data::Field<WebAuthentication<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.Dot1xSettings.Authentication", schema = Dict(1527)))]
 pub struct Authentication<'a, Mode> {

@@ -1,6 +1,26 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Metadata<'a, Mode> {
+    pub is_deployed: ::validated_data::Field<bool>,
+    pub platform: ::validated_data::Field<&'a str>,
+    pub system_mac_address: ::validated_data::Field<&'a str>,
+    pub rack: ::validated_data::Field<&'a str>,
+    pub pod_name: ::validated_data::Field<&'a str>,
+    pub dc_name: ::validated_data::Field<&'a str>,
+    pub fabric_name: ::validated_data::Field<&'a str>,
+    pub serial_number: ::validated_data::Field<&'a str>,
+    pub validate_hardware: ::validated_data::Field<ValidateHardware<'a, Mode>>,
+    pub cv_tags: ::validated_data::Field<CvTags<'a, Mode>>,
+    pub cv_use_static_config_manifest: ::validated_data::Field<bool>,
+    pub cv_pathfinder: ::validated_data::Field<CvPathfinder<'a, Mode>>,
+    pub digital_twin: ::validated_data::Field<DigitalTwin<'a, Mode>>,
+    pub validate_no_errors_period: ::validated_data::Field<i64>,
+    pub exclude_as_extra_fabric_validation_target: ::validated_data::Field<bool>,
+    pub interfaces: ::validated_data::Field<Interfaces<'a, Mode>>,
+    pub bgp: ::validated_data::Field<Bgp<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct ValidateHardware<'a, Mode> {

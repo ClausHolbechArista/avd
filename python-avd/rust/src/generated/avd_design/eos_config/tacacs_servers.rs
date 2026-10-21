@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct TacacsServers<'a, Mode> {
+    pub timeout: ::validated_data::Field<i64>,
+    pub hosts: ::validated_data::Field<Hosts<'a, Mode>>,
+    pub policy_unknown_mandatory_attribute_ignore: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view(list)]
 pub struct Hosts<'a, Mode> (::validated_data::Field<hosts::Item<'a, Mode>>);

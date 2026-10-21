@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.L3Edge", schema = Dict(1446)))]
+pub struct L3Edge<'a, Mode> {
+    #[data_view(schema = List(579))]
+    pub p2p_links_ip_pools: ::validated_data::Field<P2pLinksIpPools<'a, Mode>>,
+    #[data_view(schema = List(589))]
+    pub p2p_links_profiles: ::validated_data::Field<P2pLinksProfiles<'a, Mode>>,
+    #[data_view(schema = List(591))]
+    pub p2p_links: ::validated_data::Field<P2pLinks<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.L3Edge.P2pLinksIpPools", schema = List(579), item_name = "AVDDesign.L3Edge.P2pLinksIpPoolsItem"))]
 pub struct P2pLinksIpPools<'a, Mode> (::validated_data::Field<p2p_links_ip_pools::Item<'a, Mode>>);

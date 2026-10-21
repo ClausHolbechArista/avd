@@ -1,6 +1,21 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.AddressLockingSettings", schema = Dict(1386)))]
+pub struct AddressLockingSettings<'a, Mode> {
+    #[data_view(schema = Str(1102))]
+    pub local_interface: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(562))]
+    pub dhcp_server_interfaces: ::validated_data::Field<DhcpServerInterfaces<'a, Mode>>,
+    #[data_view(schema = List(32))]
+    pub dhcp_servers_ipv4: ::validated_data::Field<DhcpServersIpv4<'a, Mode>>,
+    #[data_view(schema = Bool(10))]
+    pub disabled: ::validated_data::Field<bool>,
+    #[data_view(schema = List(34))]
+    pub leases: ::validated_data::Field<Leases<'a, Mode>>,
+    #[data_view(schema = Dict(62))]
+    pub locked_address: ::validated_data::Field<LockedAddress<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list, python(name = "AVDDesign.AddressLockingSettings.DhcpServerInterfaces", schema = List(562)))]
 pub struct DhcpServerInterfaces<'a, Mode> (::validated_data::Field<&'a str>);

@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesign.PortProfiles", schema = List(768), item_name = "AVDDesign.PortProfilesItem"))]
+pub struct PortProfiles<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.PortProfilesItemBase", schema = Dict(1731)))]
 pub struct Item<'a, Mode> {

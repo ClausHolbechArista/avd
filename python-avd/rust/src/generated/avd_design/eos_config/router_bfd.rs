@@ -1,6 +1,18 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterBfd<'a, Mode> {
+    pub interval: ::validated_data::Field<i64>,
+    pub local_address: ::validated_data::Field<&'a str>,
+    pub min_rx: ::validated_data::Field<i64>,
+    pub multiplier: ::validated_data::Field<i64>,
+    pub multihop: ::validated_data::Field<Multihop<'a, Mode>>,
+    pub session_snapshot_interval: ::validated_data::Field<i64>,
+    pub session_snapshot_interval_dangerous: ::validated_data::Field<bool>,
+    pub sbfd: ::validated_data::Field<Sbfd<'a, Mode>>,
+    pub slow_timer: ::validated_data::Field<i64>,
+}
 
 #[::validated_data::data_view]
 pub struct Multihop<'a, Mode> {

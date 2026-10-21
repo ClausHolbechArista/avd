@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct VxlanInterface<'a, Mode> {
+    pub vxlan1: ::validated_data::Field<Vxlan1<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Vxlan1<'a, Mode> {

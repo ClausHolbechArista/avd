@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct PolicyMaps<'a, Mode> {
+    pub pbr: ::validated_data::Field<Pbr<'a, Mode>>,
+    pub qos: ::validated_data::Field<Qos<'a, Mode>>,
+    pub copp_system_policy: ::validated_data::Field<CoppSystemPolicy<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Pbr<'a, Mode> (::validated_data::Field<pbr::Item<'a, Mode>>);
