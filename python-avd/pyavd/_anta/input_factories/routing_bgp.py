@@ -8,10 +8,12 @@ from typing import TYPE_CHECKING
 from anta.input_models.routing.bgp import BgpPeer
 from anta.tests.routing.bgp import VerifyBGPPeerSession
 
+from pyavd._anta.constants import StructuredConfigKey
 from pyavd._anta.logs import LogMessage
 from pyavd.j2filters import natural_sort
 
-from ._base_classes import AntaTestInputFactory
+from .base_classes import AntaTestInputFactory
+from .decorators import skip_if_missing_config
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -28,6 +30,7 @@ class VerifyBGPPeerSessionInputFactory(AntaTestInputFactory[VerifyBGPPeerSession
     ensures that the peer is available (`is_deployed: true`) before including it in the test inputs.
     """
 
+    @skip_if_missing_config(StructuredConfigKey.ROUTER_BGP)
     def create(self) -> Iterator[VerifyBGPPeerSession.Input]:
         """Generate the inputs for the `VerifyBGPPeerSession` test."""
         bgp_peers = natural_sort(
@@ -36,7 +39,7 @@ class VerifyBGPPeerSessionInputFactory(AntaTestInputFactory[VerifyBGPPeerSession
                     peer_address=neighbor.ip_address,
                     vrf=neighbor.vrf,
                 )
-                for neighbor in self.device.bgp_neighbors
+                for neighbor in self.data_source.bgp_neighbors
             ],
             sort_key="peer_address",
         )
@@ -49,7 +52,7 @@ class VerifyBGPPeerSessionInputFactory(AntaTestInputFactory[VerifyBGPPeerSession
                         interface=neighbor_intf.interface,
                         vrf=neighbor_intf.vrf,
                     )
-                    for neighbor_intf in self.device.bgp_neighbor_interfaces
+                    for neighbor_intf in self.data_source.bgp_neighbor_interfaces
                 ],
                 sort_key="interface",
             )
@@ -59,4 +62,16 @@ class VerifyBGPPeerSessionInputFactory(AntaTestInputFactory[VerifyBGPPeerSession
             self.logger_adapter.debug(LogMessage.NO_INPUTS_GENERATED)
             return
 
-        yield VerifyBGPPeerSession.Input(bgp_peers=bgp_peers)
+        bgp_metadata = self.structured_config.metadata.bgp
+        input_kwargs = {}
+
+        if bgp_metadata.check_tcp_queues is False:
+            input_kwargs["check_tcp_queues"] = False
+
+        if (est_time := bgp_metadata.minimum_established_time) is not None:
+            input_kwargs["minimum_established_time"] = est_time
+
+        yield VerifyBGPPeerSession.Input(
+            bgp_peers=bgp_peers,
+            **input_kwargs,
+        )

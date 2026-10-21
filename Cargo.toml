@@ -1,0 +1,19 @@
+[workspace]
+members = ["python-avd/rust"]
+resolver = "3"
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+license = "Apache-2.0"
+repository = "https://github.com/aristanetworks/avd"
+publish = false
+
+[workspace.dependencies]
+avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "fea2c7fadd2c7973237e9cca6c719c11ac840a5c", default-features = false }
+pyo3 = "0.29.0"
+serde = "1.0.229"
+serde_json = "1.0.150"
+validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "fea2c7fadd2c7973237e9cca6c719c11ac840a5c", default-features = false }
+data-views = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "fea2c7fadd2c7973237e9cca6c719c11ac840a5c" }
+data-views-py = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "fea2c7fadd2c7973237e9cca6c719c11ac840a5c" }

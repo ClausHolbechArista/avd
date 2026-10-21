@@ -30,3 +30,9 @@ validation_profiles:
     exclude_as_extra_fabric_validation_target: true
     logging:
       validate_no_errors_period: 2
+    interfaces:
+      errdisable:
+        only_avd_interfaces: true
+    bgp:
+      check_tcp_queues: false
+      minimum_established_time: 10000

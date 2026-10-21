@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
-from pyavd._utils import get_ip_from_ip_prefix
+from pyavd._utils.get_ip_from_ip_prefix import get_ip_from_ip_prefix
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigOverlayProtocol
@@ -33,6 +33,9 @@ class CvxMixin(Protocol):
             peer_switch_facts = self.shared_utils.get_peer_facts(overlay_cvx_server)
             if not peer_switch_facts.mgmt_ip:
                 msg = f"'mgmt_ip' for CVX Server {overlay_cvx_server} is required."
+                raise AristaAvdInvalidInputsError(msg)
+            if peer_switch_facts.mgmt_ip == "dhcp":
+                msg = f"'mgmt_ip' for CVX Server '{overlay_cvx_server}' must be a static management IP address, 'dhcp' is not supported."
                 raise AristaAvdInvalidInputsError(msg)
             self.structured_config.cvx.peer_hosts.append(get_ip_from_ip_prefix(peer_switch_facts.mgmt_ip))
 

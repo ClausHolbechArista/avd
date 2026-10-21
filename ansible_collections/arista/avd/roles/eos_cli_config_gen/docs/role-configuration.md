@@ -27,8 +27,8 @@ ansible_collections/arista/avd/roles/eos_cli_config_gen/defaults/main/output_dir
 
 ## Input Variables Validation
 
-Schema validation is built in to the central Action plugins used in AVD. Each plugin runs variable type conversion first and then
-performs validation of the converted data.
+Schema validation is performed by the `validate_inputs` action plugin which is called automatically by the role.
+The plugin performs variable type conversion and validation of the converted data against the AVD schema.
 
 Any data validation issue will trigger errors - blocking further processing.
 
@@ -51,33 +51,15 @@ Any data validation issue will trigger errors - blocking further processing.
     If adding custom keys to an existing AVD data model, start the key with an underscore `_`, so it will be ignored by schema validation.
 
 --8<--
-ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/tables/custom-templates.md
+schemas/eos_config/docs/tables/custom-templates.md
 --8<--
 
 ## Generation of device configuration and documentation
 
 The following settings can be leveraged to control generation of device configuration and documentation.
 
---8<--
-ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/tables/role-settings.md
---8<--
-
-### Generate default config
-
-The `generate_default_config` setting controls the generation of some default EOS configurations.
-
-This is historic behavior which has been disabled by default in AVD 5.0.0 and will be removed in AVD 6.0.0.
-Instead it is recommended to build structured config according to the intended output configurations.
-
-The following commands will be generated when `generate_default_config` is set to `true`:
-
-- RANCID Content Type
-- Hostname (even if `hostname` variable is not set. Then the hostname is picked up from `inventory_hostname`)
-- Default configuration `no aaa root`
-- Default configuration `no enable password`
-- Transceiver qsfp default mode
-- End of configuration delimiter
+The `eos_cli_config_gen_configuration.hide_passwords` and `eos_cli_config_gen_documentation.hide_passwords` settings are role render settings and can be set as inventory variables or directly under `vars` on the `import_role` task. When `read_structured_config_from_file` is enabled, they do not need to be present in the structured configuration files.
 
 --8<--
-ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/tables/generate-default-config.md
+schemas/eos_config/docs/tables/role-settings.md
 --8<--

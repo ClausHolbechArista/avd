@@ -1,0 +1,37 @@
+---
+# Test for global 802.1X enabled with specific features turned off
+type: l2leaf
+l2leaf:
+  defaults:
+  nodes:
+    - name: dot1x-settings-3
+      mgmt_ip: 192.168.0.2/24
+
+dot1x_settings:
+  enabled: true
+  accounting:
+    enabled: true
+  bypass_bpdu: false
+  bypass_lldp: false
+  dynamic_authorization:
+    enabled: false
+  device_profiling:
+    enabled: true
+    dhcp:
+      hostname:
+        auth_only: true
+      parameter_request_list:
+        enabled: false
+      vendor_class_id:
+        auth_only: true
+    lldp:
+      system_name:
+        auth_only: true
+      system_description:
+        enabled: false
+
+aaa_settings:
+  radius:
+    servers:
+      - host: agni.arista.com
+        cleartext_key: super-secret-key

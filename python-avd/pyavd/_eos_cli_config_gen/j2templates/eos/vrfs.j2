@@ -4,12 +4,15 @@
  that can be found in the LICENSE file.
 #}
 {# eos - vrfs #}
-{% for vrf in vrfs | arista.avd.natural_sort('name') %}
+{% for vrf in vrfs | arista.avd.natural_sort('name', ignore_case=false) %}
 {%     if vrf.name != 'default' %}
 !
 vrf instance {{ vrf.name }}
 {%         if vrf.description is arista.avd.defined %}
    description {{ vrf.description }}
+{%         endif %}
+{%         if vrf.rd is arista.avd.defined %}
+   rd {{ vrf.rd }}
 {%         endif %}
 {%     endif %}
 {% endfor %}
