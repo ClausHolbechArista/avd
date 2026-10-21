@@ -1,25 +1,25 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct DhcpRelay<'a, Mode> {
-    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
-    pub tunnel_requests_disabled: ::validated_data::Field<bool>,
-    pub mlag_peerlink_requests_disabled: ::validated_data::Field<bool>,
-    pub client_requests: ::validated_data::Field<ClientRequests<'a, Mode>>,
-    pub reply_source_address_validation: ::validated_data::Field<bool>,
+    pub servers: ::data_views::Field<Servers<'a, Mode>>,
+    pub tunnel_requests_disabled: ::data_views::Field<bool>,
+    pub mlag_peerlink_requests_disabled: ::data_views::Field<bool>,
+    pub client_requests: ::data_views::Field<ClientRequests<'a, Mode>>,
+    pub reply_source_address_validation: ::data_views::Field<bool>,
 }
 
-#[::validated_data::data_view(list)]
-pub struct Servers<'a, Mode> (::validated_data::Field<&'a str>);
+#[::data_views::data_view(list)]
+pub struct Servers<'a, Mode> (::data_views::Field<&'a str>);
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct ClientRequests<'a, Mode> {
-    pub flooding_suppression_vlans: ::validated_data::Field<client_requests::FloodingSuppressionVlans<'a, Mode>>,
+    pub flooding_suppression_vlans: ::data_views::Field<client_requests::FloodingSuppressionVlans<'a, Mode>>,
 }
 
 pub mod client_requests {
 
-    #[::validated_data::data_view(list)]
-    pub struct FloodingSuppressionVlans<'a, Mode> (::validated_data::Field<&'a str>);
+    #[::data_views::data_view(list)]
+    pub struct FloodingSuppressionVlans<'a, Mode> (::data_views::Field<&'a str>);
 }

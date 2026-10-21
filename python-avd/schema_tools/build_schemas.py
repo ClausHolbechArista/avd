@@ -153,11 +153,11 @@ def build_schema_classes() -> None:
 
 def build_validated_data_models() -> None:
     """Generate AVD-owned Rust views with native bindings and matching Python typing stubs."""
-    from pyavd_utils_gen.validated_data_generation import generate_validated_data_models  # noqa: PLC0415
+    from pyavd_utils_gen.data_view_generation import generate_data_views  # noqa: PLC0415
 
     LOGGER.info("Generating validated-data Rust views and Python declarations")
     AVD_DESIGN_RUST_MODELS_FILE.parent.mkdir(parents=True, exist_ok=True)
-    generate_validated_data_models(
+    generate_data_views(
         SCHEMA_STORE_GZ_FILE,
         "eos_designs",
         AVD_DESIGN_RUST_MODELS_FILE,

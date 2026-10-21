@@ -1,37 +1,37 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct AaaServerGroups<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct AaaServerGroups<'a, Mode> (::data_views::Field<Item<'a, Mode>>);
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Item<'a, Mode> {
-    pub name: ::validated_data::Field<&'a str>,
+    pub name: ::data_views::Field<&'a str>,
     #[data_view(rename = "type")]
-    pub field_type: ::validated_data::RequiredValue<&'a str, Mode>,
-    pub servers: ::validated_data::Field<item::Servers<'a, Mode>>,
+    pub field_type: ::data_views::RequiredValue<&'a str, Mode>,
+    pub servers: ::data_views::Field<item::Servers<'a, Mode>>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view(list)]
-    pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);
+    #[::data_views::data_view(list)]
+    pub struct Servers<'a, Mode> (::data_views::Field<servers::Item<'a, Mode>>);
 
     pub mod servers {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub server: ::validated_data::RequiredValue<&'a str, Mode>,
-            pub vrf: ::validated_data::Field<&'a str>,
-            pub tls: ::validated_data::Field<item::Tls<'a, Mode>>,
+            pub server: ::data_views::RequiredValue<&'a str, Mode>,
+            pub vrf: ::data_views::Field<&'a str>,
+            pub tls: ::data_views::Field<item::Tls<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Tls<'a, Mode> {
-                pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-                pub port: ::validated_data::Field<i64>,
+                pub enabled: ::data_views::RequiredValue<bool, Mode>,
+                pub port: ::data_views::Field<i64>,
             }
         }
     }

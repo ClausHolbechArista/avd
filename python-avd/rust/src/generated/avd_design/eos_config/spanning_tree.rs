@@ -1,92 +1,92 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct SpanningTree<'a, Mode> {
-    pub root_super: ::validated_data::Field<bool>,
-    pub edge_port: ::validated_data::Field<EdgePort<'a, Mode>>,
-    pub mode: ::validated_data::Field<&'a str>,
-    pub bpduguard_rate_limit: ::validated_data::Field<BpduguardRateLimit<'a, Mode>>,
-    pub rstp_priority: ::validated_data::Field<i64>,
-    pub mst: ::validated_data::Field<Mst<'a, Mode>>,
-    pub mst_instances: ::validated_data::Field<MstInstances<'a, Mode>>,
-    pub no_spanning_tree_vlan: ::validated_data::Field<&'a str>,
-    pub rapid_pvst_instances: ::validated_data::Field<RapidPvstInstances<'a, Mode>>,
-    pub port_id_allocation_port_channel_range: ::validated_data::Field<PortIdAllocationPortChannelRange<'a, Mode>>,
-    pub loop_guard_default: ::validated_data::Field<bool>,
+    pub root_super: ::data_views::Field<bool>,
+    pub edge_port: ::data_views::Field<EdgePort<'a, Mode>>,
+    pub mode: ::data_views::Field<&'a str>,
+    pub bpduguard_rate_limit: ::data_views::Field<BpduguardRateLimit<'a, Mode>>,
+    pub rstp_priority: ::data_views::Field<i64>,
+    pub mst: ::data_views::Field<Mst<'a, Mode>>,
+    pub mst_instances: ::data_views::Field<MstInstances<'a, Mode>>,
+    pub no_spanning_tree_vlan: ::data_views::Field<&'a str>,
+    pub rapid_pvst_instances: ::data_views::Field<RapidPvstInstances<'a, Mode>>,
+    pub port_id_allocation_port_channel_range: ::data_views::Field<PortIdAllocationPortChannelRange<'a, Mode>>,
+    pub loop_guard_default: ::data_views::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct EdgePort<'a, Mode> {
-    pub bpdufilter_default: ::validated_data::Field<bool>,
-    pub bpduguard_default: ::validated_data::Field<bool>,
+    pub bpdufilter_default: ::data_views::Field<bool>,
+    pub bpduguard_default: ::data_views::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct BpduguardRateLimit<'a, Mode> {
-    pub default: ::validated_data::Field<bool>,
-    pub count: ::validated_data::Field<i64>,
+    pub default: ::data_views::Field<bool>,
+    pub count: ::data_views::Field<i64>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Mst<'a, Mode> {
-    pub pvst_border: ::validated_data::Field<bool>,
-    pub configuration: ::validated_data::Field<mst::Configuration<'a, Mode>>,
+    pub pvst_border: ::data_views::Field<bool>,
+    pub configuration: ::data_views::Field<mst::Configuration<'a, Mode>>,
 }
 
 pub mod mst {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Configuration<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub revision: ::validated_data::Field<i64>,
-        pub instances: ::validated_data::Field<configuration::Instances<'a, Mode>>,
+        pub name: ::data_views::Field<&'a str>,
+        pub revision: ::data_views::Field<i64>,
+        pub instances: ::data_views::Field<configuration::Instances<'a, Mode>>,
     }
 
     pub mod configuration {
 
-        #[::validated_data::data_view(indexed_list, primary_key(id))]
-        pub struct Instances<'a, Mode> (::validated_data::Field<instances::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(id))]
+        pub struct Instances<'a, Mode> (::data_views::Field<instances::Item<'a, Mode>>);
 
         pub mod instances {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub id: ::validated_data::Field<i64>,
-                pub vlans: ::validated_data::Field<&'a str>,
+                pub id: ::data_views::Field<i64>,
+                pub vlans: ::data_views::Field<&'a str>,
             }
         }
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(id))]
-pub struct MstInstances<'a, Mode> (::validated_data::Field<mst_instances::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(id))]
+pub struct MstInstances<'a, Mode> (::data_views::Field<mst_instances::Item<'a, Mode>>);
 
 pub mod mst_instances {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub id: ::validated_data::Field<&'a str>,
-        pub priority: ::validated_data::Field<i64>,
+        pub id: ::data_views::Field<&'a str>,
+        pub priority: ::data_views::Field<i64>,
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(id))]
-pub struct RapidPvstInstances<'a, Mode> (::validated_data::Field<rapid_pvst_instances::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(id))]
+pub struct RapidPvstInstances<'a, Mode> (::data_views::Field<rapid_pvst_instances::Item<'a, Mode>>);
 
 pub mod rapid_pvst_instances {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub id: ::validated_data::Field<&'a str>,
-        pub priority: ::validated_data::Field<i64>,
+        pub id: ::data_views::Field<&'a str>,
+        pub priority: ::data_views::Field<i64>,
     }
 }
 
-#[::validated_data::data_view(python(name = "EOSConfig.SpanningTree.PortIdAllocationPortChannelRange", schema = Dict(1253)))]
+#[::data_views::data_view(python(name = "EOSConfig.SpanningTree.PortIdAllocationPortChannelRange", schema = Dict(1253)))]
 pub struct PortIdAllocationPortChannelRange<'a, Mode> {
     #[data_view(schema = Int(467))]
-    pub minimum: ::validated_data::RequiredValue<i64, Mode>,
+    pub minimum: ::data_views::RequiredValue<i64, Mode>,
     #[data_view(schema = Int(468))]
-    pub maximum: ::validated_data::RequiredValue<i64, Mode>,
+    pub maximum: ::data_views::RequiredValue<i64, Mode>,
 }

@@ -1,34 +1,34 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesign.CvTopology", schema = List(601), item_name = "AVDDesign.CvTopologyItem"))]
-pub struct CvTopology<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesign.CvTopology", schema = List(601), item_name = "AVDDesign.CvTopologyItem"))]
+pub struct CvTopology<'a, Mode> (::data_views::Field<Item<'a, Mode>>);
 
-#[::validated_data::data_view(python(name = "AVDDesign.CvTopologyItemBase", schema = Dict(1460)))]
+#[::data_views::data_view(python(name = "AVDDesign.CvTopologyItemBase", schema = Dict(1460)))]
 pub struct Item<'a, Mode> {
     #[data_view(schema = Str(3))]
-    pub hostname: ::validated_data::Field<&'a str>,
+    pub hostname: ::data_views::Field<&'a str>,
     #[data_view(schema = Str(2))]
-    pub platform: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub platform: ::data_views::RequiredValue<&'a str, Mode>,
     #[data_view(schema = List(600))]
-    pub interfaces: ::validated_data::RequiredValue<item::Interfaces<'a, Mode>, Mode>,
+    pub interfaces: ::data_views::RequiredValue<item::Interfaces<'a, Mode>, Mode>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvTopologyItemBase.Interfaces", schema = List(600), item_name = "AVDDesign.CvTopologyItemBase.InterfacesItem"))]
-    pub struct Interfaces<'a, Mode> (::validated_data::Field<interfaces::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.CvTopologyItemBase.Interfaces", schema = List(600), item_name = "AVDDesign.CvTopologyItemBase.InterfacesItem"))]
+    pub struct Interfaces<'a, Mode> (::data_views::Field<interfaces::Item<'a, Mode>>);
 
     pub mod interfaces {
 
-        #[::validated_data::data_view(python(name = "AVDDesign.CvTopologyItemBase.InterfacesItemBase", schema = Dict(1459)))]
+        #[::data_views::data_view(python(name = "AVDDesign.CvTopologyItemBase.InterfacesItemBase", schema = Dict(1459)))]
         pub struct Item<'a, Mode> {
             #[data_view(schema = Str(3))]
-            pub name: ::validated_data::Field<&'a str>,
+            pub name: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(3))]
-            pub neighbor: ::validated_data::Field<&'a str>,
+            pub neighbor: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(3))]
-            pub neighbor_interface: ::validated_data::Field<&'a str>,
+            pub neighbor_interface: ::data_views::Field<&'a str>,
         }
     }
 }

@@ -1,42 +1,42 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.MacAcls", schema = List(674), item_name = "AVDDesign.MacAclsItem"))]
-pub struct MacAcls<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.MacAcls", schema = List(674), item_name = "AVDDesign.MacAclsItem"))]
+pub struct MacAcls<'a, Mode> (::data_views::Field<Item<'a, Mode>>);
 
-#[::validated_data::data_view(python(name = "AVDDesign.MacAclsItemBase", schema = Dict(1619)))]
+#[::data_views::data_view(python(name = "AVDDesign.MacAclsItemBase", schema = Dict(1619)))]
 pub struct Item<'a, Mode> {
     #[data_view(schema = Str(1445))]
-    pub name: ::validated_data::Field<&'a str>,
+    pub name: ::data_views::Field<&'a str>,
     #[data_view(schema = Bool(7))]
-    pub counters_per_entry: ::validated_data::Field<bool>,
+    pub counters_per_entry: ::data_views::Field<bool>,
     #[data_view(schema = List(673))]
-    pub entries: ::validated_data::Field<item::Entries<'a, Mode>>,
+    pub entries: ::data_views::Field<item::Entries<'a, Mode>>,
 }
 
 pub mod item {
 
-    #[::validated_data::data_view(list, python(name = "AVDDesign.MacAclsItemBase.Entries", schema = List(673)))]
-    pub struct Entries<'a, Mode> (::validated_data::Field<entries::Item<'a, Mode>>);
+    #[::data_views::data_view(list, python(name = "AVDDesign.MacAclsItemBase.Entries", schema = List(673)))]
+    pub struct Entries<'a, Mode> (::data_views::Field<entries::Item<'a, Mode>>);
 
     pub mod entries {
 
-        #[::validated_data::data_view(python(name = "AVDDesign.MacAclsItemBase.EntriesItem", schema = Dict(1618)))]
+        #[::data_views::data_view(python(name = "AVDDesign.MacAclsItemBase.EntriesItem", schema = Dict(1618)))]
         pub struct Item<'a, Mode> {
             #[data_view(schema = Int(77))]
-            pub sequence: ::validated_data::Field<i64>,
+            pub sequence: ::data_views::Field<i64>,
             #[data_view(schema = Str(1446))]
-            pub action: ::validated_data::Field<&'a str>,
+            pub action: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(1447))]
-            pub remark: ::validated_data::Field<&'a str>,
+            pub remark: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(1448))]
-            pub source: ::validated_data::Field<&'a str>,
+            pub source: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(1449))]
-            pub source_wildcard: ::validated_data::Field<&'a str>,
+            pub source_wildcard: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(1450))]
-            pub destination: ::validated_data::Field<&'a str>,
+            pub destination: ::data_views::Field<&'a str>,
             #[data_view(schema = Str(1451))]
-            pub destination_wildcard: ::validated_data::Field<&'a str>,
+            pub destination_wildcard: ::data_views::Field<&'a str>,
         }
     }
 }

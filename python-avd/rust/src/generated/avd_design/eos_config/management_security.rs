@@ -1,322 +1,322 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct ManagementSecurity<'a, Mode> {
-    pub auto_certificate: ::validated_data::Field<AutoCertificate<'a, Mode>>,
-    pub entropy_sources: ::validated_data::Field<EntropySources<'a, Mode>>,
-    pub signature_verification: ::validated_data::Field<SignatureVerification<'a, Mode>>,
-    pub password: ::validated_data::Field<Password<'a, Mode>>,
-    pub ssl_profiles: ::validated_data::Field<SslProfiles<'a, Mode>>,
-    pub shared_secret_profiles: ::validated_data::Field<SharedSecretProfiles<'a, Mode>>,
+    pub auto_certificate: ::data_views::Field<AutoCertificate<'a, Mode>>,
+    pub entropy_sources: ::data_views::Field<EntropySources<'a, Mode>>,
+    pub signature_verification: ::data_views::Field<SignatureVerification<'a, Mode>>,
+    pub password: ::data_views::Field<Password<'a, Mode>>,
+    pub ssl_profiles: ::data_views::Field<SslProfiles<'a, Mode>>,
+    pub shared_secret_profiles: ::data_views::Field<SharedSecretProfiles<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct AutoCertificate<'a, Mode> {
-    pub profiles: ::validated_data::Field<auto_certificate::Profiles<'a, Mode>>,
-    pub protocols: ::validated_data::Field<auto_certificate::Protocols<'a, Mode>>,
+    pub profiles: ::data_views::Field<auto_certificate::Profiles<'a, Mode>>,
+    pub protocols: ::data_views::Field<auto_certificate::Protocols<'a, Mode>>,
 }
 
 pub mod auto_certificate {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
-    pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(name))]
+    pub struct Profiles<'a, Mode> (::data_views::Field<profiles::Item<'a, Mode>>);
 
     pub mod profiles {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub name: ::validated_data::Field<&'a str>,
-            pub digest: ::validated_data::Field<&'a str>,
-            pub key: ::validated_data::Field<&'a str>,
-            pub protocol_instance_name: ::validated_data::Field<&'a str>,
-            pub renewal: ::validated_data::Field<i64>,
-            pub parameters: ::validated_data::Field<item::Parameters<'a, Mode>>,
+            pub name: ::data_views::Field<&'a str>,
+            pub digest: ::data_views::Field<&'a str>,
+            pub key: ::data_views::Field<&'a str>,
+            pub protocol_instance_name: ::data_views::Field<&'a str>,
+            pub renewal: ::data_views::Field<i64>,
+            pub parameters: ::data_views::Field<item::Parameters<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Parameters<'a, Mode> {
-                pub distinguished_name: ::validated_data::Field<parameters::DistinguishedName<'a, Mode>>,
-                pub subject_alternative_name: ::validated_data::Field<parameters::SubjectAlternativeName<'a, Mode>>,
+                pub distinguished_name: ::data_views::Field<parameters::DistinguishedName<'a, Mode>>,
+                pub subject_alternative_name: ::data_views::Field<parameters::SubjectAlternativeName<'a, Mode>>,
             }
 
             pub mod parameters {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct DistinguishedName<'a, Mode> {
-                    pub common_name: ::validated_data::Field<&'a str>,
-                    pub country: ::validated_data::Field<&'a str>,
-                    pub email: ::validated_data::Field<&'a str>,
-                    pub locality: ::validated_data::Field<&'a str>,
-                    pub organization: ::validated_data::Field<&'a str>,
-                    pub organization_unit: ::validated_data::Field<&'a str>,
-                    pub serial_number: ::validated_data::Field<&'a str>,
-                    pub state: ::validated_data::Field<&'a str>,
+                    pub common_name: ::data_views::Field<&'a str>,
+                    pub country: ::data_views::Field<&'a str>,
+                    pub email: ::data_views::Field<&'a str>,
+                    pub locality: ::data_views::Field<&'a str>,
+                    pub organization: ::data_views::Field<&'a str>,
+                    pub organization_unit: ::data_views::Field<&'a str>,
+                    pub serial_number: ::data_views::Field<&'a str>,
+                    pub state: ::data_views::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct SubjectAlternativeName<'a, Mode> {
-                    pub dns: ::validated_data::Field<subject_alternative_name::Dns<'a, Mode>>,
-                    pub email: ::validated_data::Field<subject_alternative_name::Email<'a, Mode>>,
-                    pub ip: ::validated_data::Field<subject_alternative_name::Ip<'a, Mode>>,
-                    pub uri: ::validated_data::Field<subject_alternative_name::Uri<'a, Mode>>,
+                    pub dns: ::data_views::Field<subject_alternative_name::Dns<'a, Mode>>,
+                    pub email: ::data_views::Field<subject_alternative_name::Email<'a, Mode>>,
+                    pub ip: ::data_views::Field<subject_alternative_name::Ip<'a, Mode>>,
+                    pub uri: ::data_views::Field<subject_alternative_name::Uri<'a, Mode>>,
                 }
 
                 pub mod subject_alternative_name {
 
-                    #[::validated_data::data_view(list)]
-                    pub struct Dns<'a, Mode> (::validated_data::Field<&'a str>);
+                    #[::data_views::data_view(list)]
+                    pub struct Dns<'a, Mode> (::data_views::Field<&'a str>);
 
-                    #[::validated_data::data_view(list)]
-                    pub struct Email<'a, Mode> (::validated_data::Field<&'a str>);
+                    #[::data_views::data_view(list)]
+                    pub struct Email<'a, Mode> (::data_views::Field<&'a str>);
 
-                    #[::validated_data::data_view(list)]
-                    pub struct Ip<'a, Mode> (::validated_data::Field<&'a str>);
+                    #[::data_views::data_view(list)]
+                    pub struct Ip<'a, Mode> (::data_views::Field<&'a str>);
 
-                    #[::validated_data::data_view(list)]
-                    pub struct Uri<'a, Mode> (::validated_data::Field<&'a str>);
+                    #[::data_views::data_view(list)]
+                    pub struct Uri<'a, Mode> (::data_views::Field<&'a str>);
                 }
             }
         }
     }
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
-    pub struct Protocols<'a, Mode> (::validated_data::Field<protocols::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(name))]
+    pub struct Protocols<'a, Mode> (::data_views::Field<protocols::Item<'a, Mode>>);
 
     pub mod protocols {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub name: ::validated_data::Field<&'a str>,
-            pub protocol: ::validated_data::RequiredValue<&'a str, Mode>,
-            pub disabled: ::validated_data::Field<bool>,
-            pub connection_retry: ::validated_data::Field<item::ConnectionRetry<'a, Mode>>,
-            pub credentials: ::validated_data::Field<item::Credentials<'a, Mode>>,
-            pub server: ::validated_data::Field<item::Server<'a, Mode>>,
+            pub name: ::data_views::Field<&'a str>,
+            pub protocol: ::data_views::RequiredValue<&'a str, Mode>,
+            pub disabled: ::data_views::Field<bool>,
+            pub connection_retry: ::data_views::Field<item::ConnectionRetry<'a, Mode>>,
+            pub credentials: ::data_views::Field<item::Credentials<'a, Mode>>,
+            pub server: ::data_views::Field<item::Server<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct ConnectionRetry<'a, Mode> {
-                pub count: ::validated_data::Field<i64>,
-                pub interval: ::validated_data::Field<i64>,
-                pub exponential_backoff: ::validated_data::Field<bool>,
+                pub count: ::data_views::Field<i64>,
+                pub interval: ::data_views::Field<i64>,
+                pub exponential_backoff: ::data_views::Field<bool>,
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Credentials<'a, Mode> {
-                pub enroll: ::validated_data::Field<credentials::Enroll<'a, Mode>>,
-                pub re_enroll: ::validated_data::Field<credentials::ReEnroll<'a, Mode>>,
+                pub enroll: ::data_views::Field<credentials::Enroll<'a, Mode>>,
+                pub re_enroll: ::data_views::Field<credentials::ReEnroll<'a, Mode>>,
             }
 
             pub mod credentials {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct Enroll<'a, Mode> {
-                    pub token: ::validated_data::Field<&'a str>,
-                    pub token_type: ::validated_data::Field<&'a str>,
-                    pub username: ::validated_data::Field<&'a str>,
-                    pub secret: ::validated_data::Field<&'a str>,
-                    pub secret_type: ::validated_data::Field<&'a str>,
+                    pub token: ::data_views::Field<&'a str>,
+                    pub token_type: ::data_views::Field<&'a str>,
+                    pub username: ::data_views::Field<&'a str>,
+                    pub secret: ::data_views::Field<&'a str>,
+                    pub secret_type: ::data_views::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct ReEnroll<'a, Mode> {
-                    pub token: ::validated_data::Field<&'a str>,
-                    pub token_type: ::validated_data::Field<&'a str>,
-                    pub username: ::validated_data::Field<&'a str>,
-                    pub secret: ::validated_data::Field<&'a str>,
-                    pub secret_type: ::validated_data::Field<&'a str>,
+                    pub token: ::data_views::Field<&'a str>,
+                    pub token_type: ::data_views::Field<&'a str>,
+                    pub username: ::data_views::Field<&'a str>,
+                    pub secret: ::data_views::Field<&'a str>,
+                    pub secret_type: ::data_views::Field<&'a str>,
                 }
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Server<'a, Mode> {
-                pub ssl_profile: ::validated_data::Field<&'a str>,
-                pub url: ::validated_data::Field<&'a str>,
-                pub vrf: ::validated_data::Field<&'a str>,
+                pub ssl_profile: ::data_views::Field<&'a str>,
+                pub url: ::data_views::Field<&'a str>,
+                pub vrf: ::data_views::Field<&'a str>,
             }
         }
     }
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct EntropySources<'a, Mode> {
-    pub hardware: ::validated_data::Field<bool>,
-    pub haveged: ::validated_data::Field<bool>,
-    pub cpu_jitter: ::validated_data::Field<bool>,
-    pub hardware_exclusive: ::validated_data::Field<bool>,
+    pub hardware: ::data_views::Field<bool>,
+    pub haveged: ::data_views::Field<bool>,
+    pub cpu_jitter: ::data_views::Field<bool>,
+    pub hardware_exclusive: ::data_views::Field<bool>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct SignatureVerification<'a, Mode> {
-    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-    pub ssl_profile: ::validated_data::Field<&'a str>,
+    pub enabled: ::data_views::RequiredValue<bool, Mode>,
+    pub ssl_profile: ::data_views::Field<&'a str>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Password<'a, Mode> {
-    pub minimum_length: ::validated_data::Field<i64>,
-    pub encryption_key_common: ::validated_data::Field<bool>,
-    pub encryption_reversible: ::validated_data::Field<&'a str>,
-    pub policies: ::validated_data::Field<password::Policies<'a, Mode>>,
+    pub minimum_length: ::data_views::Field<i64>,
+    pub encryption_key_common: ::data_views::Field<bool>,
+    pub encryption_reversible: ::data_views::Field<&'a str>,
+    pub policies: ::data_views::Field<password::Policies<'a, Mode>>,
 }
 
 pub mod password {
 
-    #[::validated_data::data_view(indexed_list, primary_key(name))]
-    pub struct Policies<'a, Mode> (::validated_data::Field<policies::Item<'a, Mode>>);
+    #[::data_views::data_view(indexed_list, primary_key(name))]
+    pub struct Policies<'a, Mode> (::data_views::Field<policies::Item<'a, Mode>>);
 
     pub mod policies {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Item<'a, Mode> {
-            pub name: ::validated_data::Field<&'a str>,
-            pub minimum: ::validated_data::Field<item::Minimum<'a, Mode>>,
-            pub maximum: ::validated_data::Field<item::Maximum<'a, Mode>>,
+            pub name: ::data_views::Field<&'a str>,
+            pub minimum: ::data_views::Field<item::Minimum<'a, Mode>>,
+            pub maximum: ::data_views::Field<item::Maximum<'a, Mode>>,
         }
 
         pub mod item {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Minimum<'a, Mode> {
-                pub digits: ::validated_data::Field<i64>,
-                pub length: ::validated_data::Field<i64>,
-                pub lower: ::validated_data::Field<i64>,
-                pub special: ::validated_data::Field<i64>,
-                pub upper: ::validated_data::Field<i64>,
+                pub digits: ::data_views::Field<i64>,
+                pub length: ::data_views::Field<i64>,
+                pub lower: ::data_views::Field<i64>,
+                pub special: ::data_views::Field<i64>,
+                pub upper: ::data_views::Field<i64>,
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Maximum<'a, Mode> {
-                pub repetitive: ::validated_data::Field<i64>,
-                pub sequential: ::validated_data::Field<i64>,
+                pub repetitive: ::data_views::Field<i64>,
+                pub sequential: ::data_views::Field<i64>,
             }
         }
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(name))]
-pub struct SslProfiles<'a, Mode> (::validated_data::Field<ssl_profiles::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(name))]
+pub struct SslProfiles<'a, Mode> (::data_views::Field<ssl_profiles::Item<'a, Mode>>);
 
 pub mod ssl_profiles {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub name: ::validated_data::Field<&'a str>,
-        pub fips_restrictions: ::validated_data::Field<bool>,
-        pub tls_versions: ::validated_data::Field<&'a str>,
-        pub cipher_list: ::validated_data::Field<&'a str>,
-        pub ciphers: ::validated_data::Field<item::Ciphers<'a, Mode>>,
-        pub trust_certificate: ::validated_data::Field<item::TrustCertificate<'a, Mode>>,
-        pub chain_certificate: ::validated_data::Field<item::ChainCertificate<'a, Mode>>,
-        pub certificate: ::validated_data::Field<item::Certificate<'a, Mode>>,
-        pub certificate_revocation_lists: ::validated_data::Field<item::CertificateRevocationLists<'a, Mode>>,
+        pub name: ::data_views::Field<&'a str>,
+        pub fips_restrictions: ::data_views::Field<bool>,
+        pub tls_versions: ::data_views::Field<&'a str>,
+        pub cipher_list: ::data_views::Field<&'a str>,
+        pub ciphers: ::data_views::Field<item::Ciphers<'a, Mode>>,
+        pub trust_certificate: ::data_views::Field<item::TrustCertificate<'a, Mode>>,
+        pub chain_certificate: ::data_views::Field<item::ChainCertificate<'a, Mode>>,
+        pub certificate: ::data_views::Field<item::Certificate<'a, Mode>>,
+        pub certificate_revocation_lists: ::data_views::Field<item::CertificateRevocationLists<'a, Mode>>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Ciphers<'a, Mode> {
-            pub v1_0: ::validated_data::Field<&'a str>,
-            pub v1_3: ::validated_data::Field<&'a str>,
+            pub v1_0: ::data_views::Field<&'a str>,
+            pub v1_3: ::data_views::Field<&'a str>,
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct TrustCertificate<'a, Mode> {
-            pub certificates: ::validated_data::Field<trust_certificate::Certificates<'a, Mode>>,
-            pub requirement: ::validated_data::Field<trust_certificate::Requirement<'a, Mode>>,
-            pub policy_expiry_date_ignore: ::validated_data::Field<bool>,
-            pub system: ::validated_data::Field<bool>,
+            pub certificates: ::data_views::Field<trust_certificate::Certificates<'a, Mode>>,
+            pub requirement: ::data_views::Field<trust_certificate::Requirement<'a, Mode>>,
+            pub policy_expiry_date_ignore: ::data_views::Field<bool>,
+            pub system: ::data_views::Field<bool>,
         }
 
         pub mod trust_certificate {
 
-            #[::validated_data::data_view(list)]
-            pub struct Certificates<'a, Mode> (::validated_data::Field<&'a str>);
+            #[::data_views::data_view(list)]
+            pub struct Certificates<'a, Mode> (::data_views::Field<&'a str>);
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Requirement<'a, Mode> {
-                pub basic_constraint_ca: ::validated_data::Field<bool>,
-                pub hostname_fqdn: ::validated_data::Field<bool>,
+                pub basic_constraint_ca: ::data_views::Field<bool>,
+                pub hostname_fqdn: ::data_views::Field<bool>,
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct ChainCertificate<'a, Mode> {
-            pub certificates: ::validated_data::Field<chain_certificate::Certificates<'a, Mode>>,
-            pub requirement: ::validated_data::Field<chain_certificate::Requirement<'a, Mode>>,
+            pub certificates: ::data_views::Field<chain_certificate::Certificates<'a, Mode>>,
+            pub requirement: ::data_views::Field<chain_certificate::Requirement<'a, Mode>>,
         }
 
         pub mod chain_certificate {
 
-            #[::validated_data::data_view(list)]
-            pub struct Certificates<'a, Mode> (::validated_data::Field<&'a str>);
+            #[::data_views::data_view(list)]
+            pub struct Certificates<'a, Mode> (::data_views::Field<&'a str>);
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Requirement<'a, Mode> {
-                pub basic_constraint_ca: ::validated_data::Field<bool>,
-                pub include_root_ca: ::validated_data::Field<bool>,
+                pub basic_constraint_ca: ::data_views::Field<bool>,
+                pub include_root_ca: ::data_views::Field<bool>,
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Certificate<'a, Mode> {
-            pub file: ::validated_data::Field<&'a str>,
-            pub key: ::validated_data::Field<&'a str>,
-            pub auto_certificate: ::validated_data::Field<&'a str>,
+            pub file: ::data_views::Field<&'a str>,
+            pub key: ::data_views::Field<&'a str>,
+            pub auto_certificate: ::data_views::Field<&'a str>,
         }
 
-        #[::validated_data::data_view(list)]
-        pub struct CertificateRevocationLists<'a, Mode> (::validated_data::Field<&'a str>);
+        #[::data_views::data_view(list)]
+        pub struct CertificateRevocationLists<'a, Mode> (::data_views::Field<&'a str>);
     }
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(profile))]
-pub struct SharedSecretProfiles<'a, Mode> (::validated_data::Field<shared_secret_profiles::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(profile))]
+pub struct SharedSecretProfiles<'a, Mode> (::data_views::Field<shared_secret_profiles::Item<'a, Mode>>);
 
 pub mod shared_secret_profiles {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub profile: ::validated_data::Field<&'a str>,
-        pub secrets: ::validated_data::Field<item::Secrets<'a, Mode>>,
+        pub profile: ::data_views::Field<&'a str>,
+        pub secrets: ::data_views::Field<item::Secrets<'a, Mode>>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view(indexed_list, primary_key(name))]
-        pub struct Secrets<'a, Mode> (::validated_data::Field<secrets::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(name))]
+        pub struct Secrets<'a, Mode> (::data_views::Field<secrets::Item<'a, Mode>>);
 
         pub mod secrets {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub name: ::validated_data::Field<&'a str>,
-                pub secret: ::validated_data::RequiredValue<&'a str, Mode>,
-                pub secret_type: ::validated_data::Field<&'a str>,
-                pub receive_lifetime: ::validated_data::RequiredValue<item::ReceiveLifetime<'a, Mode>, Mode>,
-                pub transmit_lifetime: ::validated_data::RequiredValue<item::TransmitLifetime<'a, Mode>, Mode>,
-                pub local_time: ::validated_data::Field<bool>,
+                pub name: ::data_views::Field<&'a str>,
+                pub secret: ::data_views::RequiredValue<&'a str, Mode>,
+                pub secret_type: ::data_views::Field<&'a str>,
+                pub receive_lifetime: ::data_views::RequiredValue<item::ReceiveLifetime<'a, Mode>, Mode>,
+                pub transmit_lifetime: ::data_views::RequiredValue<item::TransmitLifetime<'a, Mode>, Mode>,
+                pub local_time: ::data_views::Field<bool>,
             }
 
             pub mod item {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct ReceiveLifetime<'a, Mode> {
-                    pub infinite: ::validated_data::Field<bool>,
-                    pub start_date_time: ::validated_data::Field<&'a str>,
-                    pub end_date_time: ::validated_data::Field<&'a str>,
+                    pub infinite: ::data_views::Field<bool>,
+                    pub start_date_time: ::data_views::Field<&'a str>,
+                    pub end_date_time: ::data_views::Field<&'a str>,
                 }
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct TransmitLifetime<'a, Mode> {
-                    pub infinite: ::validated_data::Field<bool>,
-                    pub start_date_time: ::validated_data::Field<&'a str>,
-                    pub end_date_time: ::validated_data::Field<&'a str>,
+                    pub infinite: ::data_views::Field<bool>,
+                    pub start_date_time: ::data_views::Field<&'a str>,
+                    pub end_date_time: ::data_views::Field<&'a str>,
                 }
             }
         }

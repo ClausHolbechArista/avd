@@ -35,7 +35,7 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 [[package]]
 name = "avdschema"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "blake3",
  "derive_more",
@@ -676,8 +676,8 @@ dependencies = [
  "pyo3",
  "serde",
  "serde_json",
- "validated-data",
- "validated-data-py",
+ "data-views",
+ "data-views-py",
  "validation",
 ]
 
@@ -1110,22 +1110,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "validated-data"
+name = "data-views"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "derive_more",
  "mmap-guard",
  "rkyv",
  "self_cell",
  "serde_json",
- "validated-data-macros",
+ "data-views-macros",
 ]
 
 [[package]]
-name = "validated-data-macros"
+name = "data-views-macros"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1133,27 +1133,27 @@ dependencies = [
 ]
 
 [[package]]
-name = "validated-data-py"
+name = "data-views-py"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "avdschema",
  "pyo3",
  "serde_json",
- "validated-data",
+ "data-views",
 ]
 
 [[package]]
 name = "validation"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "avdschema",
  "derive_more",
  "log",
  "serde",
  "serde_json",
- "validated-data",
+ "data-views",
  "yaml-parser",
 ]
 
@@ -1273,7 +1273,7 @@ dependencies = [
 [[package]]
 name = "yaml-parser"
 version = "0.0.12"
-source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=609e7a638d53d63d9380df915ee603577b4b1d84#609e7a638d53d63d9380df915ee603577b4b1d84"
+source = "git+https://github.com/ClausHolbechArista/pyavd-utils?rev=fea2c7fadd2c7973237e9cca6c719c11ac840a5c#fea2c7fadd2c7973237e9cca6c719c11ac840a5c"
 dependencies = [
  "avdschema",
  "derive_more",

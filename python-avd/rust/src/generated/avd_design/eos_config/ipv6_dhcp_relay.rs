@@ -1,15 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Ipv6DhcpRelay<'a, Mode> {
-    pub always_on: ::validated_data::Field<bool>,
-    pub all_subnets: ::validated_data::Field<bool>,
-    pub option: ::validated_data::Field<Option<'a, Mode>>,
+    pub always_on: ::data_views::Field<bool>,
+    pub all_subnets: ::data_views::Field<bool>,
+    pub option: ::data_views::Field<Option<'a, Mode>>,
 }
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct Option<'a, Mode> {
-    pub link_layer_address: ::validated_data::Field<bool>,
-    pub remote_id_format: ::validated_data::Field<&'a str>,
+    pub link_layer_address: ::data_views::Field<bool>,
+    pub remote_id_format: ::data_views::Field<&'a str>,
 }

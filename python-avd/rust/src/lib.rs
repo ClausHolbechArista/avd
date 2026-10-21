@@ -8,11 +8,11 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use avdschema::Store;
+use data_views::DataStore;
+use data_views_py::PyValueHandle;
+use data_views_py::ViewHandle;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
-use validated_data::DataStore;
-use validated_data_py::PyValueHandle;
-use validated_data_py::ViewHandle;
 use validation::archive::validate_json_to_archive;
 
 #[allow(dead_code, non_snake_case, reason = "generated API exceeds the current call graph and preserves schema key spelling")]
@@ -118,7 +118,7 @@ fn open_avd_design(
         .import("pyavd._rust")?
         .getattr("_validated_data")?
         .cast_into::<pyo3::types::PyModule>()?;
-    validated_data_py::wrap_with_schema(&module, "AVDDesign", data.root_handle(), Arc::new(schemas))
+    data_views_py::wrap_with_schema(&module, "AVDDesign", data.root_handle(), Arc::new(schemas))
 }
 
 /// Generated schema IDs are meaningful only in the exact combined store used at build time.
@@ -146,7 +146,7 @@ mod _rust {
         let native = PyModule::new(py, "pyavd._validated_data")?;
         let opaque = py.get_type::<super::PyOpaqueData>();
         let undefined = py.import("pyavd._utils.undefined")?.getattr("Undefined")?;
-        validated_data_py::install_models::<
+        data_views_py::install_models::<
             super::generated::avd_design::avd_design::AvdDesign<'static>,
         >(&native, &opaque, &undefined)?;
         native.add("OpaqueData", &opaque)?;

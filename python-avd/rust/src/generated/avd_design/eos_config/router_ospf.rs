@@ -1,251 +1,251 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
-#[::validated_data::data_view]
+#[::data_views::data_view]
 pub struct RouterOspf<'a, Mode> {
-    pub process_ids: ::validated_data::Field<ProcessIds<'a, Mode>>,
+    pub process_ids: ::data_views::Field<ProcessIds<'a, Mode>>,
 }
 
-#[::validated_data::data_view(indexed_list, primary_key(id))]
-pub struct ProcessIds<'a, Mode> (::validated_data::Field<process_ids::Item<'a, Mode>>);
+#[::data_views::data_view(indexed_list, primary_key(id))]
+pub struct ProcessIds<'a, Mode> (::data_views::Field<process_ids::Item<'a, Mode>>);
 
 pub mod process_ids {
 
-    #[::validated_data::data_view]
+    #[::data_views::data_view]
     pub struct Item<'a, Mode> {
-        pub id: ::validated_data::Field<i64>,
-        pub vrf: ::validated_data::Field<&'a str>,
-        pub passive_interface_default: ::validated_data::Field<bool>,
-        pub router_id: ::validated_data::Field<&'a str>,
-        pub distance: ::validated_data::Field<item::Distance<'a, Mode>>,
-        pub log_adjacency_changes_detail: ::validated_data::Field<bool>,
-        pub network_prefixes: ::validated_data::Field<item::NetworkPrefixes<'a, Mode>>,
-        pub bfd_enable: ::validated_data::Field<bool>,
-        pub bfd_adjacency_state_any: ::validated_data::Field<bool>,
-        pub no_passive_interfaces: ::validated_data::Field<item::NoPassiveInterfaces<'a, Mode>>,
-        pub distribute_list_in: ::validated_data::Field<item::DistributeListIn<'a, Mode>>,
-        pub max_lsa: ::validated_data::Field<i64>,
-        pub timers: ::validated_data::Field<item::Timers<'a, Mode>>,
-        pub default_information_originate: ::validated_data::Field<item::DefaultInformationOriginate<'a, Mode>>,
-        pub summary_addresses: ::validated_data::Field<item::SummaryAddresses<'a, Mode>>,
-        pub redistribute: ::validated_data::Field<item::Redistribute<'a, Mode>>,
-        pub auto_cost_reference_bandwidth: ::validated_data::Field<i64>,
-        pub areas: ::validated_data::Field<item::Areas<'a, Mode>>,
-        pub maximum_paths: ::validated_data::Field<i64>,
-        pub max_metric: ::validated_data::Field<item::MaxMetric<'a, Mode>>,
-        pub graceful_restart: ::validated_data::Field<item::GracefulRestart<'a, Mode>>,
-        pub graceful_restart_helper: ::validated_data::Field<bool>,
-        pub mpls_ldp_sync_default: ::validated_data::Field<bool>,
-        pub segment_routing_mpls: ::validated_data::Field<item::SegmentRoutingMpls<'a, Mode>>,
-        pub eos_cli: ::validated_data::Field<&'a str>,
+        pub id: ::data_views::Field<i64>,
+        pub vrf: ::data_views::Field<&'a str>,
+        pub passive_interface_default: ::data_views::Field<bool>,
+        pub router_id: ::data_views::Field<&'a str>,
+        pub distance: ::data_views::Field<item::Distance<'a, Mode>>,
+        pub log_adjacency_changes_detail: ::data_views::Field<bool>,
+        pub network_prefixes: ::data_views::Field<item::NetworkPrefixes<'a, Mode>>,
+        pub bfd_enable: ::data_views::Field<bool>,
+        pub bfd_adjacency_state_any: ::data_views::Field<bool>,
+        pub no_passive_interfaces: ::data_views::Field<item::NoPassiveInterfaces<'a, Mode>>,
+        pub distribute_list_in: ::data_views::Field<item::DistributeListIn<'a, Mode>>,
+        pub max_lsa: ::data_views::Field<i64>,
+        pub timers: ::data_views::Field<item::Timers<'a, Mode>>,
+        pub default_information_originate: ::data_views::Field<item::DefaultInformationOriginate<'a, Mode>>,
+        pub summary_addresses: ::data_views::Field<item::SummaryAddresses<'a, Mode>>,
+        pub redistribute: ::data_views::Field<item::Redistribute<'a, Mode>>,
+        pub auto_cost_reference_bandwidth: ::data_views::Field<i64>,
+        pub areas: ::data_views::Field<item::Areas<'a, Mode>>,
+        pub maximum_paths: ::data_views::Field<i64>,
+        pub max_metric: ::data_views::Field<item::MaxMetric<'a, Mode>>,
+        pub graceful_restart: ::data_views::Field<item::GracefulRestart<'a, Mode>>,
+        pub graceful_restart_helper: ::data_views::Field<bool>,
+        pub mpls_ldp_sync_default: ::data_views::Field<bool>,
+        pub segment_routing_mpls: ::data_views::Field<item::SegmentRoutingMpls<'a, Mode>>,
+        pub eos_cli: ::data_views::Field<&'a str>,
     }
 
     pub mod item {
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Distance<'a, Mode> {
-            pub external: ::validated_data::Field<i64>,
-            pub inter_area: ::validated_data::Field<i64>,
-            pub intra_area: ::validated_data::Field<i64>,
+            pub external: ::data_views::Field<i64>,
+            pub inter_area: ::data_views::Field<i64>,
+            pub intra_area: ::data_views::Field<i64>,
         }
 
-        #[::validated_data::data_view(indexed_list, primary_key(ipv4_prefix))]
-        pub struct NetworkPrefixes<'a, Mode> (::validated_data::Field<network_prefixes::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(ipv4_prefix))]
+        pub struct NetworkPrefixes<'a, Mode> (::data_views::Field<network_prefixes::Item<'a, Mode>>);
 
         pub mod network_prefixes {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub ipv4_prefix: ::validated_data::Field<&'a str>,
-                pub area: ::validated_data::Field<&'a str>,
+                pub ipv4_prefix: ::data_views::Field<&'a str>,
+                pub area: ::data_views::Field<&'a str>,
             }
         }
 
-        #[::validated_data::data_view(list)]
-        pub struct NoPassiveInterfaces<'a, Mode> (::validated_data::Field<&'a str>);
+        #[::data_views::data_view(list)]
+        pub struct NoPassiveInterfaces<'a, Mode> (::data_views::Field<&'a str>);
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct DistributeListIn<'a, Mode> {
-            pub route_map: ::validated_data::Field<&'a str>,
+            pub route_map: ::data_views::Field<&'a str>,
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Timers<'a, Mode> {
-            pub lsa: ::validated_data::Field<timers::Lsa<'a, Mode>>,
-            pub spf_delay: ::validated_data::Field<timers::SpfDelay<'a, Mode>>,
+            pub lsa: ::data_views::Field<timers::Lsa<'a, Mode>>,
+            pub spf_delay: ::data_views::Field<timers::SpfDelay<'a, Mode>>,
         }
 
         pub mod timers {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Lsa<'a, Mode> {
-                pub rx_min_interval: ::validated_data::Field<i64>,
-                pub tx_delay: ::validated_data::Field<lsa::TxDelay<'a, Mode>>,
+                pub rx_min_interval: ::data_views::Field<i64>,
+                pub tx_delay: ::data_views::Field<lsa::TxDelay<'a, Mode>>,
             }
 
             pub mod lsa {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct TxDelay<'a, Mode> {
-                    pub initial: ::validated_data::Field<i64>,
-                    pub min: ::validated_data::Field<i64>,
-                    pub max: ::validated_data::Field<i64>,
+                    pub initial: ::data_views::Field<i64>,
+                    pub min: ::data_views::Field<i64>,
+                    pub max: ::data_views::Field<i64>,
                 }
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct SpfDelay<'a, Mode> {
-                pub initial: ::validated_data::Field<i64>,
-                pub min: ::validated_data::Field<i64>,
-                pub max: ::validated_data::Field<i64>,
+                pub initial: ::data_views::Field<i64>,
+                pub min: ::data_views::Field<i64>,
+                pub max: ::data_views::Field<i64>,
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct DefaultInformationOriginate<'a, Mode> {
-            pub always: ::validated_data::Field<bool>,
-            pub metric: ::validated_data::Field<i64>,
-            pub metric_type: ::validated_data::Field<i64>,
+            pub always: ::data_views::Field<bool>,
+            pub metric: ::data_views::Field<i64>,
+            pub metric_type: ::data_views::Field<i64>,
         }
 
-        #[::validated_data::data_view(indexed_list, primary_key(prefix))]
-        pub struct SummaryAddresses<'a, Mode> (::validated_data::Field<summary_addresses::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(prefix))]
+        pub struct SummaryAddresses<'a, Mode> (::data_views::Field<summary_addresses::Item<'a, Mode>>);
 
         pub mod summary_addresses {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub prefix: ::validated_data::Field<&'a str>,
-                pub tag: ::validated_data::Field<i64>,
-                pub attribute_map: ::validated_data::Field<&'a str>,
-                pub not_advertise: ::validated_data::Field<bool>,
+                pub prefix: ::data_views::Field<&'a str>,
+                pub tag: ::data_views::Field<i64>,
+                pub attribute_map: ::data_views::Field<&'a str>,
+                pub not_advertise: ::data_views::Field<bool>,
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct Redistribute<'a, Mode> {
             #[data_view(rename = "static")]
-            pub field_static: ::validated_data::Field<redistribute::FieldStatic<'a, Mode>>,
-            pub connected: ::validated_data::Field<redistribute::Connected<'a, Mode>>,
-            pub bgp: ::validated_data::Field<redistribute::Bgp<'a, Mode>>,
+            pub field_static: ::data_views::Field<redistribute::FieldStatic<'a, Mode>>,
+            pub connected: ::data_views::Field<redistribute::Connected<'a, Mode>>,
+            pub bgp: ::data_views::Field<redistribute::Bgp<'a, Mode>>,
         }
 
         pub mod redistribute {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct FieldStatic<'a, Mode> {
-                pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-                pub route_map: ::validated_data::Field<&'a str>,
-                pub include_leaked: ::validated_data::Field<bool>,
+                pub enabled: ::data_views::RequiredValue<bool, Mode>,
+                pub route_map: ::data_views::Field<&'a str>,
+                pub include_leaked: ::data_views::Field<bool>,
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Connected<'a, Mode> {
-                pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-                pub route_map: ::validated_data::Field<&'a str>,
-                pub include_leaked: ::validated_data::Field<bool>,
+                pub enabled: ::data_views::RequiredValue<bool, Mode>,
+                pub route_map: ::data_views::Field<&'a str>,
+                pub include_leaked: ::data_views::Field<bool>,
             }
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Bgp<'a, Mode> {
-                pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-                pub route_map: ::validated_data::Field<&'a str>,
-                pub include_leaked: ::validated_data::Field<bool>,
+                pub enabled: ::data_views::RequiredValue<bool, Mode>,
+                pub route_map: ::data_views::Field<&'a str>,
+                pub include_leaked: ::data_views::Field<bool>,
             }
         }
 
-        #[::validated_data::data_view(indexed_list, primary_key(id))]
-        pub struct Areas<'a, Mode> (::validated_data::Field<areas::Item<'a, Mode>>);
+        #[::data_views::data_view(indexed_list, primary_key(id))]
+        pub struct Areas<'a, Mode> (::data_views::Field<areas::Item<'a, Mode>>);
 
         pub mod areas {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct Item<'a, Mode> {
-                pub id: ::validated_data::Field<&'a str>,
-                pub filter: ::validated_data::Field<item::Filter<'a, Mode>>,
+                pub id: ::data_views::Field<&'a str>,
+                pub filter: ::data_views::Field<item::Filter<'a, Mode>>,
                 #[data_view(rename = "type")]
-                pub field_type: ::validated_data::Field<&'a str>,
-                pub no_summary: ::validated_data::Field<bool>,
-                pub nssa_only: ::validated_data::Field<bool>,
-                pub default_information_originate: ::validated_data::Field<item::DefaultInformationOriginate<'a, Mode>>,
+                pub field_type: ::data_views::Field<&'a str>,
+                pub no_summary: ::data_views::Field<bool>,
+                pub nssa_only: ::data_views::Field<bool>,
+                pub default_information_originate: ::data_views::Field<item::DefaultInformationOriginate<'a, Mode>>,
             }
 
             pub mod item {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct Filter<'a, Mode> {
-                    pub networks: ::validated_data::Field<filter::Networks<'a, Mode>>,
-                    pub prefix_list: ::validated_data::Field<&'a str>,
+                    pub networks: ::data_views::Field<filter::Networks<'a, Mode>>,
+                    pub prefix_list: ::data_views::Field<&'a str>,
                 }
 
                 pub mod filter {
 
-                    #[::validated_data::data_view(list)]
-                    pub struct Networks<'a, Mode> (::validated_data::Field<&'a str>);
+                    #[::data_views::data_view(list)]
+                    pub struct Networks<'a, Mode> (::data_views::Field<&'a str>);
                 }
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct DefaultInformationOriginate<'a, Mode> {
-                    pub metric: ::validated_data::Field<i64>,
-                    pub metric_type: ::validated_data::Field<i64>,
+                    pub metric: ::data_views::Field<i64>,
+                    pub metric_type: ::data_views::Field<i64>,
                 }
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct MaxMetric<'a, Mode> {
-            pub router_lsa: ::validated_data::Field<max_metric::RouterLsa<'a, Mode>>,
+            pub router_lsa: ::data_views::Field<max_metric::RouterLsa<'a, Mode>>,
         }
 
         pub mod max_metric {
 
-            #[::validated_data::data_view]
+            #[::data_views::data_view]
             pub struct RouterLsa<'a, Mode> {
-                pub external_lsa: ::validated_data::Field<router_lsa::ExternalLsa<'a, Mode>>,
-                pub include_stub: ::validated_data::Field<bool>,
-                pub on_startup: ::validated_data::Field<&'a str>,
-                pub summary_lsa: ::validated_data::Field<router_lsa::SummaryLsa<'a, Mode>>,
+                pub external_lsa: ::data_views::Field<router_lsa::ExternalLsa<'a, Mode>>,
+                pub include_stub: ::data_views::Field<bool>,
+                pub on_startup: ::data_views::Field<&'a str>,
+                pub summary_lsa: ::data_views::Field<router_lsa::SummaryLsa<'a, Mode>>,
             }
 
             pub mod router_lsa {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct ExternalLsa<'a, Mode> {
-                    pub override_metric: ::validated_data::Field<i64>,
+                    pub override_metric: ::data_views::Field<i64>,
                 }
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct SummaryLsa<'a, Mode> {
-                    pub override_metric: ::validated_data::Field<i64>,
+                    pub override_metric: ::data_views::Field<i64>,
                 }
             }
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct GracefulRestart<'a, Mode> {
-            pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-            pub grace_period: ::validated_data::Field<i64>,
+            pub enabled: ::data_views::RequiredValue<bool, Mode>,
+            pub grace_period: ::data_views::Field<i64>,
         }
 
-        #[::validated_data::data_view]
+        #[::data_views::data_view]
         pub struct SegmentRoutingMpls<'a, Mode> {
-            pub enabled: ::validated_data::RequiredValue<bool, Mode>,
-            pub shutdown: ::validated_data::Field<bool>,
-            pub prefix_segments: ::validated_data::Field<segment_routing_mpls::PrefixSegments<'a, Mode>>,
-            pub adjacency_segment_allocation: ::validated_data::Field<&'a str>,
+            pub enabled: ::data_views::RequiredValue<bool, Mode>,
+            pub shutdown: ::data_views::Field<bool>,
+            pub prefix_segments: ::data_views::Field<segment_routing_mpls::PrefixSegments<'a, Mode>>,
+            pub adjacency_segment_allocation: ::data_views::Field<&'a str>,
         }
 
         pub mod segment_routing_mpls {
 
-            #[::validated_data::data_view(indexed_list, primary_key(prefix))]
-            pub struct PrefixSegments<'a, Mode> (::validated_data::Field<prefix_segments::Item<'a, Mode>>);
+            #[::data_views::data_view(indexed_list, primary_key(prefix))]
+            pub struct PrefixSegments<'a, Mode> (::data_views::Field<prefix_segments::Item<'a, Mode>>);
 
             pub mod prefix_segments {
 
-                #[::validated_data::data_view]
+                #[::data_views::data_view]
                 pub struct Item<'a, Mode> {
-                    pub prefix: ::validated_data::Field<&'a str>,
-                    pub index: ::validated_data::RequiredValue<i64, Mode>,
+                    pub prefix: ::data_views::Field<&'a str>,
+                    pub index: ::data_views::RequiredValue<i64, Mode>,
                 }
             }
         }
