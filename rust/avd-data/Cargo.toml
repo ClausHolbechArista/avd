@@ -1,0 +1,18 @@
+[package]
+name = "avd-data"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+python = ["dep:data-views-py"]
+
+[dependencies]
+avdschema = { workspace = true, features = ["mmap"] }
+data-views.workspace = true
+data-views-py = { workspace = true, optional = true }
+derive_more = { workspace = true, features = ["display", "from"] }
+validation = { workspace = true, features = ["archive", "regex-perf"] }
