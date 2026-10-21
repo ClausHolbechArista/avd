@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Ipv6Neighbor<'a, Mode> {
+    pub static_entries: ::validated_data::Field<StaticEntries<'a, Mode>>,
+    pub persistent: ::validated_data::Field<Persistent<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list)]
 pub struct StaticEntries<'a, Mode> (::validated_data::Field<static_entries::Item<'a, Mode>>);

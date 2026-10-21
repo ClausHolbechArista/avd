@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct IpNat<'a, Mode> {
+    pub kernel_buffer_size: ::validated_data::Field<i64>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+    pub pools: ::validated_data::Field<Pools<'a, Mode>>,
+    pub synchronization: ::validated_data::Field<Synchronization<'a, Mode>>,
+    pub translation: ::validated_data::Field<Translation<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Profiles<'a, Mode> (::validated_data::Field<profiles::Item<'a, Mode>>);

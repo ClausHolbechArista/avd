@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct System<'a, Mode> {
+    pub control_plane: ::validated_data::Field<ControlPlane<'a, Mode>>,
+    pub l1: ::validated_data::Field<L1<'a, Mode>>,
+    pub mac_address: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct ControlPlane<'a, Mode> {

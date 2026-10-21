@@ -1,6 +1,23 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.QueueMonitorLength", schema = Dict(1736)))]
+pub struct QueueMonitorLength<'a, Mode> {
+    #[data_view(schema = Bool(1))]
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    #[data_view(schema = Bool(640))]
+    pub notifying: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(847))]
+    pub default_thresholds: ::validated_data::Field<DefaultThresholds<'a, Mode>>,
+    #[data_view(schema = Int(345))]
+    pub log: ::validated_data::Field<i64>,
+    #[data_view(schema = Dict(849))]
+    pub cpu: ::validated_data::Field<Cpu<'a, Mode>>,
+    #[data_view(schema = Bool(303))]
+    pub tx_latency: ::validated_data::Field<bool>,
+    #[data_view(schema = Dict(852))]
+    pub mirror: ::validated_data::Field<Mirror<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.QueueMonitorLength.DefaultThresholds", schema = Dict(847)))]
 pub struct DefaultThresholds<'a, Mode> {

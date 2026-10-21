@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorTelemetryPostcardPolicy<'a, Mode> {
+    pub disabled: ::validated_data::Field<bool>,
+    pub ingress: ::validated_data::Field<Ingress<'a, Mode>>,
+    pub marker_vxlan: ::validated_data::Field<MarkerVxlan<'a, Mode>>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+    pub sample_policies: ::validated_data::Field<SamplePolicies<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Ingress<'a, Mode> {

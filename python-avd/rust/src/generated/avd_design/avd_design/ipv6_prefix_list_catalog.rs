@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.Ipv6PrefixListCatalog", schema = List(666), item_name = "AVDDesign.Ipv6PrefixListCatalogItem"))]
+pub struct Ipv6PrefixListCatalog<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.Ipv6PrefixListCatalogItemBase", schema = Dict(1603)))]
 pub struct Item<'a, Mode> {

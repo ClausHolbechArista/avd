@@ -1,6 +1,19 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.ZscalerEndpoints", schema = Dict(1801)))]
+pub struct ZscalerEndpoints<'a, Mode> {
+    #[data_view(schema = Dict(1798))]
+    pub primary: ::validated_data::RequiredValue<Primary<'a, Mode>, Mode>,
+    #[data_view(schema = Dict(1799))]
+    pub secondary: ::validated_data::Field<Secondary<'a, Mode>>,
+    #[data_view(schema = Dict(1799))]
+    pub tertiary: ::validated_data::Field<Tertiary<'a, Mode>>,
+    #[data_view(schema = Str(1699))]
+    pub cloud_name: ::validated_data::RequiredValue<&'a str, Mode>,
+    #[data_view(schema = Dict(1800))]
+    pub device_location: ::validated_data::RequiredValue<DeviceLocation<'a, Mode>, Mode>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.ZscalerEndpoints.Primary", schema = Dict(1798)))]
 pub struct Primary<'a, Mode> {

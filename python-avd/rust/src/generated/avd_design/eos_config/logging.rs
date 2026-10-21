@@ -1,6 +1,23 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Logging<'a, Mode> {
+    pub console: ::validated_data::Field<&'a str>,
+    pub monitor: ::validated_data::Field<&'a str>,
+    pub buffered: ::validated_data::Field<Buffered<'a, Mode>>,
+    pub repeat_messages: ::validated_data::Field<bool>,
+    pub trap: ::validated_data::Field<&'a str>,
+    pub synchronous: ::validated_data::Field<Synchronous<'a, Mode>>,
+    pub format: ::validated_data::Field<Format<'a, Mode>>,
+    pub facility: ::validated_data::Field<&'a str>,
+    pub source_interface: ::validated_data::Field<&'a str>,
+    pub local_interface: ::validated_data::Field<&'a str>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub policy: ::validated_data::Field<Policy<'a, Mode>>,
+    pub event: ::validated_data::Field<Event<'a, Mode>>,
+    pub level: ::validated_data::Field<Level<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.Logging.Buffered", schema = Dict(513)))]
 pub struct Buffered<'a, Mode> {

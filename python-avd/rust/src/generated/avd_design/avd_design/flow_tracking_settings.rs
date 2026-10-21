@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.FlowTrackingSettings", schema = Dict(1581)))]
+pub struct FlowTrackingSettings<'a, Mode> {
+    #[data_view(schema = Dict(1573))]
+    pub sampled: ::validated_data::Field<Sampled<'a, Mode>>,
+    #[data_view(schema = Dict(1574))]
+    pub hardware: ::validated_data::Field<Hardware<'a, Mode>>,
+    #[data_view(schema = Dict(1575))]
+    pub cloudvision_exporter: ::validated_data::Field<CloudvisionExporter<'a, Mode>>,
+    #[data_view(schema = List(653))]
+    pub trackers: ::validated_data::Field<Trackers<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.FlowTrackingSettings.Sampled", schema = Dict(1573)))]
 pub struct Sampled<'a, Mode> {

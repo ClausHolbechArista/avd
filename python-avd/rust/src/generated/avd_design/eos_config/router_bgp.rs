@@ -1,6 +1,51 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterBgp<'a, Mode> {
+    #[data_view(rename = "as")]
+    pub field_as: ::validated_data::Field<&'a str>,
+    pub as_notation: ::validated_data::Field<&'a str>,
+    pub router_id: ::validated_data::Field<&'a str>,
+    pub timers: ::validated_data::Field<Timers<'a, Mode>>,
+    pub distance: ::validated_data::Field<Distance<'a, Mode>>,
+    pub graceful_restart: ::validated_data::Field<GracefulRestart<'a, Mode>>,
+    pub graceful_restart_helper: ::validated_data::Field<GracefulRestartHelper<'a, Mode>>,
+    pub maximum_paths: ::validated_data::Field<MaximumPaths<'a, Mode>>,
+    pub route_distinguisher: ::validated_data::Field<RouteDistinguisher<'a, Mode>>,
+    pub updates: ::validated_data::Field<Updates<'a, Mode>>,
+    pub bgp_cluster_id: ::validated_data::Field<&'a str>,
+    pub bgp_defaults: ::validated_data::Field<BgpDefaults<'a, Mode>>,
+    pub bgp: ::validated_data::Field<Bgp<'a, Mode>>,
+    pub listen_ranges: ::validated_data::Field<ListenRanges<'a, Mode>>,
+    pub neighbor_default: ::validated_data::Field<NeighborDefault<'a, Mode>>,
+    pub peer_groups: ::validated_data::Field<PeerGroups<'a, Mode>>,
+    pub neighbors: ::validated_data::Field<Neighbors<'a, Mode>>,
+    pub neighbor_interfaces: ::validated_data::Field<NeighborInterfaces<'a, Mode>>,
+    pub aggregate_addresses: ::validated_data::Field<AggregateAddresses<'a, Mode>>,
+    pub redistribute: ::validated_data::Field<Redistribute<'a, Mode>>,
+    pub vlan_aware_bundles: ::validated_data::Field<VlanAwareBundles<'a, Mode>>,
+    pub vlans: ::validated_data::Field<Vlans<'a, Mode>>,
+    pub vpws: ::validated_data::Field<Vpws<'a, Mode>>,
+    pub address_family_evpn: ::validated_data::Field<AddressFamilyEvpn<'a, Mode>>,
+    pub address_family_rtc: ::validated_data::Field<AddressFamilyRtc<'a, Mode>>,
+    pub address_family_ipv4: ::validated_data::Field<AddressFamilyIpv4<'a, Mode>>,
+    pub address_family_ipv4_labeled_unicast: ::validated_data::Field<AddressFamilyIpv4LabeledUnicast<'a, Mode>>,
+    pub address_family_ipv4_multicast: ::validated_data::Field<AddressFamilyIpv4Multicast<'a, Mode>>,
+    pub address_family_ipv4_sr_te: ::validated_data::Field<AddressFamilyIpv4SrTe<'a, Mode>>,
+    pub address_family_ipv6: ::validated_data::Field<AddressFamilyIpv6<'a, Mode>>,
+    pub address_family_ipv6_multicast: ::validated_data::Field<AddressFamilyIpv6Multicast<'a, Mode>>,
+    pub address_family_ipv6_sr_te: ::validated_data::Field<AddressFamilyIpv6SrTe<'a, Mode>>,
+    pub address_family_link_state: ::validated_data::Field<AddressFamilyLinkState<'a, Mode>>,
+    pub address_family_flow_spec_ipv4: ::validated_data::Field<AddressFamilyFlowSpecIpv4<'a, Mode>>,
+    pub address_family_flow_spec_ipv6: ::validated_data::Field<AddressFamilyFlowSpecIpv6<'a, Mode>>,
+    pub address_family_path_selection: ::validated_data::Field<AddressFamilyPathSelection<'a, Mode>>,
+    pub address_family_vpn_ipv4: ::validated_data::Field<AddressFamilyVpnIpv4<'a, Mode>>,
+    pub address_family_vpn_ipv6: ::validated_data::Field<AddressFamilyVpnIpv6<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub session_trackers: ::validated_data::Field<SessionTrackers<'a, Mode>>,
+    pub eos_cli: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct Timers<'a, Mode> {

@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.DigitalTwin", schema = Dict(1523)))]
+pub struct DigitalTwin<'a, Mode> {
+    #[data_view(schema = Str(1377))]
+    pub environment: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Dict(1522))]
+    pub fabric: ::validated_data::RequiredValue<Fabric<'a, Mode>, Mode>,
+    #[data_view(schema = Bool(491))]
+    pub use_default_interfaces_of_digital_twin_platform: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.DigitalTwin.Fabric", schema = Dict(1522)))]
 pub struct Fabric<'a, Mode> {

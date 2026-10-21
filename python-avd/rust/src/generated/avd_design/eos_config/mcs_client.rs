@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct McsClient<'a, Mode> {
+    pub shutdown: ::validated_data::Field<bool>,
+    pub cvx_secondary: ::validated_data::Field<CvxSecondary<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct CvxSecondary<'a, Mode> {

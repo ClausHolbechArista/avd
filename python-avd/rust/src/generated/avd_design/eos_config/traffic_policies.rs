@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct TrafficPolicies<'a, Mode> {
+    pub cpu_traffic_policy: ::validated_data::Field<CpuTrafficPolicy<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub options: ::validated_data::Field<Options<'a, Mode>>,
+    pub field_sets: ::validated_data::Field<FieldSets<'a, Mode>>,
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct CpuTrafficPolicy<'a, Mode> {

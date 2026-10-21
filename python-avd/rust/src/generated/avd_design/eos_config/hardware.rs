@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Hardware<'a, Mode> {
+    pub access_list: ::validated_data::Field<AccessList<'a, Mode>>,
+    pub speed_groups: ::validated_data::Field<SpeedGroups<'a, Mode>>,
+    pub port_groups: ::validated_data::Field<PortGroups<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct AccessList<'a, Mode> {

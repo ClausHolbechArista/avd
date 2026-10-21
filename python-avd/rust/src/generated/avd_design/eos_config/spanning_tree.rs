@@ -1,6 +1,20 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct SpanningTree<'a, Mode> {
+    pub root_super: ::validated_data::Field<bool>,
+    pub edge_port: ::validated_data::Field<EdgePort<'a, Mode>>,
+    pub mode: ::validated_data::Field<&'a str>,
+    pub bpduguard_rate_limit: ::validated_data::Field<BpduguardRateLimit<'a, Mode>>,
+    pub rstp_priority: ::validated_data::Field<i64>,
+    pub mst: ::validated_data::Field<Mst<'a, Mode>>,
+    pub mst_instances: ::validated_data::Field<MstInstances<'a, Mode>>,
+    pub no_spanning_tree_vlan: ::validated_data::Field<&'a str>,
+    pub rapid_pvst_instances: ::validated_data::Field<RapidPvstInstances<'a, Mode>>,
+    pub port_id_allocation_port_channel_range: ::validated_data::Field<PortIdAllocationPortChannelRange<'a, Mode>>,
+    pub loop_guard_default: ::validated_data::Field<bool>,
+}
 
 #[::validated_data::data_view]
 pub struct EdgePort<'a, Mode> {

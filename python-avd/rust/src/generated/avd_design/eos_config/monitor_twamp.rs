@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorTwamp<'a, Mode> {
+    pub twamp_light: ::validated_data::Field<TwampLight<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct TwampLight<'a, Mode> {

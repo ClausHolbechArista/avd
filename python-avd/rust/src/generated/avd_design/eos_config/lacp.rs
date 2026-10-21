@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Lacp<'a, Mode> {
+    pub port_id: ::validated_data::Field<PortId<'a, Mode>>,
+    pub rate_limit: ::validated_data::Field<RateLimit<'a, Mode>>,
+    pub system_priority: ::validated_data::Field<i64>,
+}
 
 #[::validated_data::data_view]
 pub struct PortId<'a, Mode> {

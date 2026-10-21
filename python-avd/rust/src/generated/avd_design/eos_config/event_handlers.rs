@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EOSConfig.EventHandlers", schema = List(140), item_name = "EOSConfig.EventHandlersItem"))]
+pub struct EventHandlers<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "EOSConfig.EventHandlersItemBase", schema = Dict(372)))]
 pub struct Item<'a, Mode> {

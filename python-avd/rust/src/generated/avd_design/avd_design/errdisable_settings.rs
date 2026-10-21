@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.ErrdisableSettings", schema = Dict(1550)))]
+pub struct ErrdisableSettings<'a, Mode> {
+    #[data_view(schema = Int(570))]
+    pub recovery_interval: ::validated_data::Field<i64>,
+    #[data_view(schema = Dict(1549))]
+    pub causes: ::validated_data::Field<Causes<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.ErrdisableSettings.Causes", schema = Dict(1549)))]
 pub struct Causes<'a, Mode> {

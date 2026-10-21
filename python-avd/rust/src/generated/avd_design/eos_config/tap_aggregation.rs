@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct TapAggregation<'a, Mode> {
+    pub mode: ::validated_data::Field<Mode<'a, Mode>>,
+    pub encapsulation_dot1br_strip: ::validated_data::Field<bool>,
+    pub encapsulation_vn_tag_strip: ::validated_data::Field<bool>,
+    pub protocol_lldp_trap: ::validated_data::Field<bool>,
+    pub truncation_size: ::validated_data::Field<i64>,
+    pub mac: ::validated_data::Field<Mac<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Mode<'a, Mode> {

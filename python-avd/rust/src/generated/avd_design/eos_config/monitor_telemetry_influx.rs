@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorTelemetryInflux<'a, Mode> {
+    pub vrf: ::validated_data::Field<&'a str>,
+    pub destinations: ::validated_data::Field<Destinations<'a, Mode>>,
+    pub source_group_standard_disabled: ::validated_data::Field<bool>,
+    pub source_sockets: ::validated_data::Field<SourceSockets<'a, Mode>>,
+    pub tags: ::validated_data::Field<Tags<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Destinations<'a, Mode> (::validated_data::Field<destinations::Item<'a, Mode>>);

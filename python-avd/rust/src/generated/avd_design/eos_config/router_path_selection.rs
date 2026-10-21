@@ -1,6 +1,18 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterPathSelection<'a, Mode> {
+    pub peer_dynamic_source: ::validated_data::Field<&'a str>,
+    pub mtu_discovery_interval: ::validated_data::Field<i64>,
+    pub mtu_discovery_hosts: ::validated_data::Field<MtuDiscoveryHosts<'a, Mode>>,
+    pub path_groups: ::validated_data::Field<PathGroups<'a, Mode>>,
+    pub load_balance_policies: ::validated_data::Field<LoadBalancePolicies<'a, Mode>>,
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub tcp_mss_ceiling: ::validated_data::Field<TcpMssCeiling<'a, Mode>>,
+    pub interfaces: ::validated_data::Field<Interfaces<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct MtuDiscoveryHosts<'a, Mode> {

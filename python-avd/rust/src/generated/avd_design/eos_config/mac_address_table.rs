@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "EOSConfig.MacAddressTable", schema = Dict(535)))]
+pub struct MacAddressTable<'a, Mode> {
+    #[data_view(schema = Int(222))]
+    pub aging_time: ::validated_data::Field<i64>,
+    #[data_view(schema = Dict(533))]
+    pub notification_host_flap: ::validated_data::Field<NotificationHostFlap<'a, Mode>>,
+    #[data_view(schema = List(226))]
+    pub static_entries: ::validated_data::Field<StaticEntries<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.MacAddressTable.NotificationHostFlap", schema = Dict(533)))]
 pub struct NotificationHostFlap<'a, Mode> {

@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct IpDhcpSnooping<'a, Mode> {
+    pub enabled: ::validated_data::Field<bool>,
+    pub bridging: ::validated_data::Field<bool>,
+    pub information_option: ::validated_data::Field<InformationOption<'a, Mode>>,
+    pub vlan: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct InformationOption<'a, Mode> {

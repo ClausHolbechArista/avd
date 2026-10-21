@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesign.PtpProfiles", schema = List(769), item_name = "AVDDesign.PtpProfilesItem"))]
+pub struct PtpProfiles<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.PtpProfilesItemBase", schema = Dict(1734)))]
 pub struct Item<'a, Mode> {

@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct ManagementTechSupport<'a, Mode> {
+    pub policy_show_tech_support: ::validated_data::Field<PolicyShowTechSupport<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct PolicyShowTechSupport<'a, Mode> {

@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(profile), python(name = "AVDDesign.L2vlanProfiles", schema = List(668), item_name = "AVDDesign.L2vlanProfilesItem"))]
+pub struct L2vlanProfiles<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.L2vlanProfilesItemBase", schema = Dict(1613)))]
 pub struct Item<'a, Mode> {

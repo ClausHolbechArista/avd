@@ -1,6 +1,27 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterIsis<'a, Mode> {
+    pub instance: ::validated_data::RequiredValue<&'a str, Mode>,
+    pub net: ::validated_data::Field<&'a str>,
+    pub router_id: ::validated_data::Field<&'a str>,
+    pub is_hostname: ::validated_data::Field<&'a str>,
+    pub is_type: ::validated_data::Field<&'a str>,
+    pub log_adjacency_changes: ::validated_data::Field<bool>,
+    pub mpls_ldp_sync_default: ::validated_data::Field<bool>,
+    pub timers: ::validated_data::Field<Timers<'a, Mode>>,
+    pub set_overload_bit: ::validated_data::Field<SetOverloadBit<'a, Mode>>,
+    pub authentication: ::validated_data::Field<Authentication<'a, Mode>>,
+    pub advertise: ::validated_data::Field<Advertise<'a, Mode>>,
+    pub redistribute_routes: ::validated_data::Field<RedistributeRoutes<'a, Mode>>,
+    pub address_family_ipv4: ::validated_data::Field<AddressFamilyIpv4<'a, Mode>>,
+    pub address_family_ipv6: ::validated_data::Field<AddressFamilyIpv6<'a, Mode>>,
+    pub segment_routing_mpls: ::validated_data::Field<SegmentRoutingMpls<'a, Mode>>,
+    pub spf_interval: ::validated_data::Field<SpfInterval<'a, Mode>>,
+    pub graceful_restart: ::validated_data::Field<GracefulRestart<'a, Mode>>,
+    pub eos_cli: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct Timers<'a, Mode> {

@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct ClassMaps<'a, Mode> {
+    pub pbr: ::validated_data::Field<Pbr<'a, Mode>>,
+    pub qos: ::validated_data::Field<Qos<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Pbr<'a, Mode> (::validated_data::Field<pbr::Item<'a, Mode>>);

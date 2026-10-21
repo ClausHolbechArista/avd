@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct AaaAuthorization<'a, Mode> {
+    pub policy: ::validated_data::Field<Policy<'a, Mode>>,
+    pub exec: ::validated_data::Field<Exec<'a, Mode>>,
+    pub config_commands: ::validated_data::Field<bool>,
+    pub serial_console: ::validated_data::Field<bool>,
+    pub dynamic: ::validated_data::Field<Dynamic<'a, Mode>>,
+    pub commands: ::validated_data::Field<Commands<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.AaaAuthorization.Policy", schema = Dict(48)))]
 pub struct Policy<'a, Mode> {

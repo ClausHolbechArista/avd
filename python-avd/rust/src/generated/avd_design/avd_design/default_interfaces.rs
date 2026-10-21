@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(list, python(name = "AVDDesign.DefaultInterfaces", schema = List(609)))]
+pub struct DefaultInterfaces<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.DefaultInterfacesItem", schema = Dict(1462)))]
 pub struct Item<'a, Mode> {

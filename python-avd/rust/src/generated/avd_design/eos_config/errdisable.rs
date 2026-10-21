@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Errdisable<'a, Mode> {
+    pub detect: ::validated_data::Field<Detect<'a, Mode>>,
+    pub detect_cause: ::validated_data::Field<DetectCause<'a, Mode>>,
+    pub recovery: ::validated_data::Field<Recovery<'a, Mode>>,
+    pub recovery_cause: ::validated_data::Field<RecoveryCause<'a, Mode>>,
+    pub recovery_interval: ::validated_data::Field<i64>,
+}
 
 #[::validated_data::data_view]
 pub struct Detect<'a, Mode> {

@@ -1,6 +1,14 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterTrafficEngineering<'a, Mode> {
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    pub router_id: ::validated_data::Field<RouterId<'a, Mode>>,
+    pub segment_routing: ::validated_data::Field<SegmentRouting<'a, Mode>>,
+    pub twamp_light_sender_profile: ::validated_data::Field<&'a str>,
+    pub flex_algos: ::validated_data::Field<FlexAlgos<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct RouterId<'a, Mode> {

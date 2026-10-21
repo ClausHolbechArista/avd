@@ -22,7 +22,7 @@ from .constants import (
     SCHEMA_STORE_ARCHIVE_FILE,
     SCHEMA_STORE_GZ_FILE,
     SCHEMAS,
-    VALIDATED_DATA_PYI_FILE,
+    VALIDATED_DATA_PYI_DIR,
 )
 from .store import create_store
 from .validate_schema_fragments import validate_schema_fragments
@@ -126,15 +126,15 @@ def build_validated_data_models() -> None:
         SCHEMA_STORE_GZ_FILE,
         "eos_designs",
         AVD_DESIGN_RUST_MODELS_FILE,
-        VALIDATED_DATA_PYI_FILE,
+        VALIDATED_DATA_PYI_DIR,
         "AvdDesign",
         "AVDDesign",
         reused_schemas={"eos_cli_config_gen": ("EosConfig", "EOSConfig")},
     )
-    LOGGER.info("Running 'ruff' for generated validated-data typing stub: %s", VALIDATED_DATA_PYI_FILE)
-    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
-    subprocess.run(["ruff", "check", "--fix", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
-    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_FILE)], check=True)  # noqa: S603, S607
+    LOGGER.info("Running 'ruff' for generated validated-data typing package: %s", VALIDATED_DATA_PYI_DIR)
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "check", "--fix", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
 
 
 def build_schemas() -> None:

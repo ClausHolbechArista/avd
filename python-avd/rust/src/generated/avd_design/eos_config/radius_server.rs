@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RadiusServer<'a, Mode> {
+    pub attribute_32_include_in_access_req: ::validated_data::Field<Attribute32IncludeInAccessReq<'a, Mode>>,
+    pub deadtime: ::validated_data::Field<i64>,
+    pub dynamic_authorization: ::validated_data::Field<DynamicAuthorization<'a, Mode>>,
+    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    pub tls_ssl_profile: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view]
 pub struct Attribute32IncludeInAccessReq<'a, Mode> {

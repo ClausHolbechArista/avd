@@ -1,6 +1,12 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Cvx<'a, Mode> {
+    pub shutdown: ::validated_data::Field<bool>,
+    pub peer_hosts: ::validated_data::Field<PeerHosts<'a, Mode>>,
+    pub services: ::validated_data::Field<Services<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list)]
 pub struct PeerHosts<'a, Mode> (::validated_data::Field<&'a str>);

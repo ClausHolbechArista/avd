@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.Ipv4Acls", schema = List(658), item_name = "AVDDesign.Ipv4AclsItem"))]
+pub struct Ipv4Acls<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.Ipv4AclsItemBase", schema = Dict(1596)))]
 pub struct Item<'a, Mode> {

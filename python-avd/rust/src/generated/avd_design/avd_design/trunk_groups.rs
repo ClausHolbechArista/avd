@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.TrunkGroups", schema = Dict(1767)))]
+pub struct TrunkGroups<'a, Mode> {
+    #[data_view(schema = Dict(1764))]
+    pub mlag: ::validated_data::Field<Mlag<'a, Mode>>,
+    #[data_view(schema = Dict(1765))]
+    pub mlag_l3: ::validated_data::Field<MlagL3<'a, Mode>>,
+    #[data_view(schema = Dict(1766))]
+    pub uplink: ::validated_data::Field<Uplink<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.TrunkGroups.Mlag", schema = Dict(1764)))]
 pub struct Mlag<'a, Mode> {

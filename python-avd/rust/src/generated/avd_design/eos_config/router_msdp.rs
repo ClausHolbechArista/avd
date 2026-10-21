@@ -1,6 +1,16 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct RouterMsdp<'a, Mode> {
+    pub originator_id_local_interface: ::validated_data::Field<&'a str>,
+    pub rejected_limit: ::validated_data::Field<i64>,
+    pub forward_register_packets: ::validated_data::Field<bool>,
+    pub connection_retry_interval: ::validated_data::Field<i64>,
+    pub group_limits: ::validated_data::Field<GroupLimits<'a, Mode>>,
+    pub peers: ::validated_data::Field<Peers<'a, Mode>>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(source_prefix))]
 pub struct GroupLimits<'a, Mode> (::validated_data::Field<group_limits::Item<'a, Mode>>);

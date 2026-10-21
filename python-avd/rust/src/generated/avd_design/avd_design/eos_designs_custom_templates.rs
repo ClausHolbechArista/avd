@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(list, python(name = "AVDDesign.EosDesignsCustomTemplates", schema = List(650)))]
+pub struct EosDesignsCustomTemplates<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.EosDesignsCustomTemplatesItem", schema = Dict(1544)))]
 pub struct Item<'a, Mode> {

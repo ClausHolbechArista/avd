@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Qos<'a, Mode> {
+    pub map: ::validated_data::Field<Map<'a, Mode>>,
+    pub rewrite_dscp: ::validated_data::Field<bool>,
+    pub random_detect: ::validated_data::Field<RandomDetect<'a, Mode>>,
+    pub tx_queue: ::validated_data::Field<TxQueue<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Map<'a, Mode> {

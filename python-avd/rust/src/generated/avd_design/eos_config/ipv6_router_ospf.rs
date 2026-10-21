@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Ipv6RouterOspf<'a, Mode> {
+    pub process_ids: ::validated_data::Field<ProcessIds<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(id))]
 pub struct ProcessIds<'a, Mode> (::validated_data::Field<process_ids::Item<'a, Mode>>);

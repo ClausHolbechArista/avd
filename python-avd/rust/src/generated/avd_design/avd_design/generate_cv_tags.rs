@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.GenerateCvTags", schema = Dict(1590)))]
+pub struct GenerateCvTags<'a, Mode> {
+    #[data_view(schema = Bool(538))]
+    pub topology_hints: ::validated_data::Field<bool>,
+    #[data_view(schema = Bool(539))]
+    pub campus_fabric: ::validated_data::Field<bool>,
+    #[data_view(schema = List(655))]
+    pub interface_tags: ::validated_data::Field<InterfaceTags<'a, Mode>>,
+    #[data_view(schema = List(656))]
+    pub device_tags: ::validated_data::Field<DeviceTags<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.GenerateCvTags.InterfaceTags", schema = List(655), item_name = "AVDDesign.GenerateCvTags.InterfaceTagsItem"))]
 pub struct InterfaceTags<'a, Mode> (::validated_data::Field<interface_tags::Item<'a, Mode>>);

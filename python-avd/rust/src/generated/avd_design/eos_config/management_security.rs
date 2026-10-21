@@ -1,6 +1,15 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct ManagementSecurity<'a, Mode> {
+    pub auto_certificate: ::validated_data::Field<AutoCertificate<'a, Mode>>,
+    pub entropy_sources: ::validated_data::Field<EntropySources<'a, Mode>>,
+    pub signature_verification: ::validated_data::Field<SignatureVerification<'a, Mode>>,
+    pub password: ::validated_data::Field<Password<'a, Mode>>,
+    pub ssl_profiles: ::validated_data::Field<SslProfiles<'a, Mode>>,
+    pub shared_secret_profiles: ::validated_data::Field<SharedSecretProfiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct AutoCertificate<'a, Mode> {

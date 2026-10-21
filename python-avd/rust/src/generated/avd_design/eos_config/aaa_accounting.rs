@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct AaaAccounting<'a, Mode> {
+    pub exec: ::validated_data::Field<Exec<'a, Mode>>,
+    pub system: ::validated_data::Field<System<'a, Mode>>,
+    pub dot1x: ::validated_data::Field<Dot1x<'a, Mode>>,
+    pub commands: ::validated_data::Field<Commands<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.AaaAccounting.Exec", schema = Dict(32)))]
 pub struct Exec<'a, Mode> {

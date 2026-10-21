@@ -1,6 +1,29 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.BgpPeerGroups", schema = Dict(1405)))]
+pub struct BgpPeerGroups<'a, Mode> {
+    #[data_view(schema = Dict(1394))]
+    pub ipv4_underlay_peers: ::validated_data::Field<Ipv4UnderlayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1395))]
+    pub mlag_ipv4_vrfs_peer: ::validated_data::Field<MlagIpv4VrfsPeer<'a, Mode>>,
+    #[data_view(schema = Dict(1396))]
+    pub mlag_ipv4_underlay_peer: ::validated_data::Field<MlagIpv4UnderlayPeer<'a, Mode>>,
+    #[data_view(schema = Dict(1397))]
+    pub evpn_overlay_peers: ::validated_data::Field<EvpnOverlayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1398))]
+    pub evpn_overlay_core: ::validated_data::Field<EvpnOverlayCore<'a, Mode>>,
+    #[data_view(schema = Dict(1399))]
+    pub mpls_overlay_peers: ::validated_data::Field<MplsOverlayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1400))]
+    pub rr_overlay_peers: ::validated_data::Field<RrOverlayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1401))]
+    pub ipvpn_gateway_peers: ::validated_data::Field<IpvpnGatewayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1403))]
+    pub wan_overlay_peers: ::validated_data::Field<WanOverlayPeers<'a, Mode>>,
+    #[data_view(schema = Dict(1404))]
+    pub wan_rr_overlay_peers: ::validated_data::Field<WanRrOverlayPeers<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.BgpPeerGroups.Ipv4UnderlayPeers", schema = Dict(1394)))]
 pub struct Ipv4UnderlayPeers<'a, Mode> {

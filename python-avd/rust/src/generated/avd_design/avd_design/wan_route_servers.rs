@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesign.WanRouteServers", schema = List(793), item_name = "AVDDesign.WanRouteServersItem"))]
+pub struct WanRouteServers<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.WanRouteServersItemBase", schema = Dict(1788)))]
 pub struct Item<'a, Mode> {

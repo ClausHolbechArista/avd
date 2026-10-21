@@ -1,6 +1,25 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.AaaSettings", schema = Dict(1385)))]
+pub struct AaaSettings<'a, Mode> {
+    #[data_view(schema = Dict(1366))]
+    pub enable_password: ::validated_data::Field<EnablePassword<'a, Mode>>,
+    #[data_view(schema = Dict(1370))]
+    pub tacacs: ::validated_data::Field<Tacacs<'a, Mode>>,
+    #[data_view(schema = Dict(1374))]
+    pub radius: ::validated_data::Field<Radius<'a, Mode>>,
+    #[data_view(schema = Dict(1376))]
+    pub authentication: ::validated_data::Field<Authentication<'a, Mode>>,
+    #[data_view(schema = Dict(1378))]
+    pub authorization: ::validated_data::Field<Authorization<'a, Mode>>,
+    #[data_view(schema = Dict(1382))]
+    pub accounting: ::validated_data::Field<Accounting<'a, Mode>>,
+    #[data_view(schema = Dict(1383))]
+    pub root_login: ::validated_data::Field<RootLogin<'a, Mode>>,
+    #[data_view(schema = List(561))]
+    pub local_users: ::validated_data::Field<LocalUsers<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.AaaSettings.EnablePassword", schema = Dict(1366)))]
 pub struct EnablePassword<'a, Mode> {

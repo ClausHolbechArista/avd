@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(hostname), python(name = "AVDDesign.CvTopology", schema = List(601), item_name = "AVDDesign.CvTopologyItem"))]
+pub struct CvTopology<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.CvTopologyItemBase", schema = Dict(1460)))]
 pub struct Item<'a, Mode> {

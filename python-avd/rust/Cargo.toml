@@ -1,19 +1,20 @@
 [package]
 name = "pyavd-rust"
-version = "0.0.0"
-edition = "2024"
-license = "Apache-2.0"
-publish = false
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
 
 [lib]
 name = "_rust"
 crate-type = ["cdylib"]
 
 [dependencies]
-avdschema = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "609e7a638d53d63d9380df915ee603577b4b1d84", default-features = false, features = ["mmap"] }
-pyo3 = { version = "0.29.0", features = ["abi3-py310"] }
-serde = "1.0.229"
-serde_json = "1.0.150"
-validation = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "609e7a638d53d63d9380df915ee603577b4b1d84", default-features = false, features = ["archive", "regex-perf"] }
-validated-data = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "609e7a638d53d63d9380df915ee603577b4b1d84" }
-validated-data-py = { git = "https://github.com/ClausHolbechArista/pyavd-utils", rev = "609e7a638d53d63d9380df915ee603577b4b1d84" }
+avdschema = { workspace = true, features = ["mmap"] }
+pyo3 = { workspace = true, features = ["abi3-py310"] }
+serde.workspace = true
+serde_json.workspace = true
+validation = { workspace = true, features = ["archive", "regex-perf"] }
+validated-data.workspace = true
+validated-data-py.workspace = true

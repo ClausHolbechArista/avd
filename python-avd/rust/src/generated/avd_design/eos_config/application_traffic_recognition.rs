@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "EOSConfig.ApplicationTrafficRecognition", schema = Dict(77)))]
+pub struct ApplicationTrafficRecognition<'a, Mode> {
+    #[data_view(schema = List(38))]
+    pub categories: ::validated_data::Field<Categories<'a, Mode>>,
+    #[data_view(schema = Dict(70))]
+    pub field_sets: ::validated_data::Field<FieldSets<'a, Mode>>,
+    #[data_view(schema = Dict(73))]
+    pub applications: ::validated_data::Field<Applications<'a, Mode>>,
+    #[data_view(schema = List(51))]
+    pub application_profiles: ::validated_data::Field<ApplicationProfiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "EOSConfig.ApplicationTrafficRecognition.Categories", schema = List(38), item_name = "EOSConfig.ApplicationTrafficRecognition.CategoriesItem"))]
 pub struct Categories<'a, Mode> (::validated_data::Field<categories::Item<'a, Mode>>);

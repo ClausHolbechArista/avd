@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorConnectivity<'a, Mode> {
+    pub shutdown: ::validated_data::Field<bool>,
+    pub interval: ::validated_data::Field<i64>,
+    pub interface_sets: ::validated_data::Field<InterfaceSets<'a, Mode>>,
+    pub local_interfaces: ::validated_data::Field<&'a str>,
+    pub address_only: ::validated_data::Field<bool>,
+    pub hosts: ::validated_data::Field<Hosts<'a, Mode>>,
+    pub name_server_group: ::validated_data::Field<&'a str>,
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct InterfaceSets<'a, Mode> (::validated_data::Field<interface_sets::Item<'a, Mode>>);

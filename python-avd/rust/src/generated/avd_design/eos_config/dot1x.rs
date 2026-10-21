@@ -1,6 +1,22 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Dot1x<'a, Mode> {
+    pub system_auth_control: ::validated_data::Field<bool>,
+    pub protocol_lldp_bypass: ::validated_data::Field<bool>,
+    pub protocol_bpdu_bypass: ::validated_data::Field<bool>,
+    pub dynamic_authorization: ::validated_data::Field<bool>,
+    pub statistics_packets_dropped: ::validated_data::Field<bool>,
+    pub mac_based_authentication: ::validated_data::Field<MacBasedAuthentication<'a, Mode>>,
+    pub radius_av_pair_username_format: ::validated_data::Field<RadiusAvPairUsernameFormat<'a, Mode>>,
+    pub radius_av_pair: ::validated_data::Field<RadiusAvPair<'a, Mode>>,
+    pub aaa: ::validated_data::Field<Aaa<'a, Mode>>,
+    pub captive_portal: ::validated_data::Field<CaptivePortal<'a, Mode>>,
+    pub supplicant: ::validated_data::Field<Supplicant<'a, Mode>>,
+    pub vlan_assignment_groups: ::validated_data::Field<VlanAssignmentGroups<'a, Mode>>,
+    pub eapol: ::validated_data::Field<Eapol<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct MacBasedAuthentication<'a, Mode> {

@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Ntp<'a, Mode> {
+    pub local_interface: ::validated_data::Field<LocalInterface<'a, Mode>>,
+    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
+    pub vrf: ::validated_data::Field<&'a str>,
+    pub authenticate: ::validated_data::Field<bool>,
+    pub authenticate_servers_only: ::validated_data::Field<bool>,
+    pub authentication_keys: ::validated_data::Field<AuthenticationKeys<'a, Mode>>,
+    pub trusted_keys: ::validated_data::Field<&'a str>,
+    pub serve: ::validated_data::Field<Serve<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct LocalInterface<'a, Mode> {

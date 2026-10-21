@@ -1,6 +1,23 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.NtpSettings", schema = Dict(1713)))]
+pub struct NtpSettings<'a, Mode> {
+    #[data_view(schema = Str(1592))]
+    pub server_vrf: ::validated_data::Field<&'a str>,
+    #[data_view(schema = Bool(608))]
+    pub set_first_ntp_server_as_preferred: ::validated_data::Field<bool>,
+    #[data_view(schema = List(758))]
+    pub servers: ::validated_data::Field<Servers<'a, Mode>>,
+    #[data_view(schema = Bool(7))]
+    pub authenticate: ::validated_data::Field<bool>,
+    #[data_view(schema = Bool(7))]
+    pub authenticate_servers_only: ::validated_data::Field<bool>,
+    #[data_view(schema = List(759))]
+    pub authentication_keys: ::validated_data::Field<AuthenticationKeys<'a, Mode>>,
+    #[data_view(schema = Str(633))]
+    pub trusted_keys: ::validated_data::Field<&'a str>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.NtpSettings.Servers", schema = List(758), item_name = "AVDDesign.NtpSettings.ServersItem"))]
 pub struct Servers<'a, Mode> (::validated_data::Field<servers::Item<'a, Mode>>);

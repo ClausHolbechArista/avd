@@ -1,6 +1,11 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct MonitorServerRadius<'a, Mode> {
+    pub service_dot1x: ::validated_data::Field<bool>,
+    pub probe: ::validated_data::Field<Probe<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Probe<'a, Mode> {

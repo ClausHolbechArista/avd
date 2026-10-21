@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct AaaAuthentication<'a, Mode> {
+    pub login: ::validated_data::Field<Login<'a, Mode>>,
+    pub enable: ::validated_data::Field<Enable<'a, Mode>>,
+    pub dot1x: ::validated_data::Field<Dot1x<'a, Mode>>,
+    pub policies: ::validated_data::Field<Policies<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "EOSConfig.AaaAuthentication.Login", schema = Dict(41)))]
 pub struct Login<'a, Mode> {

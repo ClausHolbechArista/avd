@@ -1,6 +1,21 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.DnsSettings", schema = Dict(1526)))]
+pub struct DnsSettings<'a, Mode> {
+    #[data_view(schema = Str(1381))]
+    pub domain: ::validated_data::Field<&'a str>,
+    #[data_view(schema = List(90))]
+    pub domain_list: ::validated_data::Field<DomainList<'a, Mode>>,
+    #[data_view(schema = List(645))]
+    pub servers: ::validated_data::RequiredValue<Servers<'a, Mode>, Mode>,
+    #[data_view(schema = List(646))]
+    pub vrfs: ::validated_data::Field<Vrfs<'a, Mode>>,
+    #[data_view(schema = Bool(492))]
+    pub set_source_interfaces: ::validated_data::Field<bool>,
+    #[data_view(schema = List(173))]
+    pub ip_hosts: ::validated_data::Field<super::super::eos_config::IpHosts<'a, Mode>>,
+}
 
 #[::validated_data::data_view(list, python(name = "AVDDesign.DnsSettings.DomainList", schema = List(90)))]
 pub struct DomainList<'a, Mode> (::validated_data::Field<&'a str>);

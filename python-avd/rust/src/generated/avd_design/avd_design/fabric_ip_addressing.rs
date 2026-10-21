@@ -1,6 +1,17 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.FabricIpAddressing", schema = Dict(1569)))]
+pub struct FabricIpAddressing<'a, Mode> {
+    #[data_view(schema = Dict(1565))]
+    pub loopback: ::validated_data::Field<Loopback<'a, Mode>>,
+    #[data_view(schema = Dict(1566))]
+    pub mlag: ::validated_data::Field<Mlag<'a, Mode>>,
+    #[data_view(schema = Dict(1567))]
+    pub p2p_uplinks: ::validated_data::Field<P2pUplinks<'a, Mode>>,
+    #[data_view(schema = Dict(1568))]
+    pub wan_ha: ::validated_data::Field<WanHa<'a, Mode>>,
+}
 
 #[::validated_data::data_view(python(name = "AVDDesign.FabricIpAddressing.Loopback", schema = Dict(1565)))]
 pub struct Loopback<'a, Mode> {

@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(python(name = "AVDDesign.UnderlayOspfAuthentication", schema = Dict(1772)))]
+pub struct UnderlayOspfAuthentication<'a, Mode> {
+    #[data_view(schema = Bool(669))]
+    pub enabled: ::validated_data::RequiredValue<bool, Mode>,
+    #[data_view(schema = List(786))]
+    pub message_digest_keys: ::validated_data::RequiredValue<MessageDigestKeys<'a, Mode>, Mode>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(id), python(name = "AVDDesign.UnderlayOspfAuthentication.MessageDigestKeys", schema = List(786), item_name = "AVDDesign.UnderlayOspfAuthentication.MessageDigestKeysItem"))]
 pub struct MessageDigestKeys<'a, Mode> (::validated_data::Field<message_digest_keys::Item<'a, Mode>>);

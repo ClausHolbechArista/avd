@@ -1,6 +1,10 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct IpHardware<'a, Mode> {
+    pub fib: ::validated_data::Field<Fib<'a, Mode>>,
+}
 
 #[::validated_data::data_view]
 pub struct Fib<'a, Mode> {

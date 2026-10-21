@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view(indexed_list, primary_key(name), python(name = "AVDDesign.Devices", schema = List(644), item_name = "AVDDesign.DevicesItem"))]
+pub struct Devices<'a, Mode> (::validated_data::Field<Item<'a, Mode>>);
 
 #[::validated_data::data_view(python(name = "AVDDesign.DevicesItemBase", schema = Dict(1521)))]
 pub struct Item<'a, Mode> {

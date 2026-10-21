@@ -1,6 +1,13 @@
 // Copyright (c) 2026 Arista Networks, Inc.
 // Generated from the AVD schema. Do not edit by hand.
 
+#[::validated_data::data_view]
+pub struct Cfm<'a, Mode> {
+    pub continuity_check_loc_state_action_disable_interface_routing: ::validated_data::Field<bool>,
+    pub domains: ::validated_data::Field<Domains<'a, Mode>>,
+    pub measurement_loss: ::validated_data::Field<MeasurementLoss<'a, Mode>>,
+    pub profiles: ::validated_data::Field<Profiles<'a, Mode>>,
+}
 
 #[::validated_data::data_view(indexed_list, primary_key(name))]
 pub struct Domains<'a, Mode> (::validated_data::Field<domains::Item<'a, Mode>>);
