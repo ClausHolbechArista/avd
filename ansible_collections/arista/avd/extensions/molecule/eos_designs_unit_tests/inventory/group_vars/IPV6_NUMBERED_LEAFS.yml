@@ -2,6 +2,11 @@
 # Common AVD group variables
 fabric_name: EOS_DESIGNS_UNIT_TESTS
 
+# Fix known bugs where the fix was introduced after 6.0.
+avd_design_future:
+  fix_match_ipv6_prefix_list_on_mlag_route_map: true
+  fix_mlag_ibgp_peering_ipv6_pool: true
+
 # Define underlay and overlay routing protocol to be used
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
@@ -31,7 +36,6 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     name: MLAG-IPv6-UNDERLAY-PEER
     password: GNtuK+/vTwZwSZiwj1FK/Q==
-
 # P2P interfaces MTU, includes VLANs 4093 and 4094 that are over peer-link
 # If you're running vEOS-lab or cEOS, you should use MTU of 1500 instead as shown in the following line
 # p2p_uplinks_mtu: 9214
@@ -39,16 +43,15 @@ p2p_uplinks_mtu: 1500
 
 # Set default uplink, downlink, and MLAG interfaces based on node type
 default_interfaces:
-  - types: [ spine ]
-    platforms: [ default ]
-    uplink_interfaces: [ Ethernet1-2 ]
-    downlink_interfaces: [ Ethernet1-8 ]
-  - types: [ l3leaf ]
-    platforms: [ default ]
-    uplink_interfaces: [ Ethernet1-2 ]
-    mlag_interfaces: [ Ethernet11-12 ]
-    downlink_interfaces: [ Ethernet8 ]
-
+  - types: [spine]
+    platforms: [default]
+    uplink_interfaces: [Ethernet1-2]
+    downlink_interfaces: [Ethernet1-8]
+  - types: [l3leaf]
+    platforms: [default]
+    uplink_interfaces: [Ethernet1-2]
+    mlag_interfaces: [Ethernet11-12]
+    downlink_interfaces: [Ethernet8]
 underlay_ipv6: true
 underlay_ipv6_numbered: true
 
@@ -68,7 +71,6 @@ ntp_settings:
   server_vrf: use_mgmt_interface_vrf
   servers:
     - name: time.google.com
-
 type: l3leaf
 
 # L3 Leaf switch group
@@ -83,7 +85,7 @@ l3leaf:
     # Pool of IPv6 addresses to be used as Virtual Tunnel EndPoint (VXLAN origin and destination IPs)
     vtep_loopback_ipv6_pool: 2001:DB8:5::/48
     # Ansible hostname of the devices used to establish neighborship (IP assignments and BGP peering)
-    uplink_switches: ['IPV6_NUMBERED_SPINE1', 'IPV6_NUMBERED_SPINE2']
+    uplink_switches: ['ipv6-numbered-spine1', 'ipv6-numbered-spine2']
     # Pool of IPv6 addresses to be used in P2P links
     uplink_ipv6_pool: 2001:DB8:2::/48
     # descitpion
@@ -106,7 +108,7 @@ l3leaf:
       bgp_as: 65101
       nodes:
         # Definition of hostnames under the node_group
-        - name: IPV6_NUMBERED_LEAF1a
+        - name: ipv6-numbered-leaf1a
           id: 1
           mgmt_ip: 172.16.1.31/24
           # Definition of the port to be used in the uplink device facing this device.
@@ -114,7 +116,7 @@ l3leaf:
           uplink_switch_interfaces:
             - Ethernet1
             - Ethernet1
-        - name: IPV6_NUMBERED_LEAF1b
+        - name: ipv6-numbered-leaf1b
           id: 2
           mgmt_ip: 172.16.1.32/24
           uplink_switch_interfaces:
@@ -125,7 +127,7 @@ l3leaf:
       bgp_as: 65101
       nodes:
         # Definition of hostnames under the node_group
-        - name: IPV6_NUMBERED_LEAF2a
+        - name: ipv6-numbered-leaf2a
           id: 3
           mgmt_ip: 172.16.1.33/24
           # Definition of the port to be used in the uplink device facing this device.
@@ -149,7 +151,7 @@ tenants:
           # Loopback interface number
           loopback: 10
           # Loopback ip range, a unique ip is derived from this ranged and assigned
-          # to each l3 leaf based on it's unique id.
+          # to each l3 leaf based on its unique id.
           loopback_ip_range: 10.255.10.0/27
         svis:
           # SVI definitions.
@@ -193,3 +195,22 @@ tenants:
             name: VRF11_VLAN22
             enabled: true
             ipv6_address_virtuals: [2001:DB8:33::1/48]
+      - name: VRF13
+        vrf_vni: 13
+        # Test that vrf.mlag_ibgp_peering_ipv4_pool is ignored for the MLAG iBGP peering
+        mlag_ibgp_peering_ipv4_pool: 172.31.13.0/24
+        svis:
+          - id: 41
+            name: VRF13_VLAN41
+            enabled: true
+            ipv6_address_virtuals: [2001:DB8:41::1/48]
+      - name: VRF14
+        vrf_vni: 14
+        # Test that vrf.mlag_ibgp_peering_ipv6_pool is used when both pools are set
+        mlag_ibgp_peering_ipv4_pool: 172.31.14.0/24
+        mlag_ibgp_peering_ipv6_pool: 2001:DB8:14::/48
+        svis:
+          - id: 51
+            name: VRF14_VLAN51
+            enabled: true
+            ipv6_address_virtuals: [2001:DB8:51::1/48]

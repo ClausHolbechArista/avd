@@ -28,6 +28,16 @@ cv_settings:
   cvaas:
     enabled: true
 
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
+  servers:
+    - name: 192.168.200.5
+      source_address: use_mgmt_interface_ipv4
+
+dns_settings:
+  servers:
+    - ip_address: 192.168.200.5
+
 flow_tracking_settings:
   # Testing export_to_cloudvision for sampled
   cloudvision_exporter:

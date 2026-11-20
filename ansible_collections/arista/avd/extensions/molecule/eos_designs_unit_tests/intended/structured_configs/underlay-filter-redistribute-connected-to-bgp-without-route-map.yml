@@ -24,6 +24,10 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 10.10.10.0/24
+  - sequence: 20
+    action: permit 10.10.30.0/24
+  - sequence: 30
+    action: permit 10.10.20.0/24
 route_maps:
 - name: RM-EVPN-EXPORT-VRF-DEFAULT
   sequence_numbers:
@@ -31,14 +35,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-SVI-VRF-DEFAULT
-- name: RM-BGP-UNDERLAY-PEERS-OUT
-  sequence_numbers:
-  - sequence: 10
-    type: deny
-    match:
-    - ip address prefix-list PL-SVI-VRF-DEFAULT
-  - sequence: 20
-    type: permit
 router_bfd:
   multihop:
     interval: 300
@@ -54,44 +50,40 @@ router_bgp:
   bgp:
     default:
       ipv4_unicast: false
-  peer_groups:
-  - name: IPv4-UNDERLAY-PEERS
-    metadata:
-      type: ipv4
-    send_community: all
-    maximum_routes: 12000
-    route_map_out: RM-BGP-UNDERLAY-PEERS-OUT
-  - name: EVPN-OVERLAY-PEERS
-    metadata:
-      type: evpn
-    update_source: Loopback0
-    bfd: true
-    ebgp_multihop: 3
-    send_community: all
-    maximum_routes: 0
   redistribute:
     connected:
       enabled: true
   vlans:
   - id: 111
     metadata:
-      tenant: TEST
+      tenants:
+      - TEST
     rd: 10.10.0.3:10111
     route_targets:
       both:
       - 10111:10111
     redistribute_routes:
     - learned
-  address_family_evpn:
-    peer_groups:
-    - name: EVPN-OVERLAY-PEERS
-      activate: true
-  address_family_ipv4:
-    peer_groups:
-    - name: IPv4-UNDERLAY-PEERS
-      activate: true
-    - name: EVPN-OVERLAY-PEERS
-      activate: false
+  - id: 112
+    metadata:
+      tenants:
+      - TEST
+    rd: 10.10.0.3:10112
+    route_targets:
+      both:
+      - 10112:10112
+    redistribute_routes:
+    - learned
+  - id: 113
+    metadata:
+      tenants:
+      - TEST
+    rd: 10.10.0.3:10113
+    route_targets:
+      both:
+      - 10113:10113
+    redistribute_routes:
+    - learned
   vrfs:
   - name: default
     rd: 10.10.0.3:111
@@ -113,7 +105,26 @@ vlan_interfaces:
   shutdown: true
   ip_address: 10.10.10.111/24
   metadata:
-    tenant: TEST
+    tenants:
+    - TEST
+    tags:
+    - fabric
+- name: Vlan112
+  description: svi_with_default_vrf_2
+  shutdown: true
+  ip_address: 10.10.30.111/24
+  metadata:
+    tenants:
+    - TEST
+    tags:
+    - fabric
+- name: Vlan113
+  description: svi_with_default_vrf_3
+  shutdown: true
+  ip_address: 10.10.20.111/24
+  metadata:
+    tenants:
+    - TEST
     tags:
     - fabric
 vlan_internal_order:
@@ -125,7 +136,18 @@ vlans:
 - id: 111
   name: svi_with_default_vrf
   metadata:
-    tenant: TEST
+    tenants:
+    - TEST
+- id: 112
+  name: svi_with_default_vrf_2
+  metadata:
+    tenants:
+    - TEST
+- id: 113
+  name: svi_with_default_vrf_3
+  metadata:
+    tenants:
+    - TEST
 vrfs:
 - name: MGMT
   ip_routing: false
@@ -138,6 +160,10 @@ vxlan_interface:
       vlans:
       - id: 111
         vni: 10111
+      - id: 112
+        vni: 10112
+      - id: 113
+        vni: 10113
       vrfs:
       - name: default
         vni: 111

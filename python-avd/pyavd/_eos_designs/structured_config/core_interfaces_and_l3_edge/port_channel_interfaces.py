@@ -7,7 +7,8 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import default, get
+from pyavd._utils.default import default
+from pyavd._utils.get import get
 from pyavd.api.interface_descriptions import InterfaceDescriptionData
 
 if TYPE_CHECKING:
@@ -39,6 +40,8 @@ class PortChannelInterfacesMixin(Protocol):
                     p2p_link.port_channel_structured_config,
                     list_merge=self.custom_structured_configs.list_merge_strategy,
                 )
+
+            self.structured_config_utils.parent_interfaces_tracker.register_port_channel_parent(port_channel_interface.name)
 
             self.structured_config.port_channel_interfaces.append(port_channel_interface)
 

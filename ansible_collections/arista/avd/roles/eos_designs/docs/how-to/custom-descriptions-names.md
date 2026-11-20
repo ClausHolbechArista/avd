@@ -13,7 +13,7 @@ title: Custom descriptions and names
 The `eos_designs` role provides the capability to customize various field descriptions and names leveraging the following methods:
 
 - [AVD string formatter syntax](#avd-string-formatter-syntax) (Recommended).
-- [Node type customization](../input-variables.md#node-type-customization) with custom Jinja2 template or Python class.
+- [Node type customization](../data-models.md#node-type-customization) with custom Jinja2 template or Python class.
 
 ## AVD string formatter syntax
 
@@ -22,12 +22,15 @@ It provides extra protection from malicious format strings and adds support for 
 
 The following syntax is supported: `"{" [field_name] ["?"] ["<" prefix] [">" suffix] ["!" conversion] [":" format_spec] "}"`:
 
-- `[field_name]`: Template field or variable, as per `eos_designs` input variables documentation.
+- `[field_name]`: Template field or variable, as per AVD Design data model documentation.
 - `["?"]`: The literal `?` signals that the field is optional and will not be printed if the value is missing or None.
 - `["<" prefix]`: Prefix string including spaces which will be inserted before the field value. Most useful in combination with `?`. Prefix should not contain `"<"`, `">"`, `"!"` or `":"`.
 - `[">" suffix]`: The suffix string including spaces which will be inserted after the field value. Most useful in combination with `?`. The suffix should not contain `"<"`, `">"`, `"!"` or `":"`.
 - `["!" conversion]`: Convert string to supported methods. Note the regular Python conversions "!r", "!s", "!a" have been removed.
   - `"!u"`: convert all characters to upper case. Symbols and numbers are ignored.
+  - `"!l"`: convert all characters to lower case. Symbols and numbers are ignored.
+  - `"!t"`: convert a string to title case. e.g server to Server.
+  - `"!c"`: convert network interfaces to *compact* names. e.g. Port-channel20 to Po20. The interface types ethernet, port-channel, loopback, tunnel, vlan are supported for this conversion. For the other strings, returns the same string.
 - `[":" format_spec]`: Format specifications are used within replacement fields contained within a format string to define how individual values are presented. Please consult [Format Specification Mini-Language](https://docs.python.org/3/library/string.html#grammar-token-format-spec-format_spec) for usage details.
 
 Example:
@@ -56,8 +59,8 @@ results in: `SERVERS_server2`
 
 ## Default description or name values
 
-Below is a complete list of input variables and default values to facilitate customizing the description and names of values.
-Please consult the `eos_designs` input variables documentation to obtain the available template field(s) (`[field_name]`).
+Below is a complete list of data models and default values to facilitate customizing the description and names of values.
+Please consult the AVD Design data model documentation to obtain the available template field(s) (`[field_name]`).
 
 ```yaml
 # Loopback interfaces description
@@ -96,6 +99,7 @@ mlag_peer_l3_vrf_vlan_name: "MLAG_L3_VRF_{vrf}"
 
 # MLAG BGP peer description
 mlag_bgp_peer_description: "{mlag_peer}_{peer_interface}"
+mlag_bgp_peer_group_description: "{mlag_peer}"
 
 # Overlay BGP peer description
 overlay_bgp_peer_description: "{peer}{peer_interface?<_}"

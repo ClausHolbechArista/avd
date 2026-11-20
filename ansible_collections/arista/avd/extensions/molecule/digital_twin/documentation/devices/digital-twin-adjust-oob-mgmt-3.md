@@ -30,9 +30,9 @@
 
 #### Management API HTTP Summary
 
-| HTTP | HTTPS | UNIX-Socket | Default Services |
-| ---- | ----- | ----------- | ---------------- |
-| False | True | - | - |
+| HTTP | HTTPS | UNIX-Socket | Default Services | Session Timeout |
+| ---- | ----- | ----------- | ---------------- | --------------- |
+| False | True | - | - | 1440 minutes |
 
 #### Management API VRF Access
 
@@ -135,7 +135,7 @@ service routing protocols model multi-agent
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| INBAND_MGMT | - |
+| INBAND_MGMT | False |
 | MGMT | False |
 
 #### IP Routing Device Configuration
@@ -151,8 +151,8 @@ no ip routing vrf MGMT
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| INBAND_MGMT | false |
-| MGMT | false |
+| INBAND_MGMT | False |
+| MGMT | False |
 
 ## Multicast
 

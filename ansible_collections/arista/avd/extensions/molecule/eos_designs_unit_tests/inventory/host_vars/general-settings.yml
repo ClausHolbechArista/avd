@@ -1,0 +1,36 @@
+---
+# Testing general_settings
+
+type: l2leaf
+l2leaf:
+  defaults:
+  nodes:
+    - name: general-settings
+      mgmt_ip: 192.168.0.2/24
+
+general_settings:
+  # Test ARP configuration
+  arp:
+    # Test persistent ARP with refresh_delay
+    persistent:
+      enabled: true
+      refresh_delay: 1200
+
+    # Test aging timeout
+    aging:
+      timeout_default: 1500
+
+  # Test IP ICMP redirect
+  ip_icmp_redirect: false
+  suspended_vlans:
+    - id: 1001
+      name: unused
+    - id: 101
+      name: suspend
+    # Test with no name
+    - id: 10
+
+  # Test MTU exceed action drop
+  ip_software_forwarding_exceed_action_drop:
+    enabled: true
+    mtu: 9000

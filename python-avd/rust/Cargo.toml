@@ -1,0 +1,18 @@
+[package]
+name = "pyavd-rust"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+name = "_rust"
+crate-type = ["cdylib"]
+
+[dependencies]
+avd-data = { workspace = true, features = ["python"] }
+pyo3 = { workspace = true, features = ["abi3-py310"] }
+serde.workspace = true
+serde_json.workspace = true
+data-views-py.workspace = true

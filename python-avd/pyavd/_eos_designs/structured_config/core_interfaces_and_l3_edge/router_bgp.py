@@ -8,7 +8,8 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import Undefined, get_ip_from_ip_prefix
+from pyavd._utils.get_ip_from_ip_prefix import get_ip_from_ip_prefix
+from pyavd._utils.undefined import Undefined
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol
@@ -33,6 +34,9 @@ class RouterBgpMixin(Protocol):
             if p2p_link_data["bgp_as"] is None or p2p_link_data["peer_bgp_as"] is None:
                 msg = f"{self.data_model}.p2p_links.[].as or {self.data_model}.p2p_links_profiles.[].as"
                 raise AristaAvdInvalidInputsError(msg)
+
+            if p2p_link.include_in_underlay_protocol:
+                self.structured_config_utils.set_once_peer_group_ipv4_underlay_peers()
 
             # RFC5549
             # When routing protocol is not set, we just add the neighbor_interface and continue.

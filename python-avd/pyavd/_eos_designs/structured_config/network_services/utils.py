@@ -9,7 +9,8 @@ from re import fullmatch as re_fullmatch
 from typing import TYPE_CHECKING, Protocol, cast
 
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
-from pyavd._utils import default, get_ip_from_ip_prefix
+from pyavd._utils.default import default
+from pyavd._utils.get_ip_from_ip_prefix import get_ip_from_ip_prefix
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
@@ -52,7 +53,7 @@ class UtilsMixin(Protocol):
     @cached_property
     def _vrf_default_ipv4_subnets(self: AvdStructuredConfigNetworkServicesProtocol) -> list[str]:
         """Return list of ipv4 subnets in VRF "default"."""
-        subnets = set()
+        subnets: dict[str, None] = {}
         for tenant in self.shared_utils.filtered_tenants:
             if "default" not in tenant.vrfs:
                 continue
@@ -62,9 +63,9 @@ class UtilsMixin(Protocol):
                 if ip_address is None:
                     continue
 
-                subnets.add(str(ipaddress.ip_network(ip_address, strict=False)))
+                subnets.setdefault(str(ipaddress.ip_network(ip_address, strict=False)))
                 for ip_address_secondary in svi.ip_address_secondaries:
-                    subnets.add(str(ipaddress.ip_network(ip_address_secondary, strict=False)))
+                    subnets.setdefault(str(ipaddress.ip_network(ip_address_secondary, strict=False)))
 
         return list(subnets)
 
@@ -97,7 +98,7 @@ class UtilsMixin(Protocol):
                 continue
 
             for static_route in static_routes:
-                vrf_default_ipv4_static_routes.add(static_route.prefix or static_route.destination_address_prefix)
+                vrf_default_ipv4_static_routes.add(static_route.prefix)
 
             vrf_default_redistribute_static = default(tenant.vrfs["default"].redistribute_static, vrf_default_redistribute_static)
 
@@ -115,6 +116,65 @@ class UtilsMixin(Protocol):
             "redistribute_in_underlay": redistribute_in_underlay,
             "redistribute_in_overlay": redistribute_in_overlay,
         }
+
+    def get_ipv4_mlag_peering_ip(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
+    ) -> str:
+        """Return the IPv4 address/prefix for the MLAG iBGP peering SVI for the given VRF."""
+        if vrf.mlag_ibgp_peering_ipv4_pool:
+            if self.shared_utils.mlag_role == "primary":
+                return (
+                    f"{self.shared_utils.ip_addressing.mlag_ibgp_peering_ip_primary(vrf.mlag_ibgp_peering_ipv4_pool)}/"
+                    f"{self.inputs.fabric_ip_addressing.mlag.ipv4_prefix_length}"
+                )
+            return (
+                f"{self.shared_utils.ip_addressing.mlag_ibgp_peering_ip_secondary(vrf.mlag_ibgp_peering_ipv4_pool)}/"
+                f"{self.inputs.fabric_ip_addressing.mlag.ipv4_prefix_length}"
+            )
+        if self.shared_utils.mlag_peer_l3_vlan is None and self.shared_utils.node_config.mlag_peer_address_family == "ipv6":
+            msg = (
+                f"Invalid combination of inputs. Unable to configure the IPv4 MLAG iBGP peering for VRF '{vrf.name}' "
+                "since the MLAG peer VLAN is also used for L3 peering ('mlag_peer_l3_vlan' is 0 or the same as 'mlag_peer_vlan') "
+                "with 'mlag_peer_address_family: ipv6'. Set 'mlag_peer_address_family: ipv4' or use a separate 'mlag_peer_l3_vlan'."
+            )
+            raise AristaAvdInvalidInputsError(msg)
+        return f"{self.shared_utils.mlag_ibgp_ip}/{self.inputs.fabric_ip_addressing.mlag.ipv4_prefix_length}"
+
+    def get_ipv6_mlag_peering_ip(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
+    ) -> str:
+        """Return the IPv6 address/prefix for the MLAG iBGP peering SVI for the given VRF."""
+        if vrf.mlag_ibgp_peering_ipv6_pool:
+            if self.shared_utils.mlag_role == "primary":
+                return (
+                    f"{self.shared_utils.ip_addressing.mlag_ibgp_peering_ipv6_primary(vrf.mlag_ibgp_peering_ipv6_pool)}/"
+                    f"{self.inputs.fabric_ip_addressing.mlag.ipv6_prefix_length}"
+                )
+            return (
+                f"{self.shared_utils.ip_addressing.mlag_ibgp_peering_ipv6_secondary(vrf.mlag_ibgp_peering_ipv6_pool)}/"
+                f"{self.inputs.fabric_ip_addressing.mlag.ipv6_prefix_length}"
+            )
+        if self.shared_utils.mlag_peer_l3_vlan is None and self.shared_utils.node_config.mlag_peer_address_family == "ipv4":
+            msg = (
+                f"Invalid combination of inputs. Unable to configure the IPv6 MLAG iBGP peering for VRF '{vrf.name}' "
+                "since the MLAG peer VLAN is also used for L3 peering ('mlag_peer_l3_vlan' is 0 or the same as 'mlag_peer_vlan') "
+                "with 'mlag_peer_address_family: ipv4'. Set 'mlag_peer_address_family: ipv6' or use a separate 'mlag_peer_l3_vlan'."
+            )
+            raise AristaAvdInvalidInputsError(msg)
+        return f"{self.shared_utils.mlag_ibgp_ip}/{self.inputs.fabric_ip_addressing.mlag.ipv6_prefix_length}"
+
+    def get_ipv6_mlag_peer_ibgp_peering_ip(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
+    ) -> str:
+        """Return the IPv6 address of the MLAG peer's iBGP peering SVI for the given VRF."""
+        if vrf.mlag_ibgp_peering_ipv6_pool:
+            if self.shared_utils.mlag_role == "primary":
+                return self.shared_utils.ip_addressing.mlag_ibgp_peering_ipv6_secondary(vrf.mlag_ibgp_peering_ipv6_pool)
+            return self.shared_utils.ip_addressing.mlag_ibgp_peering_ipv6_primary(vrf.mlag_ibgp_peering_ipv6_pool)
+        return self.shared_utils.mlag_peer_ibgp_ip
 
     def _mlag_ibgp_peering_enabled(
         self: AvdStructuredConfigNetworkServicesProtocol,
@@ -395,6 +455,21 @@ class UtilsMixin(Protocol):
 
         return f"{admin_subfield}:{bundle_number}"
 
+    def get_protocol_vrf_router_id(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
+        tenant: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem,
+        router_id: str,
+    ) -> str | None:
+        """
+        Determine the router ID for a protocol for a given VRF based on its configuration.
+
+        In particular, if use_router_general_for_router_id is True and the value of router_id is "main_router_id", return None.
+        """
+        if router_id == "main_router_id" and self.inputs.use_router_general_for_router_id:
+            return None
+        return self.get_vrf_router_id(vrf, tenant, router_id)
+
     def get_vrf_router_id(
         self: AvdStructuredConfigNetworkServicesProtocol,
         vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
@@ -404,10 +479,12 @@ class UtilsMixin(Protocol):
         """
         Determine the router ID for a given VRF based on its configuration.
 
+        It does not account for the configuration of use_router_general_for_router_id.
+
         Args:
             vrf: The VRF object containing OSPF/BGP and vtep_diagnostic details.
             tenant: The Tenant to which the VRF belongs.
-            router_id: The router ID type specified for the VRF (e.g., "vtep_diagnostic", "main_router_id", "none", or an IPv4 address).
+            router_id: The router ID type specified for the VRF (e.g., "diagnostic_loopback", "main_router_id", "none", or an IPv4 address).
 
         Returns:
             The resolved router ID as a string, or None if the router ID is not applicable.
@@ -415,23 +492,21 @@ class UtilsMixin(Protocol):
         Raises:
             AristaAvdInvalidInputsError: If required configuration for "vtep_diagnostic" router ID is missing.
         """
-        # Handle "vtep_diagnostic" router ID case
-        if router_id == "diagnostic_loopback":
-            # Validate required configuration
-            if (interface_data := self._get_vtep_diagnostic_loopback_for_vrf(vrf, tenant)) is None or not interface_data.ip_address:
-                msg = (
-                    f"Invalid configuration on VRF '{vrf.name}' in Tenant '{tenant.name}'. "
-                    "'vtep_diagnostic.loopback' along with either 'vtep_diagnostic.loopback_ip_pools' or 'vtep_diagnostic.loopback_ip_range' must be defined "
-                    "when 'router_id' is set to 'diagnostic_loopback' on the VRF."
-                )
-                raise AristaAvdInvalidInputsError(msg)
-            # Resolve router ID from loopback interface
-            return get_ip_from_ip_prefix(interface_data.ip_address)
-        if router_id == "main_router_id":
-            return self.shared_utils.router_id if not self.inputs.use_router_general_for_router_id else None
-        # Handle "none" router ID
-        if router_id == "none":
-            return None
-
-        # Default to the specified router ID
-        return router_id
+        match router_id:
+            case "diagnostic_loopback":
+                # Validate required configuration
+                if (interface_data := self._get_vtep_diagnostic_loopback_for_vrf(vrf, tenant)) is None or not interface_data.ip_address:
+                    msg = (
+                        f"Invalid configuration on VRF '{vrf.name}' in Tenant '{tenant.name}'. "
+                        "'vtep_diagnostic.loopback' along with either 'vtep_diagnostic.loopback_ip_pools' or "
+                        "'vtep_diagnostic.loopback_ip_range' must be defined when 'router_id' is set to 'diagnostic_loopback' on the VRF."
+                    )
+                    raise AristaAvdInvalidInputsError(msg)
+                # Resolve router ID from loopback interface
+                return get_ip_from_ip_prefix(interface_data.ip_address)
+            case "main_router_id":
+                return self.shared_utils.router_id
+            case "none":
+                return None
+            case _:
+                return router_id

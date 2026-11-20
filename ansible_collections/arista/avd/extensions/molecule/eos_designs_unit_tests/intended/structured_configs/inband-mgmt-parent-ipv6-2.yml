@@ -151,14 +151,29 @@ ethernet_interfaces:
     enabled: true
     mode: access
     access_vlan: 107
+- name: Ethernet28
+  description: INBAND-MGMT-IPV6-WITH-ADDRESS_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 28
+    mode: active
+  metadata:
+    peer: inband-mgmt-ipv6-with-address
+    peer_interface: Ethernet2
+    peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 4092
 hostname: inband-mgmt-parent-ipv6-2
 ip_igmp_snooping:
   globally_enabled: true
-ip_name_servers:
-- ip_address: 1.1.1.1
-  vrf: MGMT
-- ip_address: 8.8.8.8
-  vrf: MGMT
+ip_name_server:
+  vrfs:
+  - name: MGMT
+    servers:
+    - ip_address: 1.1.1.1
+    - ip_address: 8.8.8.8
 ip_routing: true
 ip_virtual_router_mac_address: 00:1c:73:00:dc:01
 loopback_interfaces:
@@ -228,6 +243,17 @@ port_channel_interfaces:
     mode: trunk
     trunk:
       allowed_vlan: '107'
+- name: Port-Channel28
+  description: INBAND-MGMT-IPV6-WITH-ADDRESS_Po1
+  shutdown: false
+  mlag: 28
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '4092'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -272,21 +298,8 @@ router_bgp:
     description: inband-mgmt-parent-ipv6-1
     next_hop_self: true
     send_community: all
-    maximum_routes: 12000
+    maximum_routes: 256000
     route_map_in: RM-MLAG-PEER-IN
-  - name: IPv4-UNDERLAY-PEERS
-    metadata:
-      type: ipv4
-    send_community: all
-    maximum_routes: 12000
-  - name: EVPN-OVERLAY-PEERS
-    metadata:
-      type: evpn
-    update_source: Loopback0
-    bfd: true
-    ebgp_multihop: 3
-    send_community: all
-    maximum_routes: 0
   neighbors:
   - ip_address: 100.64.1.8
     peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -297,18 +310,10 @@ router_bgp:
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
-  address_family_evpn:
-    peer_groups:
-    - name: EVPN-OVERLAY-PEERS
-      activate: true
   address_family_ipv4:
     peer_groups:
     - name: MLAG-IPv4-UNDERLAY-PEER
       activate: true
-    - name: IPv4-UNDERLAY-PEERS
-      activate: true
-    - name: EVPN-OVERLAY-PEERS
-      activate: false
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: 4093-4094
@@ -330,7 +335,8 @@ vlan_interfaces:
   shutdown: false
   vrf: INBANDMGMT
   ipv6_enable: true
-  ipv6_address: 2a00:106::3/64
+  ipv6_addresses:
+  - 2a00:106::3/64
   ipv6_virtual_router_addresses:
   - 2a00:106::1
   mtu: 1500
@@ -342,7 +348,8 @@ vlan_interfaces:
   shutdown: false
   vrf: INBANDMGMT
   ipv6_enable: true
-  ipv6_address: 2a00:107::3/64
+  ipv6_addresses:
+  - 2a00:107::3/64
   ipv6_virtual_router_addresses:
   - 2a00:107::1
   mtu: 1500
@@ -360,21 +367,25 @@ vlans:
   trunk_groups:
   - MLAG
   metadata:
-    tenant: system
+    tenants:
+    - system
 - id: 4094
   name: MLAG
   trunk_groups:
   - MLAG
   metadata:
-    tenant: system
+    tenants:
+    - system
 - id: 106
   name: INBAND_MGMT
   metadata:
-    tenant: system
+    tenants:
+    - system
 - id: 107
   name: INBAND_MGMT
   metadata:
-    tenant: system
+    tenants:
+    - system
 vrfs:
 - name: MGMT
   ip_routing: false

@@ -11,7 +11,8 @@ from pyavd._errors import AristaAvdError
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_list import AvdList
 from pyavd._schema.models.avd_model import AvdModel
-from pyavd._utils import default, get_v2
+from pyavd._utils.default import default
+from pyavd._utils.get import get_v2
 
 if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
@@ -168,7 +169,7 @@ class CvTagsMixin(Protocol):
                 raise AristaAvdError(msg)
 
             # Silently ignoring empty values since structured config may vary between devices.
-            if value:
+            if value is not None and value != "":
                 self.structured_config.metadata.cv_tags.device_tags.append_new(name=generate_tag.name, value=str(value))
 
     def _set_interface_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
@@ -202,7 +203,7 @@ class CvTagsMixin(Protocol):
                     raise AristaAvdError(msg)
 
                 # Silently ignoring empty values since structured config may vary between devices.
-                if value:
+                if value is not None and value != "":
                     tags.append(EosCliConfigGen.Metadata.CvTags.InterfaceTagsItem.TagsItem(name=generate_tag.name, value=str(value)))
 
             if self.shared_utils.is_cv_pathfinder_router:
