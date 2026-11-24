@@ -15,7 +15,15 @@ from yaml import CSafeDumper, CSafeLoader
 from yaml import dump as yaml_dump
 from yaml import load as yaml_load
 
-from .constants import LICENSE_HEADER, METASCHEMA_DIR, SCHEMA_STORE_ARCHIVE_FILE, SCHEMA_STORE_GZ_FILE, SCHEMAS
+from .constants import (
+    AVD_DESIGN_RUST_MODELS_FILE,
+    LICENSE_HEADER,
+    METASCHEMA_DIR,
+    SCHEMA_STORE_ARCHIVE_FILE,
+    SCHEMA_STORE_GZ_FILE,
+    SCHEMAS,
+    VALIDATED_DATA_PYI_DIR,
+)
 from .store import create_store
 from .validate_schema_fragments import validate_schema_fragments
 
@@ -108,6 +116,28 @@ def build_schema_classes() -> None:
         subprocess.run(["ruff", "format", str(schema_paths.python_class)], check=False)  # noqa: S603, S607
 
 
+def build_validated_data_models() -> None:
+    """Generate AVD-owned Rust views with native bindings and matching Python typing stubs."""
+    from pyavd_utils_gen.data_view_generation import generate_data_views  # noqa: PLC0415
+
+    LOGGER.info("Generating validated-data Rust views and Python declarations")
+    AVD_DESIGN_RUST_MODELS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    generate_data_views(
+        SCHEMA_STORE_GZ_FILE,
+        "eos_designs",
+        AVD_DESIGN_RUST_MODELS_FILE,
+        VALIDATED_DATA_PYI_DIR,
+        "AvdDesign",
+        "AVDDesign",
+        reused_schemas={"eos_cli_config_gen": ("EosConfig", "EOSConfig")},
+        python_feature="python",
+    )
+    LOGGER.info("Running 'ruff' for generated validated-data typing package: %s", VALIDATED_DATA_PYI_DIR)
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "check", "--fix", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
+    subprocess.run(["ruff", "format", str(VALIDATED_DATA_PYI_DIR)], check=True)  # noqa: S603, S607
+
+
 def build_schemas() -> None:
     """Validate and combine schema fragments, then rebuild schema artifacts."""
     validate_schema_fragments()
@@ -116,6 +146,7 @@ def build_schemas() -> None:
 
     LOGGER.info("Compiling archived schema store")
     compile_schema_archive(SCHEMA_STORE_GZ_FILE, SCHEMA_STORE_ARCHIVE_FILE)
+    build_validated_data_models()
     LOGGER.info("Rebuilding pickled schemas")
     create_store(force_rebuild=True)
     build_schema_tables()

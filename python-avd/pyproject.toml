@@ -56,6 +56,7 @@ requires = [
     "referencing>=0.35.0",
     "ruff==0.17.5",
     "setuptools>=77.0",
+    "setuptools-rust>=1.12.0",
 ]
 build-backend = "custom_build_backend"
 backend-path = ["scripts"]
@@ -71,6 +72,7 @@ include-package-data = true
     "eos_designs.schema.pickle",
     "schemas.json.gz",
     "schemas.rkyv",
+    "*.pyi",
 ]
 
 [tool.setuptools.packages.find]
@@ -78,6 +80,12 @@ include = ["pyavd*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "pyavd.__version__"}
+
+[[tool.setuptools-rust.ext-modules]]
+target = "pyavd._rust"
+path = "rust/Cargo.toml"
+binding = "PyO3"
+args = ["--locked"]
 
 [dependency-groups]
 # helping pdm generate the flat list of requirements in pre-commit
@@ -108,6 +116,11 @@ extend_skip_glob = [
 # Extend the `pyproject.toml` file in the parent directory...
 # Should not be needed, but the ruff vscode extension does not seem to respect the ruff behavior of ignoring files without tool.ruff
 extend = "../pyproject.toml"
+
+[tool.ruff.lint.extend-per-file-ignores]
+"pyavd/_validated_data/*.pyi" = [
+  "E501", # Generated schema-path identifiers can exceed the configured line length.
+]
 
 [tool.pyright]
 # Pyright stops at the first parent pyproject.toml it finds so as documented adding base config

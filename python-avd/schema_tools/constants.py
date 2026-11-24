@@ -67,3 +67,5 @@ SCHEMAS = {
 
 SCHEMA_STORE_GZ_FILE = PYAVD_DIR.joinpath("_schema/schemas.json.gz")
 SCHEMA_STORE_ARCHIVE_FILE = PYAVD_DIR.joinpath("_schema/schemas.rkyv")
+AVD_DESIGN_RUST_MODELS_FILE = REPO_ROOT.joinpath("rust/avd-data/src/generated.rs")
+VALIDATED_DATA_PYI_DIR = PYAVD_DIR.joinpath("_validated_data")
